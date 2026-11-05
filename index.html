@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="0f043ff7b8";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="82d4165610";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -744,6 +744,8 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .node .pct{position:absolute;right:-18px;top:-6px;font-size:11.5px;font-weight:800;padding:2px 7px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(20,39,94,.18);white-space:nowrap;z-index:2}
 .node .pct.full{color:#c98a00}.node .pct.hi{color:#11734a}.node .pct.mid{color:#9a6b00}.node .pct.lo{color:#c0392b}
 .bestline{font-size:13.5px;margin:-2px 0 10px;color:#3a4766}
+
+.paynote{margin:14px 0 0;padding:10px 12px;border-radius:14px;background:#f3f6fc;font-size:13.5px;text-align:center;line-height:1.5}.paynote small{color:#6b7894}
 
 </style>
 <div class="app" id="app">
@@ -4520,6 +4522,10 @@ $("bookchip").onclick=()=>{sfx("tap");const bs=books();
    ${SECTIONS[S.testament].map(([sn,a,z])=>`<div class="bsec"><div class="eyebrow">${sn}</div><div class="booklist">${bs.slice(a,z+1).map(b=>{const u=bookUnlocked(b),d=doneOf(b);
      return `<button class="bk ${b.id===curBook().id?"on":""} ${u?"":"locked"}" data-b="${b.id}"><span class="num">${b.ic}</span><span class="mid"><b>${esc(b.name)} ${u?"":"🔒"}</b><span class="bar"><i style="width:${Math.round(d/b.levels*100)}%"></i></span></span><small>${d}/${b.levels}</small></button>`}).join("")}</div></div>`).join("")}`);
   document.querySelectorAll(".bk").forEach(x=>x.onclick=()=>{const b=books().find(y=>y.id===x.dataset.b);if(!bookUnlocked(b)){sfx("bad");return;}S.book[S.testament]=b.id;save();closeSheet();renderPath();});};
+/* Version Google Play : Google interdit les dons/paiements hors de son système dans l'app.
+   On masque donc tout appel au don quand le jeu est ouvert par l'application du Play Store. */
+const IN_STORE_APP=(()=>{try{if(document.referrer==="android-app://app.parcoursbiblique/"||document.referrer==="android-app://app.parcoursbiblique"){sessionStorage.setItem("pb-store","1");}return sessionStorage.getItem("pb-store")==="1";}catch(e){return false;}})();
+if(IN_STORE_APP){$("donTop").hidden=true;document.documentElement.classList.add("store-app");}
 $("donTop").onclick=()=>{sfx("tap");openDonate();};
 
 /* ===================== MOTEUR DE QUESTIONS =====================
@@ -4695,8 +4701,8 @@ function streakScreen(){const days=["L","M","M","J","V","S","D"],now=new Date(),
   sfx("combo");$("lfoot").innerHTML=`<button class="btn" id="back">Continuer</button>`;$("back").onclick=()=>go("path");}
 function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("progBar").style.width="0%";$("lHearts").hidden=false;$("lHearts").textContent="♥ 0";
   $("lbody").innerHTML=`<div class="center"><div class="medal big">💔</div><h2 style="font-size:28px">Plus de cœurs pour le moment</h2><p>Un cœur revient toutes les 25 minutes. Le prochain dans :</p><div class="clock" id="cd">--:--</div><p style="font-size:13px" class="muted">En attendant, lis la Bible ou lance une méditation : ça ne coûte aucun cœur.</p></div>`;
-  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm" id="toD">♥ Faire un don · 24 h de vies illimitées</button><button class="btn" id="toI">📤 Inviter un ami · 24 h de vies illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
-  $("toD").onclick=()=>openDonate();$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
+  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px">${IN_STORE_APP?"":`<button class="btn warm" id="toD">♥ Faire un don · 24 h de vies illimitées</button>`}<button class="btn" id="toI">📤 Inviter un ami · 24 h de vies illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
+  if($("toD"))$("toD").onclick=()=>openDonate();$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
 $("quit").onclick=()=>{sfx("tap");if(LS&&LS.kind==="med"){S.med.state="due";save();go("medit");}else go(LS&&LS.mode==="test"?(LS.kind==="memo"?"bible":"medit"):"path");};
 $("replay").onclick=()=>{if(LS&&LS.say)speak(LS.say,true);};
 
@@ -4934,21 +4940,28 @@ function openDonate(){const a=DON.amt;
    <div class="card row" style="box-shadow:0 0 0 2px var(--ember-bg);background:var(--ember-bg);margin-bottom:14px"><span style="font-size:26px">🎁</span><div><b>En remerciement : 24 h de vies illimitées</b><br><small>Joue sans compter tes cœurs pendant une journée.</small></div></div>
    <div class="eyebrow" style="margin-bottom:8px">Montant</div>
    <div class="amounts">${[1,3,5,10,25].map(v=>`<button data-a="${v}" aria-pressed="${a===v}">${v} $</button>`).join("")}<button data-a="0" aria-pressed="${a===0}"><input id="custom" inputmode="decimal" placeholder="Autre" value="${esc(DON.custom)}" aria-label="Autre montant en dollars"></button></div>
-   <div class="eyebrow" style="margin:16px 0 8px">Moyen de paiement</div>
-   <div class="methods">${[["mm","📱","Mobile Money","M-Pesa, Orange Money, Airtel Money"],["card","💳","Carte bancaire","Visa, Mastercard"]].map(([k,e,t,s])=>`<button class="method" data-m="${k}" aria-pressed="${DON.method===k}"><span class="e">${e}</span><span><b>${t}</b><br><small>${s}</small></span></button>`).join("")}</div>
+   <div class="paynote">📱 M-Pesa, Orange Money, Airtel Money · 💳 Visa, Mastercard<br><small>Tu choisis ton moyen de paiement sur la page sécurisée SasPay.</small></div>
    <div id="donSplit" class="muted" style="margin:14px 0 12px;font-size:13px;text-align:center"></div>
    <button class="btn warm" id="donGo">Donner</button>
-   <p class="muted" style="font-size:11.5px;text-align:center;margin:10px 0 0">Prototype : aucun paiement réel n'est effectué.</p>`);
+   <p class="muted" style="font-size:11.5px;text-align:center;margin:10px 0 0">🔒 Paiement sécurisé par SasPay : Mobile Money ou carte. Tu choisis ton moyen de paiement sur la page suivante.</p>`);
   const val=()=>DON.amt||parseFloat(String(DON.custom).replace(",","."))||0;
   const upd=()=>{const v=val();$("donGo").disabled=v<1;$("donGo").textContent=v>=1?`Donner ${money(v)} $`:"Dès 1 $";$("donSplit").textContent=v>=1?`${money(v*DON_POOR)} $ aux plus démunis · ${money(v*DON_CREATORS)} $ aux créateurs`:"Le don minimum est de 1 $.";};
   document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{DON.amt=+b.dataset.a;document.querySelectorAll("[data-a]").forEach(x=>x.setAttribute("aria-pressed",x===b));if(DON.amt===0)$("custom").focus();upd();});
   $("custom").oninput=e=>{DON.custom=e.target.value;DON.amt=0;document.querySelectorAll("[data-a]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.a==="0"));upd();};
   document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{DON.method=b.dataset.m;document.querySelectorAll("[data-m]").forEach(x=>x.setAttribute("aria-pressed",x===b));});
-  $("donGo").onclick=()=>{const v=val();if(v<1)return;$("donGo").disabled=true;$("donGo").textContent="Paiement en cours…";
-    setTimeout(()=>{S.don.at=Date.now();S.don.until=Math.max(Date.now(),S.don.until||0)+UNLIM_MS;S.hearts=MAX_HEARTS;S.heartAt=0;S.don.total=Math.round((S.don.total+v)*100)/100;S.don.count++;save();sfx("coin");sfx("win");confetti();
-      openSheet(`<div class="center" style="padding:6px 0 0"><div class="medal big">🤲</div><h2 style="font-size:28px">Merci du fond du cœur${S.user?", "+esc(S.user.name):""} !</h2><p>${money(v*DON_POOR)} $ iront aux plus démunis et ${money(v*DON_CREATORS)} $ aux créateurs du jeu.</p><p><b>🎁 Tes vies sont illimitées pendant 24 heures.</b></p><p class="muted" style="font-size:13px">Que Dieu te bénisse.</p></div><button class="btn" style="margin-top:16px" id="thxOk">Continuer</button>`);$("thxOk").onclick=()=>{closeSheet();if(curScreen==="path")renderTop();if(curScreen==="profile")renderProfile();if(curScreen==="lesson"&&$("cd"))go("path");};},1200);};
+  $("donGo").onclick=async()=>{const v=val();if(v<1)return;
+    if(typeof olDonate!=="function"||!olCanAuth()){donThanks(v,true);return;}             // version hors ligne (aperçu) : simulation
+    if(!OL.session){closeSheet();notify("🔐","Connecte-toi d'abord","Le don est lié à ton compte Google pour t'offrir tes 24 h.");go("online");return;}
+    const b=$("donGo");b.disabled=true;b.textContent="Ouverture du paiement sécurisé…";
+    try{const r=await olDonate(v);try{localStorage.setItem("pb-don-pending",r.id);}catch(e){}location.href=r.checkout_url;}
+    catch(e){b.disabled=false;upd();const m=$("donSplit");if(m){m.style.color="var(--bad)";m.textContent=String(e&&e.message||e);}}};
   upd();}
-function showDonReminder(){const r=$("reminder");r.hidden=false;
+/* Merci + 24 h illimitées. simulated=true seulement dans l'aperçu sans serveur. */
+function donThanks(v,simulated,untilISO){if(simulated){S.don.until=Math.max(Date.now(),S.don.until||0)+UNLIM_MS;}else if(untilISO){S.don.until=Math.max(S.don.until||0,new Date(untilISO).getTime());}
+  S.don.at=Date.now();S.hearts=MAX_HEARTS;S.heartAt=0;S.don.total=Math.round(((S.don.total||0)+v)*100)/100;S.don.count=(S.don.count||0)+1;save();sfx("coin");sfx("win");confetti();
+  openSheet(`<div class="center" style="padding:6px 0 0"><div class="medal big">🤲</div><h2 style="font-size:28px">Merci du fond du cœur${S.user?", "+esc(S.user.name):""} !</h2><p>${money(v*DON_POOR)} $ iront aux plus démunis et ${money(v*DON_CREATORS)} $ aux créateurs du jeu.</p><p><b>🎁 Tes vies sont illimitées pendant 24 heures.</b></p><p class="muted" style="font-size:13px">Que Dieu te bénisse.</p></div><button class="btn" style="margin-top:16px" id="thxOk">Continuer</button>`);
+  $("thxOk").onclick=()=>{closeSheet();if(curScreen==="path")renderTop();if(curScreen==="profile")renderProfile();if(curScreen==="lesson"&&$("cd"))go("path");};}
+function showDonReminder(){if(IN_STORE_APP)return;const r=$("reminder");r.hidden=false;
   r.innerHTML=`<div class="box"><div class="hearts3">🤲</div><h2 style="font-size:24px">Le jeu est 100 % gratuit</h2><p>Fais un don dès <b>1 $</b> pour soutenir les créateurs et aider les plus démunis : orphelins, veuves, victimes des guerres.</p><p style="font-weight:700;color:#b4470f">🎁 En remerciement : 24 h de vies illimitées.</p>
    ${splitBar(30)}<button class="btn warm" id="rDon">Faire un don</button><button class="textlink" id="rLater">Plus tard</button></div>`;
   sfx("bell");$("rDon").onclick=()=>{r.hidden=true;openDonate();};$("rLater").onclick=()=>{r.hidden=true;};}
@@ -4978,13 +4991,13 @@ function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0]
    <div class="card"><div class="eyebrow" style="margin-bottom:12px">Mes badges · ${S.testament==="AT"?"Ancien":"Nouveau"} Testament · ${earned.length}</div><div class="badges">
      ${[...earned.map(({b,L})=>`<div class="bdg"><span class="coin">${badgeIcon(b,L)}</span>${esc(badgeName(b,L))}</div>`),...upcoming.map(({b,L})=>`<div class="bdg off"><span class="coin">🔒</span>${esc(badgeName(b,L))}</div>`)].slice(0,badgesAll?999:9).join("")}</div>
      ${earned.length+upcoming.length>9?`<button class="btn ghost small" id="bdgMore" style="margin-top:14px">${badgesAll?"Voir moins":`Voir tous les badges (${earned.length})`}</button>`:""}</div>
-   <div class="donatecard"><div class="eyebrow" style="color:#ffe1c9">Soutenir</div><h2 style="font-size:22px">Le jeu est 100 % gratuit</h2><p>60 % de chaque don va aux plus démunis (orphelins, veuves, victimes des guerres), 40 % aux créateurs.${S.don.count?` Merci pour ${S.don.count>1?"tes "+S.don.count+" dons":"ton don"} (${money(S.don.total)} $) !`:""}</p><p>🎁 En remerciement, chaque don t'offre <b>24 h de vies illimitées</b>${unlimited()?` (encore ${fmt(unlimitedLeft())})`:""}.</p><button class="btn" id="pDon">♥ Faire un don</button></div>${typeof olInviteCard==="function"?olInviteCard():""}
+   ${IN_STORE_APP?"":`<div class="donatecard"><div class="eyebrow" style="color:#ffe1c9">Soutenir</div><h2 style="font-size:22px">Le jeu est 100 % gratuit</h2><p>60 % de chaque don va aux plus démunis (orphelins, veuves, victimes des guerres), 40 % aux créateurs.${S.don.count?` Merci pour ${S.don.count>1?"tes "+S.don.count+" dons":"ton don"} (${money(S.don.total)} $) !`:""}</p><p>🎁 En remerciement, chaque don t'offre <b>24 h de vies illimitées</b>${unlimited()?` (encore ${fmt(unlimitedLeft())})`:""}.</p><button class="btn" id="pDon">♥ Faire un don</button></div>`}${typeof olInviteCard==="function"?olInviteCard():""}
    <div class="card"><div class="eyebrow">Préférences</div>${settingsHTML()}<div class="switch"><div class="row"><span style="font-size:20px">⏰</span><div><b>Rappel quotidien</b><br><small>Chaque jour à ${esc(S.ob.remind)}</small></div></div></div></div>
    <div style="display:flex;flex-direction:column;align-items:center"><button class="textlink" id="logout">Se déconnecter</button><button class="textlink" id="reset">Réinitialiser ma progression</button>${typeof olCanAuth==="function"&&olCanAuth()&&OL.session?`<button class="textlink danger" id="delAcc">Supprimer mon compte</button>`:""}
      <div class="legal"><a href="/confidentialite" target="_blank" rel="noopener">Confidentialité</a> · <a href="/suppression-compte" target="_blank" rel="noopener">Suppression des données</a></div></div>`;
   bindSettings($("profilePage"));
   document.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>{sfx("tap");S.testament=x.dataset.t;save();renderProfile();});
-  $("pDon").onclick=()=>{sfx("tap");openDonate();};const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
+  if($("pDon"))$("pDon").onclick=()=>{sfx("tap");openDonate();};const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
   $("editAv").onclick=()=>{OB.edit=true;OB.step=2;renderOnb();};
   if(typeof bindInstall==="function")bindInstall($("profilePage"));const da=$("delAcc");if(da)da.onclick=()=>{sfx("tap");olDeleteSheet();};
   $("logout").onclick=()=>{openSheet(`<h2 style="font-size:24px">Se déconnecter ?</h2><p style="line-height:1.5;color:#3a4766">Ta progression reste enregistrée sur ce compte. Tu la retrouveras en te reconnectant avec Google, sur ce téléphone ou un autre.</p><div style="display:grid;gap:12px"><button class="btn" id="yesOut">Me déconnecter</button><button class="btn ghost" onclick="closeSheet()">Annuler</button></div>`);
@@ -5110,6 +5123,20 @@ let olLockQ=Promise.resolve();
 function olTabLock(name,timeout,fn){const run=olLockQ.then(()=>fn());olLockQ=run.catch(()=>{});return run;}
 const olWithin=(p,ms,v)=>Promise.race([p,new Promise(r=>setTimeout(()=>r(v),ms))]);
 function olLoading(t){show("onb");$("onb").innerHTML=`<div class="obwrap pad" style="justify-content:center;align-items:center;text-align:center;gap:14px"><div class="radar"><span>🪔</span></div><h2 style="font-size:22px">${t}</h2><p class="muted">Un instant…</p></div>`;}
+/* ---------- Dons SasPay : tout passe par la fonction serveur (la clé SasPay n'est jamais dans le jeu) ---------- */
+const OL_FN=OL_CFG.url+"/functions/v1/saspay";
+async function olFn(route,body){const t=OL.session&&OL.session.access_token;const r=await fetch(OL_FN+"/"+route,{method:"POST",headers:{"Content-Type":"application/json",apikey:OL_CFG.key,Authorization:"Bearer "+(t||OL_CFG.key)},body:JSON.stringify(body||{})});
+  let d={};try{d=await r.json();}catch(e){}if(!r.ok)throw new Error(d.error||"Le paiement n'a pas pu démarrer. Réessaie.");return d;}
+async function olDonate(amount){return olFn("create",{amount:Number(amount).toFixed(2)});}
+// Au retour de la page de paiement (ou au démarrage), on vérifie le don en attente côté serveur.
+async function olCheckDonation(){let id=null;try{const u=new URLSearchParams(location.search);id=u.get("don")||localStorage.getItem("pb-don-pending");}catch(e){}
+  if(!id||!OL.session)return;S.don.paid=S.don.paid||{};if(S.don.paid[id]){try{localStorage.removeItem("pb-don-pending");}catch(e){}return;}
+  notify("⏳","Vérification de ton don…","Un instant, nous confirmons le paiement.");
+  for(let k=0;k<6;k++){let r;try{r=await olFn("status",{id});}catch(e){return;}
+    if(r.status==="SUCCESS"){S.don.paid[id]=Date.now();try{localStorage.removeItem("pb-don-pending");history.replaceState(null,"",location.pathname);}catch(e){}donThanks(Number(r.amount)||0,false,r.don_until);return;}
+    if(r.status==="FAILED"||r.status==="EXPIRED"){try{localStorage.removeItem("pb-don-pending");history.replaceState(null,"",location.pathname);}catch(e){}notify("⚠️","Don non abouti","Le paiement n'a pas été confirmé. Tu peux réessayer quand tu veux.");return;}
+    await new Promise(res=>setTimeout(res,k<2?3000:6000));}
+  notify("⏳","Paiement en cours de confirmation","Ton don sera pris en compte dès que l'opérateur le confirme.");}
 async function olLevelPool(book,chapters){const sb=olInit();if(!sb||!chapters.length)return [];const {data,error}=await sb.rpc("level_pool",{p_book:book,p_chapters:chapters,p_limit:12});if(error)throw error;return data||[];}
 function olInit(){if(OL.sb)return OL.sb;if(!window.supabase||!window.supabase.createClient)return null;
   OL.sb=window.supabase.createClient(OL_CFG.url,OL_CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,lock:olTabLock}});
@@ -5128,7 +5155,8 @@ function olErr(e){const m=(e&&(e.message||e.error_description||e.msg))||String(e
 function olSignedOut(){OL.me=null;OL.lb=OL.friends=OL.hist=null;OL.invites=[];if(OL.chan){try{OL.sb.removeChannel(OL.chan)}catch(e){}OL.chan=null;}olStopSearch(true);}
 async function olAfterLogin(){OL.loadingMe=true;
   try{OL.me=await olRpc("get_my_profile");}catch(e){OL.me=null;OL.msg=olErr(e);OL.loadingMe=false;if(curScreen==="online")renderOnline();return;}
-  OL.loadingMe=false;await olSyncProfile();olClaimRef();olApplyBonus();
+  OL.loadingMe=false;await olSyncProfile();olClaimRef();olApplyBonus();olCheckDonation();
+  if(OL.me&&OL.me.don_until){const t=new Date(OL.me.don_until).getTime();if(t>(S.don.until||0)){S.don.until=t;save();}}
   olWatch();olLoadAll();olLoadInvites(true);
   try{const act=await olRpc("my_active_match");if(act&&curScreen!=="duel")notify("⚔️","Partie en cours","Touche pour reprendre ta partie.",()=>olOpenMatch(act));}catch(e){}}
 function olWatch(){if(OL.chan||!OL.me)return;const id=OL.me.id;
