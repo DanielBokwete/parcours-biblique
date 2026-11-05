@@ -642,6 +642,21 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .rv{display:grid;gap:4px;font-size:13.5px}.rv small{color:var(--stone)}.rv.ok{box-shadow:inset 3px 0 0 var(--good),0 4px 0 rgba(20,33,61,.08)}.rv.ko{box-shadow:inset 3px 0 0 var(--bad),0 4px 0 rgba(20,33,61,.08)}
 .seg3 button{font-size:13px;white-space:nowrap;padding:10px 4px}
 .invite{flex-wrap:wrap}.invite>div{min-width:120px}.invite .btn{padding:8px 12px}
+
+.avimg{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.av2 .avimg,.lbrow .av2 img{width:28px;height:28px}
+.lbrow .av2{width:28px;height:28px;display:grid;place-items:center}
+.olav,.avatarbig,.pawn .head{overflow:hidden}
+.photorow{display:flex;gap:14px;align-items:center}
+.avgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px;max-height:220px;overflow-y:auto;padding:4px}
+.avgrid button{aspect-ratio:1/1;border-radius:14px;font-size:26px;background:#fff;box-shadow:0 0 0 2px var(--line)}
+.avgrid button[aria-pressed="true"]{box-shadow:0 0 0 3px var(--lapis);background:var(--lapis-soft)}
+
+.dots i.opp{background:#f59a5a}
+.fbk.info{background:#fff6dc;color:#7a5a12}
+
+.invitecard{background:linear-gradient(135deg,#fff7e8,#fff);box-shadow:0 0 0 2px #ffe0a8 inset}
+.linkbox{font-family:ui-monospace,monospace;font-size:13px;background:#f3f5fa;border-radius:10px;padding:8px 10px;word-break:break-all;margin-bottom:4px}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -688,8 +703,12 @@ const DIFF={facile:"Facile",moyen:"Moyen",difficile:"Difficile"},KIND={qcm:"QCM"
 function toast(t,bad){const e=$("toast");e.textContent=t;e.className="atoast"+(bad?" bad":"");e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,3500);}
 function err(e){return (e&&(e.message||e.error_description))||String(e);}
 
-sb.auth.onAuthStateChange(()=>boot());
-async function boot(){const {data}=await sb.auth.getSession();
+// Ne jamais attendre une requête Supabase dans ce rappel (blocage connu) : on relance boot() juste après.
+sb.auth.onAuthStateChange(ev=>{if(ev==="SIGNED_IN"||ev==="SIGNED_OUT")setTimeout(boot,0);});
+let booting=false;
+async function boot(){if(booting)return;booting=true;try{await boot2();}finally{booting=false;}}
+async function boot2(){$("main").innerHTML=`<div class="acard narrow">Connexion…</div>`;
+  const {data}=await Promise.race([sb.auth.getSession(),new Promise(r=>setTimeout(()=>r({data:{session:null}}),6000))]);
   if(!data.session){renderLogin();return;}
   try{A.me=await rpc("get_my_profile");}catch(e){A.me=null;}
   if(!A.me||!A.me.is_admin){$("main").innerHTML=`<div class="acard narrow"><h2>Accès refusé</h2><p>Le compte <b>${esc(data.session.user.email)}</b> n'est pas administrateur. Demande à un administrateur de te donner les droits depuis l'onglet Joueurs.</p><button class="btn ghost" id="out">Se déconnecter</button></div>`;$("out").onclick=()=>sb.auth.signOut();$("nav").innerHTML="";return;}
@@ -697,7 +716,7 @@ async function boot(){const {data}=await sb.auth.getSession();
 function renderLogin(){$("nav").innerHTML="";
   $("main").innerHTML=`<div class="acard narrow"><div class="eyebrow">Parcours Biblique</div><h2>Espace admin</h2><p class="muted">Connecte-toi avec le compte Google administrateur (le même que dans le jeu).</p>
   <button class="gbtn" id="g">Continuer avec Google</button><div id="m" class="muted"></div></div>`;
-  $("g").onclick=async()=>{$("m").textContent="Ouverture de Google…";const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/admin",queryParams:{prompt:"select_account"}}});if(error)$("m").textContent=err(error);};}
+  $("g").onclick=async()=>{$("m").textContent="Ouverture de Google…";try{localStorage.setItem("pb-after-login","admin");}catch(e){}const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/",queryParams:{prompt:"select_account"}}});if(error)$("m").textContent=err(error);};}
 const TABS=[["home","📊 Vue d'ensemble"],["users","👥 Joueurs"],["matches","⚔️ Parties"],["rank","🏆 Classement"],["prizes","🎁 Prix"],["questions","❓ Questions"]];
 function renderNav(){$("nav").innerHTML=TABS.map(([k,l])=>`<button data-t="${k}" aria-pressed="${A.tab===k}">${l}</button>`).join("")+`<span class="sp"></span><small class="muted">${esc(A.me.display_name)}</small><button class="textlink" id="out">Déconnexion</button><a class="textlink" href="index.html">Ouvrir le jeu</a>`;
   $("nav").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{A.tab=b.dataset.t;renderNav();renderTab();});$("out").onclick=()=>sb.auth.signOut();}
