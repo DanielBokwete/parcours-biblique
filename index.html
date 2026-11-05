@@ -707,8 +707,20 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .field select,.field textarea{width:100%;font:inherit;font-size:16px;border:0;border-radius:14px;padding:12px 14px;background:#fff;box-shadow:0 0 0 2px var(--line);color:inherit;resize:vertical}
 .field select:focus,.field textarea:focus{outline:none;box-shadow:0 0 0 2.5px var(--lapis)}
 
-.telrow{display:grid;grid-template-columns:minmax(0,46%) minmax(0,1fr);gap:8px}
+.telrow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px}
 .telrow select{width:100%;font:inherit;font-size:15px;border:0;border-radius:14px;padding:12px 8px;background:#fff;box-shadow:0 0 0 2px var(--line);color:inherit;text-overflow:ellipsis}
+
+.pkbtn{display:flex;align-items:center;gap:8px;font:inherit;font-size:16px;border:0;border-radius:14px;padding:12px 12px;background:#fff;box-shadow:0 0 0 2px var(--line);color:inherit;text-align:left;cursor:pointer;min-height:50px}
+.pkbtn.wide{width:100%}.pkbtn span:not(.pkf){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pkbtn i{font-style:normal;color:#8a96ad;font-size:13px;margin-left:auto}.pkbtn b{font-weight:700}
+.pkf{font-size:22px;line-height:1}
+.pkpanel{margin-top:8px;background:#fff;border-radius:16px;box-shadow:0 0 0 2px var(--lapis),0 10px 30px rgba(20,39,94,.18);overflow:hidden}
+.pksearch{width:100%;box-sizing:border-box;font:inherit;font-size:16px;border:0;border-bottom:1.5px solid var(--line);padding:12px 14px;outline:none}
+.pklist{max-height:240px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.pklist button{display:flex;align-items:center;gap:10px;width:100%;font:inherit;font-size:15px;border:0;background:#fff;padding:10px 14px;text-align:left;cursor:pointer}
+.pklist button .pkn{flex:1;min-width:0}.pklist button b{color:#5d6a85;font-weight:700}
+.pklist button[aria-pressed="true"]{background:#eef3ff}.pklist button:active{background:#e3ebff}
+.field select{-webkit-appearance:none;appearance:none}
 
 </style>
 <div class="app" id="app">
@@ -5045,22 +5057,37 @@ function olCountryList(){if(olCountries)return olCountries;let dn=null;try{dn=ne
   olCountries=OL_DIAL.split(",").map(x=>{const m=/^([A-Z]{2})(\d+)(\*?)$/.exec(x);let name=m[1];try{name=dn?dn.of(m[1]):m[1];}catch(e){}return {iso:m[1],dial:m[2],main:!m[3],name,flag:flag(m[1])};})
     .sort((a,b)=>a.name.localeCompare(b.name,"fr"));return olCountries;}
 function olGuessIso(){const l=(navigator.languages||[navigator.language||""]).join(",");const m=/-([A-Z]{2})\b/.exec(l);const L=olCountryList();return m&&L.some(c=>c.iso===m[1])&&m[1]!=="US"&&m[1]!=="FR"?m[1]:"CD";}
-function olClaimSheet(){const w=OL.win;if(!w)return;const u=S.user||{},L=olCountryList(),iso0=olGuessIso();
+/* Liste déroulante avec recherche (pays / indicatif) */
+const olNorm=t=>String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+function olPicker(anchor,items,cur,onPick,opts){document.querySelectorAll(".pkpanel").forEach(x=>x.remove());
+  const p=document.createElement("div");p.className="pkpanel";
+  p.innerHTML=`<input class="pksearch" placeholder="${opts.ph}" autocomplete="off" inputmode="search"><div class="pklist"></div>`;
+  anchor.after(p);const inp=p.querySelector("input"),list=p.querySelector(".pklist");
+  const draw=()=>{const q=olNorm(inp.value).replace(/^\+/,"");
+    const f=items.filter(c=>!q||olNorm(c.name).includes(q)||c.iso.toLowerCase()===q||(c.dial&&c.dial.startsWith(q))||c.iso==="autre");
+    list.innerHTML=f.slice(0,300).map(c=>`<button type="button" data-v="${c.iso}" aria-pressed="${c.iso===cur}"><span class="pkf">${c.flag||"✏️"}</span><span class="pkn">${esc(c.name)}</span>${opts.dial&&c.dial?`<b>+${c.dial}</b>`:""}</button>`).join("")||`<p class="muted" style="padding:10px;margin:0">Aucun pays trouvé</p>`;
+    list.querySelectorAll("button").forEach(b=>b.onclick=()=>{p.remove();onPick(b.dataset.v);});};
+  inp.oninput=draw;draw();setTimeout(()=>{inp.focus();const s=list.querySelector('[aria-pressed="true"]');if(s&&!inp.value)s.scrollIntoView({block:"center"});},30);
+  const close=e=>{if(!p.contains(e.target)&&e.target!==anchor&&!anchor.contains(e.target)){p.remove();document.removeEventListener("pointerdown",close,true);}};
+  setTimeout(()=>document.addEventListener("pointerdown",close,true),0);}
+function olClaimSheet(){const w=OL.win;if(!w)return;const u=S.user||{},L=olCountryList();let dialIso=olGuessIso(),ctryIso=dialIso;
+  const byIso=x=>L.find(c=>c.iso===x);
   openSheet(`<h3 style="margin:0 0 4px">🎁 Réclamer mon prix</h3><p class="muted" style="margin:0 0 12px;font-size:14px">${esc(w.title)}. Remplis ces informations pour que l'équipe Parcours Biblique puisse te contacter.</p>
     <div class="field"><label for="cName">Noms complets</label><input id="cName" value="${esc(u.name||"")}" autocomplete="name"></div>
-    <div class="field"><label for="cPhone">Numéro WhatsApp</label><div class="telrow"><select id="cDial" aria-label="Indicatif du pays">${L.map(c=>`<option value="${c.iso}"${c.iso===iso0?" selected":""}>${c.flag} +${c.dial} · ${esc(c.name)}</option>`).join("")}</select><input id="cPhone" type="tel" inputmode="tel" placeholder="Numéro" autocomplete="tel-national"></div></div>
-    <div class="field"><label for="cCountry">Pays</label><select id="cCountry">${L.map(c=>`<option value="${c.iso}"${c.iso===iso0?" selected":""}>${c.flag} ${esc(c.name)}</option>`).join("")}<option value="autre">✏️ Autre (je l'écris)</option></select>
-      <input id="cCountryOther" placeholder="Écris le nom de ton pays" hidden style="margin-top:8px"></div>
+    <div class="field"><label for="cPhone">Numéro WhatsApp</label><div class="telrow"><button type="button" class="pkbtn" id="cDial" aria-label="Indicatif du pays"></button><input id="cPhone" type="tel" inputmode="tel" placeholder="Numéro" autocomplete="tel-national"></div></div>
+    <div class="field"><label>Pays</label><button type="button" class="pkbtn wide" id="cCountry"></button><input id="cCountryOther" placeholder="Écris le nom de ton pays" hidden style="margin-top:8px"></div>
     <div class="field"><label for="cAddr">Adresse de résidence</label><textarea id="cAddr" rows="2" placeholder="N°, avenue, quartier, commune, ville" autocomplete="street-address"></textarea></div>
     <div class="muted" id="cErr" style="font-size:13px;min-height:18px;color:var(--bad)"></div><button class="btn gold" id="cGo">Envoyer</button>`);
   const dial=$("cDial"),ctry=$("cCountry"),other=$("cCountryOther"),ph=$("cPhone");
-  const syncOther=()=>{other.hidden=ctry.value!=="autre";if(!other.hidden)other.focus();};
-  dial.onchange=()=>{ctry.value=dial.value;syncOther();};                         // l'indicatif choisit le pays
-  ctry.onchange=()=>{if(ctry.value!=="autre")dial.value=ctry.value;syncOther();};   // et inversement
-  ph.oninput=()=>{const m=/^\s*(?:\+|00)(\d{1,4})/.exec(ph.value);if(!m)return;    // « +243… » tapé à la main : on reconnaît l'indicatif
-    for(let k=Math.min(4,m[1].length);k>0;k--){const code=m[1].slice(0,k),cs=L.filter(c=>c.dial===code);if(cs.length){const c=cs.find(x=>x.iso===dial.value)||cs.find(x=>x.main)||cs[0];dial.value=c.iso;ctry.value=c.iso;syncOther();ph.value=ph.value.replace(/^\s*(?:\+|00)\d{1,4}/,"").trim();break;}}};
-  $("cGo").onclick=async()=>{const v=id=>$(id).value.trim();const dc=L.find(c=>c.iso===dial.value),num=v("cPhone").replace(/[^0-9 ]/g,"").trim();
-    const country=ctry.value==="autre"?v("cCountryOther"):(L.find(c=>c.iso===ctry.value)||{}).name;
+  const paint=()=>{const d=byIso(dialIso);dial.innerHTML=`<span class="pkf">${d.flag}</span><b>+${d.dial}</b><i>▾</i>`;
+    const c=byIso(ctryIso);ctry.innerHTML=ctryIso==="autre"?`<span class="pkf">✏️</span><span>Autre pays</span><i>▾</i>`:`<span class="pkf">${c.flag}</span><span>${esc(c.name)}</span><i>▾</i>`;other.hidden=ctryIso!=="autre";};
+  paint();
+  dial.onclick=()=>olPicker(dial.parentNode,L,dialIso,v=>{dialIso=v;ctryIso=v;paint();ph.focus();},{ph:"Rechercher un pays ou un indicatif…",dial:true});
+  ctry.onclick=()=>olPicker(ctry,[...L,{iso:"autre",name:"Autre (je l'écris)",flag:"✏️"}],ctryIso,v=>{ctryIso=v;if(v!=="autre")dialIso=v;paint();if(v==="autre")other.focus();},{ph:"Rechercher ton pays…"});
+  ph.oninput=()=>{const m=/^\s*(?:\+|00)(\d{1,4})/.exec(ph.value);if(!m)return;
+    for(let k=Math.min(4,m[1].length);k>0;k--){const code=m[1].slice(0,k),cs=L.filter(c=>c.dial===code);if(cs.length){const c=cs.find(x=>x.iso===dialIso)||cs.find(x=>x.main)||cs[0];dialIso=c.iso;ctryIso=c.iso;paint();ph.value=ph.value.replace(/^\s*(?:\+|00)\d{1,4}/,"").trim();break;}}};
+  $("cGo").onclick=async()=>{const v=id=>$(id).value.trim();const dc=byIso(dialIso),num=v("cPhone").replace(/[^0-9 ]/g,"").trim();
+    const country=ctryIso==="autre"?v("cCountryOther"):byIso(ctryIso).name;
     if(!v("cName")||num.replace(/\D/g,"").length<6||!country||!v("cAddr")){$("cErr").textContent=num&&num.replace(/\D/g,"").length<6?"Ce numéro WhatsApp semble incomplet.":"Remplis tous les champs pour qu'on puisse te contacter.";return;}
     const b=$("cGo");b.disabled=true;b.textContent="Envoi…";
     try{await olRpc("claim_prize_v2",{p_prize:w.prize_id,p_name:v("cName"),p_whatsapp:`+${dc.dial} ${num.replace(/^0+/,"")}`,p_country:country,p_address:v("cAddr")});
