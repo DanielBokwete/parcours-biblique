@@ -5006,15 +5006,15 @@ async function olReload(){const d=await olRpc("get_match",{m:OL.m.id});OL.m.data
 const olAt=ts=>new Date(ts).getTime()-(OL.m?OL.m.skew:0);            // heure serveur -> heure de ce téléphone
 function olLeft(){const d=OL.m&&OL.m.data;if(!d||!d.deadline)return 0;return Math.max(0,olAt(d.deadline)-Date.now());}
 function olClock(){const el=$("dclock");if(!el||!OL.m)return;const s=Math.ceil(olLeft()/1000);el.textContent="⏱ "+Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
-async function olPoll(){if(!OL.m||OL.m.shown)return;clearTimeout(OL.pollT);
+async function olPoll(){if(!OL.m||OL.m.shown||OL.m.ending)return;clearTimeout(OL.pollT);
   try{const st=await olRpc("match_state",{m:OL.m.id});if(OL.m)OL.m.skew=new Date(st.now).getTime()-Date.now();olApply(st);}catch(e){}
-  if(OL.m&&!OL.m.shown)OL.pollT=setTimeout(olPoll,1500);}
+  if(OL.m&&!OL.m.shown&&!OL.m.ending)OL.pollT=setTimeout(olPoll,1500);}
 function olLive(r){const d=OL.m&&OL.m.data;if(!d)return;const p1=d.me_is_p1;
   olApply({status:r.status,cur_idx:r.cur_idx,cur_started:r.cur_started,me_locked:p1?r.p1_locked:r.p2_locked,opp_locked:p1?r.p2_locked:r.p1_locked,my_score:p1?r.p1_score:r.p2_score,opp_score:p1?r.p2_score:r.p1_score,last_result:r.last_result});}
 function olApply(st){if(!OL.m||OL.m.shown||!st||typeof st.cur_idx!=="number")return;const d=OL.m.data,prev=OL.m.st||{};OL.m.st=st;
   d.me.score=st.my_score;d.opp.score=st.opp_score;const a=$("dMe"),b=$("dOp");if(a)a.textContent=st.my_score;if(b)b.textContent=st.opp_score;
   const lr=st.last_result;if(lr&&lr.idx!==OL.m.shownRes&&lr.idx>=0){OL.m.shownRes=lr.idx;olShowResult(lr);}
-  if(st.status==="finished"){clearTimeout(OL.nextT);OL.nextT=setTimeout(olResult,lr?2200:300);return;}
+  if(st.status==="finished"||st.status==="cancelled"){if(!OL.m.ending){OL.m.ending=true;clearTimeout(OL.nextT);clearInterval(OL.dT);clearTimeout(OL.pollT);OL.nextT=setTimeout(olResult,lr?2200:300);}return;}
   if(st.cur_idx===OL.m.idx&&st.opp_locked&&!prev.opp_locked&&!OL.m.locked)olOppWrong();
   if(st.cur_idx!==OL.m.idx&&st.cur_idx!==OL.m.pending){OL.m.pending=st.cur_idx;clearTimeout(OL.nextT);
     const wait=Math.max(0,olAt(st.cur_started)-Date.now());
@@ -5067,7 +5067,10 @@ function olShowResult(lr){const d=OL.m.data,me=OL.me.id,who=lr.by===me?"me":lr.b
   $("dMsg").innerHTML=`<div class="fbk ${who==="me"?"ok":who==="opp"?"ko":"info"}"><b>${txt}</b>${lr.ref?`<small>${esc(lr.ref)}</small>`:""}</div>`;
   if(who==="opp")sfx("bad");else if(who==="none")sfx("timeout");olHead();}
 
-async function olResult(){if(!OL.m||OL.m.shown)return;OL.m.shown=true;olStopDuelTimers();$("dtimer").hidden=true;
+async function olResult(){try{await olResult2();}catch(e){console.error(e);const d=OL.m&&OL.m.data;$("dtimer").hidden=true;
+  $("dbody").innerHTML=`<div class="center"><div class="medal big">🏁</div><h2>Partie terminée</h2>${d?`<div class="final"><span>${d.me.score}</span><small>contre</small><span>${d.opp.score}</span></div>`:""}<button class="btn" id="dHome2">Retour aux défis</button></div>`;
+  $("dHome2").onclick=()=>{OL.m=null;go("online");olLoadAll();};}}
+async function olResult2(){if(!OL.m||OL.m.shown)return;OL.m.shown=true;olStopDuelTimers();$("dtimer").hidden=true;
   let d;try{d=await olReload();}catch(e){d=OL.m.data;}const n=d.questions.length,won=d.winner===d.me.id,draw=d.is_draw;
   olHead();const qn=document.querySelector(".vs .qn");if(qn)qn.textContent="Terminé";const cl=$("dclock");if(cl)cl.textContent="";
   let h2h="";if(d.mode==="friend"){try{const fr=await olRpc("list_friends");const f=fr.find(x=>x.id===d.opp.id);if(f)h2h=`<div class="card h2hbig"><div class="eyebrow">Vos confrontations</div><b>${f.played} match${f.played>1?"s":""}</b><div class="h2hbar"><span class="w" style="flex:${f.my_wins||0.001}">${f.my_wins} vous</span>${f.draws?`<span class="d" style="flex:${f.draws}">${f.draws}</span>`:""}<span class="l" style="flex:${f.their_wins||0.001}">${f.their_wins} ${olName(d.opp.name.split(" ")[0])}</span></div></div>`;}catch(e){}}
