@@ -662,6 +662,17 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .invitecard{background:linear-gradient(135deg,#fff7e8,#fff);box-shadow:0 0 0 2px #ffe0a8 inset}
 .linkbox{font-family:ui-monospace,monospace;font-size:13px;background:#f3f5fa;border-radius:10px;padding:8px 10px;word-break:break-all;margin-bottom:4px}
 
+.glogin{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:12px 6px 40px}
+.glogin .gl-art{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;font-size:56px;background:radial-gradient(circle at 50% 45%,#fff3d6,#ffd37a 60%,#f5b94a);box-shadow:0 10px 30px rgba(245,185,74,.35)}
+.glogin h2{font-size:26px;margin:6px 0 0}
+.glogin p{color:var(--muted,#6b7894);font-size:15px;line-height:1.5;max-width:330px;margin:0 0 10px}
+.gbtn.big{max-width:340px;padding:17px 22px;font-size:17.5px;border-radius:18px;gap:12px;box-shadow:0 0 0 1.5px #dadce0,0 6px 18px rgba(20,39,94,.12);transition:transform .12s,box-shadow .12s}
+.gbtn.big svg{width:24px;height:24px}
+.gbtn.big:active{transform:translateY(2px);box-shadow:0 0 0 1.5px #dadce0,0 2px 8px rgba(20,39,94,.12)}
+.gbtn.big:disabled{opacity:.7}
+.glogin .gl-err{min-height:18px;font-size:13.5px;color:var(--bad)}
+.glogin .gl-note{color:#8a96ad;font-size:12.5px}
+
 </style>
 <div class="app" id="app">
 
@@ -4236,9 +4247,11 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
     <button class="btn" id="obNew">Créer mon compte</button><button class="btn ghost" id="obLog">J'ai déjà un compte</button></div></div>`;
     $("obNew").onclick=()=>{sfx("tap");OB.login=false;OB.step=1;renderOnb();};$("obLog").onclick=()=>{sfx("tap");OB.login=true;OB.step=1;renderOnb();};return;}
   if(st===1&&typeof olCanAuth==="function"&&olCanAuth()){el.innerHTML=`<div class="obwrap pad"><div class="obtop"><button id="obBack" aria-label="Retour">${BACK}</button><div class="bar2"><i style="width:0%"></i></div></div>
-    ${head(S.onboarded?"Connecte-toi pour continuer":OB.login?"Content de te revoir !":"Crée ton compte","Avec ton compte Google, ta progression, tes badges, tes méditations et tes défis sont sauvegardés et te suivent sur tous tes téléphones.")}
-    <div class="auth"><button class="gbtn" id="gGo">${GLOGO}Continuer avec Google</button><div class="muted" id="fErr" style="font-size:13px;min-height:18px;text-align:center">${esc(OB.err||"")}</div></div></div>`;
-    $("obBack").onclick=()=>{OB.step=0;renderOnb();};$("gGo").onclick=()=>{sfx("tap");$("fErr").textContent="Ouverture de Google…";olGoogle();};return;}
+    <div class="glogin"><div class="gl-art">🪔</div><h2>${S.onboarded?"Connecte-toi pour continuer":OB.login?"Content de te revoir !":"Crée ton compte"}</h2>
+    <p>Ta progression, tes badges, tes méditations et tes défis sont sauvegardés et te suivent sur tous tes téléphones.</p>
+    <button class="gbtn big" id="gGo">${GLOGO}<span>Continuer avec Google</span></button>
+    <div class="gl-err" id="fErr">${esc(OB.err||"")}</div><small class="gl-note">🔒 Connexion sécurisée par Google · aucun mot de passe à retenir</small></div></div>`;
+    $("obBack").onclick=()=>{OB.step=0;renderOnb();};$("gGo").onclick=()=>{sfx("tap");OB.err="";const b=$("gGo");b.disabled=true;b.querySelector("span").textContent="Ouverture de Google…";olGoogle();setTimeout(()=>{if($("gGo")){b.disabled=false;b.querySelector("span").textContent="Continuer avec Google";}},8000);};return;}
   if(st===1){el.innerHTML=`<div class="obwrap pad"><div class="obtop"><button id="obBack" aria-label="Retour">${BACK}</button><div class="bar2"><i style="width:0%"></i></div></div>
     ${head(OB.login?"Content de te revoir !":"Crée ton compte","Ta progression, tes badges et tes méditations seront sauvegardés.")}
     <div class="auth"><button class="gbtn" id="gGo">${GLOGO}Continuer avec Google</button><div class="or">ou avec ton e-mail</div>
@@ -4748,7 +4761,7 @@ function openDonate(){const a=DON.amt;
   $("custom").oninput=e=>{DON.custom=e.target.value;DON.amt=0;document.querySelectorAll("[data-a]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.a==="0"));upd();};
   document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{DON.method=b.dataset.m;document.querySelectorAll("[data-m]").forEach(x=>x.setAttribute("aria-pressed",x===b));});
   $("donGo").onclick=()=>{const v=val();if(v<1)return;$("donGo").disabled=true;$("donGo").textContent="Paiement en cours…";
-    setTimeout(()=>{S.don.at=Date.now();S.don.until=Date.now()+UNLIM_MS;S.hearts=MAX_HEARTS;S.heartAt=0;S.don.total=Math.round((S.don.total+v)*100)/100;S.don.count++;save();sfx("coin");sfx("win");confetti();
+    setTimeout(()=>{S.don.at=Date.now();S.don.until=Math.max(Date.now(),S.don.until||0)+UNLIM_MS;S.hearts=MAX_HEARTS;S.heartAt=0;S.don.total=Math.round((S.don.total+v)*100)/100;S.don.count++;save();sfx("coin");sfx("win");confetti();
       openSheet(`<div class="center" style="padding:6px 0 0"><div class="medal big">🤲</div><h2 style="font-size:28px">Merci du fond du cœur${S.user?", "+esc(S.user.name):""} !</h2><p>${money(v*DON_POOR)} $ iront aux plus démunis et ${money(v*DON_CREATORS)} $ aux créateurs du jeu.</p><p><b>🎁 Tes vies sont illimitées pendant 24 heures.</b></p><p class="muted" style="font-size:13px">Que Dieu te bénisse.</p></div><button class="btn" style="margin-top:16px" id="thxOk">Continuer</button>`);$("thxOk").onclick=()=>{closeSheet();if(curScreen==="path")renderTop();if(curScreen==="profile")renderProfile();if(curScreen==="lesson"&&$("cd"))go("path");};},1200);};
   upd();}
 function showDonReminder(){const r=$("reminder");r.hidden=false;
@@ -4756,7 +4769,7 @@ function showDonReminder(){const r=$("reminder");r.hidden=false;
    ${splitBar(30)}<button class="btn warm" id="rDon">Faire un don</button><button class="textlink" id="rLater">Plus tard</button></div>`;
   sfx("bell");$("rDon").onclick=()=>{r.hidden=true;openDonate();};$("rLater").onclick=()=>{r.hidden=true;};}
 /* Rappel : toutes les 10 min d'utilisation, jamais en pleine question ; rien pendant 30 jours après un don */
-function donTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S.activeSec++;if(S.activeSec%10===0)save();
+function donTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S.activeSec++;if(S.activeSec%10===0)saveLocal();
   const calm=TABS.includes(curScreen)&&$("veil").hidden&&$("reminder").hidden;const paused=S.don.at&&Date.now()-S.don.at<DON_PAUSE_MS;
   if(calm&&!paused&&S.activeSec-S.don.lastAt>=DON_EVERY_S){S.don.lastAt=S.activeSec;save();showDonReminder();}}
 
@@ -4827,20 +4840,28 @@ async function olShareInvite(){if(!OL.me){notify("🔐","Connecte-toi d'abord","
   try{if(navigator.share){await navigator.share({title:"Parcours Biblique",text:txt});return;}}catch(e){return;}
   try{await navigator.clipboard.writeText(txt);notify("📋","Lien copié","Colle-le dans WhatsApp, SMS ou Facebook.");}catch(e){notify("🔗","Ton lien",link);}}
 function olInviteCard(){const n=OL.me?OL.me.referrals||0:0;
-  return `<div class="card invitecard"><div class="eyebrow">Inviter des amis</div><b style="font-size:18px">🎁 24 h de vies illimitées par ami</b>
-    <p class="muted" style="margin:6px 0 10px">Partage ton lien : chaque personne qui installe le jeu avec et crée son compte t'offre <b>24 h de vies illimitées</b> dans le parcours. Vous devenez aussi amis pour vous défier.</p>
+  return `<div class="card invitecard"><div class="eyebrow">Inviter des amis</div><b style="font-size:18px">🎁 +24 h de vies illimitées par ami</b>
+    <p class="muted" style="margin:6px 0 10px">Partage ton lien : chaque personne qui installe le jeu avec et crée son compte t'ajoute <b>24 h de vies illimitées</b> dans le parcours, et ça se cumule : 5 amis = 120 h. Vous devenez aussi amis pour vous défier.</p>
     ${OL.me?`<div class="linkbox">${esc(olInviteLink().replace("https://",""))}</div>${n?`<small class="muted">${n} ami${n>1?"s":""} invité${n>1?"s":""} 🙌</small>`:""}`:""}
     <button class="btn" id="olInv" style="margin-top:10px">📤 Partager mon lien</button></div>`;}
 // Applique les vies illimitées gagnées par parrainage (stockées sur le serveur) à la partie locale.
-function olApplyBonus(){if(!OL.me||!OL.me.bonus_until)return;const t=new Date(OL.me.bonus_until).getTime();if(!(t>Date.now()))return;
-  const was=S.don.until||0;if(t>was+60000){S.don.until=t;save();if(S.don.bonusSeen!==OL.me.referrals){S.don.bonusSeen=OL.me.referrals;save();notify("🎁","Vies illimitées !","Un ami a rejoint le jeu grâce à toi : profite de tes vies illimitées.");}
-    if(typeof renderPath==="function"&&curScreen==="path")try{renderPath();}catch(e){}}}
+// Chaque ami inscrit via le lien ajoute 24 h de vies illimitées, cumulables (5 amis = 120 h), en plus des dons.
+function olApplyBonus(){if(!OL.me)return;const n=OL.me.referrals||0,done=S.don.refApplied||0;if(n<=done)return;
+  const add=(n-done)*24*3600000;S.don.until=Math.max(Date.now(),S.don.until||0)+add;S.don.refApplied=n;save();
+  notify("🎁",`+${(n-done)*24} h de vies illimitées !`,n-done>1?`${n-done} amis ont rejoint le jeu grâce à toi.`:"Un ami a rejoint le jeu grâce à toi.");
+  if(curScreen==="path"){const p=$("pillHearts");if(p)p.innerHTML=heartPill();}}
 async function olClaimRef(){let c=null;try{c=localStorage.getItem("pb-ref");}catch(e){}if(!c||!OL.me)return;
   try{localStorage.removeItem("pb-ref");}catch(e){}if(c===OL.me.referral_code)return;
   try{const r=await olRpc("claim_referral",{p_code:c});if(r&&r.ok)notify("🤝","Bienvenue !",`Tu as rejoint le jeu grâce à ${olName(r.name)}. Vous êtes maintenant amis.`);}catch(e){}}
+// Verrou propre à cet onglet : le verrou par défaut (navigator.locks) est partagé entre onglets,
+// et un autre onglet du jeu ou de l'admin resté ouvert pouvait bloquer la connexion (page blanche).
+let olLockQ=Promise.resolve();
+function olTabLock(name,timeout,fn){const run=olLockQ.then(()=>fn());olLockQ=run.catch(()=>{});return run;}
+const olWithin=(p,ms,v)=>Promise.race([p,new Promise(r=>setTimeout(()=>r(v),ms))]);
+function olLoading(t){show("onb");$("onb").innerHTML=`<div class="obwrap pad" style="justify-content:center;align-items:center;text-align:center;gap:14px"><div class="radar"><span>🪔</span></div><h2 style="font-size:22px">${t}</h2><p class="muted">Un instant…</p></div>`;}
 function olInit(){if(OL.sb)return OL.sb;if(!window.supabase||!window.supabase.createClient)return null;
-  OL.sb=window.supabase.createClient(OL_CFG.url,OL_CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-  OL.sb.auth.onAuthStateChange((ev,s)=>{OL.session=s;setTimeout(()=>{if(!s){olSignedOut();}else if(OL.booted&&!OL.me&&!OL.loadingMe){olAfterLogin();}if(curScreen==="online")renderOnline();},0);});
+  OL.sb=window.supabase.createClient(OL_CFG.url,OL_CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,lock:olTabLock}});
+  OL.sb.auth.onAuthStateChange((ev,s)=>{OL.session=s;setTimeout(()=>{if(!s){olSignedOut();}else if(OL.booted&&curScreen==="onb"&&OB.step<=1){olEnter();}else if(OL.booted&&!OL.me&&!OL.loadingMe){olAfterLogin();}if(curScreen==="online")renderOnline();},0);});
   setInterval(()=>{if(OL.me)olLoadInvites(true);},20000);
   setInterval(async()=>{if(!OL.me)return;try{const p=await olRpc("get_my_profile");if(p){OL.me.bonus_until=p.bonus_until;OL.me.referrals=p.referrals;olApplyBonus();}}catch(e){}},60000);
   return OL.sb;}
@@ -4956,14 +4977,26 @@ async function olCloudLoad(){const su=OL.session.user,uid=su.id,meta=su.user_met
 async function olLogout(){if(!OL.sb||!OL.session){S=fresh();saveLocal();return;}await cloudPush();try{await OL.sb.auth.signOut();}catch(e){}S=fresh();saveLocal();}
 /* Démarrage : on attend la session Google (et la sauvegarde du compte) avant d'afficher le jeu. */
 async function bootAll(){const sb=olInit();if(!sb){bootApp();return;}
-  let sess=null;try{const r=await Promise.race([sb.auth.getSession(),new Promise(res=>setTimeout(()=>res({data:{session:null}}),5000))]);sess=r.data.session;}catch(e){}
-  OL.session=sess;OL.booted=true;
+  const fromGoogle=/access_token=|[?&]code=/.test(location.hash+location.search),err=/error_description=([^&]+)/.exec(location.hash+location.search);
+  if(fromGoogle)olLoading("Connexion à ton compte Google");
+  let sess=null;try{const r=await olWithin(sb.auth.getSession(),fromGoogle?20000:6000,{data:{session:null}});sess=r.data.session;}catch(e){}
+  if(!sess&&fromGoogle){const r=await olWithin(sb.auth.getSession(),8000,{data:{session:null}});sess=r.data.session;}
+  OL.session=sess||OL.session;sess=OL.session;OL.booted=true;
   if(sess){let back=null;try{back=localStorage.getItem("pb-after-login");if(back)localStorage.removeItem("pb-after-login");}catch(e){}
-    if(back==="admin"){location.replace(location.origin+"/admin");return;}}
-  if(!sess){if(S.onboarded){OB.step=1;OB.login=true;renderOnb();}else{OB.step=0;renderOnb();}return;}
-  await olCloudLoad();olAfterLogin();
-  if(!S.onboarded||!S.user||!S.user.gender||!S.testament){OB.step=2;OB.login=false;renderOnb();return;}
-  bootApp();}
+    if(back==="admin"){location.replace(location.origin+"/admin");return;}
+    await olEnter();return;}
+  if(err)OB.err="Connexion Google interrompue : "+decodeURIComponent(err[1].replace(/\+/g," "));
+  else if(fromGoogle)OB.err="La connexion a pris trop de temps. Ferme les autres onglets du jeu puis réessaie.";
+  if(fromGoogle)history.replaceState(null,"",location.pathname);
+  if(S.onboarded||fromGoogle){OB.step=1;OB.login=true;renderOnb();}else{OB.step=0;renderOnb();}}
+let olEntering=false;
+async function olEnter(){if(olEntering)return;olEntering=true;
+  try{if(/access_token=/.test(location.hash))history.replaceState(null,"",location.pathname+location.search);
+    if(curScreen==="onb"||!curScreen)olLoading("Récupération de ta progression");
+    await olWithin(olCloudLoad(),9000);olAfterLogin();
+    if(!S.onboarded||!S.user||!S.user.gender||!S.testament){OB.step=2;OB.login=false;renderOnb();return;}
+    bootApp();}
+  catch(e){console.error(e);bootApp();}finally{olEntering=false;}}
 
 /* ---------- Recherche d'un adversaire ---------- */
 function olSearch(){if(OL.searching)return;OL.searching=true;OL.searchStart=Date.now();
