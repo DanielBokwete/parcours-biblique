@@ -4809,7 +4809,7 @@ function olPrizeCard(){const p=OL.prize;const mois=new Date().toLocaleDateString
   return p?`<div class="prize">${p.image_url?`<img src="${esc(p.image_url)}" alt="">`:`<span class="pe">🏆</span>`}<div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>${esc(p.title)}</b>${p.description?`<p>${esc(p.description)}</p>`:""}</div></div>`
     :`<div class="prize"><span class="pe">🏆</span><div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>Le prix du mois sera bientôt annoncé</b><p>Le premier du classement en fin de mois le remporte.</p></div></div>`;}
 function renderOnline(){const p=$("onlinePage");if(!p)return;
-  if(!olInit()){p.innerHTML=`<h2>Défis en ligne</h2><div class="card"><b>Le jeu en ligne n'est pas disponible ici.</b><p class="muted" style="margin:6px 0 0;font-size:14px">Ouvre Parcours Biblique depuis son site pour affronter d'autres joueurs.</p></div>`;return;}
+  if(!olInit()){p.innerHTML=`<h2>Défis en ligne</h2><div class="card"><b>Les défis en ligne se jouent sur le site du jeu.</b><p class="muted" style="margin:6px 0 12px;font-size:14px">Ouvre Parcours Biblique sur son site pour affronter d'autres disciples et entrer au classement du mois.</p><a class="btn" href="https://parcours-biblique.vercel.app/#defis" target="_blank" rel="noopener">Ouvrir parcours-biblique.vercel.app</a></div>`;return;}
   if(!OL.session){renderOnlineAuth(p);return;}
   if(!OL.me){p.innerHTML=`<h2>Défis en ligne</h2><div class="card">${OL.msg?esc(OL.msg):"Chargement de ton profil…"}</div>${OL.msg?`<button class="btn ghost" id="olOut">Se déconnecter</button>`:""}`;const o=$("olOut");if(o)o.onclick=()=>OL.sb.auth.signOut();return;}
   const t=OL.tab,me=OL.lb&&OL.lb.me;
