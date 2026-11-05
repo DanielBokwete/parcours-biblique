@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="95f331a3f2";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -733,6 +733,7 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .installban[hidden]{display:none}
 .installban img{width:40px;height:40px;border-radius:10px}.installban div{flex:1;min-width:0}.installban b{display:block;font-size:14.5px}.installban small{display:block;font-size:12px;color:#6b7894}
 .installban .ibx{background:none;border:0;color:#8a96ad;font-size:16px;padding:4px 6px;cursor:pointer}
+a.btn{text-decoration:none;display:flex;align-items:center;justify-content:center}
 
 </style>
 <div class="app" id="app">
@@ -5031,6 +5032,31 @@ function refreshInstall(){const ban=$("installBan");if(ban){ban.hidden=!(canInst
   d.innerHTML=`<img src="/icons/icon-192.png" alt=""><div><b>Installe Parcours Biblique</b><small>En plein écran, comme une vraie application</small></div><button class="btn small" data-install style="width:auto">Installer</button><button class="ibx" aria-label="Fermer">✕</button>`;
   document.getElementById("app").appendChild(d);bindInstall(d);d.querySelector(".ibx").onclick=()=>{S.installHide=true;save();d.hidden=true;};
   setInterval(refreshInstall,1500);})();
+
+/* ---------- Mises à jour ----------
+   • Le jeu lui-même (questions, écrans…) vient du site : on vérifie au démarrage, au retour sur l'appli et toutes
+     les 30 min si une version plus récente est en ligne, et on propose de recharger.
+   • L'application Android installée hors Play Store (APK) est créée avec l'adresse de départ « /?app=apk&v=N ».
+     Si une APK plus récente existe, on propose de la télécharger ; Android lance ensuite l'installation.
+     La version Play Store ne reçoit jamais ce message : c'est Google Play qui la met à jour. */
+const APK_INFO=(()=>{try{const u=new URLSearchParams(location.search);if(u.get("app")==="apk"){const v=+u.get("v")||1;localStorage.setItem("pb-apk-v",String(v));return {v};}
+  const s=+localStorage.getItem("pb-apk-v");return s&&isStandalone()?{v:s}:null;}catch(e){return null;}})();
+let updShown={web:false,apk:false};
+async function checkUpdates(){if(!window.PB_BUILD||!navigator.onLine)return;let v;
+  try{v=await (await fetch("/version.json?t="+Date.now(),{cache:"no-store"})).json();}catch(e){return;}
+  if(APK_INFO&&v.apk&&v.apk.version>APK_INFO.v&&!updShown.apk&&!S.apkSkip?.[v.apk.version]){updShown.apk=true;showApkUpdate(v.apk);return;}
+  if(v.web&&v.web!==window.PB_BUILD&&!updShown.web){updShown.web=true;showWebUpdate();}}
+function showWebUpdate(){if(curScreen==="lesson"||curScreen==="duel"){updShown.web=false;return;}
+  notify("✨","Nouvelle version disponible","Touche ici pour mettre à jour le jeu.",()=>location.reload());}
+function showApkUpdate(a){const force=APK_INFO.v<(a.minVersion||0);
+  openSheet(`<div class="center" style="gap:10px;padding:6px 0"><img src="/icons/icon-192.png" alt="" style="width:72px;height:72px;border-radius:18px">
+    <h3 style="margin:0">Mise à jour de l'application</h3><p class="muted" style="margin:0">Version ${esc(a.versionName||String(a.version))} disponible${a.notes?` : ${esc(a.notes)}`:"."}</p>
+    <ol style="text-align:left;line-height:1.7;padding-left:20px;margin:6px 0;font-size:14.5px"><li>Touche <b>Télécharger</b>.</li><li>Ouvre le fichier téléchargé.</li><li>Si Android le demande, autorise l'installation, puis touche <b>Mettre à jour</b>.</li></ol>
+    <div style="display:grid;gap:10px;width:100%"><a class="btn" id="apkGo" href="${esc(a.url)}" download>⬇️ Télécharger la mise à jour</a>${force?"":`<button class="btn ghost" id="apkLater">Plus tard</button>`}</div></div>`);
+  const l=$("apkLater");if(l)l.onclick=()=>{S.apkSkip=Object.assign(S.apkSkip||{},{[a.version]:Date.now()});save();closeSheet();};
+  $("apkGo").onclick=()=>{sfx("tap");setTimeout(()=>notify("⬇️","Téléchargement lancé","Ouvre le fichier dans tes notifications pour installer."),400);};}
+setTimeout(checkUpdates,4000);setInterval(checkUpdates,30*60*1000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdates();});
 
 /* ===================== DÉFIS EN LIGNE =====================
    Vrais comptes et parties en direct via Supabase (projet « parcours-biblique »).

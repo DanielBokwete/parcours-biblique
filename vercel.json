@@ -18,6 +18,28 @@
      "value": "no-cache"
     }
    ]
+  },
+  {
+   "source": "/version.json",
+   "headers": [
+    {
+     "key": "Cache-Control",
+     "value": "no-store"
+    }
+   ]
+  },
+  {
+   "source": "/download/(.*)",
+   "headers": [
+    {
+     "key": "Content-Type",
+     "value": "application/vnd.android.package-archive"
+    },
+    {
+     "key": "Content-Disposition",
+     "value": "attachment"
+    }
+   ]
   }
  ]
 }
