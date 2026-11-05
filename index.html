@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="95f331a3f2";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="0f043ff7b8";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -734,6 +734,16 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .installban img{width:40px;height:40px;border-radius:10px}.installban div{flex:1;min-width:0}.installban b{display:block;font-size:14.5px}.installban small{display:block;font-size:12px;color:#6b7894}
 .installban .ibx{background:none;border:0;color:#8a96ad;font-size:16px;padding:4px 6px;cursor:pointer}
 a.btn{text-decoration:none;display:flex;align-items:center;justify-content:center}
+
+.scorebox{display:flex;align-items:center;gap:14px;width:100%;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 0 0 2px var(--line);text-align:left;margin:4px 0}
+.sc-ring{--c:#1f4fd1;width:68px;height:68px;border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),#e6ebf5 0)}
+.sc-ring b{width:54px;height:54px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:17px;font-weight:800;color:var(--c)}
+.scorebox.hi .sc-ring{--c:#16a06b}.scorebox.mid .sc-ring{--c:#e3a008}.scorebox.lo .sc-ring{--c:#e0573f}
+.sc-txt b{display:block;font-size:16.5px}.sc-txt small{display:block;color:#6b7894;font-size:13.5px;margin-top:2px;line-height:1.35}
+.node{position:relative}
+.node .pct{position:absolute;right:-18px;top:-6px;font-size:11.5px;font-weight:800;padding:2px 7px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(20,39,94,.18);white-space:nowrap;z-index:2}
+.node .pct.full{color:#c98a00}.node .pct.hi{color:#11734a}.node .pct.mid{color:#9a6b00}.node .pct.lo{color:#c0392b}
+.bestline{font-size:13.5px;margin:-2px 0 10px;color:#3a4766}
 
 </style>
 <div class="app" id="app">
@@ -4472,7 +4482,7 @@ function renderPath(){renderTop();const b=curBook();const T=S.testament.toLowerC
   const done=doneOf(b),open=bookUnlocked(b);const deco=T==="at"?["🌴","🌵","🐪","🌴","🐑","🏕️"]:["🌿","⛵","🐟","🌴","🏘️","🐑"];let h="";
   unitsOf(b).forEach(([name,a,z],ui)=>{h+=`<div class="unit"><div class="k">Étape ${ui+1} · ${chapSpan(b,a,z)}</div><div class="h">${esc(name)}</div></div>`;
     for(let L=a;L<=z;L++){const st=L<=done?"done":(L===done+1&&open?"cur":"lock");const x=xOf(L);
-      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}" data-level="${L}" aria-label="Niveau ${L} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span></button>${L%3===2?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
+      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}" data-level="${L}" aria-label="Niveau ${L} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${bestOf(b,L)>=100?"full":bestOf(b,L)>=80?"hi":bestOf(b,L)>=50?"mid":"lo"}">${bestOf(b,L)}%</span>`:""}</button>${L%3===2?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
   const next=books()[b.idx+1];
   h+=`<div class="endbook"><span class="ic">⛰️</span><div><b>Sommet de ${esc(b.name)}</b><br><small class="muted">${next?`Termine les ${b.levels} niveaux pour débloquer ${esc(next.name)}.`:"Dernier livre du "+(S.testament==="AT"?"Ancien":"Nouveau")+" Testament."}</small></div></div>`;
   tr.innerHTML=h+`<svg class="trail" id="trail"></svg><div class="pawn" id="pawn"><div class="bob"><div class="head">${avatarHTML()}</div><div class="pin"></div></div></div>`;
@@ -4499,8 +4509,8 @@ $("scroll").addEventListener("scroll",()=>{$("far").style.backgroundPosition=`0 
 function closeTablet(){const p=document.querySelector(".tablet");if(p)p.remove();}
 function openTablet(b,L){closeTablet();const done=doneOf(b),open=bookUnlocked(b)&&L<=done+1,has=CONTENT[b.id]&&CONTENT[b.id].levels[L],c=centerOf(L),tr=$("track");
   const p=document.createElement("div");p.className="tablet";
-  p.innerHTML=`<div class="eyebrow">${esc(b.name)} · Niveau ${L}</div><h3>${esc(levelTitle(b,L))}</h3><div class="bdgline">🏅 ${esc(badgeName(b,L))}<br>${esc(levelRef(b,L))}</div>
-   ${!open?`<div class="bdgline" style="margin:0">🔒 Réussis le niveau ${L-1} pour l'ouvrir</div>`:has?`<button class="tbtn" id="pGo">${L<=done?"Rejouer":"Monter ici"}</button>`
+  p.innerHTML=`<div class="eyebrow">${esc(b.name)} · Niveau ${L}</div><h3>${esc(levelTitle(b,L))}</h3><div class="bdgline">🏅 ${esc(badgeName(b,L))}<br>${esc(levelRef(b,L))}</div>${L<=done&&bestOf(b,L)!==undefined?`<div class="bestline">🎯 Ton meilleur score : <b>${bestOf(b,L)} %</b>${bestOf(b,L)<100?" · fais mieux !":" · parfait !"}</div>`:""}
+   ${!open?`<div class="bdgline" style="margin:0">🔒 Réussis le niveau ${L-1} pour l'ouvrir</div>`:has?`<button class="tbtn" id="pGo">${L<=done?(bestOf(b,L)!==undefined&&bestOf(b,L)<100?"Rejouer pour battre mon record":"Rejouer"):"Monter ici"}</button>`
    :`<div class="bdgline" style="margin:0">Questions en préparation</div>`}`;
   tr.appendChild(p);const w=250,x=Math.min(Math.max(14,c.x-w/2),tr.clientWidth-w-14);p.style.left=x+"px";p.style.top=(c.y-56-p.offsetHeight)+"px";
   const g=$("pGo");if(g)g.onclick=()=>{closeTablet();startLevel(b,L);};
@@ -4661,16 +4671,21 @@ function nextStep(){LS.si++;if(LS.si<LS.steps.length)renderStep();else LS.mode==
 function completeLevel(b,L){const first=L>doneOf(b);if(first)S.done[b.id]=L;const id=b.id+"-"+L,newBadge=!S.badges[id];if(newBadge)S.badges[id]=Date.now();const up=bumpStreak();save();return {first,newBadge,up};}
 function bumpStreak(){const d=localDay();if(!S.playDays.includes(d)){S.playDays.push(d);S.playDays=S.playDays.slice(-21);}if(S.lastDay===d)return false;
   const y=localDay(new Date(Date.now()-864e5));S.streak=S.lastDay===y?S.streak+1:1;S.lastDay=d;return true;}
-function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r=completeLevel(b,L);S.xp+=LS.xp;S.bestCombo=Math.max(S.bestCombo||0,LS.best);save();setHead();
+const bestOf=(b,L)=>(S.best||{})[b.id+"-"+L];
+function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r=completeLevel(b,L);
+  const pct=Math.round(LS.firstTry/LS.total*100),k=b.id+"-"+L;S.best=S.best||{};const prev=S.best[k],isRecord=prev===undefined||pct>prev;if(isRecord)S.best[k]=pct;const best=S.best[k];S.xp+=LS.xp;S.bestCombo=Math.max(S.bestCombo||0,LS.best);save();setHead();
   const lastOfBook=L===b.levels,next=BOOKS[b.t][b.idx+1],perfect=LS.mistakes===0,stars=perfect?3:LS.mistakes<=2?2:1;
   sfx("win");setTimeout(()=>{confetti();vibrate([40,40,40,40,120]);},150);if(r.newBadge)setTimeout(()=>sfx("badge"),800);
   $("lbody").innerHTML=`<div class="center"><div class="medal badge">${badgeIcon(b,L)}</div><div class="eyebrow">${r.newBadge?"Nouveau badge":"Badge déjà obtenu"}</div><div class="badgename">${esc(badgeName(b,L))}</div>
    <div class="stars">${[0,1,2].map(i=>`<span class="${i<stars?"":"off"}">⭐</span>`).join("")}</div>
    <h2 style="font-size:28px">${perfect?"Sans faute, "+esc(S.user?S.user.name:"")+" !":lastOfBook?esc(b.name)+" gravi !":"Niveau "+L+" réussi"}</h2>
    <p>${perfect?"Tu as tout trouvé du premier coup.":"Toutes les réponses sont trouvées. On continue de monter !"}${lastOfBook&&next?`<br><b>${esc(next.name)}</b> est maintenant débloqué.`:""}</p>
-   <div class="reward"><div style="--c:#e3a008"><small>XP</small><b>⭐ +${LS.xp}</b></div><div style="--c:var(--good)"><small>Du 1er coup</small><b>🎯 ${Math.round(LS.firstTry/LS.total*100)}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
+   <div class="scorebox ${pct>=80?"hi":pct>=50?"mid":"lo"}"><div class="sc-ring" style="--p:${pct}"><b>${pct}%</b></div><div class="sc-txt">${prev===undefined?`<b>Ton score : ${pct} %</b><small>${pct<100?"Rejoue ce niveau plus tard pour viser 100 % !":"Parfait du premier coup !"}</small>`
+      :isRecord&&pct>prev?`<b>🏆 Nouveau record !</b><small>Tu passes de ${prev} % à ${pct} %.</small>`:`<b>Ton record reste ${best} %</b><small>${pct<best?`Cette fois ${pct} %. Ton meilleur score est gardé.`:"Égalité avec ton record."}</small>`}</div></div>
+   <div class="reward"><div style="--c:#e3a008"><small>XP</small><b>⭐ +${LS.xp}</b></div><div style="--c:var(--good)"><small>Record</small><b>🎯 ${best}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
   speak(`${perfect?"Sans faute !":"Bravo !"} Tu gagnes le badge ${badgeName(b,L)}.`);
-  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<button class="btn" id="back">Monter au niveau suivant ↑</button>`;
+  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:10px"><button class="btn" id="back">Monter au niveau suivant ↑</button>${best<100?`<button class="btn ghost" id="again">🔁 Rejouer pour faire mieux</button>`:""}</div>`;
+  const ag=$("again");if(ag)ag.onclick=()=>{sfx("tap");S.justDone={book:b.id,L};save();startLevel(b,L);};
   $("back").onclick=()=>{sfx("tap");if(lastOfBook&&next){S.book[b.t]=next.id;S.justDone=null;}else S.justDone={book:b.id,L};save();if(r.up)streakScreen();else go("path");};}
 function streakScreen(){const days=["L","M","M","J","V","S","D"],now=new Date(),dow=(now.getDay()+6)%7,mon=new Date(now);mon.setDate(now.getDate()-dow);
   $("progBar").style.width="100%";$("lbody").innerHTML=`<div class="center"><div class="lampwrap" style="width:100%;--f:1"><span class="glow" style="--g:7"></span><span class="lamp">🪔</span><span class="flame">🔥</span></div>
