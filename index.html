@@ -726,6 +726,14 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .legal{margin-top:10px;font-size:12.5px;color:#8a96ad}.legal a{color:#6b7894}
 .gl-note a{color:var(--lapis)}
 
+.installcard{display:flex;align-items:center;gap:12px;box-shadow:0 0 0 2px var(--lapis-soft,#dbe6ff)}
+.installcard b{display:block}.installcard small{color:#6b7894;font-size:12.5px;line-height:1.35;display:block}
+.ic-app img{width:46px;height:46px;border-radius:12px;display:block}
+.installban{position:absolute;left:12px;right:12px;bottom:84px;z-index:6;display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:10px 10px 10px 12px;box-shadow:0 10px 30px rgba(20,39,94,.25)}
+.installban[hidden]{display:none}
+.installban img{width:40px;height:40px;border-radius:10px}.installban div{flex:1;min-width:0}.installban b{display:block;font-size:14.5px}.installban small{display:block;font-size:12px;color:#6b7894}
+.installban .ibx{background:none;border:0;color:#8a96ad;font-size:16px;padding:4px 6px;cursor:pointer}
+
 </style>
 <div class="app" id="app">
 
@@ -4511,8 +4519,39 @@ function normQ(q){if(q.t==="tf")return {type:"choice",disp:"tf",q:q.q,o:["Vrai",
   if(q.t==="fill")return {type:"fill",q:q.q,s:q.s,o:q.o,a:[q.a],ref:q.ref,ex:q.ex};
   if(q.t==="match")return {type:"match",q:q.q,pairs:q.pairs,right:shuffle(q.pairs.map(p=>p[1])),ref:q.ref,ex:q.ex};
   return {type:"choice",disp:"qcm",q:q.q,o:q.o,a:q.a,ref:q.ref,ex:q.ex,ill:q.ill};}
-function startLevel(b,L,fromReview){regen();helpsReset();if(!S.testament)S.testament=b.t;if(S.hearts<=0&&!unlimited()){noHearts();return;}
-  const lv=CONTENT[b.id].levels[L],qs=lv.qs.map(normQ),steps=[];
+/* ---------- Questions qui varient quand on rejoue un niveau ----------
+   1re partie : les 5 questions du niveau. Ensuite, on garde 3 questions du niveau (jamais les mêmes 3)
+   et on ajoute 2 questions prises dans les mêmes chapitres : banque en ligne (ajouts des admins, vidéos…)
+   ou, sans connexion, questions tirées du texte biblique du passage. Ordre et réponses mélangés. */
+function levelChapters(b,lv){const s=String(lv.ref||"").slice(b.name.length).trim(),out=[];
+  s.split(";").forEach(seg=>{seg=seg.trim();let m;
+    if((m=/^(\d+)\s*[–-]\s*(\d+)$/.exec(seg)))for(let c=+m[1];c<=+m[2];c++)out.push({c});
+    else if((m=/^(\d+):(\d+)-(\d+)$/.exec(seg)))out.push({c:+m[1],v1:+m[2],v2:+m[3]});
+    else if((m=/^(\d+)/.exec(seg)))out.push({c:+m[1]});});
+  return out;}
+function shuffleOpts(q){if(q.type!=="choice"||q.disp!=="qcm"||!Array.isArray(q.o))return q;const idx=shuffle(q.o.map((_,i)=>i));
+  return Object.assign({},q,{o:idx.map(i=>q.o[i]),a:(q.a||[]).map(x=>idx.indexOf(x))});}
+function bankToQ(r){if(r.kind==="tf")return {type:"choice",disp:"tf",q:r.prompt,o:["Vrai","Faux"],a:[r.answer?0:1],ref:r.ref,ex:r.explanation||""};
+  if(r.kind==="fill")return {type:"fill",q:r.prompt||"Complète le verset",s:r.sentence,o:r.options,a:[r.answer],ref:r.ref,ex:r.explanation||""};
+  return {type:"choice",disp:"qcm",q:r.prompt,o:r.options,a:Array.isArray(r.answer)?r.answer:[r.answer],ref:r.ref,ex:r.explanation||""};}
+function passageQs(b,chs){if(!BIBLE||!chs.length)return [];const out=[];let guard=0;
+  while(out.length<3&&guard++<12){const seg=pick(chs),ch=BIBLE[b.g]&&BIBLE[b.g][seg.c-1];if(!ch)continue;
+    const v1=seg.v1||1,v2=Math.min(seg.v2||ch.length,ch.length),v=v1+Math.floor(Math.random()*(v2-v1+1)),t=ch[v-1]||"";if(t.length<40||t.length>240)continue;
+    const r=genVerseQuestions({g:b.g,c:seg.c,v},false).qs.filter(q=>q.type==="fill"||q.tag==="Contexte");if(r.length)out.push(pick(r));}
+  return out;}
+async function levelQuestions(b,L,lv){const base=lv.qs.map(normQ),key=b.id+"-"+L;S.lvPlays=S.lvPlays||{};const plays=S.lvPlays[key]||0;
+  if(plays===0&&L>doneOf(b))return base.map(shuffleOpts);
+  const chs=levelChapters(b,lv),n=base.length,keepN=Math.min(3,n),start=(plays*2)%n;
+  const keep=Array.from({length:keepN},(_,i)=>base[(start+i)%n]);
+  let extra=[];
+  try{if(typeof olLevelPool==="function"){const rows=await Promise.race([olLevelPool(b.name,chs.map(x=>x.c)),new Promise(r=>setTimeout(()=>r([]),1500))]);
+    const mine=new Set(lv.qs.map(q=>q.q));extra=shuffle((rows||[]).filter(r=>!String(r.source||"").startsWith(key+"-")&&!mine.has(r.prompt))).map(bankToQ);}}catch(e){}
+  if(extra.length<n-keepN){try{await Promise.race([loadBible(),new Promise((_,j)=>setTimeout(j,1500))]);}catch(e){}extra=extra.concat(passageQs(b,chs));}
+  const qs=keep.concat(extra.slice(0,n-keepN));while(qs.length<n)qs.push(base[(start+qs.length)%n]);
+  return shuffle(qs).map(shuffleOpts);}
+let lvStarting=false;
+async function startLevel(b,L,fromReview){if(lvStarting)return;regen();helpsReset();if(!S.testament)S.testament=b.t;if(S.hearts<=0&&!unlimited()){noHearts();return;}
+  lvStarting=true;let qs;const lv=CONTENT[b.id].levels[L];try{qs=await levelQuestions(b,L,lv);}catch(e){qs=lv.qs.map(normQ);}finally{lvStarting=false;}const steps=[];const pk=b.id+"-"+L;S.lvPlays=S.lvPlays||{};S.lvPlays[pk]=(S.lvPlays[pk]||0)+1;save();
   lv.cards.forEach((c,i)=>steps.push({k:"card",c,i,n:lv.cards.length,label:"L'essentiel",last:i===lv.cards.length-1,go:"Aux questions !"}));
   qs.forEach((q,i)=>{steps.push({k:"q",q});if(i===1&&lv.mid)lv.mid.forEach((c,j)=>steps.push({k:"card",c,i:j,n:lv.mid.length,label:"Pour aller plus loin",last:j===lv.mid.length-1,go:"Reprendre les questions",num0:lv.cards.length}));});
   LS={mode:"level",fromReview:!!fromReview,b,L,lv,title:levelTitle(b,L),ref:lv.ref,steps,si:0,total:qs.length,qdone:0,xp:0,combo:0,best:0,mistakes:0,firstTry:0};
@@ -4914,7 +4953,7 @@ function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0]
   const earned=Object.keys(S.badges).sort((a,b)=>S.badges[b]-S.badges[a]).map(id=>{const k=id.lastIndexOf("-"),b=ALLB.find(x=>x.id===id.slice(0,k)),L=+id.slice(k+1);return b&&b.t===S.testament?{b,L}:null;}).filter(Boolean);
   const b=curBook(),upcoming=[];for(let L=doneOf(b)+1;L<=b.levels&&upcoming.length<3;L++)upcoming.push({b,L});
   const paused=S.don.at&&Date.now()-S.don.at<DON_PAUSE_MS;
-  $("profilePage").innerHTML=`<h2>Profil</h2>
+  $("profilePage").innerHTML=`<h2>Profil</h2>${typeof installCard==="function"?installCard():""}
    <div class="card row"><span class="avatarbig">${avatarHTML()}</span><div><b style="font-size:18px">${esc(u.name||"")}</b><br><small>${esc(u.email||"")}${u.provider==="google"?" · Google":""}</small><br><small style="color:var(--lapis);font-weight:700">${u.gender==="f"?"Sœur":"Frère"} · ${esc(r[1])}</small></div><button class="chip" id="editAv">Modifier</button></div>
    <div class="card row" style="box-shadow:0 0 0 2px var(--line)"><span class="ic" style="background:#e7eefc">🧭</span><div><small>${nx?`Encore ${plural(nx[0]-n,"niveau","niveaux")} pour devenir <b>${esc(nx[1])}</b>`:"Rang le plus élevé atteint"}</small><span class="bar"><i style="width:${nx?Math.round((n-r[0])/(nx[0]-r[0])*100):100}%"></i></span></div></div>
    <div><div class="eyebrow" style="margin-bottom:8px">Ma montée</div><div class="seg"><button aria-pressed="${S.testament==="AT"}" data-t="AT">📜 Ancien Testament</button><button aria-pressed="${S.testament==="NT"}" data-t="NT">✝️ Nouveau Testament</button></div></div>
@@ -4931,7 +4970,7 @@ function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0]
   document.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>{sfx("tap");S.testament=x.dataset.t;save();renderProfile();});
   $("pDon").onclick=()=>{sfx("tap");openDonate();};const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
   $("editAv").onclick=()=>{OB.edit=true;OB.step=2;renderOnb();};
-  const da=$("delAcc");if(da)da.onclick=()=>{sfx("tap");olDeleteSheet();};
+  if(typeof bindInstall==="function")bindInstall($("profilePage"));const da=$("delAcc");if(da)da.onclick=()=>{sfx("tap");olDeleteSheet();};
   $("logout").onclick=()=>{openSheet(`<h2 style="font-size:24px">Se déconnecter ?</h2><p style="line-height:1.5;color:#3a4766">Ta progression reste enregistrée sur ce compte. Tu la retrouveras en te reconnectant avec Google, sur ce téléphone ou un autre.</p><div style="display:grid;gap:12px"><button class="btn" id="yesOut">Me déconnecter</button><button class="btn ghost" onclick="closeSheet()">Annuler</button></div>`);
     $("yesOut").onclick=async()=>{closeSheet();if(typeof olLogout==="function")await olLogout();OB.step=0;renderOnb();};};
   $("reset").onclick=()=>{openSheet(`<h2 style="font-size:24px">Tout recommencer ?</h2><p style="line-height:1.5;color:#3a4766">Ton compte, tes niveaux, badges, XP, méditations et ton plan annuel seront effacés de cet appareil.</p><div style="display:grid;gap:12px"><button class="btn bad" id="yes">Réinitialiser</button><button class="btn ghost" onclick="closeSheet()">Annuler</button></div>`);
@@ -4973,6 +5012,26 @@ function myTitle(){const n=totalDone();let r=RANKS[0];RANKS.forEach(x=>{if(n>=x[
   if(last){const k=last.lastIndexOf("-"),bk=ALLB.find(x=>x.id===last.slice(0,k));if(bk)badge=badgeName(bk,+last.slice(k+1));}
   return {rank:r[1],badge};}
 
+/* ---------- Installer l'application (Android : installation directe ; iPhone : explication) ---------- */
+let installEvt=null;
+const isStandalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true||document.referrer.startsWith("android-app://");}catch(e){return false;}};
+const isIOS=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)&&!window.MSStream;
+const canInstall=()=>!!document.querySelector("link[rel=manifest]")&&!isStandalone()&&(!!installEvt||isIOS());
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;refreshInstall();});
+addEventListener("appinstalled",()=>{installEvt=null;S.installed=true;save();refreshInstall();notify("📲","Application installée","Retrouve Parcours Biblique sur ton écran d'accueil.");});
+function installCard(){if(!canInstall())return "";
+  return `<div class="card installcard"><span class="ic-app"><img src="/icons/icon-192.png" alt=""></span><div style="flex:1;min-width:0"><b>Installer l'application</b><small>Plein écran, icône sur ton téléphone, ouverture plus rapide.</small></div><button class="btn small" data-install style="width:auto">Installer</button></div>`;}
+async function doInstall(){sfx("tap");
+  if(installEvt){const e=installEvt;installEvt=null;try{await e.prompt();const r=await e.userChoice;if(r&&r.outcome!=="accepted")installEvt=e;}catch(err){}refreshInstall();return;}
+  if(isIOS())openSheet(`<h3 style="margin:0 0 8px">📲 Installer sur iPhone</h3><ol style="line-height:1.8;padding-left:20px;margin:0 0 14px"><li>Touche le bouton <b>Partager</b> <span style="font-size:18px">⎋</span> en bas de Safari.</li><li>Choisis <b>« Sur l'écran d'accueil »</b>.</li><li>Touche <b>Ajouter</b> : l'icône Parcours Biblique apparaît.</li></ol><button class="btn" onclick="closeSheet()">Compris</button>`);}
+function bindInstall(root){(root||document).querySelectorAll("[data-install]").forEach(b=>b.onclick=doInstall);}
+function refreshInstall(){const ban=$("installBan");if(ban){ban.hidden=!(canInstall()&&!S.installHide&&curScreen==="path");}
+  if(curScreen==="profile")try{const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;}catch(e){}}
+(function(){const d=document.createElement("div");d.id="installBan";d.className="installban";d.hidden=true;
+  d.innerHTML=`<img src="/icons/icon-192.png" alt=""><div><b>Installe Parcours Biblique</b><small>En plein écran, comme une vraie application</small></div><button class="btn small" data-install style="width:auto">Installer</button><button class="ibx" aria-label="Fermer">✕</button>`;
+  document.getElementById("app").appendChild(d);bindInstall(d);d.querySelector(".ibx").onclick=()=>{S.installHide=true;save();d.hidden=true;};
+  setInterval(refreshInstall,1500);})();
+
 /* ===================== DÉFIS EN LIGNE =====================
    Vrais comptes et parties en direct via Supabase (projet « parcours-biblique »).
    Toutes les règles (tirage des 10 questions, correction, points, classement) sont appliquées côté serveur :
@@ -5010,6 +5069,7 @@ let olLockQ=Promise.resolve();
 function olTabLock(name,timeout,fn){const run=olLockQ.then(()=>fn());olLockQ=run.catch(()=>{});return run;}
 const olWithin=(p,ms,v)=>Promise.race([p,new Promise(r=>setTimeout(()=>r(v),ms))]);
 function olLoading(t){show("onb");$("onb").innerHTML=`<div class="obwrap pad" style="justify-content:center;align-items:center;text-align:center;gap:14px"><div class="radar"><span>🪔</span></div><h2 style="font-size:22px">${t}</h2><p class="muted">Un instant…</p></div>`;}
+async function olLevelPool(book,chapters){const sb=olInit();if(!sb||!chapters.length)return [];const {data,error}=await sb.rpc("level_pool",{p_book:book,p_chapters:chapters,p_limit:12});if(error)throw error;return data||[];}
 function olInit(){if(OL.sb)return OL.sb;if(!window.supabase||!window.supabase.createClient)return null;
   OL.sb=window.supabase.createClient(OL_CFG.url,OL_CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,lock:olTabLock}});
   OL.sb.auth.onAuthStateChange((ev,s)=>{OL.session=s;setTimeout(()=>{if(!s){olSignedOut();}else if(OL.booted&&curScreen==="onb"&&OB.step<=1){olEnter();}else if(OL.booted&&!OL.me&&!OL.loadingMe){olAfterLogin();}if(curScreen==="online")renderOnline();},0);});
