@@ -756,6 +756,43 @@ code{background:var(--mist);padding:1px 6px;border-radius:6px;font-weight:700}
 .pthumb{width:44px;height:44px;border-radius:8px;object-fit:cover;float:left;margin-right:10px}
 
 .wbtn{font-size:12.5px;font-weight:700;border-radius:999px;padding:5px 10px;background:#eef1f6;color:#4a5670}.wbtn.on{background:#dff5ea;color:#11734a}
+
+/* ---- Mobile ---- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.ahead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+@media (max-width:720px){
+  .ahead{padding:12px 14px;font-size:17px}
+  .anav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:8px 10px;gap:4px}
+  .anav::-webkit-scrollbar{display:none}
+  .anav button{flex:none;font-size:13.5px;padding:8px 11px}
+  .anav .sp{display:none}
+  .anav small,.anav .textlink{flex:none;font-size:13px;white-space:nowrap;padding:0 6px}
+  #main{padding:10px;gap:10px}
+  .acard{padding:14px;border-radius:16px;overflow-x:visible}
+  .acard p{font-size:13.5px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .kpi{padding:11px}.kpi b{font-size:24px}
+  /* les tableaux deviennent des fiches */
+  .tbl,.tbl tbody{display:block}
+  .tbl tr:first-child:has(th){display:none}
+  .tbl tr{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:12px;margin:0 0 10px;border-radius:14px;background:#f7f9fd;box-shadow:0 0 0 1.5px var(--line)}
+  .tbl td{display:block;border:0;padding:0;font-size:14px;overflow-wrap:anywhere}
+  .tbl td[data-l]:not([data-l=""])::before{content:attr(data-l);display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--stone);margin-bottom:2px}
+  .tbl tr{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px}
+  .tbl td:first-child,.tbl td.acts,.tbl td[colspan]{grid-column:1/-1}
+  .row input{flex:2 1 140px}
+  .tbl td.acts{display:flex;flex-wrap:wrap;gap:4px;white-space:normal;margin-top:4px}
+  .tbl td.acts::before{display:none}
+  .tbl td[colspan]{text-align:center}
+  .tbl tr th{display:none}
+  .row{flex-wrap:wrap}
+  .row .btn{flex:1 1 auto}
+  .pimg{flex-direction:row;align-items:center}.pprev{width:84px;height:84px}
+  .pthumb{width:56px;height:56px}
+  .amodal{padding:12px 8px}
+}
+
+.pimg label.btn{text-transform:none;letter-spacing:0;font-size:14px;color:var(--lapis)}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <header class="ahead"><b>✝️ Parcours Biblique · Admin</b></header><nav class="anav" id="nav"></nav><main id="main"></main><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* ---------- Avatars personnalisés « av1:… » ----------
    Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
@@ -863,6 +900,10 @@ function renderLogin(){$("nav").innerHTML="";
 const TABS=[["home","📊 Vue d'ensemble"],["users","👥 Joueurs"],["matches","⚔️ Parties"],["rank","🏆 Classement"],["prizes","🎁 Prix"],["questions","❓ Questions"]];
 function renderNav(){$("nav").innerHTML=TABS.map(([k,l])=>`<button data-t="${k}" aria-pressed="${A.tab===k}">${l}</button>`).join("")+`<span class="sp"></span><small class="muted">${esc(A.me.display_name)}</small><button class="textlink" id="out">Déconnexion</button><a class="textlink" href="index.html">Ouvrir le jeu</a>`;
   $("nav").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{A.tab=b.dataset.t;renderNav();renderTab();});$("out").onclick=()=>sb.auth.signOut();}
+/* Sur mobile, chaque cellule reçoit le titre de sa colonne (les tableaux s'affichent en fiches). */
+function labelTables(){document.querySelectorAll("#main table.tbl").forEach(t=>{const hr=[...t.querySelectorAll("tr")].find(r=>r.querySelector("th"));if(!hr)return;
+  const heads=[...hr.children].map(th=>th.textContent.trim());t.querySelectorAll("tr").forEach(r=>{if(r===hr)return;[...r.children].forEach((td,i)=>{if(td.tagName==="TD"&&!td.hasAttribute("data-l")&&!td.hasAttribute("colspan"))td.setAttribute("data-l",heads[i]||"");});});});}
+new MutationObserver(()=>labelTables()).observe(document.getElementById("main"),{childList:true,subtree:true});
 function renderTab(){$("main").innerHTML=`<div class="acard">Chargement…</div>`;({home:tHome,users:tUsers,matches:tMatches,rank:tRank,prizes:tPrizes,questions:tQuestions})[A.tab]().catch(e=>{$("main").innerHTML=`<div class="acard"><b>Erreur</b><p>${esc(err(e))}</p></div>`;});}
 
 /* ---- Vue d'ensemble ---- */
