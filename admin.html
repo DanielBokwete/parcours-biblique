@@ -1,5 +1,5 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><title>Admin · Parcours Biblique</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Cinzel:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap">
 <style>/* Layout: one phone-sized app column; level path climbs from bottom to top over layered scenery; sheets and overlays slide over it. */
 :root{
   --ink:#14213d; --lapis:#1f4fd1; --lapis-deep:#163a9c; --lapis-hi:#6f97ff; --lapis-soft:#eef3ff;
@@ -742,6 +742,42 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .bestline{font-size:13.5px;margin:-2px 0 10px;color:#3a4766}
 
 .paynote{margin:14px 0 0;padding:10px 12px;border-radius:14px;background:#f3f6fc;font-size:13.5px;text-align:center;line-height:1.5}.paynote small{color:#6b7894}
+
+/* ---------- Décors 3D (images) : fond qui défile plus lentement que le chemin + médaillons en relief ---------- */
+.scenery.img .base{inset:auto 0 0 0;top:0;height:128%;background-size:cover;background-position:center bottom;will-change:transform;background-color:#2a3a2a}
+.scenery.img .far,.scenery.img .sun,.scenery.img .cloud{display:none}
+.scenery.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,45,.35) 0%,rgba(10,20,45,0) 22%,rgba(10,20,45,0) 70%,rgba(10,20,45,.25) 100%)}
+#path:has(.scenery.img){background:#1d2b1d}
+.track.img{background-image:none}
+.track.img .node-wrap::before{background:rgba(0,0,0,.45);filter:blur(5px)}
+.track.img .node .num{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.track.img .unit{background:linear-gradient(180deg,rgba(18,32,74,.78),rgba(10,20,50,.82));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(240,200,110,.45);box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.track.img .unit .k{color:#f3d58a;opacity:1}
+.track.img .unit .h{font-family:"Cinzel","Trajan Pro",Georgia,serif;font-weight:700;letter-spacing:.02em;font-size:18px}
+.track.img .endbook{background:rgba(255,255,255,.92);backdrop-filter:blur(6px)}
+/* médaillons */
+.track.img .node{border:4px solid transparent;background-clip:padding-box}
+.track.img .node.done{background:radial-gradient(circle at 38% 28%,#9fbcff 0,#3d6cf0 30%,#1a3fae 68%,#0e2470 100%) padding-box,linear-gradient(160deg,#fff1c2,#e0a92e 40%,#8a5a0a 75%,#f4cf6b) border-box;box-shadow:0 7px 0 #6b4508,0 14px 18px rgba(0,0,0,.45),inset 0 -6px 10px rgba(0,0,0,.35),inset 0 4px 6px rgba(255,255,255,.35)}
+.track.img .node.cur{background:radial-gradient(circle at 38% 28%,#fff6cf 0,#ffd257 30%,#e09a10 70%,#9c6200 100%) padding-box,linear-gradient(160deg,#fffbe6,#f0b429 40%,#8a5a0a 75%,#ffe9a0) border-box;box-shadow:0 8px 0 #7a4c00,0 0 26px rgba(255,210,90,.75),0 16px 20px rgba(0,0,0,.45),inset 0 -6px 10px rgba(120,60,0,.35),inset 0 4px 6px rgba(255,255,255,.6)}
+.track.img .node.lock{background:radial-gradient(circle at 38% 28%,#e9e4d8 0,#b9b1a1 40%,#7d7465 80%,#5b5347 100%) padding-box,linear-gradient(160deg,#d8d2c4,#8f8676 50%,#575045) border-box;box-shadow:0 7px 0 #3d372f,0 14px 18px rgba(0,0,0,.45),inset 0 -6px 10px rgba(0,0,0,.35),inset 0 3px 5px rgba(255,255,255,.4);color:#4e473c}
+.track.img .node.cur::after{border-color:rgba(255,215,110,.65)}
+.prop3d{position:absolute;top:-8px;height:104px;width:auto;max-width:120px;object-fit:contain;z-index:0;pointer-events:none;filter:drop-shadow(0 10px 8px rgba(0,0,0,.45))}
+.hero.hero3d{background:linear-gradient(180deg,rgba(12,22,52,.82) 0%,rgba(12,22,52,.25) 30%,rgba(12,22,52,0) 52%,rgba(240,244,250,.0) 66%,var(--mist) 86%),url(/scenes/d1.webp) center 35%/cover no-repeat,#1d2b1d}
+.hero.hero3d h1{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+.hero.hero3d .eyebrow{text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.hero.hero3d .art{height:290px;align-items:end}
+.hero.hero3d .guide{height:290px;width:auto;filter:drop-shadow(0 14px 14px rgba(0,0,0,.35));animation:guideIn .7s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes guideIn{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
+.lfoot{position:relative}
+.fbguide{position:absolute;right:10px;bottom:calc(100% - 64px);height:128px;width:auto;pointer-events:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25));animation:guidePop .45s cubic-bezier(.3,1.5,.5,1) both}
+.fb.withguide{padding-right:78px}
+@keyframes guidePop{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+/* Guide de l'accueil : plus grand, posé au sol (pieds derrière la carte), ombre de contact */
+.hero.hero3d .art{flex:1;height:auto;min-height:250px;position:relative;display:block;margin:0 -16px -46px;z-index:0}
+.hero.hero3d .guide{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:min(440px,100%);max-height:440px;animation:guideIn2 .7s cubic-bezier(.3,1.4,.5,1) both}
+.hero.hero3d .art::after{content:"";position:absolute;left:50%;bottom:6px;width:190px;height:34px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(20,30,10,.55),rgba(20,30,10,0));z-index:-1}
+.hero.hero3d > div:last-child{position:relative;z-index:1}
+@keyframes guideIn2{from{opacity:0;transform:translate(-50%,24px) scale(.96)}to{opacity:1;transform:translateX(-50%)}}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}

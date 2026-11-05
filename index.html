@@ -1,8 +1,8 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="2dbd69a7a5";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="85cae16af0";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Cinzel:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: one phone-sized app column; level path climbs from bottom to top over layered scenery; sheets and overlays slide over it. */
 :root{
@@ -746,6 +746,42 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .bestline{font-size:13.5px;margin:-2px 0 10px;color:#3a4766}
 
 .paynote{margin:14px 0 0;padding:10px 12px;border-radius:14px;background:#f3f6fc;font-size:13.5px;text-align:center;line-height:1.5}.paynote small{color:#6b7894}
+
+/* ---------- Décors 3D (images) : fond qui défile plus lentement que le chemin + médaillons en relief ---------- */
+.scenery.img .base{inset:auto 0 0 0;top:0;height:128%;background-size:cover;background-position:center bottom;will-change:transform;background-color:#2a3a2a}
+.scenery.img .far,.scenery.img .sun,.scenery.img .cloud{display:none}
+.scenery.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,45,.35) 0%,rgba(10,20,45,0) 22%,rgba(10,20,45,0) 70%,rgba(10,20,45,.25) 100%)}
+#path:has(.scenery.img){background:#1d2b1d}
+.track.img{background-image:none}
+.track.img .node-wrap::before{background:rgba(0,0,0,.45);filter:blur(5px)}
+.track.img .node .num{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.track.img .unit{background:linear-gradient(180deg,rgba(18,32,74,.78),rgba(10,20,50,.82));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(240,200,110,.45);box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.track.img .unit .k{color:#f3d58a;opacity:1}
+.track.img .unit .h{font-family:"Cinzel","Trajan Pro",Georgia,serif;font-weight:700;letter-spacing:.02em;font-size:18px}
+.track.img .endbook{background:rgba(255,255,255,.92);backdrop-filter:blur(6px)}
+/* médaillons */
+.track.img .node{border:4px solid transparent;background-clip:padding-box}
+.track.img .node.done{background:radial-gradient(circle at 38% 28%,#9fbcff 0,#3d6cf0 30%,#1a3fae 68%,#0e2470 100%) padding-box,linear-gradient(160deg,#fff1c2,#e0a92e 40%,#8a5a0a 75%,#f4cf6b) border-box;box-shadow:0 7px 0 #6b4508,0 14px 18px rgba(0,0,0,.45),inset 0 -6px 10px rgba(0,0,0,.35),inset 0 4px 6px rgba(255,255,255,.35)}
+.track.img .node.cur{background:radial-gradient(circle at 38% 28%,#fff6cf 0,#ffd257 30%,#e09a10 70%,#9c6200 100%) padding-box,linear-gradient(160deg,#fffbe6,#f0b429 40%,#8a5a0a 75%,#ffe9a0) border-box;box-shadow:0 8px 0 #7a4c00,0 0 26px rgba(255,210,90,.75),0 16px 20px rgba(0,0,0,.45),inset 0 -6px 10px rgba(120,60,0,.35),inset 0 4px 6px rgba(255,255,255,.6)}
+.track.img .node.lock{background:radial-gradient(circle at 38% 28%,#e9e4d8 0,#b9b1a1 40%,#7d7465 80%,#5b5347 100%) padding-box,linear-gradient(160deg,#d8d2c4,#8f8676 50%,#575045) border-box;box-shadow:0 7px 0 #3d372f,0 14px 18px rgba(0,0,0,.45),inset 0 -6px 10px rgba(0,0,0,.35),inset 0 3px 5px rgba(255,255,255,.4);color:#4e473c}
+.track.img .node.cur::after{border-color:rgba(255,215,110,.65)}
+.prop3d{position:absolute;top:-8px;height:104px;width:auto;max-width:120px;object-fit:contain;z-index:0;pointer-events:none;filter:drop-shadow(0 10px 8px rgba(0,0,0,.45))}
+.hero.hero3d{background:linear-gradient(180deg,rgba(12,22,52,.82) 0%,rgba(12,22,52,.25) 30%,rgba(12,22,52,0) 52%,rgba(240,244,250,.0) 66%,var(--mist) 86%),url(/scenes/d1.webp) center 35%/cover no-repeat,#1d2b1d}
+.hero.hero3d h1{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+.hero.hero3d .eyebrow{text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.hero.hero3d .art{height:290px;align-items:end}
+.hero.hero3d .guide{height:290px;width:auto;filter:drop-shadow(0 14px 14px rgba(0,0,0,.35));animation:guideIn .7s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes guideIn{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
+.lfoot{position:relative}
+.fbguide{position:absolute;right:10px;bottom:calc(100% - 64px);height:128px;width:auto;pointer-events:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25));animation:guidePop .45s cubic-bezier(.3,1.5,.5,1) both}
+.fb.withguide{padding-right:78px}
+@keyframes guidePop{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+/* Guide de l'accueil : plus grand, posé au sol (pieds derrière la carte), ombre de contact */
+.hero.hero3d .art{flex:1;height:auto;min-height:250px;position:relative;display:block;margin:0 -16px -46px;z-index:0}
+.hero.hero3d .guide{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:min(440px,100%);max-height:440px;animation:guideIn2 .7s cubic-bezier(.3,1.4,.5,1) both}
+.hero.hero3d .art::after{content:"";position:absolute;left:50%;bottom:6px;width:190px;height:34px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(20,30,10,.55),rgba(20,30,10,0));z-index:-1}
+.hero.hero3d > div:last-child{position:relative;z-index:1}
+@keyframes guideIn2{from{opacity:0;transform:translate(-50%,24px) scale(.96)}to{opacity:1;transform:translateX(-50%)}}
 
 </style>
 <div class="app" id="app">
@@ -4391,8 +4427,8 @@ const RELS=[["🌱","Je commence","Je découvre la Bible"],["📖","De temps en 
 const TONES=["🏿","🏾","🏽","🏻"];
 function head(t,s){return `<div class="guide"><span class="gav">🪔</span><div class="bubble"><b>${t}</b>${s?`<small>${s}</small>`:""}</div></div>`;}
 function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb");
-  if(st===0){el.innerHTML=`<div class="hero pad" style="background:linear-gradient(180deg,#14275e 0%,#1f4fd1 48%,var(--mist) 74%)"><div><div class="eyebrow" style="color:#b9cbff;text-align:center">Parcours Biblique</div><h1 style="color:#fff;margin-top:8px">Monte,<br><em style="color:#ffd37a">verset après verset.</em></h1></div>
-    <div class="art"><div class="disc" style="background:radial-gradient(circle at 50% 45%,#fff3d6,#ffd37a 45%,rgba(255,211,122,0) 70%);box-shadow:none;font-size:110px">🪔</div></div>
+  if(st===0){el.innerHTML=`<div class="hero pad hero3d"><div><div class="eyebrow" style="color:#b9cbff;text-align:center">Parcours Biblique</div><h1 style="color:#fff;margin-top:8px">Monte,<br><em style="color:#ffd37a">verset après verset.</em></h1></div>
+    <div class="art"><img class="guide" src="/props/p1.webp" alt="Le guide du Parcours Biblique te salue"></div>
     <div style="display:grid;gap:12px"><div class="tagcard"><span style="font-size:30px">⛰️</span><div><b>66 livres à gravir, niveau par niveau</b><br><small class="muted">Quiz, méditation, Bible complète · 100 % gratuit</small></div></div>
     <button class="btn" id="obNew">Créer mon compte</button><button class="btn ghost" id="obLog">J'ai déjà un compte</button></div></div>`;
     $("obNew").onclick=()=>{sfx("tap");OB.login=false;OB.step=1;renderOnb();};$("obLog").onclick=()=>{sfx("tap");OB.login=true;OB.step=1;renderOnb();};return;}
@@ -4479,11 +4515,22 @@ function nodeIcon(st){return st==="done"?'<svg width="32" height="32" viewBox="0
   :st==="cur"?'<svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>'
   :'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';}
 const xOf=L=>Math.round(Math.sin((L-1)*0.95)*78);
-function renderPath(){renderTop();const b=curBook();const T=S.testament.toLowerCase();$("scenery").className="scenery "+T;const tr=$("track");tr.className="track "+T;
+const SCENES={d1:["gen"],d2:["exo","lev","nom","deu","jos","jug","rut"],d3:["1sa","2sa","1ro","2ro","1ch","2ch","esd","neh","est","job","psa","pro","ecc","can","esa","jer","lam","eze","dan","ose","joe","amo","abd","jon","mic","nah","hab","sop","agg","zac","mal"],d4:["mat","mar","luc"],d5:["jea"],d6:["act","rom","1co","2co","gal","eph","phi","col","1th","2th","1ti","2ti","tit","phm","heb","jac","1pi","2pi","1je","2je","3je","jud","apo"]};
+const SCENE_READY=["d1","d2","d3","d4","d5","d6"];
+const PROPS={d1:["o1","o8"],d2:["o2","o3","o4"],d3:["o5","o6","o2"],d4:["o7","o8","o6"],d5:["o8","o6"],d6:["o7","o6","o8"]};
+const PROP_READY=["o1","o2","o3","o4","o5","o6","o7","o8"];
+function propLeft(x){const W=Math.min(($("scroll")&&$("scroll").clientWidth)||390,520),c=W/2-50+x;return Math.round((x>0?14:W-14-120)-c);}
+function propsOf(scn){return (PROPS[scn]||[]).filter(p=>PROP_READY.includes(p));}
+function sceneOf(b){for(const k in SCENES)if(SCENES[k].includes(b.id))return SCENE_READY.includes(k)?k:(BOOKS.AT.some(x=>x.id===b.id)?"d2":(SCENE_READY.includes("d4")?"d4":null));return null;}
+function sceneParallax(){const sc=$("scroll"),bg=$("scenery").querySelector(".base");if(!sc||!bg||!$("scenery").classList.contains("img"))return;
+  const max=Math.max(1,sc.scrollHeight-sc.clientHeight),p=sc.scrollTop/max;bg.style.transform=`translate3d(0,${(-(1-p)*22).toFixed(2)}%,0)`;}
+function renderPath(){renderTop();const b=curBook();const T=S.testament.toLowerCase();const scn=sceneOf(b);const sce=$("scenery");sce.className="scenery "+T+(scn?" img":"");
+  const base=sce.querySelector(".base");base.style.backgroundImage=scn?`url(/scenes/${scn}.webp)`:"";base.style.transform="";
+  const tr=$("track");tr.className="track "+T+(scn?" img":"");const props=scn?propsOf(scn):[];
   const done=doneOf(b),open=bookUnlocked(b);const deco=T==="at"?["🌴","🌵","🐪","🌴","🐑","🏕️"]:["🌿","⛵","🐟","🌴","🏘️","🐑"];let h="";
   unitsOf(b).forEach(([name,a,z],ui)=>{h+=`<div class="unit"><div class="k">Étape ${ui+1} · ${chapSpan(b,a,z)}</div><div class="h">${esc(name)}</div></div>`;
     for(let L=a;L<=z;L++){const st=L<=done?"done":(L===done+1&&open?"cur":"lock");const x=xOf(L);
-      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}" data-level="${L}" aria-label="Niveau ${L} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${bestOf(b,L)>=100?"full":bestOf(b,L)>=80?"hi":bestOf(b,L)>=50?"mid":"lo"}">${bestOf(b,L)}%</span>`:""}</button>${L%3===2?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
+      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}" data-level="${L}" aria-label="Niveau ${L} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${bestOf(b,L)>=100?"full":bestOf(b,L)>=80?"hi":bestOf(b,L)>=50?"mid":"lo"}">${bestOf(b,L)}%</span>`:""}</button>${L%3===2&&scn&&props.length?`<img class="prop3d" src="/props/${props[Math.floor(L/3)%props.length]}.webp" alt="" loading="lazy" style="left:${propLeft(x)}px">`:""}${L%3===2&&!scn?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
   const next=books()[b.idx+1];
   h+=`<div class="endbook"><span class="ic">⛰️</span><div><b>Sommet de ${esc(b.name)}</b><br><small class="muted">${next?`Termine les ${b.levels} niveaux pour débloquer ${esc(next.name)}.`:"Dernier livre du "+(S.testament==="AT"?"Ancien":"Nouveau")+" Testament."}</small></div></div>`;
   tr.innerHTML=h+`<svg class="trail" id="trail"></svg><div class="pawn" id="pawn"><div class="bob"><div class="head">${avatarHTML()}</div><div class="pin"></div></div></div>`;
@@ -4491,7 +4538,7 @@ function renderPath(){renderTop();const b=curBook();const T=S.testament.toLowerC
   tr.onclick=e=>{if(!e.target.closest(".tablet"))closeTablet();};
   requestAnimationFrame(()=>{drawTrail(b);const jd=S.justDone;
     if(jd&&jd.book===b.id&&jd.L<b.levels){S.justDone=null;save();hopPawn(jd.L,jd.L+1);}
-    else{S.justDone=null;const L=Math.min(done+1,b.levels);placePawn(L);centerOn(L,false);}});}
+    else{S.justDone=null;const L=Math.min(done+1,b.levels);placePawn(L);centerOn(L,false);}sceneParallax();});}
 function centerOf(L){const n=$("nw"+L);if(!n)return null;const tr=$("track").getBoundingClientRect(),r=n.getBoundingClientRect();return {x:r.left-tr.left+r.width/2,y:r.top-tr.top+r.height/2};}
 function curvePath(pts){let d=`M${pts[0].x},${pts[0].y}`;for(let i=1;i<pts.length;i++){const p=pts[i-1],q=pts[i],my=(p.y+q.y)/2;d+=` C${p.x},${my} ${q.x},${my} ${q.x},${q.y}`;}return d;}
 function drawTrail(b){const svg=$("trail"),tr=$("track");svg.setAttribute("width",tr.scrollWidth);svg.setAttribute("height",tr.scrollHeight);
@@ -4506,7 +4553,7 @@ function hopPawn(from,to){const a=pawnXY(from),b=pawnXY(to),pawn=$("pawn"),targe
   setTimeout(()=>{centerOn(to,true);sfx("hop");const mid={x:(a.x+b.x)/2,y:Math.min(a.y,b.y)-70};
     const an=pawn.animate([{transform:`translate(${a.x}px,${a.y}px) scale(1)`},{transform:`translate(${mid.x}px,${mid.y}px) scale(1.15)`,offset:.5},{transform:`translate(${b.x}px,${b.y}px) scale(1)`}],{duration:1100,easing:"cubic-bezier(.45,0,.3,1)",fill:"forwards"});
     an.onfinish=()=>{placePawn(to);an.cancel();target.className="node cur pop";target.innerHTML=nodeIcon("cur")+`<span class="num">${to}</span>`;sfx("good");vibrate(40);};},450);}
-$("scroll").addEventListener("scroll",()=>{$("far").style.backgroundPosition=`0 ${-$("scroll").scrollTop*.35}px`;},{passive:true});
+$("scroll").addEventListener("scroll",()=>{$("far").style.backgroundPosition=`0 ${-$("scroll").scrollTop*.35}px`;sceneParallax();},{passive:true});
 function closeTablet(){const p=document.querySelector(".tablet");if(p)p.remove();}
 function openTablet(b,L){closeTablet();const done=doneOf(b),open=bookUnlocked(b)&&L<=done+1,has=CONTENT[b.id]&&CONTENT[b.id].levels[L],c=centerOf(L),tr=$("track");
   const p=document.createElement("div");p.className="tablet";
@@ -4646,7 +4693,7 @@ function right(){stopTimer();hush();LS.answered=true;const q=LS.q,first=LS.tries
   if(q.type==="fill")drawSentence();
   const head=reflect?"Merci pour ta réflexion":bonus?`Série de ${LS.combo} !`:q.type==="recite"?`Bien récité · ${LS.sim}%`:first?"Juste !":"Trouvé !";
   const f=$("lfoot");f.className="lfoot pad ok";
-  f.innerHTML=`<div class="fb"><div class="fbh"><b>${head}</b>${bonus?`<span class="bonus">+${bonus} XP</span>`:""}</div><p>${q.ex?esc(q.ex):""}</p>${q.ref&&!reflect?`<p class="ref">📖 ${esc(q.ref)}</p>`:""}</div><button class="btn good" id="next">Continuer</button>`;
+  f.innerHTML=`<img class="fbguide" src="/props/p2.webp" alt=""><div class="fb withguide"><div class="fbh"><b>${head}</b>${bonus?`<span class="bonus">+${bonus} XP</span>`:""}</div><p>${q.ex?esc(q.ex):""}</p>${q.ref&&!reflect?`<p class="ref">📖 ${esc(q.ref)}</p>`:""}</div><button class="btn good" id="next">Continuer</button>`;
   if(q.after)speak(q.after);
   $("next").onclick=()=>{sfx("tap");nextStep();};}
 function testWrong(){stopTimer();LS.answered=true;LS.mistakes++;LS.combo=0;LS.qdone++;sfx("bad");shake();vibrate(80);setHead();const q=LS.q;
@@ -4655,7 +4702,7 @@ function testWrong(){stopTimer();LS.answered=true;LS.mistakes++;LS.combo=0;LS.qd
     if(q.type==="choice")$("lbody").querySelectorAll(".opt").forEach(x=>{if(q.a.includes(+x.dataset.i))x.classList.add("ok");});ans=q.a.map(i=>q.o[i]).join(", ");}
   if(q.type==="order")ans=q.frags.join(" ");
   if(q.type==="recite")ans=`(${LS.sim}% de ressemblance) ${q.answer}`;
-  const f=$("lfoot");f.className="lfoot pad ko";f.innerHTML=`<div class="fb"><b>Pas tout à fait.</b><p>${q.type==="recite"?"Le verset":"Bonne réponse"} : <span style="font-weight:700">${esc(ans)}</span>${q.ex?" · "+esc(q.ex):""}</p>${q.ref?`<p class="ref">📖 ${esc(q.ref)}</p>`:""}</div><button class="btn bad" id="next">Continuer</button>`;
+  const f=$("lfoot");f.className="lfoot pad ko";f.innerHTML=`<img class="fbguide" src="/props/p3.webp" alt=""><div class="fb withguide"><b>Pas tout à fait.</b><p>${q.type==="recite"?"Le verset":"Bonne réponse"} : <span style="font-weight:700">${esc(ans)}</span>${q.ex?" · "+esc(q.ex):""}</p>${q.ref?`<p class="ref">📖 ${esc(q.ref)}</p>`:""}</div><button class="btn bad" id="next">Continuer</button>`;
   $("next").onclick=()=>{sfx("tap");nextStep();};}
 const PAIRC=["m0","m1","m2","m3"];
 function matchTap(side,i){if(LS.answered)return;const q=LS.q,b=$("lbody");
