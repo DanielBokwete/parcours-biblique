@@ -722,6 +722,10 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .pklist button[aria-pressed="true"]{background:#eef3ff}.pklist button:active{background:#e3ebff}
 .field select{-webkit-appearance:none;appearance:none}
 
+.textlink.danger{color:var(--bad)}
+.legal{margin-top:10px;font-size:12.5px;color:#8a96ad}.legal a{color:#6b7894}
+.gl-note a{color:var(--lapis)}
+
 </style>
 <div class="app" id="app">
 
@@ -4375,7 +4379,7 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
     <div class="glogin"><div class="gl-art">🪔</div><h2>${S.onboarded?"Connecte-toi pour continuer":OB.login?"Content de te revoir !":"Crée ton compte"}</h2>
     <p>Ta progression, tes badges, tes méditations et tes défis sont sauvegardés et te suivent sur tous tes téléphones.</p>
     <button class="gbtn big" id="gGo">${GLOGO}<span>Continuer avec Google</span></button>
-    <div class="gl-err" id="fErr">${esc(OB.err||"")}</div><small class="gl-note">🔒 Connexion sécurisée par Google · aucun mot de passe à retenir</small></div></div>`;
+    <div class="gl-err" id="fErr">${esc(OB.err||"")}</div><small class="gl-note">🔒 Connexion sécurisée par Google · aucun mot de passe à retenir</small><small class="gl-note">En continuant, tu acceptes la <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>.</small></div></div>`;
     $("obBack").onclick=()=>{OB.step=0;renderOnb();};$("gGo").onclick=()=>{sfx("tap");OB.err="";const b=$("gGo");b.disabled=true;b.querySelector("span").textContent="Ouverture de Google…";olGoogle();setTimeout(()=>{if($("gGo")){b.disabled=false;b.querySelector("span").textContent="Continuer avec Google";}},8000);};return;}
   if(st===1){el.innerHTML=`<div class="obwrap pad"><div class="obtop"><button id="obBack" aria-label="Retour">${BACK}</button><div class="bar2"><i style="width:0%"></i></div></div>
     ${head(OB.login?"Content de te revoir !":"Crée ton compte","Ta progression, tes badges et tes méditations seront sauvegardés.")}
@@ -4921,11 +4925,13 @@ function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0]
      ${earned.length+upcoming.length>9?`<button class="btn ghost small" id="bdgMore" style="margin-top:14px">${badgesAll?"Voir moins":`Voir tous les badges (${earned.length})`}</button>`:""}</div>
    <div class="donatecard"><div class="eyebrow" style="color:#ffe1c9">Soutenir</div><h2 style="font-size:22px">Le jeu est 100 % gratuit</h2><p>60 % de chaque don va aux plus démunis (orphelins, veuves, victimes des guerres), 40 % aux créateurs.${S.don.count?` Merci pour ${S.don.count>1?"tes "+S.don.count+" dons":"ton don"} (${money(S.don.total)} $) !`:""}</p><p>🎁 En remerciement, chaque don t'offre <b>24 h de vies illimitées</b>${unlimited()?` (encore ${fmt(unlimitedLeft())})`:""}.</p><button class="btn" id="pDon">♥ Faire un don</button></div>${typeof olInviteCard==="function"?olInviteCard():""}
    <div class="card"><div class="eyebrow">Préférences</div>${settingsHTML()}<div class="switch"><div class="row"><span style="font-size:20px">⏰</span><div><b>Rappel quotidien</b><br><small>Chaque jour à ${esc(S.ob.remind)}</small></div></div></div></div>
-   <div style="display:flex;flex-direction:column;align-items:center"><button class="textlink" id="logout">Se déconnecter</button><button class="textlink" id="reset">Réinitialiser ma progression</button></div>`;
+   <div style="display:flex;flex-direction:column;align-items:center"><button class="textlink" id="logout">Se déconnecter</button><button class="textlink" id="reset">Réinitialiser ma progression</button>${typeof olCanAuth==="function"&&olCanAuth()&&OL.session?`<button class="textlink danger" id="delAcc">Supprimer mon compte</button>`:""}
+     <div class="legal"><a href="/confidentialite" target="_blank" rel="noopener">Confidentialité</a> · <a href="/suppression-compte" target="_blank" rel="noopener">Suppression des données</a></div></div>`;
   bindSettings($("profilePage"));
   document.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>{sfx("tap");S.testament=x.dataset.t;save();renderProfile();});
   $("pDon").onclick=()=>{sfx("tap");openDonate();};const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
   $("editAv").onclick=()=>{OB.edit=true;OB.step=2;renderOnb();};
+  const da=$("delAcc");if(da)da.onclick=()=>{sfx("tap");olDeleteSheet();};
   $("logout").onclick=()=>{openSheet(`<h2 style="font-size:24px">Se déconnecter ?</h2><p style="line-height:1.5;color:#3a4766">Ta progression reste enregistrée sur ce compte. Tu la retrouveras en te reconnectant avec Google, sur ce téléphone ou un autre.</p><div style="display:grid;gap:12px"><button class="btn" id="yesOut">Me déconnecter</button><button class="btn ghost" onclick="closeSheet()">Annuler</button></div>`);
     $("yesOut").onclick=async()=>{closeSheet();if(typeof olLogout==="function")await olLogout();OB.step=0;renderOnb();};};
   $("reset").onclick=()=>{openSheet(`<h2 style="font-size:24px">Tout recommencer ?</h2><p style="line-height:1.5;color:#3a4766">Ton compte, tes niveaux, badges, XP, méditations et ton plan annuel seront effacés de cet appareil.</p><div style="display:grid;gap:12px"><button class="btn bad" id="yes">Réinitialiser</button><button class="btn ghost" onclick="closeSheet()">Annuler</button></div>`);
@@ -5179,6 +5185,23 @@ async function olCloudLoad(){const su=OL.session.user,uid=su.id,meta=su.user_met
   const given=(meta.given_name||(meta.full_name||meta.name||"").split(" ")[0]||"").trim();
   S.user=Object.assign({name:given},S.user||{},{uid,email:su.email,provider:"google"});if(!S.user.name)S.user.name=given;
   save();await cloudPush();}
+/* Suppression définitive du compte (Profil → Supprimer mon compte) */
+function olDeleteSheet(){openSheet(`<h2 style="font-size:23px;margin:0 0 6px">Supprimer mon compte ?</h2>
+  <p style="line-height:1.5;color:#3a4766;margin:0 0 8px">Cette action est <b>définitive</b>. Seront effacés :</p>
+  <ul style="margin:0 0 10px;padding-left:20px;line-height:1.6;color:#3a4766"><li>ton profil, ton avatar et ta photo ;</li><li>ta progression, tes badges et tes méditations ;</li><li>tes amis, tes points et ta place au classement.</li></ul>
+  <p class="muted" style="font-size:13px;margin:0 0 12px">Les parties déjà jouées restent dans l'historique de tes adversaires, sans ton nom.</p>
+  <div class="field"><label for="delTxt">Tape SUPPRIMER pour confirmer</label><input id="delTxt" autocomplete="off" autocapitalize="characters" placeholder="SUPPRIMER"></div>
+  <div class="muted" id="delErr" style="font-size:13px;min-height:18px;color:var(--bad)"></div>
+  <div style="display:grid;gap:10px"><button class="btn bad" id="delGo" disabled>Supprimer définitivement</button><button class="btn ghost" id="delNo">Annuler</button></div>`);
+  const t=$("delTxt"),go=$("delGo");t.oninput=()=>{go.disabled=t.value.trim().toUpperCase()!=="SUPPRIMER";};$("delNo").onclick=()=>closeSheet();
+  go.onclick=async()=>{go.disabled=true;go.textContent="Suppression…";
+    try{const uid=OL.session.user.id;
+      try{const {data}=await OL.sb.storage.from("avatars").list(uid,{limit:100});if(data&&data.length)await OL.sb.storage.from("avatars").remove(data.map(f=>uid+"/"+f.name));}catch(e){}
+      await olRpc("delete_my_account",{p_confirm:"SUPPRIMER"});
+      clearTimeout(cloudT);try{await OL.sb.auth.signOut({scope:"local"});}catch(e){}
+      try{["pb-ref","pb-after-login"].forEach(k=>localStorage.removeItem(k));}catch(e){}
+      OL.me=null;OL.session=null;S=fresh();saveLocal();closeSheet();notify("👋","Compte supprimé","Toutes tes données ont été effacées. Que Dieu te bénisse !");OB.step=0;renderOnb();}
+    catch(e){go.disabled=false;go.textContent="Supprimer définitivement";const m=String(e&&e.message||"");$("delErr").textContent=/delete_my_account|not find|404/.test(m)?"La suppression n'est pas encore disponible. Réessaie plus tard ou écris-nous.":olErr(e);}};}
 async function olLogout(){if(!OL.sb||!OL.session){S=fresh();saveLocal();return;}await cloudPush();try{await OL.sb.auth.signOut();}catch(e){}S=fresh();saveLocal();}
 /* Démarrage : on attend la session Google (et la sauvegarde du compte) avant d'afficher le jeu. */
 async function bootAll(){const sb=olInit();if(!sb){bootApp();return;}
