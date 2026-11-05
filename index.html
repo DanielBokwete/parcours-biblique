@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="82d4165610";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="2dbd69a7a5";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4432,7 +4432,7 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
   if(st===7){body=`<div class="minutes"><div class="n" style="font-size:64px">${o.remind}</div><div class="field" style="max-width:200px;margin:16px auto 0"><label for="rTime">Heure du rappel</label><input id="rTime" type="time" value="${o.remind}"></div></div>`;}
   if(st===8){body=`<div class="engage"><div class="eyebrow" style="display:block">Mon objectif</div><div>${plural(o.daily,"niveau")} par jour, rappel à ${o.remind}</div><div>Commencer par ${S.testament==="AT"?"l'Ancien":"le Nouveau"} Testament</div><div>${esc(GOALS[o.goals[0]||0][1])}</div></div>
     <div class="lampwrap" id="lampw"><span class="glow" id="glow"></span><span class="lamp">🪔</span><span class="flame">🔥</span><span class="verse">« Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. » Ps 119:105</span></div>
-    <button class="btn holdbtn" id="hold"><span class="fill" id="holdFill"></span><span id="holdTxt">Maintiens appuyé pour allumer ta lampe</span></button>`;}
+    <button class="btn holdbtn" id="hold"><span class="fill" id="holdFill"></span><span id="holdTxt">🔥 Touche pour allumer ta lampe</span></button>`;}
   el.innerHTML=`<div class="obwrap pad"><div class="obtop"><button id="obBack" aria-label="Retour">${BACK}</button><div class="bar2"><i style="width:${prog}%"></i></div><small>${st-1}/7</small></div>
     ${head(T[st][0],T[st][1])}<div class="obbody">${body}</div>${st<8?`<button class="btn" id="obNext" ${can?"":"disabled"}>Continuer</button>`:""}</div>`;
   $("obBack").onclick=()=>{sfx("tap");if(OB.edit&&st===2){OB.edit=false;go("profile");return;}OB.step=st===2?1:st-1;renderOnb();};
@@ -4460,16 +4460,15 @@ function googleSheet(){sfx("tap");openSheet(`<div style="display:flex;align-item
     closeSheet();signIn({name:n.split(" ")[0],email:m,provider:"google"});};}
 function signIn(acc){sfx("good");const known=S.user&&S.user.email===acc.email;S.user=Object.assign({},known?S.user:{},acc,known?{name:S.user.name}:{});save();
   if(S.onboarded&&S.user.gender){go("path");return;}OB.step=2;renderOnb();}
-function bindHold(){const btn=$("hold"),w=$("lampw");let p=0,raf=null,last=0,holding=false,done=false;
+/* Dernière étape de l'inscription : un simple appui allume la lampe (avant, il fallait maintenir appuyé,
+   ce que beaucoup de joueurs ne comprenaient pas ou que le téléphone interrompait). */
+function bindHold(){const btn=$("hold"),w=$("lampw");let p=0,done=false,t0=0;
   const draw=()=>{w.style.setProperty("--f",p.toFixed(3));$("glow").style.setProperty("--g",(p*9).toFixed(2));$("holdFill").style.width=(p*100)+"%";};
-  const step=t=>{const dt=(t-last)/1000;last=t;p=holding?Math.min(1,p+dt/2):Math.max(0,p-dt/0.8);draw();
-    if(p>=1&&!done){done=true;holding=false;btn.classList.add("good");$("holdTxt").textContent="Ta lampe est allumée ✨";sfx("win");confetti();vibrate([50,40,120]);
-      setTimeout(()=>{S.onboarded=true;S.don.lastAt=S.activeSec;save();if(typeof olSyncProfile==="function")olSyncProfile();go("path");},1500);return;}
-    if(holding||p>0)raf=requestAnimationFrame(step);else raf=null;};
-  const start=e=>{e.preventDefault();if(done)return;holding=true;$("holdTxt").textContent="La flamme grandit…";if(!raf){last=performance.now();raf=requestAnimationFrame(step);}};
-  const end=()=>{if(done)return;holding=false;$("holdTxt").textContent="Maintiens appuyé pour allumer ta lampe";};
-  btn.addEventListener("pointerdown",start);btn.addEventListener("pointerup",end);btn.addEventListener("pointerleave",end);btn.addEventListener("pointercancel",end);
-  btn.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter")start(e);});btn.addEventListener("keyup",end);}
+  const finish=()=>{btn.classList.add("good");$("holdTxt").textContent="Ta lampe est allumée ✨";sfx("win");confetti();vibrate([50,40,120]);
+    setTimeout(()=>{S.onboarded=true;S.don.lastAt=S.activeSec;save();if(typeof olSyncProfile==="function")olSyncProfile();go("path");},1300);};
+  const step=t=>{p=Math.min(1,(t-t0)/1400);draw();if(p<1)requestAnimationFrame(step);else finish();};
+  const go1=e=>{if(e)e.preventDefault();if(done)return;done=true;sfx("tap");$("holdTxt").textContent="La flamme grandit…";t0=performance.now();requestAnimationFrame(step);};
+  btn.addEventListener("click",go1);btn.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter")go1(e);});}
 
 /* ===================== MONTÉE (chemin du bas vers le haut) ===================== */
 function heartPill(){regen();helpsReset();if(unlimited())return `<span><span style="color:var(--bad)">♥</span> ∞ &nbsp;🪔 ${S.streak}</span><small>Illimité · ${fmt(unlimitedLeft())}</small>`;return `<span><span style="color:var(--bad)">♥</span> ${S.hearts} &nbsp;🪔 ${S.streak}</span>${S.hearts<MAX_HEARTS?`<small>+1 ♥ dans ${fmt(nextHeartIn())}</small>`:`<small>💡 ${S.helps} aides</small>`}`;}
