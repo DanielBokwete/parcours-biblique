@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.parcours_biblique.twa",
+        "sha256_cert_fingerprints": ["09:47:2D:5A:83:2C:66:91:2F:DC:48:86:85:62:94:2D:F4:9F:1E:01:73:10:77:C0:3C:FB:65:CF:DA:B5:52:09"]
+      }
+    }]
