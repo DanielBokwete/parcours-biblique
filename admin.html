@@ -692,15 +692,12 @@ sb.auth.onAuthStateChange(()=>boot());
 async function boot(){const {data}=await sb.auth.getSession();
   if(!data.session){renderLogin();return;}
   try{A.me=await rpc("get_my_profile");}catch(e){A.me=null;}
-  if(!A.me||!A.me.is_admin){$("main").innerHTML=`<div class="acard narrow"><h2>Accès refusé</h2><p>Le compte <b>${esc(data.session.user.email)}</b> n'est pas administrateur.</p><button class="btn ghost" id="out">Se déconnecter</button></div>`;$("out").onclick=()=>sb.auth.signOut();$("nav").innerHTML="";return;}
+  if(!A.me||!A.me.is_admin){$("main").innerHTML=`<div class="acard narrow"><h2>Accès refusé</h2><p>Le compte <b>${esc(data.session.user.email)}</b> n'est pas administrateur. Demande à un administrateur de te donner les droits depuis l'onglet Joueurs.</p><button class="btn ghost" id="out">Se déconnecter</button></div>`;$("out").onclick=()=>sb.auth.signOut();$("nav").innerHTML="";return;}
   renderNav();renderTab();}
 function renderLogin(){$("nav").innerHTML="";
-  $("main").innerHTML=`<div class="acard narrow"><div class="eyebrow">Parcours Biblique</div><h2>Espace admin</h2><p class="muted">Connecte-toi avec un compte administrateur.</p>
-  <button class="gbtn" id="g">Continuer avec Google</button><div class="or">ou</div>
-  <div class="field"><label>E-mail</label><input id="e" type="email"></div><div class="field"><label>Mot de passe</label><input id="p" type="password"></div>
-  <div id="m" class="muted"></div><button class="btn" id="go">Me connecter</button></div>`;
-  $("g").onclick=async()=>{const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.href.split("#")[0]}});if(error)$("m").textContent=err(error);};
-  $("go").onclick=async()=>{const {error}=await sb.auth.signInWithPassword({email:$("e").value.trim(),password:$("p").value});if(error)$("m").textContent=error.message.includes("Invalid")?"E-mail ou mot de passe incorrect.":err(error);};}
+  $("main").innerHTML=`<div class="acard narrow"><div class="eyebrow">Parcours Biblique</div><h2>Espace admin</h2><p class="muted">Connecte-toi avec le compte Google administrateur (le même que dans le jeu).</p>
+  <button class="gbtn" id="g">Continuer avec Google</button><div id="m" class="muted"></div></div>`;
+  $("g").onclick=async()=>{$("m").textContent="Ouverture de Google…";const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/admin",queryParams:{prompt:"select_account"}}});if(error)$("m").textContent=err(error);};}
 const TABS=[["home","📊 Vue d'ensemble"],["users","👥 Joueurs"],["matches","⚔️ Parties"],["rank","🏆 Classement"],["prizes","🎁 Prix"],["questions","❓ Questions"]];
 function renderNav(){$("nav").innerHTML=TABS.map(([k,l])=>`<button data-t="${k}" aria-pressed="${A.tab===k}">${l}</button>`).join("")+`<span class="sp"></span><small class="muted">${esc(A.me.display_name)}</small><button class="textlink" id="out">Déconnexion</button><a class="textlink" href="index.html">Ouvrir le jeu</a>`;
   $("nav").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{A.tab=b.dataset.t;renderNav();renderTab();});$("out").onclick=()=>sb.auth.signOut();}
