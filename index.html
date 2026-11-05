@@ -698,6 +698,15 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .avs-col[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 4.5px var(--lapis)}
 .avs-foot{position:sticky;bottom:-1px;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px;background:#fff;padding:12px 0 4px;margin-top:10px}
 
+.wincard{background:linear-gradient(135deg,#fff3c4,#ffd97a);border-radius:20px;padding:14px;display:grid;gap:12px;box-shadow:0 0 0 2px #f2c14e,0 8px 24px rgba(242,170,40,.3)}
+.wc-top{display:flex;gap:12px;align-items:center}.wc-top b{display:block;font-size:17px;color:#4a3100}.wc-top small{color:#7a5a12;font-size:13px}
+.wc-medal{font-size:40px;flex:none}
+.wc-done{font-size:14px;color:#4a3a10;background:rgba(255,255,255,.6);border-radius:12px;padding:10px}
+.btn.gold{background:linear-gradient(180deg,#f7c548,#e9a51d);color:#3d2800;box-shadow:0 4px 0 #b97c0b}
+.grid2c{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field select,.field textarea{width:100%;font:inherit;font-size:16px;border:0;border-radius:14px;padding:12px 14px;background:#fff;box-shadow:0 0 0 2px var(--line);color:inherit;resize:vertical}
+.field select:focus,.field textarea:focus{outline:none;box-shadow:0 0 0 2.5px var(--lapis)}
+
 </style>
 <div class="app" id="app">
 
@@ -5010,8 +5019,9 @@ function olOnMatch(r){if(!r||!r.id||!OL.me)return;
   if(r.status==="playing"&&(OL.searching||OL.waitInvite===r.id)&&!OL.m){olStopSearch(true);OL.waitInvite=null;closeSheet();olOpenMatch(r.id);return;}
   if((r.status==="declined"||r.status==="cancelled")&&OL.waitInvite===r.id){OL.waitInvite=null;clearTimeout(OL.waitT);closeSheet();notify("🙈","Défi refusé","Ton ami n'a pas accepté cette fois. Réessaie plus tard.");}}
 async function olLoadAll(){if(!OL.me)return;
-  const [lb,fr,hi,pr]=await Promise.all([olRpc("leaderboard").catch(()=>null),olRpc("list_friends").catch(()=>null),olRpc("my_history",{p_limit:10}).catch(()=>null),olRpc("current_prize").catch(()=>null)]);
-  OL.lb=lb;OL.friends=fr;OL.hist=hi;OL.prize=pr;if(curScreen==="online")renderOnline();}
+  const [lb,fr,hi,pr,winv]=await Promise.all([olRpc("leaderboard").catch(()=>null),olRpc("list_friends").catch(()=>null),olRpc("my_history",{p_limit:10}).catch(()=>null),olRpc("current_prize").catch(()=>null),olRpc("my_prize_win").catch(()=>null)]);
+  OL.lb=lb;OL.friends=fr;OL.hist=hi;OL.prize=pr;OL.win=winv;
+  if(winv&&!winv.claimed&&OL.winSeen!==winv.prize_id){OL.winSeen=winv.prize_id;notify("🏆","Tu es le meilleur disciple du mois !","Touche pour récupérer ton prix.",()=>{go("online");olClaimSheet();});}if(curScreen==="online")renderOnline();}
 async function olLoadInvites(silent){if(!OL.me)return;try{const inv=await olRpc("my_invitations");const fresh=inv.filter(i=>!OL.seenInv[i.id]);OL.invites=inv;
   fresh.forEach(i=>{OL.seenInv[i.id]=1;if(curScreen!=="duel")notify("🤝","Nouveau défi !",(i.from_name||"Un ami")+" te défie. Touche pour répondre.",()=>{OL.tab="friends";go("online");});});
   if(curScreen==="online"&&OL.tab==="friends"&&(fresh.length||!silent))renderOnline();}catch(e){}}
@@ -5020,6 +5030,23 @@ async function olLoadInvites(silent){if(!OL.me)return;try{const inv=await olRpc(
 const olName=n=>esc(n||"Disciple");
 const olRankTag=(r,b)=>r?`<span class="rtag">${esc(r)}</span>`:"";
 function olLbRow(r){return `<div class="lbrow${r.is_me?" me":""}"><span class="rk">${r.rnk<=3?["🥇","🥈","🥉"][r.rnk-1]:r.rnk}</span><span class="av2">${avImg(r.avatar)}</span><span class="nm">${olName(r.name)}${r.is_me?" <small>(toi)</small>":""}<small>${r.rank_title?esc(r.rank_title)+" · ":""}${r.wins} victoire${r.wins>1?"s":""} · ${r.played} partie${r.played>1?"s":""}</small></span><b>${r.points} pts</b></div>`;}
+/* Bouton du gagnant : visible seulement par le 1er du classement, quand les admins l'ont activé. */
+function olWinCard(){const w=OL.win,mois=new Date(w.month+"T12:00:00").toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+  return `<div class="wincard"><div class="wc-top"><span class="wc-medal">🏆</span><div><div class="eyebrow" style="color:#7a5200">Meilleur disciple · ${esc(mois)}</div><b>Félicitations, tu as terminé 1er !</b><small>${w.points} points · Prix : ${esc(w.title)}</small></div></div>
+    ${w.claimed?`<div class="wc-done">✅ Ta demande est envoyée. L'équipe Parcours Biblique te contacte pour la remise du prix.${w.claim_status&&w.claim_status!=="nouveau"?` <b>(${esc(w.claim_status)})</b>`:""}</div><button class="textlink" id="olClaim">Modifier mes coordonnées</button>`:`<button class="btn gold" id="olClaim">🎁 Récupérer mon prix</button>`}</div>`;}
+function olClaimSheet(){const w=OL.win;if(!w)return;const u=S.user||{};
+  openSheet(`<h3 style="margin:0 0 4px">🎁 Récupérer mon prix</h3><p class="muted" style="margin:0 0 12px;font-size:14px">${esc(w.title)}. Indique où te joindre : l'équipe te contacte pour la remise (virement ou en main propre).</p>
+    <div class="field"><label for="cName">Nom complet</label><input id="cName" value="${esc(u.name||"")}" autocomplete="name"></div>
+    <div class="field"><label for="cPhone">Téléphone / WhatsApp</label><input id="cPhone" type="tel" placeholder="+243 …" autocomplete="tel"></div>
+    <div class="grid2c"><div class="field"><label for="cCountry">Pays</label><input id="cCountry" placeholder="RD Congo"></div><div class="field"><label for="cCity">Ville</label><input id="cCity" placeholder="Kinshasa"></div></div>
+    <div class="field"><label for="cMethod">Remise souhaitée</label><select id="cMethod"><option>Virement / mobile money</option><option>En main propre</option></select></div>
+    <div class="field"><label for="cNote">Message (facultatif)</label><textarea id="cNote" rows="2"></textarea></div>
+    <div class="muted" id="cErr" style="font-size:13px;min-height:18px;color:var(--bad)"></div><button class="btn gold" id="cGo">Envoyer ma demande</button>`);
+  $("cGo").onclick=async()=>{const v=id=>$(id).value.trim();if(!v("cName")||!v("cPhone")){$("cErr").textContent="Indique ton nom et ton téléphone.";return;}
+    const b=$("cGo");b.disabled=true;b.textContent="Envoi…";
+    try{await olRpc("claim_prize",{p_prize:w.prize_id,p_name:v("cName"),p_phone:v("cPhone"),p_country:v("cCountry"),p_city:v("cCity"),p_method:$("cMethod").value,p_note:v("cNote")});
+      closeSheet();sfx("win");confetti();notify("✅","Demande envoyée","L'équipe va te contacter pour ton prix.");OL.win.claimed=true;renderOnline();}
+    catch(e){b.disabled=false;b.textContent="Envoyer ma demande";const m=String(e&&e.message||"");$("cErr").textContent=/pas_premier/.test(m)?"Seul le 1er du classement peut réclamer ce prix.":/fermee/.test(m)?"La remise du prix n'est pas ouverte.":olErr(e);}};}
 function olPrizeCard(){const p=OL.prize;const mois=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
   return p?`<div class="prize">${p.image_url?`<img src="${esc(p.image_url)}" alt="">`:`<span class="pe">🏆</span>`}<div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>${esc(p.title)}</b>${p.description?`<p>${esc(p.description)}</p>`:""}</div></div>`
     :`<div class="prize"><span class="pe">🏆</span><div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>Le prix du mois sera bientôt annoncé</b><p>Le premier du classement en fin de mois le remporte.</p></div></div>`;}
@@ -5032,6 +5059,7 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
     <div class="olstats"><div><b>${me?me.rnk+"<small>e</small>":"–"}</b><small>Classement</small></div><div><b>${me?me.points:0}</b><small>Points du mois</small></div><div><b>${me?me.wins:0}</b><small>Victoires</small></div></div></div>
     <div class="segtabs seg3">${[["play","⚔️ Jouer"],["rank","🏆 Classement"],["friends","🤝 Amis"]].map(([k,l])=>`<button data-olt="${k}" aria-pressed="${t===k}">${l}${k==="friends"&&OL.invites.length?` <span class="dot">${OL.invites.length}</span>`:""}</button>`).join("")}</div>
     <p class="tabhint">${{play:"⚔️ <b>Jouer</b> : affronte un disciple au hasard. Chaque victoire rapporte des points pour le classement du mois.",rank:"🏆 <b>Classement</b> : les 10 meilleurs disciples du mois et ta place. Seules les parties en ligne comptent.",friends:"🤝 <b>Amis</b> : invite tes proches, défie-les quand tu veux et suis vos confrontations. Ces parties ne comptent pas pour le classement."}[t]}</p>`;
+  if(OL.win)h+=olWinCard();
   if(t==="play"){
     h+=olPrizeCard()+`<button class="btn big" id="olFind">⚔️ Trouver un adversaire</button>
       <div class="card rules"><b>Comment ça marche</b><ul><li>10 questions tirées au hasard, Ancien et Nouveau Testament mélangés, du facile au difficile.</li><li>⚡ Course de vitesse : le premier qui trouve la bonne réponse remporte la question, et on passe à la suivante pour les deux.</li><li>Une mauvaise réponse te bloque sur cette question : ton adversaire peut encore la trouver. 20 secondes maximum par question.</li><li>Victoire : <b>+${OL_POINTS.win} points</b> · égalité : <b>+${OL_POINTS.draw} points</b> chacun.</li><li>Seuls les points des parties en ligne comptent pour le classement du mois.</li></ul></div>`;
@@ -5059,6 +5087,7 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
   p.querySelectorAll("[data-olt]").forEach(b=>b.onclick=()=>{sfx("tap");OL.tab=b.dataset.olt;renderOnline();if(OL.tab!=="play")olLoadAll();});
   const on=(id,fn)=>{const e=$(id);if(e)e.onclick=fn;};
   on("olFind",()=>{sfx("tap");olSearch();});on("olFriend",()=>{sfx("tap");OL.tab="friends";renderOnline();olLoadAll();});on("olRefresh",()=>{sfx("tap");olLoadAll();});
+  on("olClaim",()=>{sfx("tap");olClaimSheet();});
   on("olInv",()=>{sfx("tap");olShareInvite();});
   on("olShare",async()=>{const c=OL.me.referral_code,txt=`Viens me défier sur Parcours Biblique ! Mon code : ${c}\n${location.origin+location.pathname}`;
     try{if(navigator.share){await navigator.share({title:"Parcours Biblique",text:txt});return;}}catch(e){return;}
