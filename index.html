@@ -673,6 +673,31 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .glogin .gl-err{min-height:18px;font-size:13.5px;color:var(--bad)}
 .glogin .gl-note{color:#8a96ad;font-size:12.5px}
 
+.tabhint{margin:-4px 2px 0;font-size:13px;line-height:1.45;color:#5d6a85;background:#fff;border-radius:12px;padding:9px 12px;box-shadow:0 0 0 1.5px var(--line)}
+.rtag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;color:var(--lapis);background:#e7eefc;border-radius:999px;padding:1px 7px;margin:1px 0;white-space:nowrap}
+.rtag.big{font-size:13px;padding:4px 10px}
+.btag{display:inline-block;font-size:13px;font-weight:700;color:#8a5a00;background:#fff3d6;border-radius:999px;padding:4px 10px}
+.oppid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-4px 0 4px}
+.vs .pl b{display:block}
+.dquit{margin-top:4px;font-size:11.5px;font-weight:700;color:#b4473a;background:#fdecea;border-radius:999px;padding:3px 9px}
+.btn.bad{background:var(--bad);box-shadow:0 4px 0 #a33a2f;color:#fff}
+.avsvg{width:100%;height:100%;display:block}
+.avcard{display:flex;gap:14px;align-items:center;background:#fff;border-radius:18px;padding:12px;box-shadow:0 0 0 2px var(--line);margin-bottom:6px}
+.avatarbig.xl{width:84px;height:84px;font-size:48px;flex:none}
+.avcard-r{display:grid;gap:4px;flex:1;min-width:0}.avcard-r small{font-size:12.5px;color:#6b7894}
+.avbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.avbtns .btn{width:auto;padding:7px 10px;font-size:13px}
+.avs-prev{width:96px;height:96px;flex:none;margin:6px 0;border-radius:50%;box-shadow:0 0 0 4px #fff,0 6px 20px rgba(20,39,94,.18)}
+.avs-rows{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}.avs-row{min-width:0}
+#sheet{overflow-x:hidden}
+.avs-top{position:sticky;top:-1px;z-index:2;background:#fff;padding:2px 0 6px;margin:0 -2px;display:flex;align-items:center;gap:14px;border-bottom:1.5px solid var(--line)}.avs-top h3{margin:0;font-size:18px}.avs-top small{color:#6b7894}
+.avs-opts{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 6px;scrollbar-width:thin}
+.avs-chip{flex:none;display:grid;justify-items:center;gap:4px;width:74px;font-size:11px;font-weight:700;color:#3a4766;background:#fff;border-radius:14px;padding:6px 4px;box-shadow:0 0 0 2px var(--line)}
+.avs-chip[aria-pressed="true"]{box-shadow:0 0 0 3px var(--lapis);background:#eef3ff}
+.avs-mini{width:52px;height:52px;display:block}
+.avs-col{flex:none;width:36px;height:36px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--line)}
+.avs-col[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 4.5px var(--lapis)}
+.avs-foot{position:sticky;bottom:-1px;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px;background:#fff;padding:12px 0 4px;margin-top:10px}
+
 </style>
 <div class="app" id="app">
 
@@ -4078,6 +4103,82 @@ BK("apo",[
   ["t","Selon 21:4, la mort ne sera plus.",true,"21:4",""]]
 ]);
 
+/* ---------- Avatars personnalisés « av1:… » ----------
+   Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
+   Ordre des réglages : peau, coiffure, couleur cheveux, barbe, lunettes, couvre-chef, vêtement, fond, yeux, bouche. */
+const AVB={
+  skin:["#5a3825","#6f4630","#8d5a3b","#a8714d","#c68c63","#e2b48c","#f3cfb0"],
+  hair:["Aucune","Courte","Dégradé","Afro","Longue","Tresses","Chignon","Boucles","Rasée côtés","Locks"],
+  hairCol:["#16110e","#3b2417","#6b3e22","#a0682f","#d9b25a","#b2462c","#8f8f8f","#e9e4dc","#2f4fd1","#8a3fb8"],
+  beard:["Aucune","Barbe de 3 jours","Barbe courte","Grande barbe","Moustache","Bouc"],
+  glasses:["Aucune","Rondes","Carrées","Soleil","Fines"],
+  hat:["Aucun","Casquette","Bonnet","Kufi","Foulard / gélé","Couronne","Chapeau"],
+  cloth:["#1f4fd1","#16a06b","#e0573f","#f5b94a","#7a49d6","#14275e","#e85d9a","#2a2f3a","#0ea5b7","#f4f4f4"],
+  bg:["#dbe7ff","#ffe7c2","#d8f3e6","#fde0e0","#ece2ff","#d6f4f7","#fff3b0","#e6e9ef"],
+  eyes:["Normaux","Joyeux","Clin d'œil","Grands"],
+  mouth:["Sourire","Grand sourire","Neutre","Surpris"]};
+const AVB_KEYS=["skin","hair","hairCol","beard","glasses","hat","cloth","bg","eyes","mouth"];
+const avParse=v=>{const a=String(v||"").replace(/^av1:/,"").split(".").map(n=>parseInt(n,10)||0);
+  return AVB_KEYS.reduce((o,k,i)=>{const n=AVB[k].length;o[k]=Math.min(Math.max(a[i]||0,0),n-1);return o;},{});};
+const avCode=c=>"av1:"+AVB_KEYS.map(k=>c[k]||0).join(".");
+const avIsCfg=v=>/^av1:[0-9.]+$/.test(v||"");
+function avRandom(gender){const r=n=>Math.floor(Math.random()*n),f=gender==="f";
+  return {skin:r(5),hair:f?[3,4,5,6,7,9][r(6)]:[1,2,3,8,9,0][r(6)],hairCol:r(6),beard:f?0:[0,0,1,2,3,4,5][r(7)],glasses:r(3)?0:1+r(4),hat:r(4)?0:1+r(6),cloth:r(10),bg:r(8),eyes:r(3),mouth:r(3)};}
+let avUid=0;
+function avSvg(v){const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
+  const sk=AVB.skin[c.skin],hc=AVB.hairCol[c.hairCol],cl=AVB.cloth[c.cloth],bg=AVB.bg[c.bg],hatC=AVB.cloth[(c.cloth+4)%AVB.cloth.length];
+  const dark="rgba(0,0,0,.18)";let back="",front="",hat="",beard="",gl="",eyes="",mouth="";
+  // cheveux derrière la tête
+  if(c.hair===3)back=`<circle cx="50" cy="40" r="29" fill="${hc}"/>`;
+  if(c.hair===4)back=`<path d="M24 44 C22 20 78 20 76 44 L80 82 C70 86 30 86 20 82 Z" fill="${hc}"/>`;
+  if(c.hair===5)back=`<g fill="${hc}">${[26,33,40,60,67,74].map(x=>`<rect x="${x-3}" y="40" width="6" height="40" rx="3"/>`).join("")}</g>`;
+  if(c.hair===9)back=`<g fill="${hc}">${[25,31,37,63,69,75].map(x=>`<rect x="${x-3.5}" y="34" width="7" height="44" rx="3.5"/>`).join("")}</g>`;
+  if(c.hair===7)back=`<g fill="${hc}"><circle cx="30" cy="34" r="11"/><circle cx="70" cy="34" r="11"/><circle cx="40" cy="22" r="12"/><circle cx="60" cy="22" r="12"/><circle cx="50" cy="19" r="11"/></g>`;
+  // cheveux devant
+  if(c.hair===1)front=`<path d="M28 42 C26 18 74 18 72 42 C68 31 58 27 50 27 C42 27 32 31 28 42Z" fill="${hc}"/>`;
+  if(c.hair===2)front=`<path d="M29 38 C30 20 70 20 71 38 C64 30 36 30 29 38Z" fill="${hc}"/><path d="M28 40 C28 30 72 30 72 40" stroke="${hc}" stroke-width="2" fill="none" opacity=".45"/>`;
+  if(c.hair===3)front=`<path d="M29 36 C34 24 66 24 71 36 C64 31 36 31 29 36Z" fill="${hc}"/>`;
+  if(c.hair===4)front=`<path d="M27 46 C24 16 76 16 73 46 C70 30 60 26 50 28 C42 30 34 34 27 46Z" fill="${hc}"/>`;
+  if(c.hair===5)front=`<path d="M28 40 C26 18 74 18 72 40 C66 30 34 30 28 40Z" fill="${hc}"/><g stroke="${dark}" stroke-width="1.3">${[38,44,50,56,62].map(x=>`<line x1="${x}" y1="22" x2="${x}" y2="33"/>`).join("")}</g>`;
+  if(c.hair===6)front=`<circle cx="50" cy="15" r="9" fill="${hc}"/><path d="M28 40 C26 18 74 18 72 40 C66 28 34 28 28 40Z" fill="${hc}"/>`;
+  if(c.hair===7)front=`<path d="M29 38 C32 26 68 26 71 38 C62 32 38 32 29 38Z" fill="${hc}"/>`;
+  if(c.hair===8)front=`<path d="M38 34 C38 18 62 18 62 34 C58 28 42 28 38 34Z" fill="${hc}"/>`;
+  if(c.hair===9)front=`<path d="M28 40 C26 18 74 18 72 40 C66 30 34 30 28 40Z" fill="${hc}"/>`;
+  // couvre-chefs
+  if(c.hat===1)hat=`<path d="M27 36 C27 16 73 16 73 36 Z" fill="${hatC}"/><path d="M50 33 C64 33 80 34 84 38 C74 39 60 38 50 37Z" fill="${hatC}"/><circle cx="50" cy="18" r="2.2" fill="${dark}"/>`;
+  if(c.hat===2)hat=`<path d="M26 38 C25 12 75 12 74 38 Z" fill="${hatC}"/><rect x="25" y="32" width="50" height="8" rx="4" fill="${dark}"/><circle cx="50" cy="11" r="5" fill="${hatC}"/>`;
+  if(c.hat===3)hat=`<path d="M31 32 L31 22 C40 16 60 16 69 22 L69 32 Z" fill="${hatC}"/><path d="M33 26 H67" stroke="${dark}" stroke-width="1.5"/>`;
+  if(c.hat===4)hat=`<path d="M24 40 C18 14 40 4 52 8 C66 4 86 16 76 40 C70 30 30 30 24 40Z" fill="${hatC}"/><path d="M38 12 C48 22 60 22 70 14" stroke="${dark}" stroke-width="2" fill="none"/><path d="M30 20 C42 26 58 26 72 22" stroke="${dark}" stroke-width="1.5" fill="none"/>`;
+  if(c.hat===5)hat=`<path d="M32 30 L34 14 L42 22 L50 10 L58 22 L66 14 L68 30 Z" fill="#f5c542" stroke="#c9961c" stroke-width="1.2"/><circle cx="50" cy="22" r="2.2" fill="#e0573f"/>`;
+  if(c.hat===6)hat=`<ellipse cx="50" cy="31" rx="32" ry="6" fill="${hatC}"/><path d="M34 31 C34 14 66 14 66 31Z" fill="${hatC}"/><rect x="34" y="25" width="32" height="4" fill="${dark}"/>`;
+  // barbe
+  if(c.beard===1)beard=`<path d="M30 50 C31 70 42 75 50 75 C58 75 69 70 70 50 C66 60 58 63 50 63 C42 63 34 60 30 50Z" fill="${hc}" opacity=".35"/>`;
+  if(c.beard===2)beard=`<path d="M29 48 C30 72 42 77 50 77 C58 77 70 72 71 48 C67 60 60 62 56 61 C53 59 47 59 44 61 C40 62 33 60 29 48Z" fill="${hc}"/>`;
+  if(c.beard===3)beard=`<path d="M28 46 C28 80 42 86 50 86 C58 86 72 80 72 46 C68 60 60 62 56 61 C53 59 47 59 44 61 C40 62 32 60 28 46Z" fill="${hc}"/>`;
+  if(c.beard===4)beard=`<path d="M40 60 C44 56 48 57 50 58 C52 57 56 56 60 60 C56 62 52 61 50 60 C48 61 44 62 40 60Z" fill="${hc}"/>`;
+  if(c.beard===5)beard=`<path d="M41 59 C45 56 55 56 59 59 C55 61 45 61 41 59Z" fill="${hc}"/><path d="M44 66 C46 74 54 74 56 66 C53 68 47 68 44 66Z" fill="${hc}"/>`;
+  // yeux et bouche
+  const big=c.eyes===3?3.4:2.6;
+  if(c.eyes===1)eyes=`<path d="M37 47 Q41 43 45 47 M55 47 Q59 43 63 47" stroke="#1b1b1b" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  else if(c.eyes===2)eyes=`<circle cx="41" cy="46" r="2.6" fill="#1b1b1b"/><path d="M55 47 Q59 44 63 47" stroke="#1b1b1b" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  else eyes=`<circle cx="41" cy="46" r="${big}" fill="#1b1b1b"/><circle cx="59" cy="46" r="${big}" fill="#1b1b1b"/><circle cx="42" cy="45" r=".9" fill="#fff"/><circle cx="60" cy="45" r=".9" fill="#fff"/>`;
+  const brows=`<path d="M36 40 Q41 37 46 40 M54 40 Q59 37 64 40" stroke="${c.hair===0&&c.hat===0?dark:hc}" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  if(c.mouth===0)mouth=`<path d="M43 61 Q50 67 57 61" stroke="#6b2a1e" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  if(c.mouth===1)mouth=`<path d="M41 59 Q50 72 59 59 Z" fill="#7a2a20"/><path d="M43 60 Q50 63 57 60" fill="#fff"/>`;
+  if(c.mouth===2)mouth=`<path d="M44 63 H56" stroke="#6b2a1e" stroke-width="2.4" stroke-linecap="round"/>`;
+  if(c.mouth===3)mouth=`<ellipse cx="50" cy="63" rx="3.6" ry="4.4" fill="#7a2a20"/>`;
+  // lunettes
+  const gs=c.glasses===3?`fill="#1d2433"`:`fill="rgba(255,255,255,.18)"`,gw=c.glasses===4?1.4:2.2;
+  if(c.glasses===1)gl=`<g stroke="#1d2433" stroke-width="${gw}" ${gs}><circle cx="41" cy="46" r="7"/><circle cx="59" cy="46" r="7"/></g><path d="M48 46 H52 M34 45 L28 43 M66 45 L72 43" stroke="#1d2433" stroke-width="2"/>`;
+  if(c.glasses===2||c.glasses===3||c.glasses===4)gl=`<g stroke="#1d2433" stroke-width="${gw}" ${gs}><rect x="33" y="40" width="15" height="11" rx="${c.glasses===3?4:2}"/><rect x="52" y="40" width="15" height="11" rx="${c.glasses===3?4:2}"/></g><path d="M48 45 H52 M33 44 L28 43 M67 44 L72 43" stroke="#1d2433" stroke-width="2"/>`;
+  return `<svg class="avsvg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#${id})">
+<rect width="100" height="100" fill="${bg}"/>${back}
+<path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z" fill="${cl}"/><path d="M41 72 L50 82 L59 72Z" fill="rgba(255,255,255,.35)"/>
+<rect x="42" y="60" width="16" height="15" rx="6" fill="${sk}"/><rect x="42" y="64" width="16" height="5" fill="rgba(0,0,0,.12)"/>
+<circle cx="27.5" cy="48" r="5.5" fill="${sk}"/><circle cx="72.5" cy="48" r="5.5" fill="${sk}"/>
+<ellipse cx="50" cy="46" rx="22.5" ry="25" fill="${sk}"/>${front}${beard}${brows}${eyes}
+<path d="M49 50 Q47 55 50 56" stroke="rgba(0,0,0,.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>${mouth}${gl}${hat}</g></svg>`;}
+
 /* ===================== RÉGLAGES DU JEU ===================== */
 const MAX_HEARTS=5, HEART_MS=25*60*1000, Q_SECONDS=20, DAILY_HELPS=5;
 const DON_EVERY_S=10*60, DON_PAUSE_MS=30*864e5;           // rappel de don toutes les 10 min d'utilisation ; 30 jours de silence après un don
@@ -4111,7 +4212,7 @@ const AV_PEOPLE=["👨","👩","🧑","👦","👧","👴","👵","🧔","👨�
 const AV_SYMBOLS=["🕊️","🦁","🐑","🐟","🌿","🔥","⭐","👑","🪔","📜","⛪","🌅","🌈","🍇","⚓","🛡️","💎","🌻","🦅","🐫"];
 const withTone=(b,t)=>{const c=Array.from(b);return c[0]+(t||"🏾")+c.slice(1).join("");};
 const avatar=()=>{const u=S.user;if(!u)return "🧑🏾";if(u.av)return AV_PEOPLE.includes(u.av)?withTone(u.av,u.tone):u.av;if(!u.gender)return "🧑🏾";return (u.gender==="f"?"👩":"👨")+(u.tone||"🏾");};
-const avImg=v=>/^(https:|data:image)/.test(v||"")?`<img src="${esc(v)}" alt="" class="avimg">`:esc(v||"🙂");
+const avImg=v=>/^(https:|data:image)/.test(v||"")?`<img src="${esc(v)}" alt="" class="avimg">`:avIsCfg(v)?avSvg(v):esc(v||"🙂");
 const avatarHTML=()=>avImg(S.user&&S.user.photo||avatar());
 
 /* Cœurs : +1 toutes les 25 minutes jusqu'à 5 */
@@ -4268,12 +4369,12 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
   const prog=st>=2?Math.round((st-1)/7*100):0;
   const T={2:["Comment t'appeler ?","Ton avatar grimpera les niveaux avec toi."],3:["Qu'attends-tu de ce parcours ?","Plusieurs choix possibles"],4:["Où en es-tu avec la Bible ?","Pour adapter la difficulté"],5:["Quel Testament pour commencer ?","Tu pourras changer dans ton profil"],6:["Ton objectif quotidien","Combien de niveaux par jour ?"],7:["À quelle heure te le rappeler ?","Un rappel discret chaque jour"],8:["Allume ta lampe",""]};
   let body="",can=true;
-  if(st===2){body=`<div class="field"><label for="pName">Prénom</label><input id="pName" value="${esc(u.name||"")}" autocomplete="given-name"></div>
+  if(st===2){body=`<div class="avcard"><span class="avatarbig xl">${avatarHTML()}</span><div class="avcard-r"><b>Mon avatar</b><small>C'est lui que tes adversaires voient en ligne.</small>
+      <div class="avbtns"><button class="btn small" id="avStudio">🎨 Personnaliser</button><label class="btn small ghost">📷 Ma photo<input type="file" id="pPhoto" accept="image/*" hidden></label><button class="btn small ghost" id="avEmoji">😀 Emojis</button></div><small class="muted" id="pPhotoMsg"></small></div></div>
+    <div class="field"><label for="pName">Prénom</label><input id="pName" value="${esc(u.name||"")}" autocomplete="given-name"></div>
     <div class="eyebrow">Tu es</div><div class="gender"><button data-g="m" aria-pressed="${u.gender==="m"}"><span>👨${u.tone||"🏾"}</span>Un frère</button><button data-g="f" aria-pressed="${u.gender==="f"}"><span>👩${u.tone||"🏾"}</span>Une sœur</button></div>
     <div class="eyebrow">Teint de ton avatar</div><div class="tones">${TONES.map(t=>`<button data-tone="${t}" aria-pressed="${(u.tone||"🏾")===t}" aria-label="Teint">${(u.gender==="f"?"👩":"👨")+t}</button>`).join("")}</div>
-    <div class="eyebrow">Ton avatar</div>
-    <div class="photorow"><span class="avatarbig">${avatarHTML()}</span><div style="display:grid;gap:6px;flex:1"><label class="btn small ghost" style="width:auto;cursor:pointer">📷 ${u.photo?"Changer ma photo":"Mettre ma photo"}<input type="file" id="pPhoto" accept="image/*" hidden></label>${u.photo?`<button class="textlink" id="pNoPhoto" style="justify-self:start">Retirer la photo</button>`:""}<small class="muted" id="pPhotoMsg"></small></div></div>
-    <div class="avgrid">${[["",""+(u.gender==="f"?"👩":"👨")+(u.tone||"🏾")],...AV_PEOPLE.map(b=>[b,withTone(b,u.tone)]),...AV_SYMBOLS.map(b=>[b,b])].map(([k,v])=>`<button data-av="${k}" aria-pressed="${!u.photo&&(u.av||"")===k}" aria-label="Avatar">${v}</button>`).join("")}</div>`;can=!!(u.gender&&(u.name||"").trim());}
+`;can=!!(u.gender&&(u.name||"").trim());}
   if(st===3){body=`<div class="tiles">${GOALS.map(([e,l],i)=>`<button class="tile" data-w="${i}" aria-pressed="${o.goals.includes(i)}"><span>${e}</span>${l}</button>`).join("")}</div>`;can=o.goals.length>0;}
   if(st===4){body=`<div class="list">${RELS.map(([e,t,s],i)=>`<button class="li" data-r="${i}" aria-pressed="${o.rel===i}"><span class="e">${e}</span><span><b>${t}</b><small>${s}</small></span><span class="chk">✓</span></button>`).join("")}</div>`;can=o.rel>=0;}
   if(st===5){body=`<div class="list">${[["AT","📜","Ancien Testament","39 livres, de la Genèse à Malachie"],["NT","✝️","Nouveau Testament","27 livres, de Matthieu à l'Apocalypse"]].map(([k,e,t,s])=>`<button class="li" data-t="${k}" aria-pressed="${S.testament===k}"><span class="e">${e}</span><span><b>${t}</b><small>${s}</small></span><span class="chk">✓</span></button>`).join("")}</div>`;can=!!S.testament;}
@@ -4290,8 +4391,8 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
   const pn=$("pName");if(pn)pn.oninput=()=>{S.user.name=pn.value;$("obNext").disabled=!(S.user.gender&&pn.value.trim());};
   el.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{sfx("tap");S.user.gender=b.dataset.g;S.user.name=$("pName").value;renderOnb();});
   el.querySelectorAll("[data-tone]").forEach(b=>b.onclick=()=>{sfx("tap");S.user.tone=b.dataset.tone;S.user.name=$("pName").value;renderOnb();});
-  el.querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{sfx("tap");S.user.av=b.dataset.av||null;S.user.photo=null;S.user.name=$("pName").value;save();renderOnb();});
-  const np=$("pNoPhoto");if(np)np.onclick=()=>{sfx("tap");S.user.photo=null;S.user.name=$("pName").value;save();renderOnb();};
+  const avs=$("avStudio");if(avs)avs.onclick=()=>{sfx("tap");S.user.name=$("pName").value;openAvatarStudio();};
+  const ave=$("avEmoji");if(ave)ave.onclick=()=>{sfx("tap");S.user.name=$("pName").value;openEmojiSheet();};
   const ph=$("pPhoto");if(ph)ph.onchange=async()=>{const f=ph.files&&ph.files[0];if(!f)return;$("pPhotoMsg").textContent="Envoi de la photo…";
     try{const url=await setPhoto(f);S.user.photo=url;S.user.name=$("pName").value;save();sfx("good");renderOnb();}catch(e){$("pPhotoMsg").textContent="La photo n'a pas pu être envoyée. Réessaie.";}};
   el.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{sfx("tap");const i=+b.dataset.w;o.goals=o.goals.includes(i)?o.goals.filter(x=>x!==i):[...o.goals,i];renderOnb();});
@@ -4822,6 +4923,26 @@ function squareImage(file,size){return new Promise((res,rej)=>{const img=new Ima
   c.getContext("2d").drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,size,size);URL.revokeObjectURL(u);c.toBlob(b=>b?res({blob:b,data:c.toDataURL("image/jpeg",.8)}):rej(new Error("image")),"image/jpeg",.85);};img.onerror=rej;img.src=u;});}
 async function setPhoto(file){const sq=await squareImage(file,256);if(typeof olUploadPhoto==="function"){const url=await olUploadPhoto(sq.blob);if(url)return url;}return (await squareImage(file,96)).data;}
 
+/* ---------- Studio d'avatar ---------- */
+const AVS_ROWS=[["hair","Coiffure"],["hairCol","Couleur des cheveux","color"],["beard","Barbe"],["glasses","Lunettes"],["hat","Couvre-chef"],["skin","Teint","color"],["cloth","Vêtement","color"],["bg","Fond","color"],["eyes","Yeux"],["mouth","Bouche"]];
+let avsCfg=null;
+function openAvatarStudio(){const u=S.user||{};avsCfg=avIsCfg(u.av)?avParse(u.av):Object.assign(avRandom(u.gender),{beard:0,glasses:0,hat:0,skin:Math.max(0,TONES.indexOf(u.tone||"🏾"))+1});renderAvatarStudio();}
+function renderAvatarStudio(){const c=avsCfg;
+  openSheet(`<div class="avs-top"><div class="avs-prev">${avSvg(c)}</div><div><h3>🎨 Ton avatar</h3><small>Touche une option : l'aperçu change tout de suite.</small></div></div>
+    <div class="avs-rows">${AVS_ROWS.map(([k,l,t])=>`<div class="avs-row"><div class="eyebrow">${l}</div><div class="avs-opts">${AVB[k].map((v,i)=>t==="color"?`<button class="avs-col" data-k="${k}" data-i="${i}" aria-pressed="${c[k]===i}" style="background:${v}" aria-label="${l} ${i+1}"></button>`:`<button class="avs-chip" data-k="${k}" data-i="${i}" aria-pressed="${c[k]===i}"><span class="avs-mini">${avSvg(Object.assign({},c,{[k]:i}))}</span>${esc(v)}</button>`).join("")}</div></div>`).join("")}</div>
+    <div class="avs-foot"><button class="btn ghost" id="avsRnd">🎲 Au hasard</button><button class="btn" id="avsOk">Choisir cet avatar</button></div>`);
+  const sh=$("sheet");sh.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{sfx("tap");const y=sh.scrollTop;const rows=[...sh.querySelectorAll(".avs-opts")].map(r=>r.scrollLeft);avsCfg[b.dataset.k]=+b.dataset.i;renderAvatarStudio();sh.scrollTop=y;sh.querySelectorAll(".avs-opts").forEach((r,i)=>r.scrollLeft=rows[i]||0);});
+  $("avsRnd").onclick=()=>{sfx("tap");avsCfg=avRandom(S.user&&S.user.gender);renderAvatarStudio();};
+  $("avsOk").onclick=()=>{sfx("good");S.user.av=avCode(avsCfg);S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();else if(curScreen==="profile")renderProfile();if(typeof olSyncProfile==="function")olSyncProfile();};}
+function openEmojiSheet(){const u=S.user||{};
+  openSheet(`<h3 style="margin:0 0 10px">😀 Choisis un avatar</h3><div class="avgrid">${[["",""+(u.gender==="f"?"👩":"👨")+(u.tone||"🏾")],...AV_PEOPLE.map(b=>[b,withTone(b,u.tone)]),...AV_SYMBOLS.map(b=>[b,b])].map(([k,v])=>`<button data-av="${k}" aria-pressed="${!u.photo&&(u.av||"")===k}" aria-label="Avatar">${v}</button>`).join("")}</div>`);
+  $("sheet").querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{sfx("tap");S.user.av=b.dataset.av||null;S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();if(typeof olSyncProfile==="function")olSyncProfile();});}
+/* Rang et dernier badge, affichés aux adversaires */
+function myTitle(){const n=totalDone();let r=RANKS[0];RANKS.forEach(x=>{if(n>=x[0])r=x;});
+  const last=Object.keys(S.badges||{}).sort((a,b)=>S.badges[b]-S.badges[a])[0];let badge="";
+  if(last){const k=last.lastIndexOf("-"),bk=ALLB.find(x=>x.id===last.slice(0,k));if(bk)badge=badgeName(bk,+last.slice(k+1));}
+  return {rank:r[1],badge};}
+
 /* ===================== DÉFIS EN LIGNE =====================
    Vrais comptes et parties en direct via Supabase (projet « parcours-biblique »).
    Toutes les règles (tirage des 10 questions, correction, points, classement) sont appliquées côté serveur :
@@ -4897,7 +5018,8 @@ async function olLoadInvites(silent){if(!OL.me)return;try{const inv=await olRpc(
 
 /* ---------- Écran « Défis » ---------- */
 const olName=n=>esc(n||"Disciple");
-function olLbRow(r){return `<div class="lbrow${r.is_me?" me":""}"><span class="rk">${r.rnk<=3?["🥇","🥈","🥉"][r.rnk-1]:r.rnk}</span><span class="av2">${avImg(r.avatar)}</span><span class="nm">${olName(r.name)}${r.is_me?" <small>(toi)</small>":""}<small>${r.wins} victoire${r.wins>1?"s":""} · ${r.played} partie${r.played>1?"s":""}</small></span><b>${r.points} pts</b></div>`;}
+const olRankTag=(r,b)=>r?`<span class="rtag">${esc(r)}</span>`:"";
+function olLbRow(r){return `<div class="lbrow${r.is_me?" me":""}"><span class="rk">${r.rnk<=3?["🥇","🥈","🥉"][r.rnk-1]:r.rnk}</span><span class="av2">${avImg(r.avatar)}</span><span class="nm">${olName(r.name)}${r.is_me?" <small>(toi)</small>":""}<small>${r.rank_title?esc(r.rank_title)+" · ":""}${r.wins} victoire${r.wins>1?"s":""} · ${r.played} partie${r.played>1?"s":""}</small></span><b>${r.points} pts</b></div>`;}
 function olPrizeCard(){const p=OL.prize;const mois=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
   return p?`<div class="prize">${p.image_url?`<img src="${esc(p.image_url)}" alt="">`:`<span class="pe">🏆</span>`}<div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>${esc(p.title)}</b>${p.description?`<p>${esc(p.description)}</p>`:""}</div></div>`
     :`<div class="prize"><span class="pe">🏆</span><div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>Le prix du mois sera bientôt annoncé</b><p>Le premier du classement en fin de mois le remporte.</p></div></div>`;}
@@ -4908,11 +5030,13 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
   const t=OL.tab,me=OL.lb&&OL.lb.me;
   let h=`<div class="olhero"><div class="row" style="gap:12px"><span class="olav">${avImg(OL.me.avatar)}</span><div><div class="eyebrow" style="color:#b9cbff">Défis en ligne</div><h2 style="font-size:24px;color:#fff">${olName(OL.me.display_name)}</h2></div></div>
     <div class="olstats"><div><b>${me?me.rnk+"<small>e</small>":"–"}</b><small>Classement</small></div><div><b>${me?me.points:0}</b><small>Points du mois</small></div><div><b>${me?me.wins:0}</b><small>Victoires</small></div></div></div>
-    <div class="segtabs seg3">${[["play","⚔️ Jouer"],["rank","🏆 Classement"],["friends","🤝 Amis"]].map(([k,l])=>`<button data-olt="${k}" aria-pressed="${t===k}">${l}${k==="friends"&&OL.invites.length?` <span class="dot">${OL.invites.length}</span>`:""}</button>`).join("")}</div>`;
+    <div class="segtabs seg3">${[["play","⚔️ Jouer"],["rank","🏆 Classement"],["friends","🤝 Amis"]].map(([k,l])=>`<button data-olt="${k}" aria-pressed="${t===k}">${l}${k==="friends"&&OL.invites.length?` <span class="dot">${OL.invites.length}</span>`:""}</button>`).join("")}</div>
+    <p class="tabhint">${{play:"⚔️ <b>Jouer</b> : affronte un disciple au hasard. Chaque victoire rapporte des points pour le classement du mois.",rank:"🏆 <b>Classement</b> : les 10 meilleurs disciples du mois et ta place. Seules les parties en ligne comptent.",friends:"🤝 <b>Amis</b> : invite tes proches, défie-les quand tu veux et suis vos confrontations. Ces parties ne comptent pas pour le classement."}[t]}</p>`;
   if(t==="play"){
-    h+=olPrizeCard()+`<button class="btn big" id="olFind">⚔️ Trouver un adversaire</button><button class="btn ghost" id="olFriend">🤝 Défier un ami avec son code</button>
+    h+=olPrizeCard()+`<button class="btn big" id="olFind">⚔️ Trouver un adversaire</button>
       <div class="card rules"><b>Comment ça marche</b><ul><li>10 questions tirées au hasard, Ancien et Nouveau Testament mélangés, du facile au difficile.</li><li>⚡ Course de vitesse : le premier qui trouve la bonne réponse remporte la question, et on passe à la suivante pour les deux.</li><li>Une mauvaise réponse te bloque sur cette question : ton adversaire peut encore la trouver. 20 secondes maximum par question.</li><li>Victoire : <b>+${OL_POINTS.win} points</b> · égalité : <b>+${OL_POINTS.draw} points</b> chacun.</li><li>Seuls les points des parties en ligne comptent pour le classement du mois.</li></ul></div>`;
-    h+=`<h3 class="olh3">Mes dernières parties</h3>`+(OL.hist&&OL.hist.length?`<div class="hist2">${OL.hist.map(x=>`<div class="hrow"><span>${x.won?"🏆":x.is_draw?"🤝":"💪"}</span><span class="nm">${x.mode==="friend"?"Ami · ":""}${olName(x.opp_name)}<small>${new Date(x.finished_at).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</small></span><b>${x.my_score} – ${x.opp_score}</b>${x.mode==="online"?`<span class="pts">+${x.points}</span>`:`<span class="pts muted">amical</span>`}</div>`).join("")}</div>`:`<div class="card muted" style="font-size:14px">Aucune partie pour l'instant. Lance ton premier défi !</div>`);}
+    const hOn=(OL.hist||[]).filter(x=>x.mode==="online");
+    h+=`<h3 class="olh3">Mes dernières parties en ligne</h3>`+(hOn.length?`<div class="hist2">${hOn.map(x=>`<div class="hrow"><span>${x.won?"🏆":x.is_draw?"🤝":"💪"}</span><span class="nm">${x.mode==="friend"?"Ami · ":""}${olName(x.opp_name)}<small>${new Date(x.finished_at).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</small></span><b>${x.my_score} – ${x.opp_score}</b>${x.mode==="online"?`<span class="pts">+${x.points}</span>`:`<span class="pts muted">amical</span>`}</div>`).join("")}</div>`:`<div class="card muted" style="font-size:14px">Aucune partie en ligne pour l'instant. Lance ton premier défi !</div>`);}
   if(t==="rank"){const lb=OL.lb;const mois=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
     h+=olPrizeCard()+`<h3 class="olh3">Meilleur disciple · ${esc(mois)}</h3>`;
     if(!lb||!lb.top.length)h+=`<div class="card muted" style="font-size:14px">Personne n'a encore joué en ligne ce mois-ci. Sois le premier !</div>`;
@@ -4927,7 +5051,9 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
     if(OL.invites.length)h+=`<h3 class="olh3">Défis reçus</h3>`+OL.invites.map(i=>`<div class="card invite"><span class="olav sm">${avImg(i.avatar)}</span><div style="flex:1"><b>${olName(i.from_name)}</b><small class="muted" style="display:block">te défie · 10 questions</small></div><button class="btn small good" data-acc="${i.id}" style="width:auto">Accepter</button><button class="btn small ghost" data-ref="${i.id}" style="width:auto">Refuser</button></div>`).join("");
     h+=`<h3 class="olh3">Mes amis</h3>`;
     if(!OL.friends||!OL.friends.length)h+=`<div class="card muted" style="font-size:14px">Ajoute un ami avec son code pour le défier. Vos parties entre amis ne comptent pas pour le classement, mais vos confrontations sont gardées.</div>`;
-    else h+=OL.friends.map(f=>`<div class="card friend"><span class="olav sm">${avImg(f.avatar)}</span><div style="flex:1;min-width:0"><b>${olName(f.name)}</b><div class="h2h">${f.played} match${f.played>1?"s":""} · <span class="w">${f.my_wins} vous</span> · <span class="l">${f.their_wins} ${olName(f.name.split(" ")[0])}</span>${f.draws?` · ${f.draws} nul${f.draws>1?"s":""}`:""}</div></div><button class="btn small" data-duel="${f.id}" data-nm="${esc(f.name)}" style="width:auto">Défier</button></div>`).join("");}
+    else h+=OL.friends.map(f=>`<div class="card friend"><span class="olav sm">${avImg(f.avatar)}</span><div style="flex:1;min-width:0"><b>${olName(f.name)}</b><div class="h2h">${f.played} match${f.played>1?"s":""} · <span class="w">${f.my_wins} vous</span> · <span class="l">${f.their_wins} ${olName(f.name.split(" ")[0])}</span>${f.draws?` · ${f.draws} nul${f.draws>1?"s":""}`:""}</div></div><button class="btn small" data-duel="${f.id}" data-nm="${esc(f.name)}" style="width:auto">Défier</button></div>`).join("");
+    const hFr=(OL.hist||[]).filter(x=>x.mode==="friend");
+    if(hFr.length)h+=`<h3 class="olh3">Mes dernières parties entre amis</h3><div class="hist2">${hFr.map(x=>`<div class="hrow"><span>${x.won?"🏆":x.is_draw?"🤝":"💪"}</span><span class="nm">${olName(x.opp_name)}<small>${new Date(x.finished_at).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</small></span><b>${x.my_score} – ${x.opp_score}</b><span class="pts muted">amical</span></div>`).join("")}</div>`;}
   h+=`<div class="olfoot"><small class="muted">Compte Google : ${esc((OL.session.user&&OL.session.user.email)||"")}</small>${OL.me.is_admin?`<a class="textlink" href="/admin">Espace admin</a>`:""}</div>`;
   p.innerHTML=h;
   p.querySelectorAll("[data-olt]").forEach(b=>b.onclick=()=>{sfx("tap");OL.tab=b.dataset.olt;renderOnline();if(OL.tab!=="play")olLoadAll();});
@@ -4955,11 +5081,13 @@ const olCanAuth=()=>!!olInit();
 function olGoogle(){if(!olInit())return false;OL.msg="";
   OL.sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/"+(curScreen==="online"?"?go=defis":""),queryParams:{prompt:"select_account"}}})
     .then(({error})=>{if(error){OL.msg=olErr(error);OB.err=OL.msg;if(curScreen==="online")renderOnline();else if(curScreen==="onb")renderOnb();}});return true;}
-async function olSyncProfile(){if(!OL.me||!S.user||!S.user.name||!S.user.gender)return;const av=(S.user.photo&&/^https:/.test(S.user.photo))?S.user.photo:avatar();
+async function olSyncTitle(){if(!OL.sb||!OL.session||typeof myTitle!=="function")return;const t=myTitle(),k=t.rank+"|"+t.badge;if(OL.lastTitle===k)return;
+  try{await olRpc("set_my_title",{p_rank:t.rank,p_badge:t.badge});OL.lastTitle=k;if(OL.me){OL.me.rank_title=t.rank;OL.me.badge=t.badge;}}catch(e){}}
+async function olSyncProfile(){olSyncTitle();if(!OL.me||!S.user||!S.user.name||!S.user.gender)return;const av=(S.user.photo&&/^https:/.test(S.user.photo))?S.user.photo:avatar();
   if(OL.me.display_name===S.user.name&&OL.me.gender===S.user.gender&&OL.me.avatar===av)return;
   try{await olRpc("update_my_profile",{p_name:S.user.name,p_gender:S.user.gender,p_avatar:av});OL.me=await olRpc("get_my_profile");}catch(e){}}
 let cloudT=null;
-function cloudQueue(){if(!OL.sb||!OL.session||!S.user||S.user.uid!==OL.session.user.id)return;clearTimeout(cloudT);cloudT=setTimeout(cloudPush,2500);}
+function cloudQueue(){clearTimeout(OL.titleT);OL.titleT=setTimeout(olSyncTitle,4000);if(!OL.sb||!OL.session||!S.user||S.user.uid!==OL.session.user.id)return;clearTimeout(cloudT);cloudT=setTimeout(cloudPush,2500);}
 async function cloudPush(){clearTimeout(cloudT);if(!OL.sb||!OL.session||!S.user||S.user.uid!==OL.session.user.id)return;
   try{await OL.sb.from("user_state").upsert({user_id:OL.session.user.id,state:JSON.parse(JSON.stringify(S)),client_ts:S._ts||Date.now(),updated_at:new Date().toISOString()});}catch(e){}}
 document.addEventListener("visibilitychange",()=>{if(document.hidden)cloudPush();});
@@ -5054,13 +5182,18 @@ function olApply(st){if(!OL.m||OL.m.shown||!st||typeof st.cur_idx!=="number")ret
     if(st.cur_idx===0&&OL.m.idx<0&&wait>600)olIntro(wait);
     OL.nextT=setTimeout(()=>olAsk(st.cur_idx),wait);}}
 function olHead(){const d=OL.m.data,n=d.questions.length,cur=Math.max(0,OL.m.idx);
-  $("dhead").innerHTML=`<div class="vs"><div class="pl me"><span class="olav sm">${avImg(OL.me.avatar)}</span><div><b>Toi</b><span class="sc" id="dMe">${d.me.score}</span></div></div>
-    <div class="mid"><small>${d.mode==="friend"?"Match amical":"Défi en ligne"}</small><span id="dclock">⏱ –</span><span class="qn">Question ${Math.min(cur+1,n)}/${n}</span></div>
-    <div class="pl op"><div><b>${olName(d.opp.name)}</b><span class="sc" id="dOp">${d.opp.score}</span></div><span class="olav sm">${avImg(d.opp.avatar)}</span></div></div>
-    <div class="dots"><div>${Array.from({length:n},(_,i)=>{const r=OL.m.res[i];return `<i class="${r==="me"?"ok":r==="opp"?"opp":r==="none"?"ko":i===cur?"cur":""}"></i>`;}).join("")}</div></div>`;olClock();}
+  $("dhead").innerHTML=`<div class="vs"><div class="pl me"><span class="olav sm">${avImg(OL.me.avatar)}</span><div><b>Toi</b>${olRankTag(OL.me.rank_title)}<span class="sc" id="dMe">${d.me.score}</span></div></div>
+    <div class="mid"><small>${d.mode==="friend"?"Match amical":"Défi en ligne"}</small><span id="dclock">⏱ –</span><span class="qn">Question ${Math.min(cur+1,n)}/${n}</span>${OL.m.shown?"":`<button class="dquit" id="dQuit">🏳️ Abandonner</button>`}</div>
+    <div class="pl op"><div><b>${olName(d.opp.name)}</b>${olRankTag(d.opp.rank)}<span class="sc" id="dOp">${d.opp.score}</span></div><span class="olav sm">${avImg(d.opp.avatar)}</span></div></div>
+    <div class="dots"><div>${Array.from({length:n},(_,i)=>{const r=OL.m.res[i];return `<i class="${r==="me"?"ok":r==="opp"?"opp":r==="none"?"ko":i===cur?"cur":""}"></i>`;}).join("")}</div></div>`;const q=$("dQuit");if(q)q.onclick=olAskForfeit;olClock();}
+function olAskForfeit(){sfx("tap");const d=OL.m&&OL.m.data;if(!d)return;
+  openSheet(`<div class="center" style="gap:10px;padding:8px 0"><div style="font-size:44px">🏳️</div><h3 style="margin:0">Abandonner la partie ?</h3><p class="muted" style="margin:0">${olName(d.opp.name)} remportera la partie${d.mode==="online"?` et ses <b>${OL_POINTS.win} points</b>`:""}. Tu ne marqueras aucun point.</p>
+    <div style="display:grid;gap:10px;width:100%;margin-top:6px"><button class="btn ghost" id="fqNo">Continuer à jouer</button><button class="btn bad" id="fqYes">Oui, j'abandonne</button></div></div>`);
+  $("fqNo").onclick=()=>closeSheet();
+  $("fqYes").onclick=async()=>{const b=$("fqYes");b.disabled=true;b.textContent="Abandon…";try{await olRpc("forfeit_match",{m:OL.m.id});closeSheet();OL.m.ending=true;clearInterval(OL.dT);clearTimeout(OL.pollT);clearTimeout(OL.nextT);olResult();}catch(e){b.disabled=false;b.textContent="Oui, j'abandonne";notify("⚠️","Abandon impossible",olErr(e));}};}
 function olIntro(wait){const d=OL.m.data;olHead();$("dtimer").hidden=true;
   $("dbody").innerHTML=`<div class="center"><div class="vsbig"><span class="olav">${avImg(OL.me.avatar)}</span><b>VS</b><span class="olav">${avImg(d.opp.avatar)}</span></div>
-    <h2 style="font-size:26px">${olName(d.opp.name)}</h2><p>Le premier qui trouve la bonne réponse remporte la question. Une erreur et tu ne peux plus répondre à cette question !</p><div class="count" id="dCount">${Math.ceil(wait/1000)}</div></div>`;
+    <h2 style="font-size:26px">${olName(d.opp.name)}</h2>${d.opp.rank||d.opp.badge?`<div class="oppid">${d.opp.rank?`<span class="rtag big">⛰️ Niveau ${esc(d.opp.rank)}</span>`:""}${d.opp.badge?`<span class="btag">🏅 ${esc(d.opp.badge)}</span>`:""}</div>`:""}<p>Le premier qui trouve la bonne réponse remporte la question. Une erreur et tu ne peux plus répondre à cette question !</p><div class="count" id="dCount">${Math.ceil(wait/1000)}</div></div>`;
   sfx("bell");vibrate([40,30,40]);const t0=Date.now()+wait;const t=setInterval(()=>{const e=$("dCount");const s=Math.ceil((t0-Date.now())/1000);if(!e||s<=0){clearInterval(t);return;}if(e.textContent!==String(s)){e.textContent=s;sfx("tick");}},200);}
 function olAsk(idx){if(!OL.m||OL.m.shown)return;const d=OL.m.data,n=d.questions.length;if(idx>=n)return;
   OL.m.idx=idx;OL.m.pending=-1;OL.m.locked=!!(OL.m.st&&OL.m.st.cur_idx===idx&&OL.m.st.me_locked);const q=d.questions[idx];olHead();
@@ -5104,14 +5237,14 @@ async function olResult(){try{await olResult2();}catch(e){console.error(e);const
   $("dbody").innerHTML=`<div class="center"><div class="medal big">🏁</div><h2>Partie terminée</h2>${d?`<div class="final"><span>${d.me.score}</span><small>contre</small><span>${d.opp.score}</span></div>`:""}<button class="btn" id="dHome2">Retour aux défis</button></div>`;
   $("dHome2").onclick=()=>{OL.m=null;go("online");olLoadAll();};}}
 async function olResult2(){if(!OL.m||OL.m.shown)return;OL.m.shown=true;olStopDuelTimers();$("dtimer").hidden=true;
-  let d;try{d=await olReload();}catch(e){d=OL.m.data;}const n=d.questions.length,won=d.winner===d.me.id,draw=d.is_draw;
+  let d;try{d=await olReload();}catch(e){d=OL.m.data;}const n=d.questions.length,won=d.winner===d.me.id,draw=d.is_draw&&!d.forfeit_by,quit=d.forfeit_by===d.me.id;
   olHead();const qn=document.querySelector(".vs .qn");if(qn)qn.textContent="Terminé";const cl=$("dclock");if(cl)cl.textContent="";
   let h2h="";if(d.mode==="friend"){try{const fr=await olRpc("list_friends");const f=fr.find(x=>x.id===d.opp.id);if(f)h2h=`<div class="card h2hbig"><div class="eyebrow">Vos confrontations</div><b>${f.played} match${f.played>1?"s":""}</b><div class="h2hbar"><span class="w" style="flex:${f.my_wins||0.001}">${f.my_wins} vous</span>${f.draws?`<span class="d" style="flex:${f.draws}">${f.draws}</span>`:""}<span class="l" style="flex:${f.their_wins||0.001}">${f.their_wins} ${olName(d.opp.name.split(" ")[0])}</span></div></div>`;}catch(e){}}
   $("dbody").innerHTML=`<div class="center" style="justify-content:flex-start;padding-top:8px">
-    <div class="medal ${won?"badge":"big"}">${won?"🏆":draw?"🤝":"💪"}</div>
-    <h2 style="font-size:30px">${won?"Victoire !":draw?"Égalité !":"Belle partie !"}</h2>
+    <div class="medal ${won?"badge":"big"}">${won?"🏆":draw?"🤝":quit?"🏳️":"💪"}</div>
+    <h2 style="font-size:30px">${won?"Victoire !":draw?"Égalité !":d.forfeit_by===d.me.id?"Partie abandonnée":"Belle partie !"}</h2>${d.forfeit_by?`<div class="fbk info" style="width:100%"><b>${d.forfeit_by===d.me.id?"🏳️ Tu as abandonné la partie.":`🏳️ ${olName(d.opp.name)} a abandonné : la victoire est pour toi !`}</b></div>`:""}
     <div class="final"><span>${d.me.score}</span><small>contre</small><span>${d.opp.score}</span></div>
-    <p>${d.mode==="online"?(won?`Tu gagnes <b>+${OL_POINTS.win} points</b> au classement du mois.`:draw?`Vous vous partagez les points : <b>+${OL_POINTS.draw} points</b> chacun.`:`${olName(d.opp.name)} l'emporte cette fois. Prends ta revanche !`):"Match amical : il ne compte pas pour le classement."}</p>
+    <p>${quit?(d.mode==="online"?"Abandon : tu ne marques aucun point cette fois.":"Match amical abandonné."):d.mode==="online"?(won?`Tu gagnes <b>+${OL_POINTS.win} points</b> au classement du mois.`:draw?`Vous vous partagez les points : <b>+${OL_POINTS.draw} points</b> chacun.`:`${olName(d.opp.name)} l'emporte cette fois. Prends ta revanche !`):"Match amical : il ne compte pas pour le classement."}</p>
     ${h2h}
     <div style="display:grid;gap:10px;width:100%"><button class="btn" id="dAgain">${d.mode==="online"?"⚔️ Rejouer en ligne":"🤝 Revanche"}</button><button class="btn ghost" id="dRev">Voir les réponses</button><button class="btn ghost" id="dHome">Retour aux défis</button></div>
     <div id="dReview" hidden style="width:100%;text-align:left;display:grid;gap:8px"></div></div>`;

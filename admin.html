@@ -668,6 +668,31 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .gbtn.big:disabled{opacity:.7}
 .glogin .gl-err{min-height:18px;font-size:13.5px;color:var(--bad)}
 .glogin .gl-note{color:#8a96ad;font-size:12.5px}
+
+.tabhint{margin:-4px 2px 0;font-size:13px;line-height:1.45;color:#5d6a85;background:#fff;border-radius:12px;padding:9px 12px;box-shadow:0 0 0 1.5px var(--line)}
+.rtag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;color:var(--lapis);background:#e7eefc;border-radius:999px;padding:1px 7px;margin:1px 0;white-space:nowrap}
+.rtag.big{font-size:13px;padding:4px 10px}
+.btag{display:inline-block;font-size:13px;font-weight:700;color:#8a5a00;background:#fff3d6;border-radius:999px;padding:4px 10px}
+.oppid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-4px 0 4px}
+.vs .pl b{display:block}
+.dquit{margin-top:4px;font-size:11.5px;font-weight:700;color:#b4473a;background:#fdecea;border-radius:999px;padding:3px 9px}
+.btn.bad{background:var(--bad);box-shadow:0 4px 0 #a33a2f;color:#fff}
+.avsvg{width:100%;height:100%;display:block}
+.avcard{display:flex;gap:14px;align-items:center;background:#fff;border-radius:18px;padding:12px;box-shadow:0 0 0 2px var(--line);margin-bottom:6px}
+.avatarbig.xl{width:84px;height:84px;font-size:48px;flex:none}
+.avcard-r{display:grid;gap:4px;flex:1;min-width:0}.avcard-r small{font-size:12.5px;color:#6b7894}
+.avbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.avbtns .btn{width:auto;padding:7px 10px;font-size:13px}
+.avs-prev{width:96px;height:96px;flex:none;margin:6px 0;border-radius:50%;box-shadow:0 0 0 4px #fff,0 6px 20px rgba(20,39,94,.18)}
+.avs-rows{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}.avs-row{min-width:0}
+#sheet{overflow-x:hidden}
+.avs-top{position:sticky;top:-1px;z-index:2;background:#fff;padding:2px 0 6px;margin:0 -2px;display:flex;align-items:center;gap:14px;border-bottom:1.5px solid var(--line)}.avs-top h3{margin:0;font-size:18px}.avs-top small{color:#6b7894}
+.avs-opts{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 6px;scrollbar-width:thin}
+.avs-chip{flex:none;display:grid;justify-items:center;gap:4px;width:74px;font-size:11px;font-weight:700;color:#3a4766;background:#fff;border-radius:14px;padding:6px 4px;box-shadow:0 0 0 2px var(--line)}
+.avs-chip[aria-pressed="true"]{box-shadow:0 0 0 3px var(--lapis);background:#eef3ff}
+.avs-mini{width:52px;height:52px;display:block}
+.avs-col{flex:none;width:36px;height:36px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--line)}
+.avs-col[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 4.5px var(--lapis)}
+.avs-foot{position:sticky;bottom:-1px;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px;background:#fff;padding:12px 0 4px;margin-top:10px}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -701,8 +726,87 @@ body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .atoast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;z-index:30;box-shadow:0 10px 24px rgba(0,0,0,.25)}
 .atoast.bad{background:var(--bad)}
 code{background:var(--mist);padding:1px 6px;border-radius:6px;font-weight:700}
+
+.aav{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;overflow:hidden;vertical-align:middle;background:#eef3ff}.aav img{width:100%;height:100%;object-fit:cover}
+.pimg{display:flex;gap:14px;align-items:center}.pprev{width:96px;height:96px;border-radius:14px;overflow:hidden;display:grid;place-items:center;background:#fff7e0;box-shadow:0 0 0 2px var(--line);font-size:40px;flex:none}.pprev img{width:100%;height:100%;object-fit:cover}
+.pthumb{width:44px;height:44px;border-radius:8px;object-fit:cover;float:left;margin-right:10px}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<header class="ahead"><b>✝️ Parcours Biblique · Admin</b></header><nav class="anav" id="nav"></nav><main id="main"></main><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* Espace admin Parcours Biblique — réservé aux comptes marqués administrateur dans Supabase. */
+<header class="ahead"><b>✝️ Parcours Biblique · Admin</b></header><nav class="anav" id="nav"></nav><main id="main"></main><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* ---------- Avatars personnalisés « av1:… » ----------
+   Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
+   Ordre des réglages : peau, coiffure, couleur cheveux, barbe, lunettes, couvre-chef, vêtement, fond, yeux, bouche. */
+const AVB={
+  skin:["#5a3825","#6f4630","#8d5a3b","#a8714d","#c68c63","#e2b48c","#f3cfb0"],
+  hair:["Aucune","Courte","Dégradé","Afro","Longue","Tresses","Chignon","Boucles","Rasée côtés","Locks"],
+  hairCol:["#16110e","#3b2417","#6b3e22","#a0682f","#d9b25a","#b2462c","#8f8f8f","#e9e4dc","#2f4fd1","#8a3fb8"],
+  beard:["Aucune","Barbe de 3 jours","Barbe courte","Grande barbe","Moustache","Bouc"],
+  glasses:["Aucune","Rondes","Carrées","Soleil","Fines"],
+  hat:["Aucun","Casquette","Bonnet","Kufi","Foulard / gélé","Couronne","Chapeau"],
+  cloth:["#1f4fd1","#16a06b","#e0573f","#f5b94a","#7a49d6","#14275e","#e85d9a","#2a2f3a","#0ea5b7","#f4f4f4"],
+  bg:["#dbe7ff","#ffe7c2","#d8f3e6","#fde0e0","#ece2ff","#d6f4f7","#fff3b0","#e6e9ef"],
+  eyes:["Normaux","Joyeux","Clin d'œil","Grands"],
+  mouth:["Sourire","Grand sourire","Neutre","Surpris"]};
+const AVB_KEYS=["skin","hair","hairCol","beard","glasses","hat","cloth","bg","eyes","mouth"];
+const avParse=v=>{const a=String(v||"").replace(/^av1:/,"").split(".").map(n=>parseInt(n,10)||0);
+  return AVB_KEYS.reduce((o,k,i)=>{const n=AVB[k].length;o[k]=Math.min(Math.max(a[i]||0,0),n-1);return o;},{});};
+const avCode=c=>"av1:"+AVB_KEYS.map(k=>c[k]||0).join(".");
+const avIsCfg=v=>/^av1:[0-9.]+$/.test(v||"");
+function avRandom(gender){const r=n=>Math.floor(Math.random()*n),f=gender==="f";
+  return {skin:r(5),hair:f?[3,4,5,6,7,9][r(6)]:[1,2,3,8,9,0][r(6)],hairCol:r(6),beard:f?0:[0,0,1,2,3,4,5][r(7)],glasses:r(3)?0:1+r(4),hat:r(4)?0:1+r(6),cloth:r(10),bg:r(8),eyes:r(3),mouth:r(3)};}
+let avUid=0;
+function avSvg(v){const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
+  const sk=AVB.skin[c.skin],hc=AVB.hairCol[c.hairCol],cl=AVB.cloth[c.cloth],bg=AVB.bg[c.bg],hatC=AVB.cloth[(c.cloth+4)%AVB.cloth.length];
+  const dark="rgba(0,0,0,.18)";let back="",front="",hat="",beard="",gl="",eyes="",mouth="";
+  // cheveux derrière la tête
+  if(c.hair===3)back=`<circle cx="50" cy="40" r="29" fill="${hc}"/>`;
+  if(c.hair===4)back=`<path d="M24 44 C22 20 78 20 76 44 L80 82 C70 86 30 86 20 82 Z" fill="${hc}"/>`;
+  if(c.hair===5)back=`<g fill="${hc}">${[26,33,40,60,67,74].map(x=>`<rect x="${x-3}" y="40" width="6" height="40" rx="3"/>`).join("")}</g>`;
+  if(c.hair===9)back=`<g fill="${hc}">${[25,31,37,63,69,75].map(x=>`<rect x="${x-3.5}" y="34" width="7" height="44" rx="3.5"/>`).join("")}</g>`;
+  if(c.hair===7)back=`<g fill="${hc}"><circle cx="30" cy="34" r="11"/><circle cx="70" cy="34" r="11"/><circle cx="40" cy="22" r="12"/><circle cx="60" cy="22" r="12"/><circle cx="50" cy="19" r="11"/></g>`;
+  // cheveux devant
+  if(c.hair===1)front=`<path d="M28 42 C26 18 74 18 72 42 C68 31 58 27 50 27 C42 27 32 31 28 42Z" fill="${hc}"/>`;
+  if(c.hair===2)front=`<path d="M29 38 C30 20 70 20 71 38 C64 30 36 30 29 38Z" fill="${hc}"/><path d="M28 40 C28 30 72 30 72 40" stroke="${hc}" stroke-width="2" fill="none" opacity=".45"/>`;
+  if(c.hair===3)front=`<path d="M29 36 C34 24 66 24 71 36 C64 31 36 31 29 36Z" fill="${hc}"/>`;
+  if(c.hair===4)front=`<path d="M27 46 C24 16 76 16 73 46 C70 30 60 26 50 28 C42 30 34 34 27 46Z" fill="${hc}"/>`;
+  if(c.hair===5)front=`<path d="M28 40 C26 18 74 18 72 40 C66 30 34 30 28 40Z" fill="${hc}"/><g stroke="${dark}" stroke-width="1.3">${[38,44,50,56,62].map(x=>`<line x1="${x}" y1="22" x2="${x}" y2="33"/>`).join("")}</g>`;
+  if(c.hair===6)front=`<circle cx="50" cy="15" r="9" fill="${hc}"/><path d="M28 40 C26 18 74 18 72 40 C66 28 34 28 28 40Z" fill="${hc}"/>`;
+  if(c.hair===7)front=`<path d="M29 38 C32 26 68 26 71 38 C62 32 38 32 29 38Z" fill="${hc}"/>`;
+  if(c.hair===8)front=`<path d="M38 34 C38 18 62 18 62 34 C58 28 42 28 38 34Z" fill="${hc}"/>`;
+  if(c.hair===9)front=`<path d="M28 40 C26 18 74 18 72 40 C66 30 34 30 28 40Z" fill="${hc}"/>`;
+  // couvre-chefs
+  if(c.hat===1)hat=`<path d="M27 36 C27 16 73 16 73 36 Z" fill="${hatC}"/><path d="M50 33 C64 33 80 34 84 38 C74 39 60 38 50 37Z" fill="${hatC}"/><circle cx="50" cy="18" r="2.2" fill="${dark}"/>`;
+  if(c.hat===2)hat=`<path d="M26 38 C25 12 75 12 74 38 Z" fill="${hatC}"/><rect x="25" y="32" width="50" height="8" rx="4" fill="${dark}"/><circle cx="50" cy="11" r="5" fill="${hatC}"/>`;
+  if(c.hat===3)hat=`<path d="M31 32 L31 22 C40 16 60 16 69 22 L69 32 Z" fill="${hatC}"/><path d="M33 26 H67" stroke="${dark}" stroke-width="1.5"/>`;
+  if(c.hat===4)hat=`<path d="M24 40 C18 14 40 4 52 8 C66 4 86 16 76 40 C70 30 30 30 24 40Z" fill="${hatC}"/><path d="M38 12 C48 22 60 22 70 14" stroke="${dark}" stroke-width="2" fill="none"/><path d="M30 20 C42 26 58 26 72 22" stroke="${dark}" stroke-width="1.5" fill="none"/>`;
+  if(c.hat===5)hat=`<path d="M32 30 L34 14 L42 22 L50 10 L58 22 L66 14 L68 30 Z" fill="#f5c542" stroke="#c9961c" stroke-width="1.2"/><circle cx="50" cy="22" r="2.2" fill="#e0573f"/>`;
+  if(c.hat===6)hat=`<ellipse cx="50" cy="31" rx="32" ry="6" fill="${hatC}"/><path d="M34 31 C34 14 66 14 66 31Z" fill="${hatC}"/><rect x="34" y="25" width="32" height="4" fill="${dark}"/>`;
+  // barbe
+  if(c.beard===1)beard=`<path d="M30 50 C31 70 42 75 50 75 C58 75 69 70 70 50 C66 60 58 63 50 63 C42 63 34 60 30 50Z" fill="${hc}" opacity=".35"/>`;
+  if(c.beard===2)beard=`<path d="M29 48 C30 72 42 77 50 77 C58 77 70 72 71 48 C67 60 60 62 56 61 C53 59 47 59 44 61 C40 62 33 60 29 48Z" fill="${hc}"/>`;
+  if(c.beard===3)beard=`<path d="M28 46 C28 80 42 86 50 86 C58 86 72 80 72 46 C68 60 60 62 56 61 C53 59 47 59 44 61 C40 62 32 60 28 46Z" fill="${hc}"/>`;
+  if(c.beard===4)beard=`<path d="M40 60 C44 56 48 57 50 58 C52 57 56 56 60 60 C56 62 52 61 50 60 C48 61 44 62 40 60Z" fill="${hc}"/>`;
+  if(c.beard===5)beard=`<path d="M41 59 C45 56 55 56 59 59 C55 61 45 61 41 59Z" fill="${hc}"/><path d="M44 66 C46 74 54 74 56 66 C53 68 47 68 44 66Z" fill="${hc}"/>`;
+  // yeux et bouche
+  const big=c.eyes===3?3.4:2.6;
+  if(c.eyes===1)eyes=`<path d="M37 47 Q41 43 45 47 M55 47 Q59 43 63 47" stroke="#1b1b1b" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  else if(c.eyes===2)eyes=`<circle cx="41" cy="46" r="2.6" fill="#1b1b1b"/><path d="M55 47 Q59 44 63 47" stroke="#1b1b1b" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  else eyes=`<circle cx="41" cy="46" r="${big}" fill="#1b1b1b"/><circle cx="59" cy="46" r="${big}" fill="#1b1b1b"/><circle cx="42" cy="45" r=".9" fill="#fff"/><circle cx="60" cy="45" r=".9" fill="#fff"/>`;
+  const brows=`<path d="M36 40 Q41 37 46 40 M54 40 Q59 37 64 40" stroke="${c.hair===0&&c.hat===0?dark:hc}" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  if(c.mouth===0)mouth=`<path d="M43 61 Q50 67 57 61" stroke="#6b2a1e" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  if(c.mouth===1)mouth=`<path d="M41 59 Q50 72 59 59 Z" fill="#7a2a20"/><path d="M43 60 Q50 63 57 60" fill="#fff"/>`;
+  if(c.mouth===2)mouth=`<path d="M44 63 H56" stroke="#6b2a1e" stroke-width="2.4" stroke-linecap="round"/>`;
+  if(c.mouth===3)mouth=`<ellipse cx="50" cy="63" rx="3.6" ry="4.4" fill="#7a2a20"/>`;
+  // lunettes
+  const gs=c.glasses===3?`fill="#1d2433"`:`fill="rgba(255,255,255,.18)"`,gw=c.glasses===4?1.4:2.2;
+  if(c.glasses===1)gl=`<g stroke="#1d2433" stroke-width="${gw}" ${gs}><circle cx="41" cy="46" r="7"/><circle cx="59" cy="46" r="7"/></g><path d="M48 46 H52 M34 45 L28 43 M66 45 L72 43" stroke="#1d2433" stroke-width="2"/>`;
+  if(c.glasses===2||c.glasses===3||c.glasses===4)gl=`<g stroke="#1d2433" stroke-width="${gw}" ${gs}><rect x="33" y="40" width="15" height="11" rx="${c.glasses===3?4:2}"/><rect x="52" y="40" width="15" height="11" rx="${c.glasses===3?4:2}"/></g><path d="M48 45 H52 M33 44 L28 43 M67 44 L72 43" stroke="#1d2433" stroke-width="2"/>`;
+  return `<svg class="avsvg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#${id})">
+<rect width="100" height="100" fill="${bg}"/>${back}
+<path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z" fill="${cl}"/><path d="M41 72 L50 82 L59 72Z" fill="rgba(255,255,255,.35)"/>
+<rect x="42" y="60" width="16" height="15" rx="6" fill="${sk}"/><rect x="42" y="64" width="16" height="5" fill="rgba(0,0,0,.12)"/>
+<circle cx="27.5" cy="48" r="5.5" fill="${sk}"/><circle cx="72.5" cy="48" r="5.5" fill="${sk}"/>
+<ellipse cx="50" cy="46" rx="22.5" ry="25" fill="${sk}"/>${front}${beard}${brows}${eyes}
+<path d="M49 50 Q47 55 50 56" stroke="rgba(0,0,0,.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>${mouth}${gl}${hat}</g></svg>`;}
+/* Espace admin Parcours Biblique — réservé aux comptes marqués administrateur dans Supabase. */
 const CFG={url:"https://xyuqturdtqmclrjdnaen.supabase.co",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dXF0dXJkdHFtY2xyamRuYWVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NDI3OTUsImV4cCI6MjEwOTQxODc5NX0.RHa_6UtvTfeFBdQ7wcBDby35cgvBYabIDe5grAfmS0E"};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -713,6 +817,7 @@ const A={me:null,tab:"home",q:{page:0,t:"",d:"",k:"",s:"",act:"1"},month:new Dat
 const fmtD=d=>d?new Date(d).toLocaleString("fr-FR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"–";
 const DIFF={facile:"Facile",moyen:"Moyen",difficile:"Difficile"},KIND={qcm:"QCM",tf:"Vrai / faux",fill:"Verset à compléter"};
 function toast(t,bad){const e=$("toast");e.textContent=t;e.className="atoast"+(bad?" bad":"");e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,3500);}
+const adAv=v=>/^https:/.test(v||"")?`<img src="${esc(v)}" alt="">`:avIsCfg(v)?avSvg(v):esc(v||"🙂");
 function err(e){return (e&&(e.message||e.error_description))||String(e);}
 
 // Ne jamais attendre une requête Supabase dans ce rappel (blocage connu) : on relance boot() juste après.
@@ -750,7 +855,7 @@ async function tHome(){const o=await rpc("admin_overview");const qb=o.questions_
 async function tUsers(){const list=await rpc("admin_users",{p_search:A.users});
   $("main").innerHTML=`<div class="acard"><div class="row"><input id="us" placeholder="Rechercher : nom, e-mail ou code" value="${esc(A.users)}" style="flex:1"><button class="btn small" id="usGo" style="width:auto">Rechercher</button></div>
   <table class="tbl"><tr><th>Joueur</th><th>E-mail</th><th>Code</th><th>Parties</th><th>Inscrit</th><th>Statut</th><th></th></tr>
-  ${list.map(u=>`<tr class="${u.banned?"off":""}"><td>${esc(u.avatar)} <b>${esc(u.display_name)}</b></td><td>${esc(u.email)}</td><td><code>${esc(u.referral_code)}</code></td><td>${u.played}</td><td>${fmtD(u.created_at)}</td>
+  ${list.map(u=>`<tr class="${u.banned?"off":""}"><td><span class="aav">${adAv(u.avatar)}</span> <b>${esc(u.display_name)}</b></td><td>${esc(u.email)}</td><td><code>${esc(u.referral_code)}</code></td><td>${u.played}</td><td>${fmtD(u.created_at)}</td>
     <td>${u.is_admin?`<span class="pill2 adm">Admin</span>`:""}${u.banned?`<span class="pill2 ban">Suspendu</span>`:`<span class="pill2 ok">Actif</span>`}</td>
     <td class="acts"><button class="textlink" data-ban="${u.id}" data-v="${!u.banned}">${u.banned?"Réactiver":"Suspendre"}</button>${u.id===A.me.id?"":`<button class="textlink" data-adm="${u.id}" data-v="${!u.is_admin}">${u.is_admin?"Retirer admin":"Rendre admin"}</button>`}</td></tr>`).join("")||`<tr><td colspan="7" class="muted">Aucun joueur.</td></tr>`}</table></div>`;
   $("usGo").onclick=()=>{A.users=$("us").value.trim();tUsers();};$("us").onkeydown=e=>{if(e.key==="Enter")$("usGo").click();};
@@ -780,16 +885,22 @@ async function tPrizes(){const {data,error}=await sb.from("prizes").select("*").
   $("main").innerHTML=`<div class="acard"><h3>Annoncer un prix</h3><p class="muted">Le prix du mois en cours s'affiche dans l'onglet Défis du jeu, au-dessus du classement.</p>
   <div class="grid2"><div class="field"><label>Mois</label><input type="month" id="pm" value="${new Date().toISOString().slice(0,7)}"></div><div class="field"><label>Titre du prix</label><input id="pt" placeholder="Ex. Une Bible d'étude en cuir"></div>
   <div class="field span2"><label>Description</label><textarea id="pd" rows="2" placeholder="Ce que gagne le meilleur disciple du mois, comment il sera remis…"></textarea></div>
-  <div class="field span2"><label>Lien d'une image (facultatif)</label><input id="pi" placeholder="https://…"></div></div>
+  <div class="field span2"><label>Image du prix (facultatif)</label><div class="pimg"><div class="pprev" id="pprev"><span>🏆</span></div><div style="display:grid;gap:6px"><label class="btn small ghost" style="width:auto;cursor:pointer">🖼️ Importer une image<input type="file" id="pfile" accept="image/jpeg,image/png,image/webp" hidden></label><button class="textlink" id="pclr" hidden style="justify-self:start">Retirer l'image</button><small class="muted" id="pimsg">JPG, PNG ou WebP · 3 Mo maximum</small></div></div><input type="hidden" id="pi"></div></div>
   <input type="hidden" id="pid"><div class="row"><button class="btn small" id="psave" style="width:auto">Enregistrer le prix</button><button class="textlink" id="pnew">Nouveau</button></div></div>
   <div class="acard"><h3>Prix enregistrés</h3><table class="tbl"><tr><th>Mois</th><th>Prix</th><th>Visible</th><th></th></tr>
-  ${data.map(p=>`<tr class="${p.active?"":"off"}"><td>${new Date(p.month+"T12:00:00").toLocaleDateString("fr-FR",{month:"long",year:"numeric"})}</td><td><b>${esc(p.title)}</b><br><small class="muted">${esc(p.description||"")}</small></td><td>${p.active?"Oui":"Non"}</td>
+  ${data.map(p=>`<tr class="${p.active?"":"off"}"><td>${new Date(p.month+"T12:00:00").toLocaleDateString("fr-FR",{month:"long",year:"numeric"})}</td><td>${p.image_url?`<img src="${esc(p.image_url)}" alt="" class="pthumb">`:""}<b>${esc(p.title)}</b><br><small class="muted">${esc(p.description||"")}</small></td><td>${p.active?"Oui":"Non"}</td>
   <td class="acts"><button class="textlink" data-ed="${p.id}">Modifier</button><button class="textlink" data-tg="${p.id}" data-v="${!p.active}">${p.active?"Masquer":"Afficher"}</button><button class="textlink" data-del="${p.id}">Supprimer</button></td></tr>`).join("")||`<tr><td colspan="4" class="muted">Aucun prix pour l'instant.</td></tr>`}</table></div>`;
-  $("pnew").onclick=()=>{["pid","pt","pd","pi"].forEach(i=>$(i).value="");};
+  const setImg=u=>{$("pi").value=u||"";$("pprev").innerHTML=u?`<img src="${esc(u)}" alt="">`:"<span>🏆</span>";$("pclr").hidden=!u;};
+  $("pclr").onclick=()=>setImg("");
+  $("pfile").onchange=async()=>{const f=$("pfile").files[0];if(!f)return;if(f.size>3*1024*1024){$("pimsg").textContent="Image trop lourde (3 Mo maximum).";return;}
+    $("pimsg").textContent="Envoi de l'image…";const ext=(f.type.split("/")[1]||"jpg").replace("jpeg","jpg"),path=`prix-${Date.now()}.${ext}`;
+    const {error}=await sb.storage.from("prizes").upload(path,f,{contentType:f.type,upsert:false});
+    if(error){$("pimsg").textContent="Échec de l'envoi : "+err(error);return;}setImg(sb.storage.from("prizes").getPublicUrl(path).data.publicUrl);$("pimsg").textContent="Image prête. N'oublie pas d'enregistrer le prix.";};
+  $("pnew").onclick=()=>{["pid","pt","pd"].forEach(i=>$(i).value="");setImg("");};
   $("psave").onclick=async()=>{const row={month:$("pm").value+"-01",title:$("pt").value.trim(),description:$("pd").value.trim()||null,image_url:$("pi").value.trim()||null,active:true};
     if(!row.title){toast("Donne un titre au prix.",1);return;}const id=$("pid").value;
     const {error}=id?await sb.from("prizes").update(row).eq("id",id):await sb.from("prizes").insert(row);if(error)toast(err(error),1);else{toast("Prix enregistré.");tPrizes();}};
-  document.querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>{const p=data.find(x=>x.id==b.dataset.ed);$("pid").value=p.id;$("pm").value=p.month.slice(0,7);$("pt").value=p.title;$("pd").value=p.description||"";$("pi").value=p.image_url||"";window.scrollTo({top:0,behavior:"smooth"});});
+  document.querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>{const p=data.find(x=>x.id==b.dataset.ed);$("pid").value=p.id;$("pm").value=p.month.slice(0,7);$("pt").value=p.title;$("pd").value=p.description||"";setImg(p.image_url||"");window.scrollTo({top:0,behavior:"smooth"});});
   document.querySelectorAll("[data-tg]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("prizes").update({active:b.dataset.v==="true"}).eq("id",b.dataset.tg);if(error)toast(err(error),1);else tPrizes();});
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(!confirm("Supprimer définitivement ce prix ?"))return;const {error}=await sb.from("prizes").delete().eq("id",b.dataset.del);if(error)toast(err(error),1);else tPrizes();});}
 
