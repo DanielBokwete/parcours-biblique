@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>Suivi de votre annonce · Parcours Biblique</title>
+<title>Suivi de votre campagne · Parcours Biblique</title>
 <link rel="icon" href="/icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Figtree:wght@400;500;600;700;800&display=swap">
@@ -80,6 +80,20 @@ button.send:disabled{opacity:.6}
   .media{width:84px;height:84px}
   .bar{grid-template-columns:90px 1fr 46px}
 }
+.mosaic{display:grid;gap:4px;width:112px;height:112px;flex:none;border-radius:16px;overflow:hidden}
+.mosaic .media{width:100%;height:100%;border-radius:0}
+.mosaic.n2{grid-template-columns:1fr 1fr}.mosaic.n3{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}.mosaic.n3 .media:first-child{grid-row:1/3}.mosaic.n4{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.mosaic .media{font-size:22px}
+.crs{display:grid;gap:12px}
+.cr{display:flex;gap:14px;align-items:flex-start;background:var(--mist);border-radius:16px;padding:12px}
+.cr .media{width:84px;height:84px;border-radius:12px;font-size:26px}
+.cb{flex:1;min-width:0;display:grid;gap:8px}
+.ch{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ch b{font-size:15.5px}
+.best{font-size:12px;font-weight:800;background:#fff3d6;color:#8a5a00;border-radius:999px;padding:3px 9px}
+.cm{display:flex;flex-wrap:wrap;gap:6px}
+.cn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.cn div{background:#fff;border-radius:10px;padding:8px 10px}.cn b{display:block;font-family:var(--f-d);font-size:20px;color:var(--lapis-deep);line-height:1.1}.cn small{font-size:11.5px;color:var(--stone);font-weight:700}
+@media (max-width:720px){.cn{grid-template-columns:repeat(2,minmax(0,1fr))}.cr .media{width:64px;height:64px}.mosaic{width:84px;height:84px}}
 </style>
 </head>
 <body>
@@ -112,8 +126,11 @@ async function load(){
   if(!token){$("hello").innerHTML=`<h1>Lien incomplet</h1><p>Ce lien de suivi n'est pas valide. Vérifiez le lien reçu.</p>`;$("app").innerHTML="";return;}
   let r;try{r=await rpc("ad_report",{p_token:token});}catch(e){if(first){$("app").innerHTML=`<div class="card empty"><h2>Connexion impossible</h2><p>Vérifiez votre connexion internet puis rechargez la page.</p></div>`;}return;}
   if(!r){$("hello").innerHTML=`<h1>Lien introuvable</h1><p>Ce lien de suivi n'existe pas ou a été désactivé.</p>`;$("app").innerHTML="";return;}
+  const crs=r.creatives||[];const liveN=crs.filter(c=>c.status==="live").length;
+  const thumb=c=>c.image_url?`<img src="${esc(c.image_url)}" alt="">`:c.video_url?`<video src="${esc(c.video_url)}#t=1" muted playsinline preload="metadata"></video>`:"📣";
+  const bestC=crs.length>1?crs.reduce((m,c)=>((c.clicks*3+c.views)>(m.clicks*3+m.views)?c:m),crs[0]):null;
   const name=r.advertiser?esc(r.advertiser):"";const [sl,sc]=ST[r.status]||ST.live;
-  $("hello").innerHTML=`<h1>Merci${name?", "+name:""}, pour votre confiance 🙏</h1><p>Voici les résultats de votre annonce dans Parcours Biblique, le jeu biblique joué chaque jour par des jeunes chrétiens. Les chiffres se mettent à jour automatiquement.</p>`;
+  $("hello").innerHTML=`<h1>Merci${name?", "+name:""}, pour votre confiance 🙏</h1><p>Voici les résultats de ${crs.length>1?"vos annonces":"votre annonce"} dans Parcours Biblique, le jeu biblique joué chaque jour par des jeunes chrétiens. Les chiffres se mettent à jour automatiquement.</p>`;
   $("upd").textContent="Mis à jour à "+new Date(r.updated_at).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
   const ctr=r.views?Math.round(r.clicks/r.views*1000)/10:0;
   const start=new Date(r.starts_at),end=r.ends_at?new Date(r.ends_at):null,now=new Date();
@@ -121,11 +138,10 @@ async function load(){
   const daily=r.daily||[];const best=daily.reduce((m,x)=>x.v>m.v?x:m,{v:0});
   const cities=(r.by_city||[]).filter(x=>x.city!=="?");const cmax=Math.max(1,...cities.map(x=>x.v));
   const modes=[["📣 Bandeau",r.views_banner],["▶️ Plein écran",r.views_reward]].filter(x=>x[1]>0||true);const mmax=Math.max(1,r.views_banner,r.views_reward);
-  const media=r.video_url?`<video src="${esc(r.video_url)}" ${r.image_url?`poster="${esc(r.image_url)}"`:""} muted playsinline loop autoplay></video>`:r.image_url?`<img src="${esc(r.image_url)}" alt="">`:"📣";
   const y0=scrollY;
   $("app").innerHTML=`
-  <section class="card"><div class="adrow"><div class="media">${media}</div><div class="t"><span class="status ${sc}"><i></i>${sl}</span><h3 style="margin-top:8px">${esc(r.title)}</h3>${r.body?`<p>${esc(r.body)}</p>`:""}
-    <div class="meta">${(r.cities&&r.cities.length?r.cities.map(c=>`<span class="tag">📍 ${esc(cap(c))}</span>`).join(""):`<span class="tag">📍 Toutes les villes</span>`)}${r.show_banner?`<span class="tag">📣 Bandeau</span>`:""}${r.show_reward?`<span class="tag">▶️ Plein écran${r.duration_s?" · "+r.duration_s+" s":""}</span>`:""}${r.link_url?`<a class="tag" href="${esc(r.link_url)}" target="_blank" rel="noopener">🔗 ${esc(r.cta||"Lien")}</a>`:""}</div></div></div></section>
+  <section class="card"><div class="adrow"><div class="mosaic n${Math.min(4,crs.length)}">${crs.slice(0,4).map(c=>`<div class="media">${thumb(c)}</div>`).join("")||`<div class="media">📣</div>`}</div><div class="t"><span class="status ${sc}"><i></i>${sl}</span><h3 style="margin-top:8px">${crs.length>1?`Votre campagne · ${crs.length} créations`:esc(crs[0]?crs[0].title:"Votre annonce")}</h3><p>${crs.length>1?`${liveN} en diffusion en ce moment. Les créations passent à tour de rôle, à parts égales.`:esc(crs[0]&&crs[0].body||"")}</p>
+    <div class="meta">${(r.cities&&r.cities.length&&!r.cities.includes("*")?r.cities.map(c=>`<span class="tag">📍 ${esc(cap(c))}</span>`).join(""):`<span class="tag">📍 Toutes les villes</span>`)}</div></div></div></section>
   <section class="kpis">
     <div class="kpi hl"><small>Vues</small><b>${N(r.views)}</b><span>affichages de l'annonce</span></div>
     <div class="kpi"><small>Portée</small><b>${N(r.people)}</b><span>personnes différentes</span></div>
@@ -138,6 +154,10 @@ async function load(){
     <div><small>Début</small><b>${D(r.starts_at)}</b></div><div><small>Fin</small><b>${end?D(r.ends_at):"Sans date de fin"}</b></div>
     <div><small>Jours de diffusion</small><b>${N(ran)} jour${ran>1?"s":""}</b></div><div><small>${end?"Jours restants":"Dernière vue"}</small><b>${end?N(leftD)+" jour"+(leftD>1?"s":""):DT(r.last_view)}</b></div></div>
     ${total?`<div class="prog" title="Avancement de la campagne"><i style="width:${Math.min(100,Math.round(ran/total*100))}%"></i></div>`:""}</section>
+  ${crs.length?`<section class="card"><h2>${crs.length>1?"Vos créations":"Votre création"}</h2><div class="crs">${crs.map(c=>{const S2=ST[c.status]||ST.live;const ct=c.views?Math.round(c.clicks/c.views*1000)/10:0;
+     return `<div class="cr"><div class="media">${thumb(c)}</div><div class="cb"><div class="ch"><b>${esc(c.title)}</b>${bestC&&bestC.id===c.id&&c.views?`<span class="best">🏆 La plus performante</span>`:""}</div>
+       <div class="cm"><span class="status ${S2[1]}"><i></i>${S2[0]}</span><span class="tag">${c.video_url?"🎬 Vidéo":"🖼️ Affiche"}${c.duration_s?" · "+c.duration_s+" s":""}</span>${c.show_banner?`<span class="tag">📣 Bandeau</span>`:""}${c.show_reward?`<span class="tag">▶️ Plein écran</span>`:""}</div>
+       <div class="cn"><div><b>${N(c.views)}</b><small>vues</small></div><div><b>${N(c.people)}</b><small>personnes</small></div><div><b>${N(c.clicks)}</b><small>clics · ${String(ct).replace(".",",")} %</small></div><div><b>${N(c.full_views)}</b><small>vues complètes</small></div></div></div></div>`;}).join("")}</div></section>`:""}
   <section class="card"><h2>Vues et clics par jour</h2>${daily.length?chart(daily):`<p>La diffusion n'a pas encore commencé.</p>`}
     <div class="legend"><span><i style="background:#1f4fd1"></i>Vues</span><span><i style="background:#f0b429"></i>Clics</span>${best.v?`<span style="margin-left:auto">Meilleur jour : ${new Date(best.d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long"})} (${N(best.v)} vues)</span>`:""}</div></section>
   <section class="two">

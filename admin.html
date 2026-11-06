@@ -1017,6 +1017,13 @@ body.admin:not(.logged) .atop,body.admin:not(.logged) .abot,body.admin:not(.logg
 .abot .nbadge.dot{min-width:10px;width:10px;height:10px;padding:0;top:4px;right:calc(50% - 16px)}
 #adForm[hidden]{display:none!important}
 #us{flex:1 1 200px!important;min-width:0}
+.camp{gap:12px}.camp.off{opacity:.6}
+.chead{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.cid{display:flex;gap:12px;align-items:center;min-width:0}
+.cav{width:42px;height:42px;border-radius:12px;background:linear-gradient(140deg,#1c3a96,#2e5ff0);color:#fff;font-family:var(--f-display);font-weight:800;font-size:20px;display:grid;place-items:center;flex:none}
+.cact{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cstats{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px;color:#4a5670;background:#f6f8fc;border-radius:12px;padding:10px 12px}
+.vthumb{display:grid!important;place-items:center;background:#0f1d3d;color:#fff;font-size:20px}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <div class="ashell"><aside class="aside" id="nav"></aside><div class="acol"><header class="atop" id="atop"></header><main id="main"></main></div></div><nav class="abot" id="abot"></nav><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* ---------- Avatars personnalisés « av1:… » ----------
    Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
@@ -1238,48 +1245,67 @@ const cityKey=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCa
 const cap=s=>String(s||"").replace(/(^|\s|-)(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());
 const AD_FIELDS=[["banner_every_min","Bandeau : toutes les … minutes","0 = aucun bandeau"],["banner_seconds","Bandeau : durée d'affichage (secondes)",""],["reward_seconds","Annonce récompensée : durée minimale (secondes)","Avant de pouvoir récupérer la récompense"],["reward_lives","Vies gagnées par annonce",""],["reward_helps","Aides gagnées par annonce",""],["reward_daily_max","Annonces récompensées par jour et par joueur",""],["online_min_lives","Vies minimum pour jouer en ligne ou entre amis","0 = aucune condition"],["online_cost_lives","Vies consommées par partie en ligne ou entre amis","0 = gratuit"]];
 async function tAds(){
-  const [{data:ads,error},{data:set},stats,cities]=await Promise.all([sb.from("ads").select("*").order("created_at",{ascending:false}),sb.from("ad_settings").select("*").eq("id",1).maybeSingle(),rpc("admin_ad_stats").catch(()=>[]),rpc("admin_known_cities").catch(()=>[])]);
-  if(error)throw error;window.__ads=ads;const S=set||{};const st={};(stats||[]).forEach(x=>st[x.id]=x);
-  const label={};(cities||[]).forEach(c=>label[c.k]=c.label||cap(c.k));const lab=k=>label[k]||cap(k);
+  const [{data:ads,error},{data:camps,error:e2},stats,cities]=await Promise.all([sb.from("ads").select("*").order("created_at",{ascending:true}),sb.from("campaigns").select("*").order("created_at",{ascending:false}),rpc("admin_ad_stats").catch(()=>[]),rpc("admin_known_cities").catch(()=>[])]);
+  if(error)throw error;if(e2)throw e2;window.__ads=ads;window.__camps=camps;const st={};(stats||[]).forEach(x=>st[x.id]=x);
+  const label={};(cities||[]).forEach(c=>label[c.k]=c.label||cap(c.k));const lab=k=>label[k]||cap(k);A.adLab=lab;A.adCities=cities;
   const now=Date.now();
   const status=a=>a.archived?["Archivée","off"]:!a.active?["En pause","off"]:a.starts_at&&new Date(a.starts_at)>now?["Programmée","wait"]:a.ends_at&&new Date(a.ends_at)<=now?["Terminée","off"]:["En diffusion","on"];
-  const showArch=!!A.adArch;const list=ads.filter(a=>showArch||!a.archived);
-  $("main").innerHTML=`<div class="acard" id="adForm" hidden></div>
-  <div class="acard"><div class="row"><h3 style="flex:1;margin:0">Annonces</h3><button class="btn small" id="adNewTop" style="width:auto">＋ Nouvelle annonce</button></div><p class="muted" style="font-size:13px">Les annonces d'une même ville tournent à parts égales : le jeu montre toujours celle que le joueur a le moins vue, puis la moins vue au total.</p>
-   <table class="tbl"><tr><th>Annonce</th><th>Villes</th><th>Diffusion</th><th>Période</th><th>Statistiques</th><th></th></tr>
-   ${list.map(a=>{const s=st[a.id]||{},[sl,sc]=status(a),ctr=s.views?Math.round(s.clicks/s.views*1000)/10:0;
-     return `<tr class="${sc==="off"?"off":""}"><td>${a.image_url?`<img src="${esc(a.image_url)}" alt="" class="pthumb">`:""}<b>${esc(a.title)}</b>${a.advertiser_name?`<br><small>👤 ${esc(a.advertiser_name)}${a.price?` · <b>${Number(a.price).toLocaleString("fr-FR")} ${esc(a.currency||"USD")}</b>`:""}</small>`:""}<br><small class="muted">${esc(a.body||"")}</small><br><span class="stag ${sc}">${sl}</span></td>
+  const showArch=!!A.adArch;
+  const row=a=>{const s=st[a.id]||{},[sl,sc]=status(a),ctr=s.views?Math.round(s.clicks/s.views*1000)/10:0;
+     return `<tr class="${sc==="off"?"off":""}"><td>${a.image_url?`<img src="${esc(a.image_url)}" alt="" class="pthumb">`:a.video_url?`<span class="pthumb vthumb">🎬</span>`:""}<b>${esc(a.title)}</b>${a.body?`<br><small class="muted">${esc(a.body)}</small>`:""}<br><span class="stag ${sc}">${sl}</span></td>
      <td>${a.cities&&a.cities.length?a.cities.map(k=>`<span class="ctag">${esc(lab(k))}</span>`).join(" "):"<b>Toutes les villes</b>"}</td>
-     <td>${[a.show_banner?"📣 Bandeau":"",a.show_reward?"▶️ Récompense":"",a.video_url?`🎬 Vidéo${a.duration_s?" · "+a.duration_s+" s":""}`:a.duration_s?`⏱️ ${a.duration_s} s`:"",a.audio_url?"🎵 Musique":""].filter(Boolean).join("<br>")||"<span class='muted'>Aucune</span>"}</td>
+     <td>${[a.show_banner?"📣 Bandeau":"",a.show_reward?"▶️ Plein écran":"",a.video_url?`🎬 Vidéo${a.duration_s?" · "+a.duration_s+" s":""}`:a.duration_s?`⏱️ ${a.duration_s} s`:"",a.audio_url?"🎵 Musique":""].filter(Boolean).join("<br>")||"<span class='muted'>Aucune</span>"}</td>
      <td><small>${a.starts_at?"Du "+fmtD(a.starts_at):"Dès maintenant"}<br>${a.ends_at?"Au "+fmtD(a.ends_at):"Sans fin"}</small></td>
-     <td><small><b>${s.views||0}</b> vues · <b>${s.people||0}</b> personnes<br><b>${s.clicks||0}</b> clics (${ctr} %) · <b>${s.rewards||0}</b> récompenses<br><span class="muted">${s.views_24h||0} vues sur 24 h</span></small></td>
-     <td class="acts"><button class="textlink" data-sr="${a.id}">🔗 Lien de suivi</button><button class="textlink" data-ae="${a.id}">Modifier</button>${a.archived?`<button class="textlink" data-aa="${a.id}" data-v="false">Restaurer</button>`:`<button class="textlink" data-ap="${a.id}" data-v="${!a.active}">${a.active?"Mettre en pause":"Activer"}</button><button class="textlink" data-aa="${a.id}" data-v="true">Archiver</button>`}</td></tr>`;}).join("")||`<tr><td colspan="6" class="muted">Aucune annonce pour l'instant.</td></tr>`}</table>
-   <button class="textlink" id="adArch">${showArch?"Masquer les annonces archivées":"Voir les annonces archivées"}</button></div>
-</div>`;
-  adForm(null,cities,lab);if(adDraftGet()||A.adOpen)$("adForm").hidden=false;
-  $("adNewTop").onclick=()=>{adDraftClear();adForm(null,cities,lab);$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});};
+     <td><small><b>${s.views||0}</b> vues · <b>${s.people||0}</b> pers.<br><b>${s.clicks||0}</b> clics (${ctr} %) · <b>${s.rewards||0}</b> complètes<br><span class="muted">${s.views_24h||0} vues sur 24 h</span></small></td>
+     <td class="acts"><button class="textlink" data-ae="${a.id}">Modifier</button>${a.archived?`<button class="textlink" data-aa="${a.id}" data-v="false">Restaurer</button>`:`<button class="textlink" data-ap="${a.id}" data-v="${!a.active}">${a.active?"Pause":"Activer"}</button><button class="textlink" data-aa="${a.id}" data-v="true">Archiver</button>`}</td></tr>`;};
+  const list=camps.filter(c=>showArch||!c.archived);
+  $("main").innerHTML=`<div class="acard" id="adForm" hidden></div>
+  <div class="row wrap"><div style="flex:1 1 280px;min-width:0"><h3 style="margin:0">Annonceurs et leurs créas</h3><p class="muted" style="font-size:13px;margin:2px 0 0">Chaque annonceur a un seul lien de suivi pour toutes ses créas. Le jeu partage le temps d'antenne à parts égales entre annonceurs, puis entre les créas d'un même annonceur.</p></div><button class="btn small" id="cNew" style="width:auto">＋ Nouvel annonceur</button></div>
+  ${list.map(c=>{const mine=ads.filter(a=>a.campaign_id===c.id&&(showArch||!a.archived));const all=ads.filter(a=>a.campaign_id===c.id);const live=all.filter(a=>status(a)[1]==="on").length;
+     const sum=k=>all.reduce((t,a)=>t+((st[a.id]||{})[k]||0),0);const v=sum("views"),cl=sum("clicks");
+     return `<div class="acard camp${c.archived?" off":""}"><div class="chead"><div class="cid"><span class="cav">${esc((c.advertiser_name||"?").trim().charAt(0).toUpperCase())}</span><div><b>${esc(c.advertiser_name)}</b>${c.archived?` <span class="stag off">Archivé</span>`:""}<br><small class="muted">${all.length} créa${all.length>1?"s":""} · ${live} en diffusion${c.advertiser_contact?` · ${esc(c.advertiser_contact)}`:""}${c.price?` · <b>${Number(c.price).toLocaleString("fr-FR")} ${esc(c.currency||"USD")}</b>`:""}</small></div></div>
+       <div class="cact"><button class="btn small" data-cadd="${c.id}" style="width:auto">＋ Ajouter une créa</button><button class="btn small ghost" data-csr="${c.id}" style="width:auto">🔗 Lien de suivi</button><button class="textlink" data-ced="${c.id}">Modifier</button><button class="textlink" data-car="${c.id}" data-v="${!c.archived}">${c.archived?"Restaurer":"Archiver"}</button></div></div>
+       <div class="cstats"><span><b>${v}</b> vues</span><span><b>${cl}</b> clics · ${v?Math.round(cl/v*1000)/10:0} %</span><span><b>${sum("rewards")}</b> vues complètes</span></div>
+       ${mine.length?`<table class="tbl"><tr><th>Créa</th><th>Villes</th><th>Diffusion</th><th>Période</th><th>Statistiques</th><th></th></tr>${mine.map(row).join("")}</table>`:`<p class="muted" style="margin:0">Aucune créa pour l'instant. Ajoute une affiche ou une vidéo.</p>`}</div>`;}).join("")||`<div class="acard"><p class="muted">Aucun annonceur pour l'instant. Commence par « ＋ Nouvel annonceur ».</p></div>`}
+  <button class="textlink" id="adArch">${showArch?"Masquer les éléments archivés":"Voir les éléments archivés"}</button>`;
+  const dr=adDraftGet();if(dr){adForm(null);$("adForm").hidden=false;}
+  $("cNew").onclick=()=>campForm(null);
   $("adArch").onclick=()=>{A.adArch=!showArch;tAds();};
-  document.querySelectorAll("[data-sr]").forEach(b=>b.onclick=()=>shareReport(ads.find(x=>x.id==b.dataset.sr)));
-  document.querySelectorAll("[data-ae]").forEach(b=>b.onclick=()=>{adDraftClear();adForm(ads.find(x=>x.id==b.dataset.ae),cities,lab);$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
+  document.querySelectorAll("[data-cadd]").forEach(b=>b.onclick=()=>{adDraftClear();A.adCamp=+b.dataset.cadd;adForm(null);$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
+  document.querySelectorAll("[data-csr]").forEach(b=>b.onclick=()=>shareReport(camps.find(x=>x.id==b.dataset.csr)));
+  document.querySelectorAll("[data-ced]").forEach(b=>b.onclick=()=>campForm(camps.find(x=>x.id==b.dataset.ced)));
+  document.querySelectorAll("[data-car]").forEach(b=>b.onclick=async()=>{const arch=b.dataset.v==="true";if(arch&&!confirm("Archiver cet annonceur ? Toutes ses créas arrêtent d'être diffusées. Son lien de suivi reste consultable."))return;
+    const {error}=await sb.from("campaigns").update({archived:arch}).eq("id",b.dataset.car);if(error)toast(err(error),1);else tAds();});
+  document.querySelectorAll("[data-ae]").forEach(b=>b.onclick=()=>{adDraftClear();adForm(ads.find(x=>x.id==b.dataset.ae));$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
   document.querySelectorAll("[data-ap]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("ads").update({active:b.dataset.v==="true"}).eq("id",b.dataset.ap);if(error)toast(err(error),1);else tAds();});
-  document.querySelectorAll("[data-aa]").forEach(b=>b.onclick=async()=>{const arch=b.dataset.v==="true";if(arch&&!confirm("Archiver cette annonce ? Elle ne sera plus diffusée (ses statistiques sont conservées)."))return;
+  document.querySelectorAll("[data-aa]").forEach(b=>b.onclick=async()=>{const arch=b.dataset.v==="true";if(arch&&!confirm("Archiver cette créa ? Elle ne sera plus diffusée (ses statistiques sont conservées)."))return;
     const {error}=await sb.from("ads").update(arch?{archived:true,active:false}:{archived:false}).eq("id",b.dataset.aa);if(error)toast(err(error),1);else tAds();});}
+
+/* ---- Annonceur (campagne) ---- */
+function campForm(c){const n=!c;c=c||{advertiser_name:"",advertiser_contact:"",price:"",currency:"USD",notes:""};
+  $("modal").innerHTML=`<div class="acard modalbox" style="max-width:560px"><h3>${n?"Nouvel annonceur":"Modifier l'annonceur"}</h3>
+   <div class="grid2"><div class="field span2"><label for="cN">Nom de l'annonceur</label><input id="cN" maxlength="80" value="${esc(c.advertiser_name)}" placeholder="Ex. Chantre Moïse Mbiye"><small class="muted">Il apparaît dans le message de remerciement de sa page de suivi.</small></div>
+   <div class="field"><label for="cC">Contact (WhatsApp ou e-mail)</label><input id="cC" maxlength="80" value="${esc(c.advertiser_contact||"")}" placeholder="+243 …"></div>
+   <div class="field"><label for="cP">Montant payé (facultatif)</label><div class="row"><input id="cP" type="number" min="0" step="0.01" value="${c.price??""}" placeholder="0" style="flex:1"><select id="cU">${["USD","CDF","EUR"].map(x=>`<option${(c.currency||"USD")===x?" selected":""}>${x}</option>`).join("")}</select></div></div>
+   <div class="field span2"><label for="cO">Note interne (facultatif)</label><input id="cO" maxlength="200" value="${esc(c.notes||"")}" placeholder="Ex. 3 affiches + 2 vidéos, payé par M-Pesa le 5/11"><small class="muted">Le montant et la note restent privés.</small></div></div>
+   <div class="row"><button class="btn small" id="cS" style="width:auto">${n?"Créer et ajouter la 1re créa":"Enregistrer"}</button><span class="sp"></span><button class="textlink" id="cX">Annuler</button></div></div>`;
+  $("modal").hidden=false;$("cX").onclick=()=>{$("modal").hidden=true;};
+  $("cS").onclick=async()=>{const row={advertiser_name:$("cN").value.trim(),advertiser_contact:$("cC").value.trim()||null,price:$("cP").value!==""?Math.max(0,+$("cP").value):null,currency:$("cU").value,notes:$("cO").value.trim()||null};
+    if(!row.advertiser_name){toast("Donne le nom de l'annonceur.",1);return;}
+    const res=n?await sb.from("campaigns").insert(row).select().single():await sb.from("campaigns").update(row).eq("id",c.id).select().single();
+    if(res.error){toast(err(res.error),1);return;}$("modal").hidden=true;toast(n?"Annonceur créé.":"Annonceur enregistré.");
+    await tAds();if(n){A.adCamp=res.data.id;adDraftClear();adForm(null);$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}};}
 const toLocalInput=iso=>{if(!iso)return "";const d=new Date(iso);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);};
 const AD_DRAFT="pb-admin-ad-draft";
 const adDraftGet=()=>{try{return JSON.parse(localStorage.getItem(AD_DRAFT)||"null");}catch(e){return null;}};
 const adDraftClear=()=>{try{localStorage.removeItem(AD_DRAFT);}catch(e){}};
-function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.id:null))a=Object.assign({},a||{},dr.row);else if(dr&&a===null&&dr.id){const x=(window.__ads||[]).find(y=>y.id===dr.id);if(x)a=Object.assign({},x,dr.row);}
+function adForm(a){const cities=A.adCities||[],lab=A.adLab||(k=>cap(k));const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.id:null))a=Object.assign({},a||{},dr.row);else if(dr&&a===null&&dr.id){const x=(window.__ads||[]).find(y=>y.id===dr.id);if(x)a=Object.assign({},x,dr.row);}
   const n=!a||!a.id;a=a||{title:"",body:"",cta:"En savoir plus",link_url:"",image_url:"",cities:[],show_banner:true,show_reward:true,starts_at:null,ends_at:null};
   let sel=[...(a.cities||[])];let all=a.all!==undefined?a.all:!sel.length;
   const f=$("adForm");
-  f.innerHTML=`<h3>${n?"Nouvelle annonce":"Modifier l'annonce"}</h3><p class="muted" style="font-size:13px">Exemple : un concert, une conférence, une campagne d'une organisation partenaire. Le joueur qui touche l'annonce ouvre le lien.</p>
-  <div class="grid2"><div class="field span2 advbox"><div class="eyebrow">Annonceur</div><div class="grid2">
-     <div class="field"><label for="aAn">Nom de l'annonceur</label><input id="aAn" maxlength="80" value="${esc(a.advertiser_name||"")}" placeholder="Ex. Chantre Moïse Mbiye"></div>
-     <div class="field"><label for="aAc">Contact (WhatsApp ou e-mail)</label><input id="aAc" maxlength="80" value="${esc(a.advertiser_contact||"")}" placeholder="Ex. +243 …"></div>
-     <div class="field"><label for="aPr">Montant payé (facultatif)</label><div class="row"><input id="aPr" type="number" min="0" step="0.01" value="${a.price??""}" placeholder="0" style="flex:1"><select id="aCu">${["USD","CDF","EUR"].map(c=>`<option${(a.currency||"USD")===c?" selected":""}>${c}</option>`).join("")}</select></div></div>
-     <div class="field"><label for="aNo">Note interne (facultatif)</label><input id="aNo" maxlength="200" value="${esc(a.notes||"")}" placeholder="Ex. payé par M-Pesa le 5/11"></div></div>
-     <small class="muted">Le nom apparaît dans le message de remerciement de sa page de suivi. Le montant et la note restent privés.</small></div>
-   <div class="field"><label for="aT">Titre</label><input id="aT" maxlength="80" value="${esc(a.title)}" placeholder="Ex. Concert de louange · 14 décembre"></div>
+  f.innerHTML=`<h3>${n?"Nouvelle créa":"Modifier la créa"}</h3><p class="muted" style="font-size:13px">Exemple : un concert, une conférence, une campagne d'une organisation partenaire. Le joueur qui touche l'annonce ouvre le lien.</p>
+  <div class="grid2"><div class="field span2"><label for="aCamp">Annonceur</label><select id="aCamp">${(window.__camps||[]).filter(c=>!c.archived||c.id===a.campaign_id).map(c=>`<option value="${c.id}"${c.id===(a.campaign_id||A.adCamp)?" selected":""}>${esc(c.advertiser_name)}</option>`).join("")}</select><small class="muted">La créa s'ajoute à la page de suivi de cet annonceur.</small></div>
+   <div class="field"><label for="aT">Titre de la créa</label><input id="aT" maxlength="80" value="${esc(a.title)}" placeholder="Ex. Concert de louange · 14 décembre"></div>
    <div class="field"><label for="aC">Texte du bouton</label><input id="aC" maxlength="24" value="${esc(a.cta||"")}" placeholder="Ex. Réserver"></div>
    <div class="field span2"><label for="aB">Texte court (facultatif)</label><textarea id="aB" rows="2" maxlength="180" placeholder="Ex. Stade des Martyrs, 18 h. Billets dès 5 $.">${esc(a.body||"")}</textarea></div>
    <div class="field span2"><label for="aL">Lien (réservation, inscription, page…)</label><input id="aL" type="url" value="${esc(a.link_url||"")}" placeholder="https://…"></div>
@@ -1298,8 +1324,8 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
      <label class="chk"><input type="checkbox" id="aMR"${a.show_reward?" checked":""}> ▶️ Annonce à regarder pour gagner une vie ou une aide</label></div>
    <div class="field"><label for="aS">Début (facultatif)</label><input type="datetime-local" id="aS" value="${toLocalInput(a.starts_at)}"></div>
    <div class="field"><label for="aE">Fin (facultatif)</label><input type="datetime-local" id="aE" value="${toLocalInput(a.ends_at)}"></div></div>
-  <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button><button class="textlink" id="aCancel">Fermer</button>${n?"":`<button class="textlink" id="aNew">Nouvelle annonce</button>`}</div>`;
-  const draftRow=()=>({advertiser_name:$("aAn").value,advertiser_contact:$("aAc").value,price:$("aPr").value,currency:$("aCu").value,notes:$("aNo").value,title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,audio_url:$("aU").value,video_url:$("aV").value,duration_s:$("aD").value?+$("aD").value:null,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
+  <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button><button class="textlink" id="aCancel">Fermer</button></div>`;
+  const draftRow=()=>({campaign_id:+$("aCamp").value,title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,audio_url:$("aU").value,video_url:$("aV").value,duration_s:$("aD").value?+$("aD").value:null,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
   const saveDraft=()=>{try{localStorage.setItem(AD_DRAFT,JSON.stringify({id:n?null:a.id,row:draftRow()}));}catch(e){}};
   const setVid=u=>{$("aV").value=u||"";$("aVidPrev").innerHTML=u?`<video controls playsinline preload="metadata" src="${esc(u)}" style="width:100%;max-height:260px;border-radius:12px;background:#000"></video>`:"";$("aVidClr").hidden=!u;};setVid(a.video_url);
   $("aVidClr").onclick=()=>{setVid("");saveDraft();};
@@ -1335,17 +1361,19 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
   f.querySelectorAll("[data-qc]").forEach(b=>b.onclick=()=>addCity(b.dataset.qc));
   $("aAll").onchange=()=>{$("aCityBox").hidden=$("aAll").checked;};
   $("aCancel").onclick=()=>{adDraftClear();$("adForm").hidden=true;};
-  const nw=$("aNew");if(nw)nw.onclick=()=>{adDraftClear();adForm(null,cities,lab);};
-  $("aSave").onclick=async()=>{const row={advertiser_name:$("aAn").value.trim()||null,advertiser_contact:$("aAc").value.trim()||null,price:$("aPr").value!==""?Math.max(0,+$("aPr").value):null,currency:$("aCu").value,notes:$("aNo").value.trim()||null,title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,video_url:$("aV").value||null,duration_s:$("aD").value?Math.min(120,Math.max(3,parseInt($("aD").value,10)||0)):null,
+  
+  $("aSave").onclick=async()=>{const row={campaign_id:+$("aCamp").value||null,title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,video_url:$("aV").value||null,duration_s:$("aD").value?Math.min(120,Math.max(3,parseInt($("aD").value,10)||0)):null,
       cities:$("aAll").checked?[]:sel,show_banner:$("aMB").checked,show_reward:$("aMR").checked,
       starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null};
-    if(!row.title){toast("Donne un titre à l'annonce.",1);return;}
+    if(!row.campaign_id){toast("Choisis l'annonceur (ou crée-le d'abord).",1);return;}
+    if(!row.title){toast("Donne un titre à la créa.",1);return;}
     if(row.link_url&&!/^https?:\/\//i.test(row.link_url)){toast("Le lien doit commencer par https://",1);return;}
     if(!row.show_banner&&!row.show_reward){toast("Choisis au moins un mode de diffusion.",1);return;}
     if(!$("aAll").checked&&!sel.length){toast("Ajoute au moins une ville, ou coche « Toutes les villes ».",1);return;}
     if(row.starts_at&&row.ends_at&&row.ends_at<=row.starts_at){toast("La fin doit être après le début.",1);return;}
     const res=n?await sb.from("ads").insert(row).select().single():await sb.from("ads").update(row).eq("id",a.id).select().single();
-    if(res.error)toast(err(res.error),1);else{adDraftClear();toast(n?"Annonce publiée.":"Annonce enregistrée.");await tAds();if(n&&res.data)shareReport(res.data,true);}};
+    if(res.error)toast(err(res.error),1);else{adDraftClear();A.adCamp=null;await tAds();const cp=(window.__camps||[]).find(c=>c.id===row.campaign_id);const cnt=(window.__ads||[]).filter(x=>x.campaign_id===row.campaign_id).length;
+      if(n&&cp&&cnt===1)shareReport(cp,true);else toast(n?"Créa ajoutée : elle apparaît déjà sur la page de suivi de l'annonceur.":"Créa enregistrée.");}};
   if(adDraftGet())$("aMsg").textContent="Brouillon restauré : ta saisie a été gardée.";}
 
 /* ---- Réglages (annonces, vies, parties en ligne) ---- */
@@ -1358,11 +1386,11 @@ async function tSettings(){const {data:S}=await sb.from("ad_settings").select("*
 
 /* ---- Lien de suivi à partager à l'annonceur ---- */
 const reportUrl=a=>location.origin+"/suivi?k="+a.report_token;
-function shareReport(a,fresh){if(!a||!a.report_token){toast("Lien indisponible pour cette annonce.",1);return;}const u=reportUrl(a);
-  const msg=`Bonjour${a.advertiser_name?" "+a.advertiser_name:""} 🙏\nMerci pour votre confiance ! Votre annonce « ${a.title} » est diffusée dans Parcours Biblique.\nSuivez ses résultats en direct (vues, portée, clics) ici :\n${u}`;
-  const phone=String(a.advertiser_contact||"").replace(/[^0-9]/g,"");
-  $("modal").innerHTML=`<div class="acard modalbox" style="max-width:560px"><h3>${fresh?"✅ Annonce publiée":"🔗 Lien de suivi"}</h3>
-    <p class="muted">Envoie ce lien à ${a.advertiser_name?esc(a.advertiser_name):"l'annonceur"} : il y verra ses statistiques en direct et pourra vous écrire. Le lien est secret, ne le publie pas.</p>
+function shareReport(c,fresh){if(!c||!c.report_token){toast("Lien indisponible.",1);return;}const u=reportUrl(c);const n=(window.__ads||[]).filter(a=>a.campaign_id===c.id&&!a.archived).length;
+  const msg=`Bonjour ${c.advertiser_name} 🙏\nMerci pour votre confiance ! ${n>1?`Vos ${n} annonces sont diffusées`:"Votre annonce est diffusée"} dans Parcours Biblique.\nSuivez les résultats en direct (vues, portée, clics, détail de chaque création) ici :\n${u}`;
+  const phone=String(c.advertiser_contact||"").replace(/[^0-9]/g,"");
+  $("modal").innerHTML=`<div class="acard modalbox" style="max-width:560px"><h3>${fresh?"✅ Annonce publiée":"🔗 Lien de suivi"} · ${esc(c.advertiser_name)}</h3>
+    <p class="muted">Un seul lien pour toutes les créas de cet annonceur : les nouvelles créas y apparaissent automatiquement. Le lien est secret, ne le publie pas.</p>
     <div class="linkbox"><input id="srU" value="${esc(u)}" readonly><button class="btn small" id="srC" style="width:auto">Copier</button></div>
     <div class="row wrap"><a class="btn small good" style="width:auto" target="_blank" rel="noopener" href="https://wa.me/${phone.length>=8?phone:""}?text=${encodeURIComponent(msg)}">WhatsApp</a><button class="btn small ghost" id="srM" style="width:auto">Copier le message complet</button><a class="btn small ghost" style="width:auto" href="${esc(u)}" target="_blank" rel="noopener">Ouvrir la page</a><span class="sp"></span><button class="textlink" id="srX">Fermer</button></div></div>`;
   $("modal").hidden=false;
@@ -1376,7 +1404,7 @@ async function tMessages(){const list=await rpc("admin_messages");
    <div class="msgs">${list.map(m=>{const ph=String(m.contact||"").replace(/[^0-9]/g,"");const mail=/@/.test(m.contact||"");
      return `<div class="msg ${m.is_read?"":"unread"}"><div class="mhd"><b>${esc(m.name||"Sans nom")}</b>${m.is_read?"":`<span class="pill2 adm">Nouveau</span>`}<span class="sp"></span><small class="muted">${fmtD(m.created_at)}</small></div>
        <div class="mtx">${esc(m.message).replace(/\n/g,"<br>")}</div>
-       <div class="mft"><small class="muted">📣 ${esc(m.ad_title||"Annonce supprimée")}${m.contact?` · ${esc(m.contact)}`:""}</small><span class="sp"></span>
+       <div class="mft"><small class="muted">📣 ${esc(m.advertiser_name||"Annonceur")}${m.creatives?` · ${m.creatives} créa${m.creatives>1?"s":""}`:""}${m.contact?` · ${esc(m.contact)}`:""}</small><span class="sp"></span>
        ${ph.length>=8?`<a class="textlink" target="_blank" rel="noopener" href="https://wa.me/${ph}">Répondre sur WhatsApp</a>`:mail?`<a class="textlink" href="mailto:${esc(m.contact)}">Répondre par e-mail</a>`:""}
        <button class="textlink" data-mr="${m.id}" data-v="${!m.is_read}">${m.is_read?"Marquer non lu":"Marquer lu"}</button></div></div>`;}).join("")||`<p class="muted">Aucun message pour l'instant. Les annonceurs peuvent vous écrire depuis leur lien de suivi.</p>`}</div></div>`;
   document.querySelectorAll("[data-mr]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("ad_messages").update({is_read:b.dataset.v==="true"}).eq("id",b.dataset.mr);if(error)toast(err(error),1);else{tMessages();refreshBadges();}});
