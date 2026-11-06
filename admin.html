@@ -1024,6 +1024,13 @@ body.admin:not(.logged) .atop,body.admin:not(.logged) .abot,body.admin:not(.logg
 .cact{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .cstats{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px;color:#4a5670;background:#f6f8fc;border-radius:12px;padding:10px 12px}
 .vthumb{display:grid!important;place-items:center;background:#0f1d3d;color:#fff;font-size:20px}
+.segbar{display:flex;gap:6px;background:#fff;border-radius:16px;padding:5px;box-shadow:0 1px 0 rgba(20,33,61,.04),0 8px 24px rgba(20,33,61,.06);flex-wrap:wrap}
+.segbar button{flex:1 1 200px;padding:10px 12px;border-radius:12px;font-weight:700;font-size:14px;color:var(--stone);display:flex;align-items:center;justify-content:center;gap:6px}
+.segbar button[aria-pressed="true"]{background:var(--lapis);color:#fff}
+.segbar .nbadge{margin:0}
+.kv{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px;color:#3a4766}
+.sponsorcard{background:linear-gradient(135deg,#fff8e6,#fff);box-shadow:0 0 0 1.5px #f3dfae,0 8px 24px rgba(20,33,61,.06)}
+.sponsorcard .linkbox{flex-wrap:wrap}.sponsorcard .linkbox input{flex:1 1 100%;min-width:0}.sponsorcard .linkbox .btn{flex:1 1 auto}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <div class="ashell"><aside class="aside" id="nav"></aside><div class="acol"><header class="atop" id="atop"></header><main id="main"></main></div></div><nav class="abot" id="abot"></nav><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* ---------- Avatars personnalisés « av1:… » ----------
    Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
@@ -1259,7 +1266,7 @@ async function tAds(){
      <td><small><b>${s.views||0}</b> vues · <b>${s.people||0}</b> pers.<br><b>${s.clicks||0}</b> clics (${ctr} %) · <b>${s.rewards||0}</b> complètes<br><span class="muted">${s.views_24h||0} vues sur 24 h</span></small></td>
      <td class="acts"><button class="textlink" data-ae="${a.id}">Modifier</button>${a.archived?`<button class="textlink" data-aa="${a.id}" data-v="false">Restaurer</button>`:`<button class="textlink" data-ap="${a.id}" data-v="${!a.active}">${a.active?"Pause":"Activer"}</button><button class="textlink" data-aa="${a.id}" data-v="true">Archiver</button>`}</td></tr>`;};
   const list=camps.filter(c=>showArch||!c.archived);
-  $("main").innerHTML=`<div class="acard" id="adForm" hidden></div>
+  $("main").innerHTML=`${sponsorLinkCard()}<div class="acard" id="adForm" hidden></div>
   <div class="row wrap"><div style="flex:1 1 280px;min-width:0"><h3 style="margin:0">Annonceurs et leurs créas</h3><p class="muted" style="font-size:13px;margin:2px 0 0">Chaque annonceur a un seul lien de suivi pour toutes ses créas. Le jeu partage le temps d'antenne à parts égales entre annonceurs, puis entre les créas d'un même annonceur.</p></div><button class="btn small" id="cNew" style="width:auto">＋ Nouvel annonceur</button></div>
   ${list.map(c=>{const mine=ads.filter(a=>a.campaign_id===c.id&&(showArch||!a.archived));const all=ads.filter(a=>a.campaign_id===c.id);const live=all.filter(a=>status(a)[1]==="on").length;
      const sum=k=>all.reduce((t,a)=>t+((st[a.id]||{})[k]||0),0);const v=sum("views"),cl=sum("clicks");
@@ -1269,7 +1276,7 @@ async function tAds(){
        ${mine.length?`<table class="tbl"><tr><th>Créa</th><th>Villes</th><th>Diffusion</th><th>Période</th><th>Statistiques</th><th></th></tr>${mine.map(row).join("")}</table>`:`<p class="muted" style="margin:0">Aucune créa pour l'instant. Ajoute une affiche ou une vidéo.</p>`}</div>`;}).join("")||`<div class="acard"><p class="muted">Aucun annonceur pour l'instant. Commence par « ＋ Nouvel annonceur ».</p></div>`}
   <button class="textlink" id="adArch">${showArch?"Masquer les éléments archivés":"Voir les éléments archivés"}</button>`;
   const dr=adDraftGet();if(dr){adForm(null);$("adForm").hidden=false;}
-  $("cNew").onclick=()=>campForm(null);
+  $("cNew").onclick=()=>campForm(null);bindSponsorLink();
   $("adArch").onclick=()=>{A.adArch=!showArch;tAds();};
   document.querySelectorAll("[data-cadd]").forEach(b=>b.onclick=()=>{adDraftClear();A.adCamp=+b.dataset.cadd;adForm(null);$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
   document.querySelectorAll("[data-csr]").forEach(b=>b.onclick=()=>shareReport(camps.find(x=>x.id==b.dataset.csr)));
@@ -1282,7 +1289,7 @@ async function tAds(){
     const {error}=await sb.from("ads").update(arch?{archived:true,active:false}:{archived:false}).eq("id",b.dataset.aa);if(error)toast(err(error),1);else tAds();});}
 
 /* ---- Annonceur (campagne) ---- */
-function campForm(c){const n=!c;c=c||{advertiser_name:"",advertiser_contact:"",price:"",currency:"USD",notes:""};
+function campForm(c,prefill){const n=!c||!!prefill;c=c||{advertiser_name:"",advertiser_contact:"",price:"",currency:"USD",notes:""};
   $("modal").innerHTML=`<div class="acard modalbox" style="max-width:560px"><h3>${n?"Nouvel annonceur":"Modifier l'annonceur"}</h3>
    <div class="grid2"><div class="field span2"><label for="cN">Nom de l'annonceur</label><input id="cN" maxlength="80" value="${esc(c.advertiser_name)}" placeholder="Ex. Chantre Moïse Mbiye"><small class="muted">Il apparaît dans le message de remerciement de sa page de suivi.</small></div>
    <div class="field"><label for="cC">Contact (WhatsApp ou e-mail)</label><input id="cC" maxlength="80" value="${esc(c.advertiser_contact||"")}" placeholder="+243 …"></div>
@@ -1294,6 +1301,8 @@ function campForm(c){const n=!c;c=c||{advertiser_name:"",advertiser_contact:"",p
     if(!row.advertiser_name){toast("Donne le nom de l'annonceur.",1);return;}
     const res=n?await sb.from("campaigns").insert(row).select().single():await sb.from("campaigns").update(row).eq("id",c.id).select().single();
     if(res.error){toast(err(res.error),1);return;}$("modal").hidden=true;toast(n?"Annonceur créé.":"Annonceur enregistré.");
+    if(n&&A.fromRequest){await sb.from("sponsor_requests").update({campaign_id:res.data.id,status:"converti"}).eq("id",A.fromRequest);A.fromRequest=null;}
+    if(n){A.tab="ads";try{localStorage.setItem("pb-admin-tab","ads");}catch(e){}renderNav();}
     await tAds();if(n){A.adCamp=res.data.id;adDraftClear();adForm(null);$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}};}
 const toLocalInput=iso=>{if(!iso)return "";const d=new Date(iso);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);};
 const AD_DRAFT="pb-admin-ad-draft";
@@ -1398,8 +1407,31 @@ function shareReport(c,fresh){if(!c||!c.report_token){toast("Lien indisponible."
   $("srC").onclick=()=>copy(u,"Lien copié.");$("srM").onclick=()=>copy(msg,"Message copié.");$("srX").onclick=()=>{$("modal").hidden=true;};}
 
 /* ---- Messages des annonceurs ---- */
-async function tMessages(){const list=await rpc("admin_messages");
-  $("main").innerHTML=`<div class="acard"><div class="row"><h3 style="flex:1;margin:0">Messages reçus</h3>${list.some(m=>!m.is_read)?`<button class="btn small ghost" id="mAll" style="width:auto">Tout marquer comme lu</button>`:""}</div>
+const sponsorUrl=()=>location.origin+"/sponsor";
+function sponsorLinkCard(){return `<div class="acard sponsorcard"><div class="row wrap"><div style="flex:1 1 260px;min-width:0"><h3 style="margin:0">📝 Formulaire « Annoncer dans le jeu »</h3><p class="muted" style="font-size:13px;margin:2px 0 0">Mets ce lien dans ta créa de sponsoring (bouton « Réserver mon espace »), sur WhatsApp ou tes réseaux. Les demandes arrivent dans l'onglet Messages.</p></div>
+  <div class="linkbox" style="flex:1 1 320px"><input id="spU" value="${esc(sponsorUrl())}" readonly><button class="btn small" id="spC" style="width:auto">Copier</button><a class="btn small ghost" href="${esc(sponsorUrl())}" target="_blank" rel="noopener" style="width:auto">Voir</a></div></div></div>`;}
+function bindSponsorLink(){const c=$("spC");if(c)c.onclick=async()=>{try{await navigator.clipboard.writeText(sponsorUrl());}catch(e){$("spU").select();document.execCommand("copy");}toast("Lien du formulaire copié.");};}
+const SP_ST=["nouveau","contacté","converti","refusé"];
+async function tMessages(){const [list,{data:reqs}]=await Promise.all([rpc("admin_messages"),sb.from("sponsor_requests").select("*").order("created_at",{ascending:false}).limit(300)]);const rq=reqs||[];
+  const seg=A.msgSeg||(rq.some(r=>r.status==="nouveau")||!list.length?"req":"msg");
+  const nNew=rq.filter(r=>r.status==="nouveau").length,nUn=list.filter(m=>!m.is_read).length;
+  $("main").innerHTML=sponsorLinkCard()+`<div class="segbar"><button data-seg="req" aria-pressed="${seg==="req"}">📝 Demandes de sponsoring${nNew?` <span class="nbadge">${nNew}</span>`:""}</button><button data-seg="msg" aria-pressed="${seg==="msg"}">💬 Messages des annonceurs${nUn?` <span class="nbadge">${nUn}</span>`:""}</button></div><div id="segBody"></div>`;
+  document.querySelectorAll("[data-seg]").forEach(b=>b.onclick=()=>{A.msgSeg=b.dataset.seg;tMessages();});bindSponsorLink();
+  if(seg==="req"){$("segBody").innerHTML=`<div class="acard"><h3 style="margin:0">Demandes reçues · ${rq.length}</h3><p class="muted" style="font-size:13px;margin:0">Envoyées depuis le formulaire « Annoncer dans le jeu ». Contacte la personne, puis crée son annonceur en un clic.</p>
+    <div class="msgs">${rq.map(r=>{const ph=String(r.contact_phone||"").replace(/[^0-9]/g,"");const hi=`Bonjour ${r.name} 🙏\nMerci pour votre demande d'annonce dans Parcours Biblique. Parlons de votre projet :`;
+      return `<div class="msg ${r.status==="nouveau"?"unread":""}"><div class="mhd"><b>${esc(r.name)}</b>${r.org_type?`<span class="pill2">${esc(r.org_type)}</span>`:""}<span class="sp"></span><small class="muted">${fmtD(r.created_at)}</small></div>
+        <div class="kv">${r.contact_phone?`<span>📱 ${esc(r.contact_phone)}</span>`:""}${r.contact_email?`<span>✉️ ${esc(r.contact_email)}</span>`:""}${r.cities?`<span>📍 ${esc(r.cities)}</span>`:""}${r.formats&&r.formats.length?`<span>🎨 ${esc(r.formats.join(", "))}</span>`:""}${r.period?`<span>🗓️ ${esc(r.period)}</span>`:""}${r.budget?`<span>💰 ${esc(r.budget)}</span>`:""}</div>
+        ${r.message?`<div class="mtx">${esc(r.message).replace(/\n/g,"<br>")}</div>`:""}
+        <div class="mft"><select data-sps="${r.id}">${SP_ST.map(x=>`<option${r.status===x?" selected":""}>${x}</option>`).join("")}</select><span class="sp"></span>
+        ${ph.length>=8?`<a class="textlink" target="_blank" rel="noopener" href="https://wa.me/${ph}?text=${encodeURIComponent(hi)}">Écrire sur WhatsApp</a>`:r.contact_email?`<a class="textlink" href="mailto:${esc(r.contact_email)}">Écrire un e-mail</a>`:""}
+        <button class="textlink" data-spc="${r.id}">${r.campaign_id?"Annonceur créé ✓":"Créer l'annonceur"}</button></div></div>`;}).join("")||`<p class="muted">Aucune demande pour l'instant. Partage le lien du formulaire ci-dessus.</p>`}</div></div>`;
+    document.querySelectorAll("[data-sps]").forEach(s=>s.onchange=async()=>{const {error}=await sb.from("sponsor_requests").update({status:s.value}).eq("id",s.dataset.sps);if(error)toast(err(error),1);else{toast("Statut mis à jour.");refreshBadges();tMessages();}});
+    document.querySelectorAll("[data-spc]").forEach(b=>b.onclick=()=>{const r=rq.find(x=>x.id==b.dataset.spc);if(r.campaign_id){A.tab="ads";setTab("ads");return;}
+      A.fromRequest=r.id;campForm({advertiser_name:r.name,advertiser_contact:r.contact_phone||r.contact_email||"",price:"",currency:"USD",notes:[r.org_type,r.cities,r.period,r.budget].filter(Boolean).join(" · ")},true);});
+    return;}
+  const box=$("segBody");box.innerHTML="<div id=\"msgBox\"></div>";await tMessagesList(list);}
+async function tMessagesList(list){const host=$("msgBox");
+  host.innerHTML=`<div class="acard"><div class="row"><h3 style="flex:1;margin:0">Messages reçus</h3>${list.some(m=>!m.is_read)?`<button class="btn small ghost" id="mAll" style="width:auto">Tout marquer comme lu</button>`:""}</div>
    <p class="muted" style="font-size:13px">Envoyés par les annonceurs depuis leur page de suivi.</p>
    <div class="msgs">${list.map(m=>{const ph=String(m.contact||"").replace(/[^0-9]/g,"");const mail=/@/.test(m.contact||"");
      return `<div class="msg ${m.is_read?"":"unread"}"><div class="mhd"><b>${esc(m.name||"Sans nom")}</b>${m.is_read?"":`<span class="pill2 adm">Nouveau</span>`}<span class="sp"></span><small class="muted">${fmtD(m.created_at)}</small></div>
@@ -1426,7 +1458,7 @@ const IC={
   game:'<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>'};
 const ico=(k,s=20)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]||""}</svg>`;
 const NAV=[
-  {g:"Pilotage",items:[["home","Tableau de bord","Activité, croissance et annonces en un coup d'œil"],["ads","Annonces","Créer, diffuser et suivre les annonces"],["messages","Messages","Ce que vous écrivent les annonceurs"]]},
+  {g:"Pilotage",items:[["home","Tableau de bord","Activité, croissance et annonces en un coup d'œil"],["ads","Annonces","Créer, diffuser et suivre les annonces"],["messages","Messages","Demandes de sponsoring et messages des annonceurs"]]},
   {g:"Communauté",items:[["users","Joueurs","Comptes, villes, activité"],["matches","Parties","Parties en ligne et entre amis"],["rank","Classement","Le meilleur disciple du mois"],["prizes","Prix","Prix du mois et demandes des gagnants"]]},
   {g:"Contenu",items:[["questions","Questions","Banque de questions des défis en ligne"]]},
   {g:"Système",items:[["settings","Réglages","Annonces, vies, aides et parties en ligne"]]}];
@@ -1453,7 +1485,7 @@ function renderNav(){const me=A.me||{};
     $("modal").hidden=false;$("modal").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));$("mClose").onclick=()=>{$("modal").hidden=true;};$("mOut").onclick=()=>{if(confirm("Se déconnecter ?"))sb.auth.signOut();};};}
 function renderTab(){$("main").innerHTML=`<div class="acard"><div class="skel"></div></div>`;
   ({home:tHome,users:tUsers,matches:tMatches,rank:tRank,prizes:tPrizes,ads:tAds,messages:tMessages,questions:tQuestions,settings:tSettings})[A.tab]().catch(e=>{$("main").innerHTML=`<div class="acard"><b>Erreur</b><p>${esc(err(e))}</p></div>`;});}
-async function refreshBadges(){try{const o=await rpc("admin_activity");A.act=o;const m=+o.unread||0,p=+o.claims_new||0;if(m!==BADGE.messages||p!==BADGE.prizes){BADGE.messages=m;BADGE.prizes=p;renderNav();}}catch(e){}}
+async function refreshBadges(){try{const o=await rpc("admin_activity");A.act=o;const m=(+o.unread||0)+(+o.sponsor_new||0),p=+o.claims_new||0;if(m!==BADGE.messages||p!==BADGE.prizes){BADGE.messages=m;BADGE.prizes=p;renderNav();}}catch(e){}}
 setInterval(()=>{if(document.body.classList.contains("logged")&&document.visibilityState==="visible")refreshBadges();},60000);
 // Retour sur l'onglet du navigateur : on actualise les compteurs sans recharger la page.
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&document.body.classList.contains("logged"))refreshBadges();});
@@ -1466,10 +1498,10 @@ function miniChart(series){const W=640,H=180,P={l:30,r:6,t:10,b:24},n=series.len
   const line=series.map((x,i)=>`${P.l+i*bw+bw/2},${y(x.n)}`).join(" ");
   const lab=series.map((x,i)=>(i%7===0&&n-1-i>=3)||i===n-1?`<text x="${P.l+i*bw+bw/2}" y="${H-6}" text-anchor="middle" font-size="10" fill="#8a96ad">${new Date(x.d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</text>`:"").join("");
   return `<svg viewBox="0 0 ${W} ${H}" class="mchart" role="img" aria-label="Activité des 30 derniers jours">${g}${bars}<polyline points="${line}" fill="none" stroke="#f0b429" stroke-width="2.2"/>${lab}</svg>`;}
-async function tHome(){const [o,ov]=await Promise.all([rpc("admin_activity"),rpc("admin_overview")]);A.act=o;BADGE.messages=+o.unread||0;BADGE.prizes=+o.claims_new||0;renderNav();
+async function tHome(){const [o,ov]=await Promise.all([rpc("admin_activity"),rpc("admin_overview")]);A.act=o;BADGE.messages=(+o.unread||0)+(+o.sponsor_new||0);BADGE.prizes=+o.claims_new||0;renderNav();
   const ctr=o.ad_views_30?Math.round(o.ad_clicks_30/o.ad_views_30*1000)/10:0;const pct=v=>v==null?"–":v+" %";
   const cities=o.cities||[],cmax=Math.max(1,...cities.map(c=>c.n));const pl=o.platforms||{};const PL={web:"Navigateur",pwa:"Raccourci installé",apk:"Appli Android",store:"Play Store"};const ptot=Math.max(1,Object.values(pl).reduce((a,b)=>a+b,0));
-  const alerts=[o.unread?`<button class="alert" data-t="messages">${ico("messages",18)}<span><b>${o.unread} message${o.unread>1?"s":""} non lu${o.unread>1?"s":""}</b> d'annonceurs</span></button>`:"",o.claims_new?`<button class="alert gold" data-t="prizes">${ico("prizes",18)}<span><b>${o.claims_new} demande${o.claims_new>1?"s":""} de prix</b> à traiter</span></button>`:""].join("");
+  const alerts=[o.sponsor_new?`<button class="alert" data-t="messages">${ico("ads",18)}<span><b>${o.sponsor_new} demande${o.sponsor_new>1?"s":""} de sponsoring</b> à traiter</span></button>`:"",o.unread?`<button class="alert" data-t="messages">${ico("messages",18)}<span><b>${o.unread} message${o.unread>1?"s":""} non lu${o.unread>1?"s":""}</b> d'annonceurs</span></button>`:"",o.claims_new?`<button class="alert gold" data-t="prizes">${ico("prizes",18)}<span><b>${o.claims_new} demande${o.claims_new>1?"s":""} de prix</b> à traiter</span></button>`:""].join("");
   $("main").innerHTML=`${alerts?`<div class="alerts">${alerts}</div>`:""}
   <div class="kpis">
     <div class="kpi hl"><small>Actifs aujourd'hui</small><b>${n0(o.dau)}</b><span>appareils</span></div>
