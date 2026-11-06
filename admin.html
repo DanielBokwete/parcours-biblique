@@ -119,8 +119,8 @@ input[type=range]{width:100%;accent-color:var(--lapis);height:28px}
 .bookchip svg{margin-left:auto;flex:none}
 .pill{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:var(--white);border-radius:14px;padding:6px 10px;box-shadow:0 4px 0 rgba(20,33,61,.14),0 10px 18px rgba(20,33,61,.12);font-weight:800;font-size:14px;font-variant-numeric:tabular-nums;line-height:1.15}
 .pill small{font-size:10px;font-weight:700;color:var(--stone)}
-.donbtn{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:50px;height:46px;border-radius:14px;background:linear-gradient(180deg,#ff8a4c,#e8611c);color:#fff;font-weight:800;font-size:11px;box-shadow:0 4px 0 #a8430f,0 10px 18px rgba(232,97,28,.25);line-height:1.1}
-.donbtn b{font-size:17px}
+.adbtn{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:50px;height:46px;border-radius:14px;background:linear-gradient(180deg,#ff6b7a,#e0344a);color:#fff;font-weight:800;font-size:11px;box-shadow:0 4px 0 #a51e30,0 10px 18px rgba(224,52,74,.25);line-height:1.1}
+.adbtn b{font-size:17px}
 
 /* ---------- Path & scenery ---------- */
 #path{background:#e6c88f}
@@ -213,16 +213,6 @@ input[type=range]{width:100%;accent-color:var(--lapis);height:28px}
 .seg button[aria-pressed="true"]{background:var(--lapis);color:var(--white);box-shadow:0 3px 0 var(--lapis-deep)}
 
 /* ---------- Dons ---------- */
-.split{display:flex;height:42px;border-radius:12px;overflow:hidden;font-weight:800;font-size:13px;color:#fff;box-shadow:0 4px 0 var(--line)}
-.split div{display:flex;align-items:center;justify-content:center;gap:6px}
-.split .p80{flex:8;background:linear-gradient(180deg,#ff8a4c,#e8611c)}
-.split .p20{flex:2;background:linear-gradient(180deg,#3a6cf0,var(--lapis))}
-.splitlegend{display:grid;gap:8px;font-size:13.5px;line-height:1.4;color:#3a4766}
-.splitlegend b{color:var(--ink)}
-.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.amounts button{padding:12px 6px;border-radius:14px;font-family:var(--f-display);font-weight:800;font-size:20px;background:var(--white);box-shadow:0 0 0 2px var(--line),0 4px 0 var(--line)}
-.amounts button[aria-pressed="true"]{background:var(--ember-bg);color:#b4470f;box-shadow:0 0 0 2px var(--ember),0 4px 0 #f0b08a}
-.amounts input{width:100%;font:inherit;font-weight:800;font-size:18px;text-align:center;border:0;background:none;color:inherit;padding:0}
 .methods{display:grid;gap:8px}
 .method{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;box-shadow:0 0 0 2px var(--line);text-align:left;width:100%}
 .method[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ember);background:var(--ember-bg)}
@@ -368,9 +358,6 @@ input[type=range]{width:100%;accent-color:var(--lapis);height:28px}
 .toggle::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--white);box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
 .toggle[aria-checked="true"]{background:var(--good)}
 .toggle[aria-checked="true"]::after{transform:translateX(20px)}
-.donatecard{background:linear-gradient(160deg,#ff8a4c,#d9531a);color:#fff;border-radius:22px;padding:18px;box-shadow:0 6px 0 #a8430f,0 16px 26px rgba(232,97,28,.25);display:grid;gap:10px}
-.donatecard p{margin:0;line-height:1.45;opacity:.95;font-size:14px}
-.donatecard .btn{background:#fff;color:#c2410c;box-shadow:0 5px 0 #a8430f}
 .blank{display:inline-block;min-width:80px;border-bottom:3px solid var(--lapis);color:var(--lapis);font-weight:700;text-align:center}
 canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:45}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -741,7 +728,6 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .node .pct.full{color:#c98a00}.node .pct.hi{color:#11734a}.node .pct.mid{color:#9a6b00}.node .pct.lo{color:#c0392b}
 .bestline{font-size:13.5px;margin:-2px 0 10px;color:#3a4766}
 
-.paynote{margin:14px 0 0;padding:10px 12px;border-radius:14px;background:#f3f6fc;font-size:13.5px;text-align:center;line-height:1.5}.paynote small{color:#6b7894}
 
 /* ---------- Décors 3D (images) : fond qui défile plus lentement que le chemin + médaillons en relief ---------- */
 .scenery.img .base{inset:auto 0 0 0;top:0;height:128%;background-size:cover;background-position:center bottom;will-change:transform;background-color:#2a3a2a}
@@ -778,6 +764,19 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .hero.hero3d .art::after{content:"";position:absolute;left:50%;bottom:6px;width:190px;height:34px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(20,30,10,.55),rgba(20,30,10,0));z-index:-1}
 .hero.hero3d > div:last-child{position:relative;z-index:1}
 @keyframes guideIn2{from{opacity:0;transform:translate(-50%,24px) scale(.96)}to{opacity:1;transform:translateX(-50%)}}
+
+/* ---------- Annonces ---------- */
+.adban{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));left:10px;right:10px;z-index:58;display:flex;gap:12px;align-items:center;text-align:left;background:rgba(255,255,255,.98);border-radius:18px;padding:10px 12px;box-shadow:0 14px 34px rgba(15,29,61,.32),0 0 0 1.5px rgba(240,180,41,.55);transform:translateY(calc(-100% - 30px));opacity:0;transition:transform .38s cubic-bezier(.3,1.3,.5,1),opacity .3s;cursor:pointer}
+.adban.on{transform:none;opacity:1}
+.adban img{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none;background:#eef2f9}
+.adban .adic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-size:24px;background:#fff3d6;flex:none}
+.adban .adtx{flex:1;min-width:0;display:grid;gap:1px}
+.adban .adtx small{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b07a00}
+.adban .adtx b{font-size:14.5px;line-height:1.25;color:var(--ink);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.adban .adtx span{font-size:12.5px;color:var(--stone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adban .adcta{flex:none;font-weight:800;font-size:12.5px;color:#fff;background:var(--lapis);border-radius:999px;padding:7px 11px}
+.adban .adx{position:absolute;top:-8px;right:-6px;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--stone);font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(15,29,61,.25)}
+.adsheet .adimg{display:block;width:100%;max-height:46vh;object-fit:contain;border-radius:16px;background:#0f1d3d;margin-top:10px}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -854,6 +853,14 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 }
 
 .pimg label.btn{text-transform:none;letter-spacing:0;font-size:14px;color:var(--lapis)}
+
+.stag{display:inline-block;margin-top:4px;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;background:#eef2f9;color:#5b6884}
+.stag.on{background:#e3f6ec;color:#167a46}.stag.wait{background:#fff3d6;color:#8a5a00}
+.ctag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;background:#e7eefc;color:#1d3f9c;border-radius:999px;padding:3px 9px;margin:2px 0}
+.ctag button{font-size:11px;color:#1d3f9c;padding:0 2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.field label.chk{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer;padding:4px 0}
+.field label.chk input{width:20px;height:20px;flex:none;accent-color:var(--lapis)}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <header class="ahead"><b>✝️ Parcours Biblique · Admin</b></header><nav class="anav" id="nav"></nav><main id="main"></main><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* ---------- Avatars personnalisés « av1:… » ----------
    Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
@@ -958,14 +965,14 @@ function renderLogin(){$("nav").innerHTML="";
   $("main").innerHTML=`<div class="acard narrow"><div class="eyebrow">Parcours Biblique</div><h2>Espace admin</h2><p class="muted">Connecte-toi avec le compte Google administrateur (le même que dans le jeu).</p>
   <button class="gbtn" id="g">Continuer avec Google</button><div id="m" class="muted"></div></div>`;
   $("g").onclick=async()=>{$("m").textContent="Ouverture de Google…";try{localStorage.setItem("pb-after-login","admin");}catch(e){}const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/",queryParams:{prompt:"select_account"}}});if(error)$("m").textContent=err(error);};}
-const TABS=[["home","📊 Vue d'ensemble"],["users","👥 Joueurs"],["matches","⚔️ Parties"],["rank","🏆 Classement"],["prizes","🎁 Prix"],["questions","❓ Questions"]];
+const TABS=[["home","📊 Vue d'ensemble"],["users","👥 Joueurs"],["matches","⚔️ Parties"],["rank","🏆 Classement"],["prizes","🎁 Prix"],["ads","📣 Annonces"],["questions","❓ Questions"]];
 function renderNav(){$("nav").innerHTML=TABS.map(([k,l])=>`<button data-t="${k}" aria-pressed="${A.tab===k}">${l}</button>`).join("")+`<span class="sp"></span><small class="muted">${esc(A.me.display_name)}</small><button class="textlink" id="out">Déconnexion</button><a class="textlink" href="index.html">Ouvrir le jeu</a>`;
   $("nav").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{A.tab=b.dataset.t;renderNav();renderTab();});$("out").onclick=()=>sb.auth.signOut();}
 /* Sur mobile, chaque cellule reçoit le titre de sa colonne (les tableaux s'affichent en fiches). */
 function labelTables(){document.querySelectorAll("#main table.tbl").forEach(t=>{const hr=[...t.querySelectorAll("tr")].find(r=>r.querySelector("th"));if(!hr)return;
   const heads=[...hr.children].map(th=>th.textContent.trim());t.querySelectorAll("tr").forEach(r=>{if(r===hr)return;[...r.children].forEach((td,i)=>{if(td.tagName==="TD"&&!td.hasAttribute("data-l")&&!td.hasAttribute("colspan"))td.setAttribute("data-l",heads[i]||"");});});});}
 new MutationObserver(()=>labelTables()).observe(document.getElementById("main"),{childList:true,subtree:true});
-function renderTab(){$("main").innerHTML=`<div class="acard">Chargement…</div>`;({home:tHome,users:tUsers,matches:tMatches,rank:tRank,prizes:tPrizes,questions:tQuestions})[A.tab]().catch(e=>{$("main").innerHTML=`<div class="acard"><b>Erreur</b><p>${esc(err(e))}</p></div>`;});}
+function renderTab(){$("main").innerHTML=`<div class="acard">Chargement…</div>`;({home:tHome,users:tUsers,matches:tMatches,rank:tRank,prizes:tPrizes,ads:tAds,questions:tQuestions})[A.tab]().catch(e=>{$("main").innerHTML=`<div class="acard"><b>Erreur</b><p>${esc(err(e))}</p></div>`;});}
 
 /* ---- Vue d'ensemble ---- */
 async function tHome(){const o=await rpc("admin_overview");const qb=o.questions_by||{};const cell=(t,d)=>qb[t+"-"+d]||0;
@@ -1085,4 +1092,84 @@ function qEdit(x){const n=!x;x=x||{kind:"qcm",prompt:"",sentence:"",options:["",
     if(error)toast(err(error),1);else{toast("Question enregistrée.");$("modal").hidden=true;tQuestions();}};
   const d=$("qdel");if(d)d.onclick=async()=>{if(!confirm("Supprimer définitivement cette question ? (Pour la retirer des parties sans la perdre, désactive-la plutôt.)"))return;const {error}=await sb.from("questions").delete().eq("id",x.id);if(error)toast(error.message.includes("foreign")?"Cette question a déjà servi : désactive-la plutôt.":err(error),1);else{$("modal").hidden=true;tQuestions();}};}
 boot();
+
+/* ---- Annonces : réglages, création, diffusion par ville, statistiques ---- */
+const cityKey=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+const cap=s=>String(s||"").replace(/(^|\s|-)(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());
+const AD_FIELDS=[["banner_every_min","Bandeau : toutes les … minutes","0 = aucun bandeau"],["banner_seconds","Bandeau : durée d'affichage (secondes)",""],["reward_seconds","Annonce récompensée : durée minimale (secondes)","Avant de pouvoir récupérer la récompense"],["reward_lives","Vies gagnées par annonce",""],["reward_helps","Aides gagnées par annonce",""],["reward_daily_max","Annonces récompensées par jour et par joueur",""],["online_min_lives","Vies minimum pour jouer en ligne ou entre amis","0 = aucune condition"],["online_cost_lives","Vies consommées par partie en ligne ou entre amis","0 = gratuit"]];
+async function tAds(){
+  const [{data:ads,error},{data:set},stats,cities]=await Promise.all([sb.from("ads").select("*").order("created_at",{ascending:false}),sb.from("ad_settings").select("*").eq("id",1).maybeSingle(),rpc("admin_ad_stats").catch(()=>[]),rpc("admin_known_cities").catch(()=>[])]);
+  if(error)throw error;const S=set||{};const st={};(stats||[]).forEach(x=>st[x.id]=x);
+  const label={};(cities||[]).forEach(c=>label[c.k]=c.label||cap(c.k));const lab=k=>label[k]||cap(k);
+  const now=Date.now();
+  const status=a=>a.archived?["Archivée","off"]:!a.active?["En pause","off"]:a.starts_at&&new Date(a.starts_at)>now?["Programmée","wait"]:a.ends_at&&new Date(a.ends_at)<=now?["Terminée","off"]:["En diffusion","on"];
+  const showArch=!!A.adArch;const list=ads.filter(a=>showArch||!a.archived);
+  $("main").innerHTML=`<div class="acard" id="adForm"></div>
+  <div class="acard"><h3>Annonces</h3><p class="muted" style="font-size:13px">Les annonces d'une même ville tournent à parts égales : le jeu montre toujours celle que le joueur a le moins vue, puis la moins vue au total.</p>
+   <table class="tbl"><tr><th>Annonce</th><th>Villes</th><th>Diffusion</th><th>Période</th><th>Statistiques</th><th></th></tr>
+   ${list.map(a=>{const s=st[a.id]||{},[sl,sc]=status(a),ctr=s.views?Math.round(s.clicks/s.views*1000)/10:0;
+     return `<tr class="${sc==="off"?"off":""}"><td>${a.image_url?`<img src="${esc(a.image_url)}" alt="" class="pthumb">`:""}<b>${esc(a.title)}</b><br><small class="muted">${esc(a.body||"")}</small><br><span class="stag ${sc}">${sl}</span></td>
+     <td>${a.cities&&a.cities.length?a.cities.map(k=>`<span class="ctag">${esc(lab(k))}</span>`).join(" "):"<b>Toutes les villes</b>"}</td>
+     <td>${[a.show_banner?"📣 Bandeau":"",a.show_reward?"▶️ Récompense":""].filter(Boolean).join("<br>")||"<span class='muted'>Aucune</span>"}</td>
+     <td><small>${a.starts_at?"Du "+fmtD(a.starts_at):"Dès maintenant"}<br>${a.ends_at?"Au "+fmtD(a.ends_at):"Sans fin"}</small></td>
+     <td><small><b>${s.views||0}</b> vues · <b>${s.people||0}</b> personnes<br><b>${s.clicks||0}</b> clics (${ctr} %) · <b>${s.rewards||0}</b> récompenses<br><span class="muted">${s.views_24h||0} vues sur 24 h</span></small></td>
+     <td class="acts"><button class="textlink" data-ae="${a.id}">Modifier</button>${a.archived?`<button class="textlink" data-aa="${a.id}" data-v="false">Restaurer</button>`:`<button class="textlink" data-ap="${a.id}" data-v="${!a.active}">${a.active?"Mettre en pause":"Activer"}</button><button class="textlink" data-aa="${a.id}" data-v="true">Archiver</button>`}</td></tr>`;}).join("")||`<tr><td colspan="6" class="muted">Aucune annonce pour l'instant.</td></tr>`}</table>
+   <button class="textlink" id="adArch">${showArch?"Masquer les annonces archivées":"Voir les annonces archivées"}</button></div>
+  <div class="acard"><h3>Réglages</h3><p class="muted" style="font-size:13px">S'appliquent à tous les joueurs, sans mise à jour du jeu.</p>
+   <div class="grid2">${AD_FIELDS.map(([k,l,h])=>`<div class="field"><label for="as_${k}">${l}</label><input type="number" min="0" max="999" id="as_${k}" value="${S[k]??""}">${h?`<small class="muted">${h}</small>`:""}</div>`).join("")}</div>
+   <div class="row"><button class="btn small" id="asSave" style="width:auto">Enregistrer les réglages</button></div></div>`;
+  adForm(null,cities,lab);
+  $("adArch").onclick=()=>{A.adArch=!showArch;tAds();};
+  $("asSave").onclick=async()=>{const row={};for(const [k] of AD_FIELDS){const v=parseInt($("as_"+k).value,10);if(!(v>=0)){toast("Valeur invalide : "+AD_FIELDS.find(f=>f[0]===k)[1],1);return;}row[k]=v;}
+    const {error}=await sb.from("ad_settings").update(row).eq("id",1);if(error)toast(err(error),1);else toast("Réglages enregistrés.");};
+  document.querySelectorAll("[data-ae]").forEach(b=>b.onclick=()=>{adForm(ads.find(x=>x.id==b.dataset.ae),cities,lab);window.scrollTo({top:0,behavior:"smooth"});});
+  document.querySelectorAll("[data-ap]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("ads").update({active:b.dataset.v==="true"}).eq("id",b.dataset.ap);if(error)toast(err(error),1);else tAds();});
+  document.querySelectorAll("[data-aa]").forEach(b=>b.onclick=async()=>{const arch=b.dataset.v==="true";if(arch&&!confirm("Archiver cette annonce ? Elle ne sera plus diffusée (ses statistiques sont conservées)."))return;
+    const {error}=await sb.from("ads").update(arch?{archived:true,active:false}:{archived:false}).eq("id",b.dataset.aa);if(error)toast(err(error),1);else tAds();});}
+const toLocalInput=iso=>{if(!iso)return "";const d=new Date(iso);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);};
+function adForm(a,cities,lab){const n=!a;a=a||{title:"",body:"",cta:"En savoir plus",link_url:"",image_url:"",cities:[],show_banner:true,show_reward:true,starts_at:null,ends_at:null};
+  let sel=[...(a.cities||[])];let all=!sel.length&&!n?true:!sel.length;
+  const f=$("adForm");
+  f.innerHTML=`<h3>${n?"Nouvelle annonce":"Modifier l'annonce"}</h3><p class="muted" style="font-size:13px">Exemple : un concert, une conférence, une campagne d'une organisation partenaire. Le joueur qui touche l'annonce ouvre le lien.</p>
+  <div class="grid2"><div class="field"><label for="aT">Titre</label><input id="aT" maxlength="80" value="${esc(a.title)}" placeholder="Ex. Concert de louange · 14 décembre"></div>
+   <div class="field"><label for="aC">Texte du bouton</label><input id="aC" maxlength="24" value="${esc(a.cta||"")}" placeholder="Ex. Réserver"></div>
+   <div class="field span2"><label for="aB">Texte court (facultatif)</label><textarea id="aB" rows="2" maxlength="180" placeholder="Ex. Stade des Martyrs, 18 h. Billets dès 5 $.">${esc(a.body||"")}</textarea></div>
+   <div class="field span2"><label for="aL">Lien (réservation, inscription, page…)</label><input id="aL" type="url" value="${esc(a.link_url||"")}" placeholder="https://…"></div>
+   <div class="field span2"><label>Image (facultatif)</label><div class="pimg"><div class="pprev" id="aPrev"><span>📣</span></div><div style="display:grid;gap:6px"><label class="btn small ghost" style="width:auto;cursor:pointer">🖼️ Importer une image<input type="file" id="aFile" accept="image/jpeg,image/png,image/webp" hidden></label><button class="textlink" id="aClr" hidden style="justify-self:start">Retirer l'image</button><small class="muted" id="aMsg">Format carré ou paysage · 3 Mo maximum</small></div></div><input type="hidden" id="aI"></div>
+   <div class="field span2"><label>Villes de diffusion</label>
+     <label class="chk"><input type="checkbox" id="aAll"${all?" checked":""}> Toutes les villes</label>
+     <div id="aCityBox"${all?" hidden":""}><div class="chips" id="aChips"></div>
+       <div class="row" style="margin-top:8px"><input id="aCityIn" list="aCityList" placeholder="Ajouter une ville (ex. Kinshasa)" style="flex:1"><button class="btn small ghost" id="aCityAdd" style="width:auto">Ajouter</button></div>
+       <datalist id="aCityList">${(cities||[]).map(c=>`<option value="${esc(c.label||cap(c.k))}">${c.players} joueur${c.players>1?"s":""}</option>`).join("")}</datalist>
+       ${(cities||[]).length?`<small class="muted">Villes déjà vues chez les joueurs : ${(cities||[]).slice(0,12).map(c=>`<button class="textlink" data-qc="${esc(c.k)}">${esc(c.label||cap(c.k))} (${c.players})</button>`).join(" · ")}</small>`:""}</div></div>
+   <div class="field span2"><label>Mode de diffusion</label>
+     <label class="chk"><input type="checkbox" id="aMB"${a.show_banner?" checked":""}> 📣 Bandeau en haut de l'écran, à intervalle régulier</label>
+     <label class="chk"><input type="checkbox" id="aMR"${a.show_reward?" checked":""}> ▶️ Annonce à regarder pour gagner une vie ou une aide</label></div>
+   <div class="field"><label for="aS">Début (facultatif)</label><input type="datetime-local" id="aS" value="${toLocalInput(a.starts_at)}"></div>
+   <div class="field"><label for="aE">Fin (facultatif)</label><input type="datetime-local" id="aE" value="${toLocalInput(a.ends_at)}"></div></div>
+  <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button>${n?"":`<button class="textlink" id="aNew">Nouvelle annonce</button>`}</div>`;
+  const setImg=u=>{$("aI").value=u||"";$("aPrev").innerHTML=u?`<img src="${esc(u)}" alt="">`:"<span>📣</span>";$("aClr").hidden=!u;};setImg(a.image_url);
+  $("aClr").onclick=()=>setImg("");
+  $("aFile").onchange=async()=>{const fl=$("aFile").files[0];if(!fl)return;if(fl.size>3*1024*1024){$("aMsg").textContent="Image trop lourde (3 Mo maximum).";return;}
+    $("aMsg").textContent="Envoi de l'image…";const ext=(fl.type.split("/")[1]||"jpg").replace("jpeg","jpg"),path=`annonce-${Date.now()}.${ext}`;
+    const {error}=await sb.storage.from("prizes").upload(path,fl,{contentType:fl.type,upsert:false});
+    if(error){$("aMsg").textContent="Échec de l'envoi : "+err(error);return;}setImg(sb.storage.from("prizes").getPublicUrl(path).data.publicUrl);$("aMsg").textContent="Image prête.";};
+  const drawChips=()=>{$("aChips").innerHTML=sel.map(k=>`<span class="ctag">${esc(lab(k))} <button data-rc="${esc(k)}" aria-label="Retirer">✕</button></span>`).join("")||`<small class="muted">Aucune ville choisie.</small>`;
+    $("aChips").querySelectorAll("[data-rc]").forEach(b=>b.onclick=()=>{sel=sel.filter(k=>k!==b.dataset.rc);drawChips();});};drawChips();
+  const addCity=v=>{const k=cityKey(v);if(!k)return;if(!sel.includes(k))sel.push(k);drawChips();};
+  $("aCityAdd").onclick=()=>{addCity($("aCityIn").value);$("aCityIn").value="";$("aCityIn").focus();};
+  $("aCityIn").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();$("aCityAdd").click();}};
+  f.querySelectorAll("[data-qc]").forEach(b=>b.onclick=()=>addCity(b.dataset.qc));
+  $("aAll").onchange=()=>{$("aCityBox").hidden=$("aAll").checked;};
+  const nw=$("aNew");if(nw)nw.onclick=()=>adForm(null,cities,lab);
+  $("aSave").onclick=async()=>{const row={title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,
+      cities:$("aAll").checked?[]:sel,show_banner:$("aMB").checked,show_reward:$("aMR").checked,
+      starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null};
+    if(!row.title){toast("Donne un titre à l'annonce.",1);return;}
+    if(row.link_url&&!/^https?:\/\//i.test(row.link_url)){toast("Le lien doit commencer par https://",1);return;}
+    if(!row.show_banner&&!row.show_reward){toast("Choisis au moins un mode de diffusion.",1);return;}
+    if(!$("aAll").checked&&!sel.length){toast("Ajoute au moins une ville, ou coche « Toutes les villes ».",1);return;}
+    if(row.starts_at&&row.ends_at&&row.ends_at<=row.starts_at){toast("La fin doit être après le début.",1);return;}
+    const {error}=n?await sb.from("ads").insert(row):await sb.from("ads").update(row).eq("id",a.id);
+    if(error)toast(err(error),1);else{toast(n?"Annonce publiée.":"Annonce enregistrée.");tAds();}};}
 </script></body></html>

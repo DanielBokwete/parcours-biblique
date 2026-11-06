@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="7214a20f76";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="eec8cfbef0";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -123,8 +123,8 @@ input[type=range]{width:100%;accent-color:var(--lapis);height:28px}
 .bookchip svg{margin-left:auto;flex:none}
 .pill{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:var(--white);border-radius:14px;padding:6px 10px;box-shadow:0 4px 0 rgba(20,33,61,.14),0 10px 18px rgba(20,33,61,.12);font-weight:800;font-size:14px;font-variant-numeric:tabular-nums;line-height:1.15}
 .pill small{font-size:10px;font-weight:700;color:var(--stone)}
-.donbtn{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:50px;height:46px;border-radius:14px;background:linear-gradient(180deg,#ff8a4c,#e8611c);color:#fff;font-weight:800;font-size:11px;box-shadow:0 4px 0 #a8430f,0 10px 18px rgba(232,97,28,.25);line-height:1.1}
-.donbtn b{font-size:17px}
+.adbtn{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:50px;height:46px;border-radius:14px;background:linear-gradient(180deg,#ff6b7a,#e0344a);color:#fff;font-weight:800;font-size:11px;box-shadow:0 4px 0 #a51e30,0 10px 18px rgba(224,52,74,.25);line-height:1.1}
+.adbtn b{font-size:17px}
 
 /* ---------- Path & scenery ---------- */
 #path{background:#e6c88f}
@@ -217,16 +217,6 @@ input[type=range]{width:100%;accent-color:var(--lapis);height:28px}
 .seg button[aria-pressed="true"]{background:var(--lapis);color:var(--white);box-shadow:0 3px 0 var(--lapis-deep)}
 
 /* ---------- Dons ---------- */
-.split{display:flex;height:42px;border-radius:12px;overflow:hidden;font-weight:800;font-size:13px;color:#fff;box-shadow:0 4px 0 var(--line)}
-.split div{display:flex;align-items:center;justify-content:center;gap:6px}
-.split .p80{flex:8;background:linear-gradient(180deg,#ff8a4c,#e8611c)}
-.split .p20{flex:2;background:linear-gradient(180deg,#3a6cf0,var(--lapis))}
-.splitlegend{display:grid;gap:8px;font-size:13.5px;line-height:1.4;color:#3a4766}
-.splitlegend b{color:var(--ink)}
-.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.amounts button{padding:12px 6px;border-radius:14px;font-family:var(--f-display);font-weight:800;font-size:20px;background:var(--white);box-shadow:0 0 0 2px var(--line),0 4px 0 var(--line)}
-.amounts button[aria-pressed="true"]{background:var(--ember-bg);color:#b4470f;box-shadow:0 0 0 2px var(--ember),0 4px 0 #f0b08a}
-.amounts input{width:100%;font:inherit;font-weight:800;font-size:18px;text-align:center;border:0;background:none;color:inherit;padding:0}
 .methods{display:grid;gap:8px}
 .method{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;box-shadow:0 0 0 2px var(--line);text-align:left;width:100%}
 .method[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ember);background:var(--ember-bg)}
@@ -372,9 +362,6 @@ input[type=range]{width:100%;accent-color:var(--lapis);height:28px}
 .toggle::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--white);box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
 .toggle[aria-checked="true"]{background:var(--good)}
 .toggle[aria-checked="true"]::after{transform:translateX(20px)}
-.donatecard{background:linear-gradient(160deg,#ff8a4c,#d9531a);color:#fff;border-radius:22px;padding:18px;box-shadow:0 6px 0 #a8430f,0 16px 26px rgba(232,97,28,.25);display:grid;gap:10px}
-.donatecard p{margin:0;line-height:1.45;opacity:.95;font-size:14px}
-.donatecard .btn{background:#fff;color:#c2410c;box-shadow:0 5px 0 #a8430f}
 .blank{display:inline-block;min-width:80px;border-bottom:3px solid var(--lapis);color:var(--lapis);font-weight:700;text-align:center}
 canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:45}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -745,7 +732,6 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .node .pct.full{color:#c98a00}.node .pct.hi{color:#11734a}.node .pct.mid{color:#9a6b00}.node .pct.lo{color:#c0392b}
 .bestline{font-size:13.5px;margin:-2px 0 10px;color:#3a4766}
 
-.paynote{margin:14px 0 0;padding:10px 12px;border-radius:14px;background:#f3f6fc;font-size:13.5px;text-align:center;line-height:1.5}.paynote small{color:#6b7894}
 
 /* ---------- Décors 3D (images) : fond qui défile plus lentement que le chemin + médaillons en relief ---------- */
 .scenery.img .base{inset:auto 0 0 0;top:0;height:128%;background-size:cover;background-position:center bottom;will-change:transform;background-color:#2a3a2a}
@@ -783,6 +769,19 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .hero.hero3d > div:last-child{position:relative;z-index:1}
 @keyframes guideIn2{from{opacity:0;transform:translate(-50%,24px) scale(.96)}to{opacity:1;transform:translateX(-50%)}}
 
+/* ---------- Annonces ---------- */
+.adban{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));left:10px;right:10px;z-index:58;display:flex;gap:12px;align-items:center;text-align:left;background:rgba(255,255,255,.98);border-radius:18px;padding:10px 12px;box-shadow:0 14px 34px rgba(15,29,61,.32),0 0 0 1.5px rgba(240,180,41,.55);transform:translateY(calc(-100% - 30px));opacity:0;transition:transform .38s cubic-bezier(.3,1.3,.5,1),opacity .3s;cursor:pointer}
+.adban.on{transform:none;opacity:1}
+.adban img{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none;background:#eef2f9}
+.adban .adic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-size:24px;background:#fff3d6;flex:none}
+.adban .adtx{flex:1;min-width:0;display:grid;gap:1px}
+.adban .adtx small{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b07a00}
+.adban .adtx b{font-size:14.5px;line-height:1.25;color:var(--ink);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.adban .adtx span{font-size:12.5px;color:var(--stone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adban .adcta{flex:none;font-weight:800;font-size:12.5px;color:#fff;background:var(--lapis);border-radius:999px;padding:7px 11px}
+.adban .adx{position:absolute;top:-8px;right:-6px;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--stone);font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(15,29,61,.25)}
+.adsheet .adimg{display:block;width:100%;max-height:46vh;object-fit:contain;border-radius:16px;background:#0f1d3d;margin-top:10px}
+
 </style>
 <div class="app" id="app">
 
@@ -798,7 +797,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8a96ad" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       <div class="pill" id="pillHearts"></div>
-      <button class="donbtn" id="donTop" aria-label="Faire un don"><b>♥</b>Don</button>
+      <button class="adbtn" id="adTop" aria-label="Gagner des vies"><b>♥+</b>Vies</button>
     </div>
     <div class="scroll" id="scroll"><div class="track" id="track"></div></div>
   </section>
@@ -839,6 +838,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
   <div class="veil" id="veil" hidden><div class="sheet pad" id="sheet"></div></div>
   <div class="reminder" id="reminder" hidden></div>
   <button class="toast" id="toast" hidden></button>
+  <div class="adban" id="adBan" hidden></div>
   <canvas id="confetti" hidden></canvas>
 </div>
 
@@ -4266,18 +4266,16 @@ function avSvg(v){const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
 
 /* ===================== RÉGLAGES DU JEU ===================== */
 const MAX_HEARTS=5, HEART_MS=25*60*1000, Q_SECONDS=20, DAILY_HELPS=5;
-const DON_EVERY_S=10*60, DON_PAUSE_MS=30*864e5;           // rappel de don toutes les 10 min d'utilisation ; 30 jours de silence après un don
-const DON_POOR=0.6, DON_CREATORS=0.4;                     // 60 % aux plus démunis, 40 % aux créateurs
 const MED_REMIND_MS=10*60*1000, MED_REMIND_COUNT=7;       // méditation : rappel toutes les 10 min pendant 1 h
 
 /* ===================== ÉTAT ===================== */
 const KEY="parcours-biblique-v4";
 const fresh=()=>({user:null,onboarded:false,ob:{goals:[],rel:-1,daily:2,remind:"07:00"},testament:null,book:{AT:"gen",NT:"mat"},done:{},xp:0,
   hearts:MAX_HEARTS,heartAt:0,helps:DAILY_HELPS,helpsDay:"",streak:0,lastDay:"",playDays:[],bestCombo:0,badges:{},justDone:null,
-  set:{music:true,voice:true,sfx:true,vib:true},activeSec:0,don:{lastAt:0,at:0,total:0,count:0},
+  set:{music:true,voice:true,sfx:true,vib:true},activeSec:0,adAt:0,bonus:{until:0,refApplied:0},loc:{city:"",country:"",src:"",at:0},olPaid:{},
   med:{sel:[],delay:60,state:"idle",start:0,due:0,notified:0,notes:{},history:[]},plan:{done:{},notes:{}},read:{}});
 let S=fresh();
-function loadState(o){const f=fresh(),s=Object.assign(f,o||{});["set","don","med","ob","plan"].forEach(k=>s[k]=Object.assign(f[k],(o||{})[k]||{}));return s;}
+function loadState(o){const f=fresh(),s=Object.assign(f,o||{});if(o&&o.don&&!o.bonus)o.bonus={until:o.don.until||0,refApplied:o.don.refApplied||0};if(s.don)delete s.don;["set","bonus","loc","olPaid","med","ob","plan"].forEach(k=>s[k]=Object.assign(f[k],(o||{})[k]||{}));return s;}
 try{const raw=localStorage.getItem(KEY);if(raw)S=loadState(JSON.parse(raw));}catch(e){}
 /* Chaque sauvegarde est horodatée, gardée sur l'appareil et envoyée au compte (voir cloudQueue dans online.js). */
 const saveLocal=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
@@ -4305,8 +4303,8 @@ function regen(){if(S.hearts>=MAX_HEARTS){S.hearts=MAX_HEARTS;S.heartAt=0;return
   if(!S.heartAt)S.heartAt=Date.now();const n=Math.floor((Date.now()-S.heartAt)/HEART_MS);
   if(n>0){S.hearts=Math.min(MAX_HEARTS,S.hearts+n);S.heartAt=S.hearts>=MAX_HEARTS?0:S.heartAt+n*HEART_MS;save();}}
 const UNLIM_MS=24*3600*1000;
-const unlimited=()=>!!(S.don&&S.don.until&&Date.now()<S.don.until);
-const unlimitedLeft=()=>Math.max(0,(S.don.until||0)-Date.now());
+const unlimited=()=>!!(S.bonus&&S.bonus.until&&Date.now()<S.bonus.until);
+const unlimitedLeft=()=>Math.max(0,(S.bonus.until||0)-Date.now());
 function loseHeart(){if(unlimited())return;regen();if(S.hearts>=MAX_HEARTS)S.heartAt=Date.now();S.hearts=Math.max(0,S.hearts-1);save();}
 const nextHeartIn=()=>S.hearts>=MAX_HEARTS?0:Math.max(0,HEART_MS-(Date.now()-S.heartAt));
 function helpsReset(){if(S.helpsDay!==localDay()){S.helps=DAILY_HELPS;S.helpsDay=localDay();save();}}
@@ -4501,7 +4499,7 @@ function signIn(acc){sfx("good");const known=S.user&&S.user.email===acc.email;S.
 function bindHold(){const btn=$("hold"),w=$("lampw");let p=0,done=false,t0=0;
   const draw=()=>{w.style.setProperty("--f",p.toFixed(3));$("glow").style.setProperty("--g",(p*9).toFixed(2));$("holdFill").style.width=(p*100)+"%";};
   const finish=()=>{btn.classList.add("good");$("holdTxt").textContent="Ta lampe est allumée ✨";sfx("win");confetti();vibrate([50,40,120]);
-    setTimeout(()=>{S.onboarded=true;S.don.lastAt=S.activeSec;save();if(typeof olSyncProfile==="function")olSyncProfile();go("path");},1300);};
+    setTimeout(()=>{S.onboarded=true;S.adAt=S.activeSec;save();if(typeof olSyncProfile==="function")olSyncProfile();go("path");},1300);};
   const step=t=>{p=Math.min(1,(t-t0)/1400);draw();if(p<1)requestAnimationFrame(step);else finish();};
   const go1=e=>{if(e)e.preventDefault();if(done)return;done=true;sfx("tap");$("holdTxt").textContent="La flamme grandit…";t0=performance.now();requestAnimationFrame(step);};
   btn.addEventListener("click",go1);btn.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter")go1(e);});}
@@ -4568,11 +4566,10 @@ $("bookchip").onclick=()=>{sfx("tap");const bs=books();
    ${SECTIONS[S.testament].map(([sn,a,z])=>`<div class="bsec"><div class="eyebrow">${sn}</div><div class="booklist">${bs.slice(a,z+1).map(b=>{const u=bookUnlocked(b),d=doneOf(b);
      return `<button class="bk ${b.id===curBook().id?"on":""} ${u?"":"locked"}" data-b="${b.id}"><span class="num">${b.ic}</span><span class="mid"><b>${esc(b.name)} ${u?"":"🔒"}</b><span class="bar"><i style="width:${Math.round(d/b.levels*100)}%"></i></span></span><small>${d}/${b.levels}</small></button>`}).join("")}</div></div>`).join("")}`);
   document.querySelectorAll(".bk").forEach(x=>x.onclick=()=>{const b=books().find(y=>y.id===x.dataset.b);if(!bookUnlocked(b)){sfx("bad");return;}S.book[S.testament]=b.id;save();closeSheet();renderPath();});};
-/* Version Google Play : Google interdit les dons/paiements hors de son système dans l'app.
-   On masque donc tout appel au don quand le jeu est ouvert par l'application du Play Store. */
+/* Application installée depuis le Play Store (détectée par le référent Android). */
 const IN_STORE_APP=(()=>{try{if(document.referrer==="android-app://app.parcoursbiblique/"||document.referrer==="android-app://app.parcoursbiblique"){sessionStorage.setItem("pb-store","1");}return sessionStorage.getItem("pb-store")==="1";}catch(e){return false;}})();
-if(IN_STORE_APP){$("donTop").hidden=true;document.documentElement.classList.add("store-app");}
-$("donTop").onclick=()=>{sfx("tap");openDonate();};
+if(IN_STORE_APP)document.documentElement.classList.add("store-app");
+$("adTop").onclick=()=>{sfx("tap");adReward("life");};
 
 /* ===================== MOTEUR DE QUESTIONS =====================
    mode "level" : cœurs, chrono 20 s, aides ; on réessaie jusqu'à trouver (la bonne réponse n'est jamais montrée).
@@ -4662,8 +4659,8 @@ function askFoot(msg){helpsReset();const f=$("lfoot"),q=LS.q,lvl=LS.mode==="leve
   const needCheck=q.type!=="match";const dis=q.type==="order"?LS.ord.length!==q.frags.length:q.type==="recite"?true:LS.sel.size===0;
   f.innerHTML=`${msg?`<div class="fb"><b>${msg[0]}</b><p>${msg[1]}</p></div>`:""}<div class="actions">${lvl?`<button class="btn ghost helpbtn" id="help">💡 Aide · ${S.helps}</button>`:""}${needCheck?`<button class="btn" id="check" ${dis?"disabled":""}>${q.graded===false?"Valider":"Vérifier"}</button>`:""}</div>`;
   const c=$("check");if(c)c.onclick=check;const h=$("help");if(h)h.onclick=useHelp;}
-function startTimer(){stopTimer();$("timer").hidden=false;$("timer").classList.remove("urgent");const t0=Date.now();let lastSec=Q_SECONDS;$("tbar").style.transform="scaleX(1)";$("tnum").textContent=Q_SECONDS+"s";
-  TM=setInterval(()=>{const left=Math.max(0,Q_SECONDS-(Date.now()-t0)/1000);$("tbar").style.transform=`scaleX(${left/Q_SECONDS})`;const s=Math.ceil(left);$("tnum").textContent=s+"s";
+function startTimer(){stopTimer();$("timer").hidden=false;$("timer").classList.remove("urgent");let t0=Date.now(),tl=t0;let lastSec=Q_SECONDS;$("tbar").style.transform="scaleX(1)";$("tnum").textContent=Q_SECONDS+"s";
+  TM=setInterval(()=>{const nw=Date.now();if(!$("veil").hidden){t0+=nw-tl;tl=nw;return;}tl=nw;const left=Math.max(0,Q_SECONDS-(Date.now()-t0)/1000);$("tbar").style.transform=`scaleX(${left/Q_SECONDS})`;const s=Math.ceil(left);$("tnum").textContent=s+"s";
     if(left<=5)$("timer").classList.add("urgent");if(s<lastSec&&s<=5&&s>0)sfx("tick");lastSec=s;if(left<=0){stopTimer();penalize(true);}},80);}
 function stopTimer(){if(TM){clearInterval(TM);TM=null;}}
 function floatXp(n){if(!n)return;const e=document.createElement("span");e.className="xpfloat";e.textContent="+"+n;const r=$("lXp").getBoundingClientRect(),a=$("app").getBoundingClientRect();e.style.left=(r.left-a.left+8)+"px";e.style.top=(r.top-a.top+18)+"px";$("app").appendChild(e);setTimeout(()=>e.remove(),1000);}
@@ -4714,7 +4711,7 @@ function matchTap(side,i){if(LS.answered)return;const q=LS.q,b=$("lbody");
   else{le.classList.add("badpair");re.classList.add("badpair");setTimeout(()=>{le.classList.remove("badpair");re.classList.remove("badpair");},600);
     penalize(false,["Mauvaise association.","Ces deux éléments ne vont pas ensemble. Réessaie !"]);}}
 function useHelp(){helpsReset();const q=LS.q;
-  if(S.helps<=0){askFoot(["Plus d'aides aujourd'hui","Tes 5 aides reviennent à minuit. Tu peux trouver !"]);return;}
+  if(S.helps<=0){adReward("help",()=>{if(curScreen==="lesson"&&LS&&!LS.answered)askFoot();});return;}
   if(q.type==="match"){const L=q.pairs.findIndex((p,i)=>!LS.matched.some(m=>m[0]===i));if(L<0)return;const R=q.right.findIndex((r,i)=>r===q.pairs[L][1]&&!LS.matched.some(m=>m[1]===i));
     S.helps--;save();sfx("help");LS.mL=L;LS.mR=null;matchTap("r",R);askFoot();return;}
   const cand=q.o.map((_,i)=>i).filter(i=>!q.a.includes(i)&&!LS.out.has(i));if(!cand.length){askFoot(["Plus rien à retirer","Toutes les mauvaises options sont déjà barrées."]);return;}
@@ -4747,8 +4744,8 @@ function streakScreen(){const days=["L","M","M","J","V","S","D"],now=new Date(),
   sfx("combo");$("lfoot").innerHTML=`<button class="btn" id="back">Continuer</button>`;$("back").onclick=()=>go("path");}
 function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("progBar").style.width="0%";$("lHearts").hidden=false;$("lHearts").textContent="♥ 0";
   $("lbody").innerHTML=`<div class="center"><div class="medal big">💔</div><h2 style="font-size:28px">Plus de cœurs pour le moment</h2><p>Un cœur revient toutes les 25 minutes. Le prochain dans :</p><div class="clock" id="cd">--:--</div><p style="font-size:13px" class="muted">En attendant, lis la Bible ou lance une méditation : ça ne coûte aucun cœur.</p></div>`;
-  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px">${IN_STORE_APP?"":`<button class="btn warm" id="toD">♥ Faire un don · 24 h de vies illimitées</button>`}<button class="btn" id="toI">📤 Inviter un ami · 24 h de vies illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
-  if($("toD"))$("toD").onclick=()=>openDonate();$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
+  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter un ami · 24 h de vies illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
+  $("toAd").onclick=()=>adReward("life",()=>{if(S.hearts>0)go("path");});$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
 $("quit").onclick=()=>{sfx("tap");if(LS&&LS.kind==="med"){S.med.state="due";save();go("medit");}else go(LS&&LS.mode==="test"?(LS.kind==="memo"?"bible":"medit"):"path");};
 $("replay").onclick=()=>{if(LS&&LS.say)speak(LS.say,true);};
 
@@ -4973,49 +4970,6 @@ function renderPlan(p,tabs){const now=new Date(),Y=now.getFullYear(),plan=planFo
   $("cPrev").onclick=()=>{calMonth--;renderMedit();};$("cNext").onclick=()=>{calMonth++;renderMedit();};
   p.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{sfx("tap");planSel=+b.dataset.day;const y=p.scrollTop;renderMedit();p.scrollTop=y;});}
 
-/* ===================== DONS =====================
-   Le jeu reste 100 % gratuit. 60 % de chaque don va aux plus démunis, 40 % aux créateurs. */
-let DON={amt:5,method:"mm",custom:""};
-const money=v=>(Math.round(v*100)/100).toString().replace(".",",");
-function splitBar(h){return `<div class="split" style="${h?`height:${h}px;font-size:12px`:""}"><div class="p80" style="flex:6">60 % · plus démunis</div><div class="p20" style="flex:4">40 % · créateurs</div></div>`;}
-function openDonate(){const a=DON.amt;
-  openSheet(`<div class="eyebrow" style="color:var(--ember)">100 % gratuit · sans pub</div><h2 style="font-size:26px;margin:4px 0 8px">Soutiens la mission</h2>
-   <p style="margin:0 0 14px;line-height:1.5;color:#3a4766">Parcours Biblique est et restera gratuit. Si le jeu t'aide à grandir, tu peux faire un don dès 1 $. Voici exactement où va chaque dollar :</p>
-   ${splitBar()}
-   <div class="splitlegend" style="margin:12px 0 16px"><div>🤲 <b>60 % aux plus démunis</b> : orphelins, veuves, familles touchées par la guerre et personnes dans le besoin.</div><div>🛠️ <b>40 % aux créateurs</b> : rédaction et relecture des questions, illustrations, voix, serveurs et développement.</div></div>
-   <div class="card row" style="box-shadow:0 0 0 2px var(--ember-bg);background:var(--ember-bg);margin-bottom:14px"><span style="font-size:26px">🎁</span><div><b>En remerciement : 24 h de vies illimitées</b><br><small>Joue sans compter tes cœurs pendant une journée.</small></div></div>
-   <div class="eyebrow" style="margin-bottom:8px">Montant</div>
-   <div class="amounts">${[1,3,5,10,25].map(v=>`<button data-a="${v}" aria-pressed="${a===v}">${v} $</button>`).join("")}<button data-a="0" aria-pressed="${a===0}"><input id="custom" inputmode="decimal" placeholder="Autre" value="${esc(DON.custom)}" aria-label="Autre montant en dollars"></button></div>
-   <div class="paynote">📱 M-Pesa, Orange Money, Airtel Money · 💳 Visa, Mastercard<br><small>Tu choisis ton moyen de paiement sur la page sécurisée SasPay.</small></div>
-   <div id="donSplit" class="muted" style="margin:14px 0 12px;font-size:13px;text-align:center"></div>
-   <button class="btn warm" id="donGo">Donner</button>
-   <p class="muted" style="font-size:11.5px;text-align:center;margin:10px 0 0">🔒 Paiement sécurisé par SasPay : Mobile Money ou carte. Tu choisis ton moyen de paiement sur la page suivante.</p>`);
-  const val=()=>DON.amt||parseFloat(String(DON.custom).replace(",","."))||0;
-  const upd=()=>{const v=val();$("donGo").disabled=v<1;$("donGo").textContent=v>=1?`Donner ${money(v)} $`:"Dès 1 $";$("donSplit").textContent=v>=1?`${money(v*DON_POOR)} $ aux plus démunis · ${money(v*DON_CREATORS)} $ aux créateurs`:"Le don minimum est de 1 $.";};
-  document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{DON.amt=+b.dataset.a;document.querySelectorAll("[data-a]").forEach(x=>x.setAttribute("aria-pressed",x===b));if(DON.amt===0)$("custom").focus();upd();});
-  $("custom").oninput=e=>{DON.custom=e.target.value;DON.amt=0;document.querySelectorAll("[data-a]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.a==="0"));upd();};
-  document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{DON.method=b.dataset.m;document.querySelectorAll("[data-m]").forEach(x=>x.setAttribute("aria-pressed",x===b));});
-  $("donGo").onclick=async()=>{const v=val();if(v<1)return;
-    if(typeof olDonate!=="function"||!olCanAuth()){donThanks(v,true);return;}             // version hors ligne (aperçu) : simulation
-    if(!OL.session){closeSheet();notify("🔐","Connecte-toi d'abord","Le don est lié à ton compte Google pour t'offrir tes 24 h.");go("online");return;}
-    const b=$("donGo");b.disabled=true;b.textContent="Ouverture du paiement sécurisé…";
-    try{const r=await olDonate(v);try{localStorage.setItem("pb-don-pending",r.id);}catch(e){}location.href=r.checkout_url;}
-    catch(e){b.disabled=false;upd();const m=$("donSplit");if(m){m.style.color="var(--bad)";m.textContent=String(e&&e.message||e);}}};
-  upd();}
-/* Merci + 24 h illimitées. simulated=true seulement dans l'aperçu sans serveur. */
-function donThanks(v,simulated,untilISO){if(simulated){S.don.until=Math.max(Date.now(),S.don.until||0)+UNLIM_MS;}else if(untilISO){S.don.until=Math.max(S.don.until||0,new Date(untilISO).getTime());}
-  S.don.at=Date.now();S.hearts=MAX_HEARTS;S.heartAt=0;S.don.total=Math.round(((S.don.total||0)+v)*100)/100;S.don.count=(S.don.count||0)+1;save();sfx("coin");sfx("win");confetti();
-  openSheet(`<div class="center" style="padding:6px 0 0"><div class="medal big">🤲</div><h2 style="font-size:28px">Merci du fond du cœur${S.user?", "+esc(S.user.name):""} !</h2><p>${money(v*DON_POOR)} $ iront aux plus démunis et ${money(v*DON_CREATORS)} $ aux créateurs du jeu.</p><p><b>🎁 Tes vies sont illimitées pendant 24 heures.</b></p><p class="muted" style="font-size:13px">Que Dieu te bénisse.</p></div><button class="btn" style="margin-top:16px" id="thxOk">Continuer</button>`);
-  $("thxOk").onclick=()=>{closeSheet();if(curScreen==="path")renderTop();if(curScreen==="profile")renderProfile();if(curScreen==="lesson"&&$("cd"))go("path");};}
-function showDonReminder(){if(IN_STORE_APP)return;const r=$("reminder");r.hidden=false;
-  r.innerHTML=`<div class="box"><div class="hearts3">🤲</div><h2 style="font-size:24px">Le jeu est 100 % gratuit</h2><p>Fais un don dès <b>1 $</b> pour soutenir les créateurs et aider les plus démunis : orphelins, veuves, victimes des guerres.</p><p style="font-weight:700;color:#b4470f">🎁 En remerciement : 24 h de vies illimitées.</p>
-   ${splitBar(30)}<button class="btn warm" id="rDon">Faire un don</button><button class="textlink" id="rLater">Plus tard</button></div>`;
-  sfx("bell");$("rDon").onclick=()=>{r.hidden=true;openDonate();};$("rLater").onclick=()=>{r.hidden=true;};}
-/* Rappel : toutes les 10 min d'utilisation, jamais en pleine question ; rien pendant 30 jours après un don */
-function donTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S.activeSec++;if(S.activeSec%10===0)saveLocal();
-  const calm=TABS.includes(curScreen)&&$("veil").hidden&&$("reminder").hidden;const paused=S.don.at&&Date.now()-S.don.at<DON_PAUSE_MS;
-  if(calm&&!paused&&S.activeSec-S.don.lastAt>=DON_EVERY_S){S.don.lastAt=S.activeSec;save();showDonReminder();}}
-
 /* ===================== PROFIL ===================== */
 let badgesAll=false;
 const RANKS=[[0,"Pèlerin"],[4,"Semeur"],[15,"Disciple"],[40,"Témoin"],[100,"Berger"],[250,"Ancien"]];
@@ -5027,7 +4981,6 @@ function bindSettings(root){root.querySelectorAll("[data-set]").forEach(t=>t.onc
 function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0],nx=null;RANKS.forEach((x,i)=>{if(n>=x[0]){r=x;nx=RANKS[i+1]||null;}});const u=S.user||{};
   const earned=Object.keys(S.badges).sort((a,b)=>S.badges[b]-S.badges[a]).map(id=>{const k=id.lastIndexOf("-"),b=ALLB.find(x=>x.id===id.slice(0,k)),L=+id.slice(k+1);return b&&b.t===S.testament?{b,L}:null;}).filter(Boolean);
   const b=curBook(),upcoming=[];for(let L=doneOf(b)+1;L<=b.levels&&upcoming.length<3;L++)upcoming.push({b,L});
-  const paused=S.don.at&&Date.now()-S.don.at<DON_PAUSE_MS;
   $("profilePage").innerHTML=`<h2>Profil</h2>${typeof installCard==="function"?installCard():""}
    <div class="card row"><span class="avatarbig">${avatarHTML()}</span><div><b style="font-size:18px">${esc(u.name||"")}</b><br><small>${esc(u.email||"")}${u.provider==="google"?" · Google":""}</small><br><small style="color:var(--lapis);font-weight:700">${u.gender==="f"?"Sœur":"Frère"} · ${esc(r[1])}</small></div><button class="chip" id="editAv">Modifier</button></div>
    <div class="card row" style="box-shadow:0 0 0 2px var(--line)"><span class="ic" style="background:#e7eefc">🧭</span><div><small>${nx?`Encore ${plural(nx[0]-n,"niveau","niveaux")} pour devenir <b>${esc(nx[1])}</b>`:"Rang le plus élevé atteint"}</small><span class="bar"><i style="width:${nx?Math.round((n-r[0])/(nx[0]-r[0])*100):100}%"></i></span></div></div>
@@ -5037,13 +4990,13 @@ function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0]
    <div class="card"><div class="eyebrow" style="margin-bottom:12px">Mes badges · ${S.testament==="AT"?"Ancien":"Nouveau"} Testament · ${earned.length}</div><div class="badges">
      ${[...earned.map(({b,L})=>`<div class="bdg"><span class="coin">${badgeIcon(b,L)}</span>${esc(badgeName(b,L))}</div>`),...upcoming.map(({b,L})=>`<div class="bdg off"><span class="coin">🔒</span>${esc(badgeName(b,L))}</div>`)].slice(0,badgesAll?999:9).join("")}</div>
      ${earned.length+upcoming.length>9?`<button class="btn ghost small" id="bdgMore" style="margin-top:14px">${badgesAll?"Voir moins":`Voir tous les badges (${earned.length})`}</button>`:""}</div>
-   ${IN_STORE_APP?"":`<div class="donatecard"><div class="eyebrow" style="color:#ffe1c9">Soutenir</div><h2 style="font-size:22px">Le jeu est 100 % gratuit</h2><p>60 % de chaque don va aux plus démunis (orphelins, veuves, victimes des guerres), 40 % aux créateurs.${S.don.count?` Merci pour ${S.don.count>1?"tes "+S.don.count+" dons":"ton don"} (${money(S.don.total)} $) !`:""}</p><p>🎁 En remerciement, chaque don t'offre <b>24 h de vies illimitées</b>${unlimited()?` (encore ${fmt(unlimitedLeft())})`:""}.</p><button class="btn" id="pDon">♥ Faire un don</button></div>`}${typeof olInviteCard==="function"?olInviteCard():""}
+   ${typeof adCityCard==="function"?adCityCard():""}${typeof olInviteCard==="function"?olInviteCard():""}
    <div class="card"><div class="eyebrow">Préférences</div>${settingsHTML()}<div class="switch"><div class="row"><span style="font-size:20px">⏰</span><div><b>Rappel quotidien</b><br><small>Chaque jour à ${esc(S.ob.remind)}</small></div></div></div></div>
    <div style="display:flex;flex-direction:column;align-items:center"><button class="textlink" id="logout">Se déconnecter</button><button class="textlink" id="reset">Réinitialiser ma progression</button>${typeof olCanAuth==="function"&&olCanAuth()&&OL.session?`<button class="textlink danger" id="delAcc">Supprimer mon compte</button>`:""}
      <div class="legal"><a href="/confidentialite" target="_blank" rel="noopener">Confidentialité</a> · <a href="/suppression-compte" target="_blank" rel="noopener">Suppression des données</a></div></div>`;
   bindSettings($("profilePage"));
   document.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>{sfx("tap");S.testament=x.dataset.t;save();renderProfile();});
-  if($("pDon"))$("pDon").onclick=()=>{sfx("tap");openDonate();};const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
+  if(typeof bindCityCard==="function")bindCityCard();const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
   $("editAv").onclick=()=>{OB.edit=true;OB.step=2;renderOnb();};
   if(typeof bindInstall==="function")bindInstall($("profilePage"));const da=$("delAcc");if(da)da.onclick=()=>{sfx("tap");olDeleteSheet();};
   $("logout").onclick=()=>{openSheet(`<h2 style="font-size:24px">Se déconnecter ?</h2><p style="line-height:1.5;color:#3a4766">Ta progression reste enregistrée sur ce compte. Tu la retrouveras en te reconnectant avec Google, sur ce téléphone ou un autre.</p><div style="display:grid;gap:12px"><button class="btn" id="yesOut">Me déconnecter</button><button class="btn ghost" onclick="closeSheet()">Annuler</button></div>`);
@@ -5052,7 +5005,7 @@ function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0]
     $("yes").onclick=()=>{const st=S.set;S=fresh();S.set=st;save();closeSheet();OB.step=0;renderOnb();};};}
 
 /* ===================== HORLOGE ===================== */
-setInterval(()=>{const before=S.hearts;regen();helpsReset();donTick();medTick();
+setInterval(()=>{const before=S.hearts;regen();helpsReset();if(typeof adTick==="function")adTick();medTick();
   if(S.hearts!==before&&curScreen==="lesson"&&LS&&LS.mode==="level")setHead();
   if(curScreen==="path")$("pillHearts").innerHTML=heartPill();
   const cd=$("cd");if(cd&&curScreen==="lesson")cd.textContent=unlimited()?"♥ ∞ illimité":S.hearts>0?"♥ "+S.hearts+" prêt !":fmt(nextHeartIn());},1000);
@@ -5156,8 +5109,8 @@ function olInviteCard(){const n=OL.me?OL.me.referrals||0:0;
     <button class="btn" id="olInv" style="margin-top:10px">📤 Partager mon lien</button></div>`;}
 // Applique les vies illimitées gagnées par parrainage (stockées sur le serveur) à la partie locale.
 // Chaque ami inscrit via le lien ajoute 24 h de vies illimitées, cumulables (5 amis = 120 h), en plus des dons.
-function olApplyBonus(){if(!OL.me)return;const n=OL.me.referrals||0,done=S.don.refApplied||0;if(n<=done)return;
-  const add=(n-done)*24*3600000;S.don.until=Math.max(Date.now(),S.don.until||0)+add;S.don.refApplied=n;save();
+function olApplyBonus(){if(!OL.me)return;const n=OL.me.referrals||0,done=S.bonus.refApplied||0;if(n<=done)return;
+  const add=(n-done)*24*3600000;S.bonus.until=Math.max(Date.now(),S.bonus.until||0)+add;S.bonus.refApplied=n;save();
   notify("🎁",`+${(n-done)*24} h de vies illimitées !`,n-done>1?`${n-done} amis ont rejoint le jeu grâce à toi.`:"Un ami a rejoint le jeu grâce à toi.");
   if(curScreen==="path"){const p=$("pillHearts");if(p)p.innerHTML=heartPill();}}
 async function olClaimRef(){let c=null;try{c=localStorage.getItem("pb-ref");}catch(e){}if(!c||!OL.me)return;
@@ -5169,20 +5122,6 @@ let olLockQ=Promise.resolve();
 function olTabLock(name,timeout,fn){const run=olLockQ.then(()=>fn());olLockQ=run.catch(()=>{});return run;}
 const olWithin=(p,ms,v)=>Promise.race([p,new Promise(r=>setTimeout(()=>r(v),ms))]);
 function olLoading(t){show("onb");$("onb").innerHTML=`<div class="obwrap pad" style="justify-content:center;align-items:center;text-align:center;gap:14px"><div class="radar"><span>🪔</span></div><h2 style="font-size:22px">${t}</h2><p class="muted">Un instant…</p></div>`;}
-/* ---------- Dons SasPay : tout passe par la fonction serveur (la clé SasPay n'est jamais dans le jeu) ---------- */
-const OL_FN=OL_CFG.url+"/functions/v1/saspay";
-async function olFn(route,body){const t=OL.session&&OL.session.access_token;const r=await fetch(OL_FN+"/"+route,{method:"POST",headers:{"Content-Type":"application/json",apikey:OL_CFG.key,Authorization:"Bearer "+(t||OL_CFG.key)},body:JSON.stringify(body||{})});
-  let d={};try{d=await r.json();}catch(e){}if(!r.ok)throw new Error(d.error||"Le paiement n'a pas pu démarrer. Réessaie.");return d;}
-async function olDonate(amount){return olFn("create",{amount:Number(amount).toFixed(2)});}
-// Au retour de la page de paiement (ou au démarrage), on vérifie le don en attente côté serveur.
-async function olCheckDonation(){let id=null;try{const u=new URLSearchParams(location.search);id=u.get("don")||localStorage.getItem("pb-don-pending");}catch(e){}
-  if(!id||!OL.session)return;S.don.paid=S.don.paid||{};if(S.don.paid[id]){try{localStorage.removeItem("pb-don-pending");}catch(e){}return;}
-  notify("⏳","Vérification de ton don…","Un instant, nous confirmons le paiement.");
-  for(let k=0;k<6;k++){let r;try{r=await olFn("status",{id});}catch(e){return;}
-    if(r.status==="SUCCESS"){S.don.paid[id]=Date.now();try{localStorage.removeItem("pb-don-pending");history.replaceState(null,"",location.pathname);}catch(e){}donThanks(Number(r.amount)||0,false,r.don_until);return;}
-    if(r.status==="FAILED"||r.status==="EXPIRED"){try{localStorage.removeItem("pb-don-pending");history.replaceState(null,"",location.pathname);}catch(e){}notify("⚠️","Don non abouti","Le paiement n'a pas été confirmé. Tu peux réessayer quand tu veux.");return;}
-    await new Promise(res=>setTimeout(res,k<2?3000:6000));}
-  notify("⏳","Paiement en cours de confirmation","Ton don sera pris en compte dès que l'opérateur le confirme.");}
 async function olLevelPool(book,chapters){const sb=olInit();if(!sb||!chapters.length)return [];const {data,error}=await sb.rpc("level_pool",{p_book:book,p_chapters:chapters,p_limit:12});if(error)throw error;return data||[];}
 function olInit(){if(OL.sb)return OL.sb;if(!window.supabase||!window.supabase.createClient)return null;
   OL.sb=window.supabase.createClient(OL_CFG.url,OL_CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,lock:olTabLock}});
@@ -5201,8 +5140,7 @@ function olErr(e){const m=(e&&(e.message||e.error_description||e.msg))||String(e
 function olSignedOut(){OL.me=null;OL.lb=OL.friends=OL.hist=null;OL.invites=[];if(OL.chan){try{OL.sb.removeChannel(OL.chan)}catch(e){}OL.chan=null;}olStopSearch(true);}
 async function olAfterLogin(){OL.loadingMe=true;
   try{OL.me=await olRpc("get_my_profile");}catch(e){OL.me=null;OL.msg=olErr(e);OL.loadingMe=false;if(curScreen==="online")renderOnline();return;}
-  OL.loadingMe=false;await olSyncProfile();olClaimRef();olApplyBonus();olCheckDonation();
-  if(OL.me&&OL.me.don_until){const t=new Date(OL.me.don_until).getTime();if(t>(S.don.until||0)){S.don.until=t;save();}}
+  OL.loadingMe=false;await olSyncProfile();olClaimRef();olApplyBonus();if(typeof adFromProfile==="function")adFromProfile();
   olWatch();olLoadAll();olLoadInvites(true);
   try{const act=await olRpc("my_active_match");if(act&&curScreen!=="duel")notify("⚔️","Partie en cours","Touche pour reprendre ta partie.",()=>olOpenMatch(act));}catch(e){}}
 function olWatch(){if(OL.chan||!OL.me)return;const id=OL.me.id;
@@ -5324,7 +5262,7 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
   on("olAdd",async()=>{const c=$("olCode").value.trim();if(c.length<6){$("olAddMsg").textContent="Le code contient 6 caractères.";return;}
     try{const f=await olRpc("add_friend",{p_code:c});sfx("good");$("olAddMsg").textContent=`${f.name} est maintenant dans tes amis !`;await olLoadAll();}catch(e){sfx("bad");$("olAddMsg").textContent=olErr(e);}});
   p.querySelectorAll("[data-duel]").forEach(b=>b.onclick=()=>{sfx("tap");olInvite(b.dataset.duel,b.dataset.nm);});
-  p.querySelectorAll("[data-acc]").forEach(b=>b.onclick=async()=>{sfx("tap");try{await olRpc("respond_invite",{m:b.dataset.acc,p_accept:true});OL.invites=OL.invites.filter(i=>i.id!==b.dataset.acc);olOpenMatch(b.dataset.acc);}catch(e){notify("⚠️","Défi",olErr(e));olLoadInvites();}});
+  p.querySelectorAll("[data-acc]").forEach(b=>b.onclick=async()=>{sfx("tap");if(typeof adGate==="function"&&!adGate(()=>b.click()))return;try{await olRpc("respond_invite",{m:b.dataset.acc,p_accept:true});OL.invites=OL.invites.filter(i=>i.id!==b.dataset.acc);olOpenMatch(b.dataset.acc);}catch(e){notify("⚠️","Défi",olErr(e));olLoadInvites();}});
   p.querySelectorAll("[data-ref]").forEach(b=>b.onclick=async()=>{sfx("tap");try{await olRpc("respond_invite",{m:b.dataset.ref,p_accept:false});}catch(e){}OL.invites=OL.invites.filter(i=>i.id!==b.dataset.ref);renderOnline();});}
 
 function renderOnlineAuth(p){
@@ -5402,7 +5340,7 @@ async function olEnter(){if(olEntering)return;olEntering=true;
   catch(e){console.error(e);bootApp();}finally{olEntering=false;}}
 
 /* ---------- Recherche d'un adversaire ---------- */
-function olSearch(){if(OL.searching)return;OL.searching=true;OL.searchStart=Date.now();
+function olSearch(){if(OL.searching)return;if(typeof adGate==="function"&&!adGate(olSearch))return;OL.searching=true;OL.searchStart=Date.now();
   openSheet(`<div class="center" style="padding-block:10px"><div class="radar"><span>⚔️</span></div><h2 style="font-size:24px">Recherche d'un adversaire…</h2><p id="olSrchTxt">Dès qu'un autre disciple lance une recherche, la partie commence.</p><button class="btn ghost" id="olStop">Annuler</button></div>`);
   $("olStop").onclick=()=>{sfx("tap");olStopSearch();closeSheet();};
   const tick=async()=>{if(!OL.searching)return;
@@ -5414,7 +5352,7 @@ function olSearch(){if(OL.searching)return;OL.searching=true;OL.searchStart=Date
 function olStopSearch(silent){const was=OL.searching;OL.searching=false;clearTimeout(OL.searchT);if(was&&OL.sb&&OL.session)olRpc("leave_queue").catch(()=>{});}
 
 /* ---------- Défier un ami ---------- */
-async function olInvite(fid,name){let m;try{m=await olRpc("invite_friend",{p_friend:fid});}catch(e){notify("⚠️","Défi",olErr(e));return;}
+async function olInvite(fid,name){if(typeof adGate==="function"&&!adGate(()=>olInvite(fid,name)))return;let m;try{m=await olRpc("invite_friend",{p_friend:fid});}catch(e){notify("⚠️","Défi",olErr(e));return;}
   OL.waitInvite=m;const t0=Date.now();
   openSheet(`<div class="center" style="padding-block:10px"><div class="radar"><span>🤝</span></div><h2 style="font-size:24px">Défi envoyé à ${esc(name)}</h2><p>La partie commence dès qu'il accepte. Il voit ton défi dans l'onglet Amis.</p><button class="btn ghost" id="olCancelInv">Annuler le défi</button></div>`);
   $("olCancelInv").onclick=async()=>{sfx("tap");OL.waitInvite=null;clearTimeout(OL.waitT);closeSheet();try{await olRpc("respond_invite",{m,p_accept:false});}catch(e){}};
@@ -5430,7 +5368,7 @@ async function olInvite(fid,name){let m;try{m=await olRpc("invite_friend",{p_fri
    et la question se ferme pour les deux. Une mauvaise réponse bloque ce joueur pour cette question ; l'autre peut encore trouver.
    Si les deux se trompent ou si les 20 s passent, on passe à la suivante. Tout est arbitré par le serveur. */
 function olStopDuelTimers(){clearInterval(OL.dT);OL.dT=null;clearInterval(OL.clockT);OL.clockT=null;clearTimeout(OL.pollT);OL.pollT=null;clearTimeout(OL.nextT);OL.nextT=null;}
-async function olOpenMatch(id){olStopSearch(true);closeSheet();olStopDuelTimers();hush();
+async function olOpenMatch(id){olStopSearch(true);closeSheet();olStopDuelTimers();hush();if(typeof adPayMatch==="function")adPayMatch(id);
   OL.m={id,data:null,idx:-1,pending:-1,st:null,res:{},skew:0,locked:false,shownRes:-1};show("duel");$("dtimer").hidden=true;$("dhead").innerHTML="";
   $("dbody").innerHTML=`<div class="center"><div class="radar"><span>⚔️</span></div><p>Préparation de la partie…</p></div>`;
   let d;try{d=await olReload();}catch(e){$("dbody").innerHTML=`<div class="center"><p>${esc(olErr(e))}</p><button class="btn" id="dBack">Retour</button></div>`;$("dBack").onclick=()=>go("online");return;}
@@ -5535,6 +5473,114 @@ bootAll();
 async function olUploadPhoto(blob){if(!OL.sb||!OL.session)return null;const uid=OL.session.user.id,path=`${uid}/photo-${Date.now()}.jpg`;
   const {error}=await OL.sb.storage.from("avatars").upload(path,blob,{contentType:"image/jpeg",upsert:true});if(error)throw error;
   return OL.sb.storage.from("avatars").getPublicUrl(path).data.publicUrl;}
+
+/* ===================== ANNONCES =====================
+   Annonces publiées par l'équipe depuis l'admin (événements, partenaires…).
+   - bandeau discret en haut de l'écran, à intervalle réglable, jamais pendant une question ;
+   - annonces à regarder volontairement pour gagner une vie ou une aide (contrôlé par le serveur) ;
+   - chaque annonce peut viser une ou plusieurs villes ; le serveur fait tourner les annonces à parts égales.
+   Tous les réglages (fréquence, durées, gains, plafond du jour, vies pour jouer en ligne) viennent de la base. */
+const AD={set:null,setAt:0,banT:null,busy:false,tick:null};
+const AD_DEF={banner_every_min:10,banner_seconds:8,reward_seconds:8,reward_lives:1,reward_helps:1,reward_daily_max:10,online_min_lives:3,online_cost_lives:1};
+const adCfg=()=>Object.assign({},AD_DEF,AD.set||{});
+const adSb=()=>typeof olInit==="function"?olInit():null;
+function adViewer(){let v="";try{v=localStorage.getItem("pb-viewer")||"";if(!v){v=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);localStorage.setItem("pb-viewer",v);}}catch(e){v=v||"invite";}return v;}
+async function adLoadSettings(force){const sb=adSb();if(!sb)return adCfg();if(!force&&AD.set&&Date.now()-AD.setAt<10*60000)return adCfg();
+  try{const {data}=await sb.from("ad_settings").select("*").eq("id",1).maybeSingle();if(data){AD.set=data;AD.setAt=Date.now();}}catch(e){}return adCfg();}
+
+/* ---------- Ville du joueur : estimée par la connexion, remplaçable dans le profil ---------- */
+function adCountryName(c){if(!c)return "";if(/^[A-Z]{2}$/.test(c)){try{return new Intl.DisplayNames(["fr"],{type:"region"}).of(c)||c;}catch(e){}}return c;}
+const adCityLabel=()=>S.loc&&S.loc.city?S.loc.city+(S.loc.country?", "+adCountryName(S.loc.country):""):"";
+async function adLocate(force){const L=S.loc||{};if(!force&&L.src==="manual"&&L.city)return;if(!force&&L.city&&Date.now()-(L.at||0)<12*3600e3)return;
+  try{const r=await fetch("/api/geo",{cache:"no-store"});if(!r.ok)return;const g=await r.json();
+    if(g&&g.city){S.loc={city:g.city,country:g.country||"",src:"auto",at:Date.now()};save();}}catch(e){}}
+// Après connexion : la ville choisie dans le profil (sur n'importe quel appareil) l'emporte.
+function adFromProfile(){if(!OL.me)return;
+  if(OL.me.city){if(S.loc.src!=="manual"||S.loc.city!==OL.me.city){S.loc={city:OL.me.city,country:OL.me.country||"",src:"manual",at:Date.now()};save();}}
+  else if(S.loc.src==="manual"&&S.loc.city){olRpc("set_my_city",{p_city:S.loc.city,p_country:S.loc.country||""}).catch(()=>{});}}
+function adCityCard(){const L=S.loc||{};
+  return `<div class="card row"><span class="ic" style="background:#e7eefc">📍</span><div style="flex:1;min-width:0"><b>Ma ville</b><br><small>${L.city?esc(adCityLabel())+(L.src==="manual"?"":" · détectée automatiquement"):"Pas encore détectée"}</small><br><small class="muted">Pour voir les événements près de chez toi.</small></div><button class="chip" id="cityEdit">Modifier</button></div>`;}
+function bindCityCard(){const b=$("cityEdit");if(!b)return;b.onclick=()=>{sfx("tap");const L=S.loc||{};
+  openSheet(`<h2 style="font-size:23px;margin:0 0 6px">Ma ville</h2><p class="muted" style="margin:0 0 14px;line-height:1.45">Les annonces d'événements (concerts, conférences, cultes…) sont choisies selon ta ville.</p>
+   <div style="display:grid;gap:12px"><div class="field"><label for="cIn">Ville</label><input id="cIn" value="${esc(L.city||"")}" placeholder="Ex. Kinshasa" maxlength="60" autocomplete="address-level2"></div>
+   <div class="field"><label for="kIn">Pays</label><input id="kIn" value="${esc(adCountryName(L.country))}" placeholder="Ex. RD Congo" maxlength="60" autocomplete="country-name"></div>
+   <button class="btn" id="cOk">Enregistrer</button>${L.src==="manual"?`<button class="btn ghost" id="cAuto">Détecter automatiquement</button>`:""}</div>`);
+  $("cOk").onclick=()=>{const city=$("cIn").value.trim().replace(/\s+/g," "),ct=$("kIn").value.trim();if(!city){$("cIn").focus();return;}
+    S.loc={city,country:ct,src:"manual",at:Date.now()};save();if(OL.session)olRpc("set_my_city",{p_city:city,p_country:ct}).catch(()=>{});
+    closeSheet();notify("📍","Ville enregistrée",city);if(curScreen==="profile")renderProfile();};
+  const a=$("cAuto");if(a)a.onclick=async()=>{a.disabled=true;a.textContent="Détection…";S.loc={city:"",country:"",src:"",at:0};save();
+    if(OL.session)olRpc("set_my_city",{p_city:"",p_country:""}).catch(()=>{});await adLocate(true);closeSheet();if(curScreen==="profile")renderProfile();};};}
+
+/* ---------- Statistiques (vues, clics) ---------- */
+function adLog(ad,kind,mode){const sb=adSb();if(!sb||!ad)return Promise.resolve();
+  return sb.rpc("ad_log",{p_ad:ad.id,p_kind:kind,p_mode:mode,p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||""}).then(()=>{},()=>{});}
+function adOpen(ad,mode){if(!ad||!ad.link_url)return;adLog(ad,"click",mode);const w=window.open(ad.link_url,"_blank","noopener");if(!w)location.href=ad.link_url;}
+async function adNext(mode){const sb=adSb();if(!sb)return null;try{const {data,error}=await sb.rpc("next_ad",{p_mode:mode,p_city:(S.loc&&S.loc.city)||"",p_viewer:adViewer()});if(error)return null;return data||null;}catch(e){return null;}}
+
+/* ---------- Bandeau en haut de l'écran ---------- */
+function adTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S.activeSec++;if(S.activeSec%10===0)saveLocal();
+  const c=adCfg();if(!(c.banner_every_min>0))return;
+  const calm=TABS.includes(curScreen)&&$("veil").hidden&&$("reminder").hidden&&$("adBan").hidden&&$("toast").hidden;
+  if(calm&&S.activeSec-(S.adAt||0)>=c.banner_every_min*60){S.adAt=S.activeSec;saveLocal();adBanner();}}
+async function adBanner(){if(AD.busy)return;AD.busy=true;
+  try{const c=await adLoadSettings();const ad=await adNext("banner");if(!ad)return;
+    const b=$("adBan");
+    b.innerHTML=`${ad.image_url?`<img src="${esc(ad.image_url)}" alt="">`:`<span class="adic">📣</span>`}<span class="adtx"><small>Annonce</small><b>${esc(ad.title)}</b>${ad.body?`<span>${esc(ad.body)}</span>`:""}</span>${ad.link_url?`<span class="adcta">${esc(ad.cta||"Voir")}</span>`:""}<button class="adx" aria-label="Fermer l'annonce">✕</button>`;
+    b.hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add("on")));adLog(ad,"view","banner");
+    b.onclick=e=>{if(e.target.closest(".adx")){adHideBan();return;}if(ad.link_url){adOpen(ad,"banner");adHideBan();}};
+    let y0=null;b.ontouchstart=e=>{y0=e.touches[0].clientY;};b.ontouchmove=e=>{if(y0!==null&&e.touches[0].clientY-y0<-24){y0=null;adHideBan();}};
+    clearTimeout(AD.banT);AD.banT=setTimeout(adHideBan,Math.max(4,+c.banner_seconds||8)*1000);
+  }catch(e){}finally{AD.busy=false;}}
+function adHideBan(){const b=$("adBan");if(!b||b.hidden)return;b.classList.remove("on");clearTimeout(AD.banT);setTimeout(()=>{if(!b.classList.contains("on"))b.hidden=true;},380);}
+
+/* ---------- Annonce à regarder pour gagner une vie ou une aide ---------- */
+async function adReward(kind,after){sfx("tap");const c=await adLoadSettings();const life=kind==="life";
+  const gain=life?(+c.reward_lives||0):(+c.reward_helps||0);
+  if(life&&unlimited()){notify("♥","Vies illimitées","Tu as déjà des vies illimitées en ce moment.");return;}
+  if(life){regen();if(S.hearts>=MAX_HEARTS){notify("♥","Tes vies sont au complet","Reviens quand il t'en manquera.");return;}}
+  const prize=life?`+${gain} ♥`:`+${gain} 💡 aide${gain>1?"s":""}`;
+  const sorry=(t,p)=>{openSheet(`<div class="center" style="padding-top:4px"><div class="medal big">${life?"💔":"💡"}</div><h2 style="font-size:24px">${t}</h2><p style="line-height:1.5">${p}</p></div><div style="display:grid;gap:10px">${life?`<button class="btn" id="adInv">📤 Inviter un ami · 24 h de vies illimitées</button>`:""}<button class="btn ghost" id="adBack">Fermer</button></div>`);
+    $("adBack").onclick=closeSheet;const iv=$("adInv");if(iv)iv.onclick=()=>{closeSheet();if(typeof olShareInvite==="function")olShareInvite();};};
+  const later=life?`Un cœur revient toutes les 25 minutes.`:`Tes aides reviennent à minuit.`;
+  if(!gain){sorry("Pas d'annonce pour le moment",later);return;}
+  const sb=adSb();if(!sb){sorry("Connexion nécessaire","Les annonces s'affichent quand tu es connecté à internet. "+later);return;}
+  openSheet(`<div class="center" style="padding:18px 0"><div class="radar"><span>📣</span></div><p>Recherche d'une annonce…</p></div>`);
+  let left=1;try{const {data}=await sb.rpc("ad_rewards_left",{p_viewer:adViewer()});if(typeof data==="number")left=data;}catch(e){}
+  if(left<=0){sorry("C'est tout pour aujourd'hui","Tu as regardé toutes les annonces récompensées du jour. "+later);return;}
+  const ad=await adNext("reward");
+  if(!ad){sorry("Pas d'annonce pour le moment","Aucune annonce n'est disponible dans ta ville pour l'instant. "+later);return;}
+  const secs=Math.max(3,+c.reward_seconds||8);
+  openSheet(`<div class="adsheet"><div class="eyebrow">Annonce · ${prize} à la fin</div>
+    ${ad.image_url?`<img class="adimg" src="${esc(ad.image_url)}" alt="">`:""}
+    <h2 style="font-size:22px;margin:10px 0 4px">${esc(ad.title)}</h2>${ad.body?`<p style="margin:0 0 12px;line-height:1.5;color:#3a4766">${esc(ad.body)}</p>`:""}
+    <div style="display:grid;gap:10px">${ad.link_url?`<button class="btn ghost" id="adGo">${esc(ad.cta||"En savoir plus")} ↗</button>`:""}
+    <button class="btn warm" id="adClaim" disabled>Récompense dans ${secs} s</button></div></div>`);
+  adLog(ad,"view","reward");
+  const go=$("adGo");if(go)go.onclick=()=>adOpen(ad,"reward");
+  const btn=$("adClaim");let n=secs;clearInterval(AD.tick);
+  AD.tick=setInterval(()=>{if(!document.body.contains(btn)||$("veil").hidden){clearInterval(AD.tick);return;}n--;
+    if(n>0){btn.textContent=`Récompense dans ${n} s`;return;}clearInterval(AD.tick);btn.disabled=false;btn.textContent=`Récupérer ${prize}`;sfx("bell");},1000);
+  btn.onclick=async()=>{btn.disabled=true;btn.textContent="Un instant…";
+    const claim=async()=>{const {data,error}=await sb.rpc("claim_ad_reward",{p_ad:ad.id,p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||""});if(error)throw error;return data||{};};
+    let r;try{r=await claim();if(!r.ok&&r.reason==="too_soon"){await new Promise(z=>setTimeout(z,2500));r=await claim();}}catch(e){r={ok:false,reason:"error"};}
+    if(!r.ok){btn.disabled=false;btn.textContent=`Récupérer ${prize}`;
+      if(r.reason==="limit"){sorry("C'est tout pour aujourd'hui","Tu as atteint le nombre d'annonces récompensées du jour. "+later);}
+      else if(r.reason==="already"){closeSheet();}
+      else notify("⚠️","Réessaie dans un instant","La récompense n'a pas pu être validée.");return;}
+    if(life){regen();S.hearts=Math.min(MAX_HEARTS,S.hearts+(+r.lives||0));if(S.hearts>=MAX_HEARTS)S.heartAt=0;}else{helpsReset();S.helps+=(+r.helps||0);}
+    save();sfx("coin");closeSheet();notify(life?"♥":"💡",life?`${prize} !`:`${prize} !`,typeof r.left==="number"&&r.left>0?`Encore ${r.left} annonce${r.left>1?"s":""} récompensée${r.left>1?"s":""} aujourd'hui.`:"Merci d'avoir regardé l'annonce.");
+    if(curScreen==="path")renderTop();if(curScreen==="profile")renderProfile();if(after)after();};}
+
+/* ---------- Jouer en ligne / entre amis : un minimum de vies ---------- */
+function adGate(retry){const c=adCfg();const need=+c.online_min_lives||0;if(unlimited()||need<=0)return true;regen();if(S.hearts>=need)return true;
+  openSheet(`<div class="center" style="padding-top:4px"><div class="medal big">⚔️</div><h2 style="font-size:24px">Il te faut ${need} ♥ pour jouer en ligne</h2><p style="line-height:1.5">Tu en as ${S.hearts}. Regarde une annonce pour gagner +${+c.reward_lives||1} ♥, ou attends le prochain cœur (${fmt(nextHeartIn())}).</p></div>
+   <div style="display:grid;gap:10px"><button class="btn warm" id="gAd">▶️ Regarder une annonce · +${+c.reward_lives||1} ♥</button><button class="btn ghost" id="gNo">Plus tard</button></div>`);
+  $("gAd").onclick=()=>adReward("life",()=>{regen();if(S.hearts>=need)retry();else adGate(retry);});$("gNo").onclick=closeSheet;return false;}
+function adPayMatch(id){const c=adCfg();const cost=+c.online_cost_lives||0;if(!id||unlimited()||cost<=0||(S.olPaid&&S.olPaid[id]))return;
+  S.olPaid=S.olPaid||{};S.olPaid[id]=Date.now();const ks=Object.keys(S.olPaid);if(ks.length>80)ks.sort((a,b)=>S.olPaid[a]-S.olPaid[b]).slice(0,ks.length-80).forEach(k=>{delete S.olPaid[k];});
+  for(let i=0;i<cost;i++)loseHeart();}
+
+setTimeout(()=>{adLoadSettings();adLocate();if(!S.adAt)S.adAt=S.activeSec;},2500);
 
 </script>
 <script>if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script></body></html>
