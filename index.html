@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="c7f65be37e";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="e5ce23170a";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -859,11 +859,20 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 /* Badge « niveau difficile » sur le médaillon (visible même cadenassé) */
 .node .hardb{position:absolute;left:-12px;top:-8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(160deg,#7b3fe4,#4a1fa8);border:2.5px solid #fff;box-shadow:0 3px 8px rgba(30,10,80,.45);z-index:3}
 .node.lock .hardb{filter:none;opacity:1}
-.hardtag{display:inline-flex;align-items:center;gap:6px;margin:4px 0 2px;padding:3px 10px 3px 3px;border-radius:999px;background:#efe7ff;color:#4a1fa8;font-weight:800;font-size:12.5px}
-.hardtag .hardb{position:static;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(160deg,#7b3fe4,#4a1fa8)}
+.hardtag{display:inline-flex;align-items:center;gap:6px;margin:4px 0 2px;padding:3px 10px 3px 3px;border-radius:999px;background:#fff0e6;color:#c2410c;font-weight:800;font-size:12.5px}
+.hardtag .hardb{position:static;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#ffb020,#ff5a1f 55%,#e0162b);border:0;box-shadow:none}
 .hardtag .hardb svg{width:13px;height:13px}
 .node .pct .fl{vertical-align:-1px;margin-right:3px}
-.node .pct.hardp{background:linear-gradient(160deg,#7b3fe4,#4a1fa8);color:#fff}
+.node .pct.hardp{background:linear-gradient(135deg,#ffb020,#ff5a1f 55%,#e0162b);color:#fff;box-shadow:0 0 0 2px #fff,0 2px 10px rgba(255,80,20,.6)}
+/* Niveau chaud : halo de feu autour du médaillon */
+.node.hot::before{content:"";position:absolute;inset:-9px;border-radius:50%;background:conic-gradient(from 0deg,#ffb020,#ff5a1f,#e0162b,#ff5a1f,#ffb020);filter:blur(5px);opacity:.85;z-index:-1;animation:hotspin 3.2s linear infinite}
+.node.hot.lock::before{opacity:.7}
+@keyframes hotspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.node.hot::before{animation:none}}
+
+.abtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:10px;padding:13px;border-radius:16px;background:#000;color:#fff;font-weight:700;font-size:16px;box-shadow:0 4px 0 #333}
+.abtn.big{max-width:340px;padding:17px 22px;font-size:17.5px;border-radius:18px;gap:12px;margin-left:auto;margin-right:auto;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.abtn.big svg{width:22px;height:22px}.abtn:disabled{opacity:.7}
 
 </style>
 <div class="app" id="app">
@@ -4516,9 +4525,11 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
   if(st===1&&typeof olCanAuth==="function"&&olCanAuth()){el.innerHTML=`<div class="obwrap pad"><div class="obtop"><button id="obBack" aria-label="Retour">${BACK}</button><div class="bar2"><i style="width:0%"></i></div></div>
     <div class="glogin"><div class="gl-art">🪔</div><h2>${S.onboarded?"Connecte-toi pour continuer":OB.login?"Content de te revoir !":"Crée ton compte"}</h2>
     <p>Ta progression, tes badges, tes méditations et tes défis sont sauvegardés et te suivent sur tous tes téléphones.</p>
-    <button class="gbtn big" id="gGo">${GLOGO}<span>Continuer avec Google</span></button>
-    <div class="gl-err" id="fErr">${esc(OB.err||"")}</div><small class="gl-note">🔒 Connexion sécurisée par Google · aucun mot de passe à retenir</small><small class="gl-note">En continuant, tu acceptes la <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>.</small></div></div>`;
-    $("obBack").onclick=()=>{OB.step=0;renderOnb();};$("gGo").onclick=()=>{sfx("tap");OB.err="";const b=$("gGo");b.disabled=true;b.querySelector("span").textContent="Ouverture de Google…";olGoogle();setTimeout(()=>{if($("gGo")){b.disabled=false;b.querySelector("span").textContent="Continuer avec Google";}},8000);};return;}
+    <button class="gbtn big" id="gGo">${GLOGO}<span>Continuer avec Google</span></button>${typeof olAppleBtn==="function"?olAppleBtn("aGo",true):""}
+    <div class="gl-err" id="fErr">${esc(OB.err||"")}</div><small class="gl-note">🔒 Connexion sécurisée${typeof OL_APPLE!=="undefined"&&OL_APPLE?" par Google ou Apple":" par Google"} · aucun mot de passe à retenir</small><small class="gl-note">En continuant, tu acceptes la <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>.</small></div></div>`;
+    $("obBack").onclick=()=>{OB.step=0;renderOnb();};$("gGo").onclick=()=>{sfx("tap");OB.err="";const b=$("gGo");b.disabled=true;b.querySelector("span").textContent="Ouverture de Google…";olGoogle();setTimeout(()=>{if($("gGo")){b.disabled=false;b.querySelector("span").textContent="Continuer avec Google";}},8000);};
+    const ab=$("aGo");if(ab)ab.onclick=()=>{sfx("tap");OB.err="";ab.disabled=true;ab.querySelector("span").textContent="Ouverture d'Apple…";olApple();setTimeout(()=>{if($("aGo")){ab.disabled=false;ab.querySelector("span").textContent="Continuer avec Apple";}},8000);};
+    if(typeof olAppleCheck==="function")olAppleCheck();return;}
   if(st===1){el.innerHTML=`<div class="obwrap pad"><div class="obtop"><button id="obBack" aria-label="Retour">${BACK}</button><div class="bar2"><i style="width:0%"></i></div></div>
     ${head(OB.login?"Content de te revoir !":"Crée ton compte","Ta progression, tes badges et tes méditations seront sauvegardés.")}
     <div class="auth"><button class="gbtn" id="gGo">${GLOGO}Continuer avec Google</button><div class="or">ou avec ton e-mail</div>
@@ -4597,15 +4608,12 @@ const pctTone=p=>p>=100?"full":p>=50?"mid":"lo";
 function renderTop(){const b=curBook();const L=Math.min(doneOf(b)+1,b.levels);const u=unitOfLevel(b,L);
   $("chipAv").textContent=b.ic;$("chipAv").style.background=S.testament==="AT"?"#f6e7c7":"#dbe9ff";
   $("chipUnit").textContent=`${b.name} · Étape ${u.i}`;$("chipName").textContent=u.name;$("pillHearts").innerHTML=heartPill();}
-/* Niveaux difficiles : dans chaque livre, environ 1 niveau sur 5 — ceux dont les questions sont les plus exigeantes
-   (associations, versets à compléter, plusieurs bonnes réponses). */
+/* Niveaux difficiles (« niveaux chauds ») : ceux dont les questions sont les plus exigeantes
+   (versets à compléter, associations, plusieurs bonnes réponses, peu de vrai/faux). */
 const HARD_C={};
 function hardScore(lv){const sc=q=>{const t=q.t||"qcm";if(t==="tf")return 0;if(t==="fill")return 2;if(t==="match")return 3+((q.pairs||[]).length>=4?1:0);return Array.isArray(q.a)&&q.a.length>1?3:1;};
   return (lv&&lv.qs||[]).reduce((t,q)=>t+sc(q),0);}
-function isHard(b,L){let set=HARD_C[b.id];if(!set){const lv=(CONTENT[b.id]&&CONTENT[b.id].levels)||{};
-    const ls=Object.keys(lv).map(k=>[+k,hardScore(lv[k])]).filter(x=>x[1]>=6).sort((x,y)=>y[1]-x[1]||y[0]-x[0]);
-    const k=Math.max(1,Math.round(Object.keys(lv).length*0.2));set=HARD_C[b.id]=new Set(ls.slice(0,k).map(x=>x[0]));}
-  return set.has(+L);}
+function isHard(b,L){const k=b.id+"-"+L;if(k in HARD_C)return HARD_C[k];const lv=CONTENT[b.id]&&CONTENT[b.id].levels[L];return HARD_C[k]=!!lv&&hardScore(lv)>=6;}
 const HARD_FL='<svg class="fl" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 1.5s1 3.2-1.4 6.2C10 10.3 7 12 7 15.8 7 19.2 9.4 22 12.6 22c3.6 0 5.9-2.7 5.9-6.3 0-3-1.6-5-2.6-6 .1 1.6-.5 3-1.6 3.6.5-3.5-.1-8.3-.8-11.8z"/></svg>';
 const HARD_IC='<span class="hardb" title="Niveau difficile" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M13.5 1.5s1 3.2-1.4 6.2C10 10.3 7 12 7 15.8 7 19.2 9.4 22 12.6 22c3.6 0 5.9-2.7 5.9-6.3 0-3-1.6-5-2.6-6 .1 1.6-.5 3-1.6 3.6.5-3.5-.1-8.3-.8-11.8z"/></svg></span>';
 function nodeIcon(st){return st==="done"?'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>'
@@ -4627,7 +4635,7 @@ function renderPath(){renderTop();const b=curBook();const T=S.testament.toLowerC
   const done=doneOf(b),open=bookUnlocked(b);const deco=T==="at"?["🌴","🌵","🐪","🌴","🐑","🏕️"]:["🌿","⛵","🐟","🌴","🏘️","🐑"];let h="";
   unitsOf(b).forEach(([name,a,z],ui)=>{h+=`<div class="unit"><div class="k">Étape ${ui+1} · ${chapSpan(b,a,z)}</div><div class="h">${esc(name)}</div></div>`;
     for(let L=a;L<=z;L++){const st=L<=done?"done":(L===done+1&&open?"cur":"lock");const x=xOf(L);
-      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}${st==="done"&&bestOf(b,L)!==undefined?" s-"+pctTone(bestOf(b,L)):""}" data-level="${L}" aria-label="Niveau ${L}${isHard(b,L)?" (difficile)":""} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${pctTone(bestOf(b,L))}${isHard(b,L)?" hard":""}">${isHard(b,L)?HARD_FL:""}${bestOf(b,L)}%</span>`:isHard(b,L)?`<span class="pct hardp">${HARD_FL}Difficile</span>`:""}</button>${L%3===2&&scn&&props.length?`<img class="prop3d" src="/props/${props[Math.floor(L/3)%props.length]}.webp" alt="" loading="lazy" style="left:${propLeft(x)}px">`:""}${L%3===2&&!scn?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
+      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}${st==="done"&&bestOf(b,L)!==undefined?" s-"+pctTone(bestOf(b,L)):""}${isHard(b,L)?" hot":""}" data-level="${L}" aria-label="Niveau ${L}${isHard(b,L)?" (difficile)":""} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${pctTone(bestOf(b,L))}${isHard(b,L)?" hard":""}">${isHard(b,L)?HARD_FL:""}${bestOf(b,L)}%</span>`:isHard(b,L)?`<span class="pct hardp">${HARD_FL}Difficile</span>`:""}</button>${L%3===2&&scn&&props.length?`<img class="prop3d" src="/props/${props[Math.floor(L/3)%props.length]}.webp" alt="" loading="lazy" style="left:${propLeft(x)}px">`:""}${L%3===2&&!scn?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
   const next=books()[b.idx+1];
   h+=`<div class="endbook"><span class="ic">⛰️</span><div><b>Sommet de ${esc(b.name)}</b><br><small class="muted">${next?`Termine les ${b.levels} niveaux pour débloquer ${esc(next.name)}.`:"Dernier livre du "+(S.testament==="AT"?"Ancien":"Nouveau")+" Testament."}</small></div></div>`;
   tr.innerHTML=h+`<svg class="trail" id="trail"></svg><div class="pawn" id="pawn"><div class="bob"><div class="head">${avatarHTML()}</div><div class="pin"></div></div></div>`;
@@ -5378,12 +5386,21 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
 function renderOnlineAuth(p){
   p.innerHTML=`<div class="olhero"><div class="eyebrow" style="color:#b9cbff">Nouveau</div><h2 style="color:#fff;font-size:26px">Défis en ligne</h2><p>Affronte d'autres disciples en direct, gagne des points et vise la première place du classement du mois.</p></div>
   ${olPrizeCard()}
-  <div class="card authcard"><b>Connecte ton compte Google</b><p class="muted" style="margin:0;font-size:14px;line-height:1.45">Le même compte garde ta progression, tes méditations et tes défis sur tous tes téléphones.</p>
-    <button class="gbtn" id="olG">${GLOGO}Continuer avec Google</button><div id="olMsg" class="olmsg">${esc(OL.msg||"")}</div></div>`;
-  $("olG").onclick=()=>{sfx("tap");olGoogle();};}
+  <div class="card authcard"><b>Connecte ton compte</b><p class="muted" style="margin:0;font-size:14px;line-height:1.45">Le même compte garde ta progression, tes méditations et tes défis sur tous tes téléphones.</p>
+    <button class="gbtn" id="olG">${GLOGO}Continuer avec Google</button>${olAppleBtn("olA")}<div id="olMsg" class="olmsg">${esc(OL.msg||"")}</div></div>`;
+  $("olG").onclick=()=>{sfx("tap");olGoogle();};const ab=$("olA");if(ab)ab.onclick=()=>{sfx("tap");olApple();};olAppleCheck();}
 
 /* ---------- Compte Google unique + sauvegarde dans le compte ---------- */
 const olCanAuth=()=>!!olInit();
+/* Connexion Apple (iCloud) : le bouton n'apparaît que si le fournisseur Apple est activé dans Supabase. */
+const ALOGO='<svg width="20" height="20" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>';
+let OL_APPLE=null;
+async function olAppleCheck(){if(OL_APPLE!==null)return OL_APPLE;try{const r=await fetch(OL_CFG.url+"/auth/v1/settings",{headers:{apikey:OL_CFG.key}});const j=await r.json();OL_APPLE=!!(j&&j.external&&j.external.apple);}catch(e){OL_APPLE=false;}
+  if(OL_APPLE){if(curScreen==="onb"&&typeof renderOnb==="function")renderOnb();else if(curScreen==="online")renderOnline();}return OL_APPLE;}
+const olAppleBtn=(id,big)=>OL_APPLE?`<button class="abtn${big?" big":""}" id="${id}">${ALOGO}<span>Continuer avec Apple</span></button>`:"";
+function olApple(){if(!olInit())return false;OL.msg="";
+  OL.sb.auth.signInWithOAuth({provider:"apple",options:{redirectTo:location.origin+"/"+(curScreen==="online"?"?go=defis":"")}})
+    .then(({error})=>{if(error){OL.msg=olErr(error);OB.err=OL.msg;if(curScreen==="online")renderOnline();else if(curScreen==="onb")renderOnb();}});return true;}
 function olGoogle(){if(!olInit())return false;OL.msg="";
   OL.sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/"+(curScreen==="online"?"?go=defis":""),queryParams:{prompt:"select_account"}}})
     .then(({error})=>{if(error){OL.msg=olErr(error);OB.err=OL.msg;if(curScreen==="online")renderOnline();else if(curScreen==="onb")renderOnb();}});return true;}
