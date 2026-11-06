@@ -833,6 +833,14 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .stbig.hp{background:var(--bad-bg);color:var(--bad)}.stbig.hl{background:#eaf1ff;color:var(--lapis)}
 .bookchip .u{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.04em}
 .bookchip{padding:8px 10px;gap:8px}.bookchip .av{width:30px;height:30px;font-size:16px}
+
+/* Score des niveaux : rouge / orange / vert */
+.node .pct{color:#fff;border:2px solid #fff;padding:1px 8px;font-size:12px}
+.node .pct.lo{background:#e5484d;color:#fff}
+.node .pct.mid{background:#f08a24;color:#fff}
+.node .pct.full,.node .pct.hi{background:#1fa45a;color:#fff}
+.node .pct.full::after{content:" ✓"}
+.scorebox.full .sc-ring{--c:#1fa45a}.scorebox.mid .sc-ring{--c:#f08a24}.scorebox.lo .sc-ring{--c:#e5484d}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}

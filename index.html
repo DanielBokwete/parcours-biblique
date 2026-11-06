@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="313e1a59f4";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="45992a7578";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -837,6 +837,14 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .stbig.hp{background:var(--bad-bg);color:var(--bad)}.stbig.hl{background:#eaf1ff;color:var(--lapis)}
 .bookchip .u{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.04em}
 .bookchip{padding:8px 10px;gap:8px}.bookchip .av{width:30px;height:30px;font-size:16px}
+
+/* Score des niveaux : rouge / orange / vert */
+.node .pct{color:#fff;border:2px solid #fff;padding:1px 8px;font-size:12px}
+.node .pct.lo{background:#e5484d;color:#fff}
+.node .pct.mid{background:#f08a24;color:#fff}
+.node .pct.full,.node .pct.hi{background:#1fa45a;color:#fff}
+.node .pct.full::after{content:" ✓"}
+.scorebox.full .sc-ring{--c:#1fa45a}.scorebox.mid .sc-ring{--c:#f08a24}.scorebox.lo .sc-ring{--c:#e5484d}
 
 </style>
 <div class="app" id="app">
@@ -4565,6 +4573,8 @@ function bindHold(){const btn=$("hold"),w=$("lampw");let p=0,done=false,t0=0;
 function heartPill(){regen();helpsReset();const un=unlimited();
   const lifeSub=un?fmt(unlimitedLeft()):S.hearts<MAX_HEARTS?fmt(nextHeartIn()):"au complet";
   return `<button class="sbtn hp" data-st="life" aria-label="Mes vies"><span class="v">♥ ${un?"∞":S.hearts}</span><small>${lifeSub}</small><i>+</i></button><button class="sbtn hl" data-st="help" aria-label="Mes aides"><span class="v">💡 ${S.helps}</span><small>aide${S.helps>1?"s":""}</small><i>+</i></button>`;}
+// Couleur du score : rouge en dessous de 50 %, orange de 50 à 99 %, vert à 100 % (pour donner envie de tout mettre au vert).
+const pctTone=p=>p>=100?"full":p>=50?"mid":"lo";
 function renderTop(){const b=curBook();const L=Math.min(doneOf(b)+1,b.levels);const u=unitOfLevel(b,L);
   $("chipAv").textContent=b.ic;$("chipAv").style.background=S.testament==="AT"?"#f6e7c7":"#dbe9ff";
   $("chipUnit").textContent=`${b.name} · Étape ${u.i}`;$("chipName").textContent=u.name;$("pillHearts").innerHTML=heartPill();}
@@ -4587,7 +4597,7 @@ function renderPath(){renderTop();const b=curBook();const T=S.testament.toLowerC
   const done=doneOf(b),open=bookUnlocked(b);const deco=T==="at"?["🌴","🌵","🐪","🌴","🐑","🏕️"]:["🌿","⛵","🐟","🌴","🏘️","🐑"];let h="";
   unitsOf(b).forEach(([name,a,z],ui)=>{h+=`<div class="unit"><div class="k">Étape ${ui+1} · ${chapSpan(b,a,z)}</div><div class="h">${esc(name)}</div></div>`;
     for(let L=a;L<=z;L++){const st=L<=done?"done":(L===done+1&&open?"cur":"lock");const x=xOf(L);
-      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}" data-level="${L}" aria-label="Niveau ${L} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${bestOf(b,L)>=100?"full":bestOf(b,L)>=80?"hi":bestOf(b,L)>=50?"mid":"lo"}">${bestOf(b,L)}%</span>`:""}</button>${L%3===2&&scn&&props.length?`<img class="prop3d" src="/props/${props[Math.floor(L/3)%props.length]}.webp" alt="" loading="lazy" style="left:${propLeft(x)}px">`:""}${L%3===2&&!scn?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
+      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}" data-level="${L}" aria-label="Niveau ${L} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${pctTone(bestOf(b,L))}">${bestOf(b,L)}%</span>`:""}</button>${L%3===2&&scn&&props.length?`<img class="prop3d" src="/props/${props[Math.floor(L/3)%props.length]}.webp" alt="" loading="lazy" style="left:${propLeft(x)}px">`:""}${L%3===2&&!scn?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
   const next=books()[b.idx+1];
   h+=`<div class="endbook"><span class="ic">⛰️</span><div><b>Sommet de ${esc(b.name)}</b><br><small class="muted">${next?`Termine les ${b.levels} niveaux pour débloquer ${esc(next.name)}.`:"Dernier livre du "+(S.testament==="AT"?"Ancien":"Nouveau")+" Testament."}</small></div></div>`;
   tr.innerHTML=h+`<svg class="trail" id="trail"></svg><div class="pawn" id="pawn"><div class="bob"><div class="head">${avatarHTML()}</div><div class="pin"></div></div></div>`;
@@ -4788,7 +4798,7 @@ function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r
    <div class="stars">${[0,1,2].map(i=>`<span class="${i<stars?"":"off"}">⭐</span>`).join("")}</div>
    <h2 style="font-size:28px">${perfect?"Sans faute, "+esc(S.user?S.user.name:"")+" !":lastOfBook?esc(b.name)+" gravi !":"Niveau "+L+" réussi"}</h2>
    <p>${perfect?"Tu as tout trouvé du premier coup.":"Toutes les réponses sont trouvées. On continue de monter !"}${lastOfBook&&next?`<br><b>${esc(next.name)}</b> est maintenant débloqué.`:""}</p>
-   <div class="scorebox ${pct>=80?"hi":pct>=50?"mid":"lo"}"><div class="sc-ring" style="--p:${pct}"><b>${pct}%</b></div><div class="sc-txt">${prev===undefined?`<b>Ton score : ${pct} %</b><small>${pct<100?"Rejoue ce niveau plus tard pour viser 100 % !":"Parfait du premier coup !"}</small>`
+   <div class="scorebox ${pctTone(pct)}"><div class="sc-ring" style="--p:${pct}"><b>${pct}%</b></div><div class="sc-txt">${prev===undefined?`<b>Ton score : ${pct} %</b><small>${pct<100?"Rejoue ce niveau plus tard pour viser 100 % !":"Parfait du premier coup !"}</small>`
       :isRecord&&pct>prev?`<b>🏆 Nouveau record !</b><small>Tu passes de ${prev} % à ${pct} %.</small>`:`<b>Ton record reste ${best} %</b><small>${pct<best?`Cette fois ${pct} %. Ton meilleur score est gardé.`:"Égalité avec ton record."}</small>`}</div></div>
    <div class="reward"><div style="--c:#e3a008"><small>XP</small><b>⭐ +${LS.xp}</b></div><div style="--c:var(--good)"><small>Record</small><b>🎯 ${best}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
   speak(`${perfect?"Sans faute !":"Bravo !"} Tu gagnes le badge ${badgeName(b,L)}.`);
