@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="7ca8c74395";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="67e832afe0";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -239,6 +239,9 @@ input[type=range]{width:100%;accent-color:var(--lapis);height:28px}
 .chipstat{display:flex;align-items:center;gap:4px;font-weight:800;font-variant-numeric:tabular-nums;font-size:14px;padding:4px 8px;border-radius:10px}
 .chipstat.xp{background:#fff6dc;color:#9a6b00}
 .chipstat.hp{background:var(--bad-bg);color:var(--bad)}
+.chipstat.hl{background:#eaf1ff;color:var(--lapis)}
+button.chipstat{font-family:inherit;cursor:pointer}
+button.chipstat:active{transform:scale(.94)}
 .chipstat.hit{animation:hit .5s}
 .xpfloat{position:absolute;font-weight:800;color:#9a6b00;font-size:13px;animation:xpup 1s forwards;pointer-events:none}
 @keyframes xpup{to{transform:translateY(-22px);opacity:0}}
@@ -817,6 +820,8 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .adf-confirm{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:24px}
 .adf-confirm>div{background:#1c1f2b;border-radius:20px;padding:22px;display:grid;gap:10px;text-align:center;max-width:320px}
 .adf-confirm p{margin:0 0 6px;color:rgba(255,255,255,.75);font-size:14px;line-height:1.45}
+.card.livewarn{background:#fff1f2;box-shadow:0 0 0 2px #ffc9cf;display:grid;gap:8px}
+.card.livewarn b{color:#b4232f}.card.livewarn p{margin:0;font-size:14px;line-height:1.45;color:#5b3a40}
 
 </style>
 <div class="app" id="app">
@@ -853,8 +858,9 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
       <div class="lhead">
         <button id="quit" aria-label="Quitter"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8a96ad" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
         <div class="prog"><i id="progBar" style="width:0%"></i></div>
-        <span class="chipstat xp" id="lXp">⭐ 0</span>
-        <span class="chipstat hp" id="lHearts">♥ 5</span>
+        <button class="chipstat xp" id="lXp" aria-label="Points et aides">⭐ 0</button>
+        <button class="chipstat hl" id="lHelps" aria-label="Aides : regarder une annonce pour en gagner">💡 5</button>
+        <button class="chipstat hp" id="lHearts" aria-label="Vies : regarder une annonce pour en gagner">♥ 5</button>
         <button id="replay" aria-label="Relire à voix haute"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1f4fd1" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
       </div>
       <div class="timer" id="timer" hidden><div class="tline"><i id="tbar"></i></div><span class="tnum" id="tnum">20s</span></div>
@@ -4654,7 +4660,7 @@ async function startLevel(b,L,fromReview){if(lvStarting)return;regen();helpsRese
   show("lesson");renderStep();}
 function startTest(kind,qs,meta){const graded=qs.filter(q=>q.graded!==false).length;
   LS=Object.assign({mode:"test",kind,steps:qs.map(q=>({k:"q",q})),si:0,total:qs.length,graded,qdone:0,xp:0,combo:0,best:0,mistakes:0,firstTry:0,score:0},meta);show("lesson");renderStep();}
-function setHead(){$("progBar").style.width=Math.round(LS.qdone/LS.total*100)+"%";$("lXp").textContent="⭐ "+LS.xp;$("lHearts").hidden=LS.mode!=="level";$("lHearts").textContent="♥ "+(unlimited()?"∞":S.hearts);}
+function setHead(){$("progBar").style.width=Math.round(LS.qdone/LS.total*100)+"%";$("lXp").textContent="⭐ "+LS.xp;$("lHearts").hidden=LS.mode!=="level";$("lHearts").textContent="♥ "+(unlimited()?"∞":S.hearts);$("lHelps").hidden=LS.mode!=="level";$("lHelps").textContent="💡 "+S.helps;}
 function renderStep(){stopTimer();setHead();const st=LS.steps[LS.si];$("timer").hidden=true;const body=$("lbody"),foot=$("lfoot");foot.className="lfoot pad";body.scrollTop=0;
   if(st.k==="card"){const c=st.c,num=(st.num0||0)+st.i+1;
     body.innerHTML=`<div class="eyebrow" style="color:var(--lapis)">${st.label} · ${esc(LS.ref)}</div><h2 class="qtitle" style="font-size:28px">${esc(LS.title)}</h2>
@@ -4691,7 +4697,7 @@ function drawOrder(){const q=LS.q;$("oline").innerHTML=LS.ord.map(i=>`<button cl
 function pickOpt(i){if(LS.answered||LS.out.has(i))return;sfx("tap");const q=LS.q;
   if(q.type==="choice"&&q.a.length>1){LS.sel.has(i)?LS.sel.delete(i):LS.sel.add(i);}else{if(q.type==="fill"&&LS.sel.has(i))LS.sel.clear();else LS.sel=new Set([i]);}syncPick();}
 function syncPick(){const q=LS.q;if(q.type==="fill")drawSentence();else $("lbody").querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-checked",LS.sel.has(+x.dataset.i)));const c=$("check");if(c)c.disabled=LS.sel.size===0;}
-function askFoot(msg){helpsReset();const f=$("lfoot"),q=LS.q,lvl=LS.mode==="level";f.className="lfoot pad"+(msg?" ko":"");
+function askFoot(msg){helpsReset();if($("lHelps"))$("lHelps").textContent="💡 "+S.helps;const f=$("lfoot"),q=LS.q,lvl=LS.mode==="level";f.className="lfoot pad"+(msg?" ko":"");
   const needCheck=q.type!=="match";const dis=q.type==="order"?LS.ord.length!==q.frags.length:q.type==="recite"?true:LS.sel.size===0;
   f.innerHTML=`${msg?`<div class="fb"><b>${msg[0]}</b><p>${msg[1]}</p></div>`:""}<div class="actions">${lvl?`<button class="btn ghost helpbtn" id="help">💡 Aide · ${S.helps}</button>`:""}${needCheck?`<button class="btn" id="check" ${dis?"disabled":""}>${q.graded===false?"Valider":"Vérifier"}</button>`:""}</div>`;
   const c=$("check");if(c)c.onclick=check;const h=$("help");if(h)h.onclick=useHelp;}
@@ -4782,6 +4788,9 @@ function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("
   $("lbody").innerHTML=`<div class="center"><div class="medal big">💔</div><h2 style="font-size:28px">Plus de cœurs pour le moment</h2><p>Un cœur revient toutes les 25 minutes. Le prochain dans :</p><div class="clock" id="cd">--:--</div><p style="font-size:13px" class="muted">En attendant, lis la Bible ou lance une méditation : ça ne coûte aucun cœur.</p></div>`;
   $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter un ami · 24 h de vies illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
   $("toAd").onclick=()=>adReward("life",()=>{if(S.hearts>0)go("path");});$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
+{const helpAd=()=>{if(!LS||LS.mode!=="level"||typeof adReward!=="function")return;adReward("help",()=>{if(curScreen==="lesson"&&LS&&!LS.answered)askFoot();setHead();});};
+ $("lHelps").onclick=helpAd;$("lXp").onclick=helpAd;
+ $("lHearts").onclick=()=>{if(!LS||LS.mode!=="level"||typeof adReward!=="function")return;adReward("life",()=>{if(curScreen==="lesson")setHead();});};}
 $("quit").onclick=()=>{sfx("tap");if(LS&&LS.kind==="med"){S.med.state="due";save();go("medit");}else go(LS&&LS.mode==="test"?(LS.kind==="memo"?"bible":"medit"):"path");};
 $("replay").onclick=()=>{if(LS&&LS.say)speak(LS.say,true);};
 
@@ -5263,9 +5272,11 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
     <div class="segtabs seg3">${[["play","⚔️ Jouer"],["rank","🏆 Classement"],["friends","🤝 Amis"]].map(([k,l])=>`<button data-olt="${k}" aria-pressed="${t===k}">${l}${k==="friends"&&OL.invites.length?` <span class="dot">${OL.invites.length}</span>`:""}</button>`).join("")}</div>
     <p class="tabhint">${{play:"⚔️ <b>Jouer</b> : affronte un disciple au hasard. Chaque victoire rapporte des points pour le classement du mois.",rank:"🏆 <b>Classement</b> : les 10 meilleurs disciples du mois et ta place. Seules les parties en ligne comptent, et tout repart à zéro le 1er de chaque mois.",friends:"🤝 <b>Amis</b> : invite tes proches, défie-les quand tu veux et suis vos confrontations. Ces parties ne comptent pas pour le classement."}[t]}</p>`;
   if(OL.win)h+=olWinCard();
+    const gc=typeof adCfg==="function"?adCfg():{online_min_lives:0},need=+gc.online_min_lives||0,cost=+gc.online_cost_lives||0;regen();const low=need>0&&!unlimited()&&S.hearts<need;
+  if(low&&(t==="play"||t==="friends"))h+=`<div class="card livewarn"><b>💔 Il te faut ${need} ♥ pour jouer en ligne</b><p>Tu en as ${S.hearts}. Regarde une annonce pour gagner +${+gc.reward_lives||1} ♥ à chaque fois, ou attends le prochain cœur (${fmt(nextHeartIn())}).</p><button class="btn warm" id="olAdLife">▶️ Regarder une annonce · +${+gc.reward_lives||1} ♥</button></div>`;
   if(t==="play"){
     h+=olPrizeCard()+`<button class="btn big" id="olFind">⚔️ Trouver un adversaire</button>
-      <div class="card rules"><b>Comment ça marche</b><ul><li>10 questions tirées au hasard, Ancien et Nouveau Testament mélangés, du facile au difficile.</li><li>⚡ Course de vitesse : le premier qui trouve la bonne réponse remporte la question, et on passe à la suivante pour les deux.</li><li>Une mauvaise réponse te bloque sur cette question : ton adversaire peut encore la trouver. 20 secondes maximum par question.</li><li>Victoire : <b>+${OL_POINTS.win} points</b> · égalité : <b>+${OL_POINTS.draw} points</b> chacun.</li><li>Seuls les points des parties en ligne comptent pour le classement du mois.</li></ul></div>`;
+      <div class="card rules"><b>Comment ça marche</b><ul><li>10 questions tirées au hasard, Ancien et Nouveau Testament mélangés, du facile au difficile.</li><li>⚡ Course de vitesse : le premier qui trouve la bonne réponse remporte la question, et on passe à la suivante pour les deux.</li><li>Une mauvaise réponse te bloque sur cette question : ton adversaire peut encore la trouver. 20 secondes maximum par question.</li><li>Victoire : <b>+${OL_POINTS.win} points</b> · égalité : <b>+${OL_POINTS.draw} points</b> chacun.</li><li>Seuls les points des parties en ligne comptent pour le classement du mois.</li>${need>0?`<li>♥ Il faut au moins <b>${need} vies</b> pour lancer ou accepter une partie (en ligne ou entre amis)${cost>0?`, et chaque partie en utilise ${cost}`:""}. Il en manque ? Regarde une annonce : +${+gc.reward_lives||1} ♥ par annonce.</li>`:""}</ul></div>`;
     const hOn=(OL.hist||[]).filter(x=>x.mode==="online");
     h+=`<h3 class="olh3">Mes dernières parties en ligne</h3>`+(hOn.length?`<div class="hist2">${hOn.map(x=>`<div class="hrow"><span>${x.won?"🏆":x.is_draw?"🤝":"💪"}</span><span class="nm">${x.mode==="friend"?"Ami · ":""}${olName(x.opp_name)}<small>${new Date(x.finished_at).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</small></span><b>${x.my_score} – ${x.opp_score}</b>${x.mode==="online"?`<span class="pts">+${x.points}</span>`:`<span class="pts muted">amical</span>`}</div>`).join("")}</div>`:`<div class="card muted" style="font-size:14px">Aucune partie en ligne pour l'instant. Lance ton premier défi !</div>`);}
   if(t==="rank"){const lb=OL.lb;const mois=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
@@ -5289,7 +5300,7 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
   p.innerHTML=h;
   p.querySelectorAll("[data-olt]").forEach(b=>b.onclick=()=>{sfx("tap");OL.tab=b.dataset.olt;renderOnline();if(OL.tab!=="play")olLoadAll();});
   const on=(id,fn)=>{const e=$(id);if(e)e.onclick=fn;};
-  on("olFind",()=>{sfx("tap");olSearch();});on("olFriend",()=>{sfx("tap");OL.tab="friends";renderOnline();olLoadAll();});on("olRefresh",()=>{sfx("tap");olLoadAll();});
+  on("olFind",()=>{sfx("tap");olSearch();});on("olAdLife",()=>{if(typeof adReward==="function")adReward("life",()=>{if(curScreen==="online")renderOnline();});});on("olFriend",()=>{sfx("tap");OL.tab="friends";renderOnline();olLoadAll();});on("olRefresh",()=>{sfx("tap");olLoadAll();});
   on("olClaim",()=>{sfx("tap");olClaimSheet();});
   on("olInv",()=>{sfx("tap");olShareInvite();});
   on("olShare",async()=>{const c=OL.me.referral_code,txt=`Viens me défier sur Parcours Biblique ! Mon code : ${c}\n${location.origin+location.pathname}`;
