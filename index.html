@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="ba3b45441a";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="04301d760e";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -574,6 +574,7 @@ canvas#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .segtabs .dot{display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;padding:0 4px}
 .prize{display:flex;gap:12px;align-items:center;background:linear-gradient(160deg,#fff7dc,#ffe9a8);border-radius:20px;padding:14px;box-shadow:0 4px 0 #e8c76a}
 .prize .pe{font-size:40px;flex:none}
+.prize-legal{margin:6px 4px 0;font-size:11.5px;line-height:1.4;color:var(--muted);text-align:center}.prize-legal a{color:inherit;font-weight:700}
 .prize img{width:64px;height:64px;border-radius:14px;object-fit:cover;flex:none}
 .prize .eyebrow{color:#9a6b00}
 .prize b{font-family:var(--f-display);font-size:18px;line-height:1.2;display:block;color:#5a3d00}
@@ -5073,7 +5074,7 @@ function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0]
    ${typeof adCityCard==="function"?adCityCard():""}${typeof olInviteCard==="function"?olInviteCard():""}
    <div class="card"><div class="eyebrow">Préférences</div>${settingsHTML()}<div class="switch"><div class="row"><span style="font-size:20px">⏰</span><div><b>Rappel quotidien</b><br><small>Chaque jour à ${esc(S.ob.remind)}</small></div></div></div></div>
    <div style="display:flex;flex-direction:column;align-items:center"><button class="textlink" id="logout">Se déconnecter</button><button class="textlink" id="reset">Réinitialiser ma progression</button>${typeof olCanAuth==="function"&&olCanAuth()&&OL.session?`<button class="textlink danger" id="delAcc">Supprimer mon compte</button>`:""}
-     <div class="legal"><a href="/confidentialite" target="_blank" rel="noopener">Confidentialité</a> · <a href="/suppression-compte" target="_blank" rel="noopener">Suppression des données</a></div></div>`;
+     <div class="legal"><a href="/confidentialite" target="_blank" rel="noopener">Confidentialité</a> · <a href="/suppression-compte" target="_blank" rel="noopener">Suppression des données</a> · <a href="/reglement" target="_blank" rel="noopener">Règlement du prix</a></div></div>`;
   bindSettings($("profilePage"));
   document.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>{sfx("tap");S.testament=x.dataset.t;save();renderProfile();});
   if(typeof bindCityCard==="function")bindCityCard();const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
@@ -5278,7 +5279,7 @@ function olPicker(anchor,items,cur,onPick,opts){document.querySelectorAll(".pkpa
   setTimeout(()=>document.addEventListener("pointerdown",close,true),0);}
 function olClaimSheet(){const w=OL.win;if(!w)return;const u=S.user||{},L=olCountryList();let dialIso=olGuessIso(),ctryIso=dialIso;
   const byIso=x=>L.find(c=>c.iso===x);
-  openSheet(`<h3 style="margin:0 0 4px">🎁 Réclamer mon prix</h3><p class="muted" style="margin:0 0 12px;font-size:14px">${esc(w.title)}. Remplis ces informations pour que l'équipe Parcours Biblique puisse te contacter.</p>
+  openSheet(`<h3 style="margin:0 0 4px">🎁 Réclamer mon prix</h3><p class="muted" style="margin:0 0 12px;font-size:14px">${esc(w.title)}. Remplis ces informations pour que l'équipe Parcours Biblique puisse te contacter. <a href="/reglement" target="_blank" rel="noopener">Voir le règlement</a>.</p>
     <div class="field"><label for="cName">Noms complets</label><input id="cName" value="${esc(u.name||"")}" autocomplete="name"></div>
     <div class="field"><label for="cPhone">Numéro WhatsApp</label><div class="telrow"><button type="button" class="pkbtn" id="cDial" aria-label="Indicatif du pays"></button><input id="cPhone" type="tel" inputmode="tel" placeholder="Numéro" autocomplete="tel-national"></div></div>
     <div class="field"><label>Pays</label><button type="button" class="pkbtn wide" id="cCountry"></button><input id="cCountryOther" placeholder="Écris le nom de ton pays" hidden style="margin-top:8px"></div>
@@ -5301,7 +5302,8 @@ function olClaimSheet(){const w=OL.win;if(!w)return;const u=S.user||{},L=olCount
       openSheet(`<div class="center" style="gap:10px;padding:14px 0"><div style="font-size:56px">🎉</div><h3 style="margin:0;font-size:22px">Demande bien reçue !</h3><p style="margin:0;font-size:15.5px">Tu seras contacté <b>dans les 24 heures</b> sur WhatsApp pour la remise de ton prix.</p><p class="muted" style="margin:0;font-size:13px">Que Dieu te bénisse !</p><button class="btn" id="cOk" style="margin-top:8px">Super, merci !</button></div>`);
       $("cOk").onclick=()=>closeSheet();renderOnline();}
     catch(e){b.disabled=false;b.textContent="Envoyer";const m=String(e&&e.message||"");$("cErr").textContent=/pas_premier/.test(m)?"Seul le 1er du classement peut réclamer ce prix.":/fermee/.test(m)?"La remise du prix n'est pas encore ouverte.":/champs/.test(m)?"Remplis tous les champs.":olErr(e);}};}
-function olPrizeCard(){const p=OL.prize;const mois=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+function olPrizeCard(){return olPrizeCard0()+'<p class="prize-legal">Gratuit, sans achat. Apple et Google ne sont ni organisateurs ni sponsors de ce concours. <a href="/reglement" target="_blank" rel="noopener">Règlement</a></p>';}
+function olPrizeCard0(){const p=OL.prize;const mois=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
   return p?`<div class="prize">${p.image_url?`<img src="${esc(p.image_url)}" alt="">`:`<span class="pe">🏆</span>`}<div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>${esc(p.title)}</b>${p.description?`<p>${esc(p.description)}</p>`:""}</div></div>`
     :`<div class="prize"><span class="pe">🏆</span><div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>Le prix du mois sera bientôt annoncé</b><p>Le premier du classement en fin de mois le remporte.</p></div></div>`;}
 function renderOnline(){const p=$("onlinePage");if(!p)return;
@@ -5632,7 +5634,7 @@ function adAudioStop(){const a=AD.au;if(a){try{a.pause();a.removeAttribute("src"
 
 /* ---------- Annonce à regarder pour gagner une vie ou une aide (plein écran) ----------
    Vidéo ou image en plein écran, minuteur et barre de progression ; la récompense est accordée
-   automatiquement à la fin de la durée, ou dès que le joueur touche le lien de l'annonce. */
+   automatiquement à la fin de la durée regardée (toucher le lien ouvre l'annonceur sans donner la récompense). */
 async function adReward(kind,after){sfx("tap");adAudioUnlock();const c=await adLoadSettings();const life=kind==="life";
   const gain=life?(+c.reward_lives||0):(+c.reward_helps||0);
   if(life&&unlimited()){notify("♥","Vies illimitées","Tu as déjà des vies illimitées en ce moment.");return;}
@@ -5698,7 +5700,7 @@ function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||docu
     if(v)v.pause();const cf=document.createElement("div");cf.className="adf-confirm";
     cf.innerHTML=`<div><b>Quitter l'annonce ?</b><p>Tu ne recevras pas ta récompense (${o.prize}).</p><button class="btn" id="adfKeep">Continuer l'annonce</button><button class="textlink" id="adfQuit" style="color:#fff">Quitter</button></div>`;el.appendChild(cf);
     $("adfKeep").onclick=()=>{cf.remove();last=performance.now();if(v)v.play().catch(()=>{});};$("adfQuit").onclick=()=>{cf.remove();close();};};
-  const open=e=>{if(e)e.stopPropagation();if(!ad.link_url)return;adOpen(ad,"reward");if(!done)finish(true);};
+  const open=e=>{if(e)e.stopPropagation();if(!ad.link_url)return;adOpen(ad,"reward");};
   $("adfCard").onclick=open;const m=el.querySelector(".adf-media");if(m&&ad.link_url)m.onclick=open;}
 
 /* ---------- Fenêtres « Mes vies » et « Mes aides » ---------- */
