@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="e629ac1e31";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="3a011c44f5";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -860,6 +860,10 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .abtn.big{max-width:340px;padding:17px 22px;font-size:17.5px;border-radius:18px;gap:12px;margin-left:auto;margin-right:auto;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .abtn.big svg{width:22px;height:22px}.abtn:disabled{opacity:.7}
 .refprog{display:grid;gap:5px;margin-top:6px}.refprog .bar{height:8px}
+.adleft{display:block;text-align:center;font-size:12.5px;color:var(--muted);margin-top:-4px}
+.btn.adcta:not(:disabled){animation:adpulse 1.8s ease-in-out infinite}
+@keyframes adpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@media (prefers-reduced-motion:reduce){.btn.adcta{animation:none}}
 
 </style>
 <div class="app" id="app">
@@ -4830,7 +4834,7 @@ function streakScreen(){const days=["L","M","M","J","V","S","D"],now=new Date(),
   sfx("combo");$("lfoot").innerHTML=`<button class="btn" id="back">Continuer</button>`;$("back").onclick=()=>go("path");}
 function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("progBar").style.width="0%";$("lHearts").hidden=false;$("lHearts").textContent="♥ 0";
   $("lbody").innerHTML=`<div class="center"><div class="medal big">💔</div><h2 style="font-size:28px">Plus de cœurs pour le moment</h2><p>Un cœur revient toutes les 25 minutes. Le prochain dans :</p><div class="clock" id="cd">--:--</div><p style="font-size:13px" class="muted">En attendant, lis la Bible ou lance une méditation : ça ne coûte aucun cœur.</p></div>`;
-  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter 3 amis · 24 h illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
+  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm adcta" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter 3 amis · 24 h illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
   $("toAd").onclick=()=>adReward("life",()=>{if(S.hearts>0)go("path");});$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
 {const lessonSheet=k=>{if(!LS||LS.mode!=="level"||typeof statSheet!=="function")return;statSheet(k,()=>{if(curScreen==="lesson"){setHead();if(LS&&!LS.answered&&LS.q)askFoot();}});};
  $("lHelps").onclick=()=>lessonSheet("help");$("lXp").onclick=()=>lessonSheet("help");$("lHearts").onclick=()=>lessonSheet("life");}
@@ -5665,7 +5669,7 @@ async function adReward(kind,after){sfx("tap");adAudioUnlock();const c=await adL
   const sb=adSb();if(!sb){sorry("Connexion nécessaire","Les annonces s'affichent quand tu es connecté à internet. "+later);return;}
   openSheet(`<div class="center" style="padding:18px 0"><div class="radar"><span>📣</span></div><p>Recherche d'une annonce…</p></div>`);
   let left=1;try{const {data}=await sb.rpc("ad_rewards_left",{p_viewer:adViewer()});if(typeof data==="number")left=data;}catch(e){}
-  if(left<=0){sorry("C'est tout pour aujourd'hui","Tu as regardé toutes les annonces récompensées du jour. "+later);return;}
+  if(left<=0){sorry("C'est tout pour aujourd'hui",`Tu as regardé tes ${+c.reward_daily_max||10} annonces récompensées du jour. Elles reviennent à minuit. `+later);return;}
   const ad=await adNext("reward");
   if(!ad){sorry("Pas d'annonce pour le moment","Aucune annonce n'est disponible dans ta ville pour l'instant. "+later);return;}
   closeSheet();adPlayer(ad,{life,prize,later,sorry,after});}
@@ -5701,7 +5705,7 @@ function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||docu
     const claim=async()=>{const {data,error}=await sb.rpc("claim_ad_reward",{p_ad:ad.id,p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||""});if(error)throw error;return data||{};};
     let r;try{if(viaClick)await new Promise(z=>setTimeout(z,600));r=await claim();if(!r.ok&&r.reason==="too_soon"){await new Promise(z=>setTimeout(z,2500));r=await claim();}}catch(e){r={ok:false,reason:"error"};}
     if(closed)return;const pill=$("adfPill"),box=$("adfDone");pill.hidden=true;$("adfBar").style.width="100%";
-    if(r.ok){granted=true;if(o.life){regen();S.hearts=Math.min(MAX_HEARTS,S.hearts+(+r.lives||0));if(S.hearts>=MAX_HEARTS)S.heartAt=0;}else{helpsReset();S.helps+=(+r.helps||0);}save();sfx("coin");
+    if(typeof r.left==="number")AD_LEFT=r.left;if(r.ok){granted=true;if(o.life){regen();S.hearts=Math.min(MAX_HEARTS,S.hearts+(+r.lives||0));if(S.hearts>=MAX_HEARTS)S.heartAt=0;}else{helpsReset();S.helps+=(+r.helps||0);}save();sfx("coin");
       box.innerHTML=`<span class="ok">✓</span><span><b>Récompense accordée : ${o.prize}</b><small>${typeof r.left==="number"&&r.left>0?`Encore ${r.left} annonce${r.left>1?"s":""} récompensée${r.left>1?"s":""} aujourd'hui`:"Merci d'avoir regardé l'annonce"}</small></span>`;}
     else if(r.reason==="already"){granted=true;box.innerHTML=`<span class="ok">✓</span><span><b>Récompense déjà accordée</b></span>`;}
     else box.innerHTML=`<span class="ok bad">!</span><span><b>${r.reason==="limit"?"Limite du jour atteinte":"Récompense non validée"}</b><small>${r.reason==="limit"?o.later:"Vérifie ta connexion et réessaie."}</small></span>`;
@@ -5721,6 +5725,12 @@ function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||docu
   const open=e=>{if(e)e.stopPropagation();if(!ad.link_url)return;adOpen(ad,"reward");};
   $("adfCard").onclick=open;const m=el.querySelector(".adf-media");if(m&&ad.link_url)m.onclick=open;}
 
+/* ---------- Annonces récompensées restantes aujourd'hui (remise à zéro à minuit, heure de Kinshasa) ---------- */
+let AD_LEFT=null;
+function adLeftTxt(){const mx=+adCfg().reward_daily_max||10;if(AD_LEFT===null)return `🎬 Jusqu'à ${mx} annonces récompensées par jour · renouvelées à minuit`;
+  return AD_LEFT>0?`🎬 Encore <b>${AD_LEFT}/${mx}</b> annonces récompensées aujourd'hui · renouvelées à minuit`:`🎬 Tes ${mx} annonces du jour sont utilisées · elles reviennent à minuit`;}
+async function adLeftFetch(){const sb=adSb();if(!sb)return;try{const {data}=await sb.rpc("ad_rewards_left",{p_viewer:adViewer()});if(typeof data==="number"){AD_LEFT=data;const e=$("stLeft");if(e)e.innerHTML=adLeftTxt();const b=$("stAd");if(b&&data<=0)b.disabled=true;}}catch(e){}}
+
 /* ---------- Fenêtres « Mes vies » et « Mes aides » ---------- */
 function statSheet(kind,after){sfx("tap");regen();helpsReset();const c=adCfg();const life=kind==="life";const un=unlimited();
   const gain=life?(+c.reward_lives||0):(+c.reward_helps||0);
@@ -5728,9 +5738,10 @@ function statSheet(kind,after){sfx("tap");regen();helpsReset();const c=adCfg();c
     const big=life?(un?"∞":`${S.hearts}<small>/${MAX_HEARTS}</small>`):`${S.helps}`;
     const sub=life?(un?`Vies illimitées encore ${fmt(unlimitedLeft())}`:S.hearts<MAX_HEARTS?`+1 ♥ dans <b id="stCd">${fmt(nextHeartIn())}</b> · un cœur revient toutes les 25 minutes`:"Tes vies sont au complet"):`Tu reçois ${DAILY_HELPS} aides chaque jour, à minuit. Une aide retire une mauvaise réponse pendant un niveau.`;
     openSheet(`<div class="center" style="padding-top:2px"><div class="stbig ${life?"hp":"hl"}"><span>${life?"♥":"💡"}</span><b>${big}</b></div><h2 style="font-size:24px;margin:6px 0 4px">${life?"Mes vies":"Mes aides"}</h2><p style="line-height:1.5;margin:0 0 14px">${sub}</p></div>
-      <div style="display:grid;gap:10px">${gain>0?`<button class="btn warm" id="stAd"${full?" disabled":""}>▶️ Regarder une annonce · +${gain} ${life?"♥":`aide${gain>1?"s":""}`}</button>`:""}
+      <div style="display:grid;gap:10px">${gain>0?`<button class="btn warm adcta" id="stAd"${full?" disabled":""}>▶️ Regarder une annonce · +${gain} ${life?"♥":`aide${gain>1?"s":""}`}</button><small class="adleft" id="stLeft">${adLeftTxt()}</small>`:""}
       ${life?`<button class="btn ghost" id="stInv">📤 Inviter 3 amis · 24 h illimitées</button>`:""}<button class="textlink" id="stClose">Fermer</button></div>
       ${life&&+c.online_min_lives>0?`<p class="muted" style="font-size:12.5px;text-align:center;margin:10px 0 0">Il faut au moins ${+c.online_min_lives} ♥ pour jouer en ligne ou entre amis.</p>`:""}`);
+    adLeftFetch();
     const ad=$("stAd");if(ad)ad.onclick=()=>{closeSheet();adReward(kind,()=>{if(curScreen==="path")renderTop();if(after)after();});};
     const iv=$("stInv");if(iv)iv.onclick=()=>{closeSheet();if(typeof olShareInvite==="function")olShareInvite();};
     $("stClose").onclick=()=>{closeSheet();if(after)after();};};
