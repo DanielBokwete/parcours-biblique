@@ -918,8 +918,90 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .field label.chk{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer;padding:4px 0}
 .field label.chk input{width:20px;height:20px;flex:none;accent-color:var(--lapis)}
 .field label.btn{text-transform:none;letter-spacing:0;font-size:14px;color:var(--lapis);width:auto;justify-self:start}
+
+/* =================== Nouvelle coquille de l'admin =================== */
+body.admin{background:#f3f6fb}
+.ashell{display:flex;min-height:100vh}
+.aside{display:none}
+.acol{flex:1;min-width:0;display:flex;flex-direction:column}
+body.admin:not(.logged) .atop,body.admin:not(.logged) .abot,body.admin:not(.logged) .aside{display:none!important}
+.atop{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;background:rgba(243,246,251,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #e3e9f3}
+.atop .tleft{display:flex;align-items:center;gap:12px;min-width:0}
+.atop h1{font-family:var(--f-display);font-size:24px;line-height:1.1;margin:0}
+.atop p{margin:2px 0 0;color:var(--stone);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atop .tlogo{width:34px;height:34px;border-radius:10px;display:none}
+.tref{width:38px;height:38px;border-radius:12px;background:#fff;color:var(--lapis);display:grid;place-items:center;box-shadow:0 1px 0 rgba(20,33,61,.06),0 4px 12px rgba(20,33,61,.08);flex:none}
+#main{max-width:1180px;width:100%;margin:0 auto;padding:20px 22px 40px;gap:16px}
+.acard{border-radius:20px;padding:18px;box-shadow:0 1px 0 rgba(20,33,61,.04),0 8px 24px rgba(20,33,61,.06)}
+.acard h3{font-size:16.5px}
+/* menu latéral (ordinateur) */
+@media (min-width:900px){
+  .aside{display:flex;flex-direction:column;gap:6px;width:250px;flex:none;position:sticky;top:0;height:100vh;overflow-y:auto;background:#0f1d45;color:#c9d5f5;padding:18px 12px}
+  .abot{display:none!important}
+}
+.abrand{display:flex;align-items:center;gap:10px;padding:4px 8px 14px}
+.abrand img{width:38px;height:38px;border-radius:11px}
+.abrand b{display:block;color:#fff;font-family:var(--f-display);font-size:17px;line-height:1.1}.abrand small{font-size:12px;opacity:.7}
+.ngroup{display:grid;gap:2px;margin-top:8px}
+.ngroup>small{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.5;padding:6px 10px}
+.nitem{display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;border-radius:12px;color:#c9d5f5;font-weight:600;font-size:14.5px;text-align:left;text-decoration:none;position:relative}
+.nitem:hover{background:rgba(255,255,255,.06);color:#fff}
+.nitem[aria-current="page"]{background:linear-gradient(135deg,#2e5ff0,#1f4fd1);color:#fff;box-shadow:0 6px 16px rgba(31,79,209,.45)}
+.nbadge{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#e5484d;color:#fff;font-size:11.5px;font-weight:800;display:inline-grid;place-items:center}
+.nbadge.dot{min-width:9px;width:9px;height:9px;padding:0;position:absolute;top:8px;right:calc(50% - 18px)}
+.nfoot{margin-top:auto;display:grid;gap:2px;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}
+.nme{display:flex;align-items:center;gap:10px;padding:10px 10px 2px}.nme b{display:block;color:#fff;font-size:13.5px}.nme small{font-size:11.5px;opacity:.65}
+.nme .aav{width:32px;height:32px}
+/* barre du bas (téléphone) */
+.abot{position:fixed;left:0;right:0;bottom:0;z-index:15;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid #e3e9f3;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.abot button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:12px;color:#8a96ad;font-size:11px;font-weight:700;position:relative;min-width:0}
+.abot button span:not(.nbadge){max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.abot button[aria-current="page"]{color:var(--lapis)}
+.abot button[aria-current="page"] svg{background:var(--lapis-soft);border-radius:10px;padding:3px;width:30px;height:28px;margin:-3px 0}
+.abot .nbadge{position:absolute;top:2px;right:calc(50% - 22px);min-width:17px;height:17px;font-size:10px;padding:0 4px;margin:0}
+.moresheet{max-width:520px}
+.moregrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.moregrid button,.moregrid a{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;border-radius:16px;background:#f3f6fb;color:var(--ink);font-weight:700;font-size:13px;text-decoration:none;position:relative;text-align:center}
+.moregrid .on{background:var(--lapis);color:#fff}
+.moregrid .nbadge{position:absolute;top:8px;right:8px;margin:0}
+@media (max-width:899px){
+  .atop{padding:10px 14px}.atop .tlogo{display:block}.atop h1{font-size:20px}.atop p{font-size:12px}
+  #main{padding:12px 12px calc(90px + env(safe-area-inset-bottom,0px))}
+  .amodal{z-index:30}
+}
+/* indicateurs */
+.kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpis.k2{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kpi{border-radius:18px;padding:16px;box-shadow:0 1px 0 rgba(20,33,61,.04),0 8px 24px rgba(20,33,61,.06);min-width:0}
+.kpi b{font-size:30px;line-height:1.15}.kpi span{display:block;font-size:12px;color:var(--stone);margin-top:2px}
+.kpi.hl{background:linear-gradient(140deg,#1c3a96,#2e5ff0);color:#fff}.kpi.hl small,.kpi.hl span{color:rgba(255,255,255,.8)}.kpi.hl b{color:#fff}
+.kpi.flat{box-shadow:none;background:#f3f6fb;padding:12px}.kpi.flat b{font-size:24px}
+@media (max-width:899px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mchart{width:100%;height:auto;display:block}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--stone);font-weight:700}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.hbars{display:grid;gap:10px}
+.hbar{display:grid;grid-template-columns:minmax(0,120px) 1fr 52px;gap:10px;align-items:center;font-size:14px}
+.hbar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hbar div{height:9px;border-radius:9px;background:#e6ecf6;overflow:hidden}.hbar i{display:block;height:100%;background:var(--lapis);border-radius:9px}.hbar b{text-align:right;font-variant-numeric:tabular-nums}
+.alerts{display:flex;flex-wrap:wrap;gap:10px}
+.alert{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;background:#eef3ff;color:var(--lapis-deep);font-size:14px;text-align:left}
+.alert.gold{background:#fff6dc;color:#8a5a00}
+.skel{height:90px;border-radius:14px;background:linear-gradient(90deg,#edf1f8,#f7f9fc,#edf1f8);background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+/* annonceur, lien de suivi, messages */
+.advbox{background:#f6f8fc;border-radius:16px;padding:14px;box-shadow:0 0 0 1.5px var(--line)}
+.linkbox{display:flex;gap:8px}.linkbox input{flex:1;font-size:13px!important;background:#f6f8fc!important}
+.msgs{display:grid;gap:10px}
+.msg{border-radius:16px;padding:14px;background:#f6f8fc;display:grid;gap:8px}
+.msg.unread{background:#eef3ff;box-shadow:inset 3px 0 0 var(--lapis)}
+.msg .mhd,.msg .mft{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.msg .sp{flex:1}
+.msg .mtx{font-size:14.5px;line-height:1.5;white-space:normal;overflow-wrap:anywhere}
+.acard{align-content:start}
+.hbar{grid-template-columns:minmax(0,140px) 1fr 52px}
+.abot .nbadge.dot{min-width:10px;width:10px;height:10px;padding:0;top:4px;right:calc(50% - 16px)}
+#adForm[hidden]{display:none!important}
+#us{flex:1 1 200px!important;min-width:0}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<header class="ahead"><b>✝️ Parcours Biblique · Admin</b></header><nav class="anav" id="nav"></nav><main id="main"></main><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* ---------- Avatars personnalisés « av1:… » ----------
+<div class="ashell"><aside class="aside" id="nav"></aside><div class="acol"><header class="atop" id="atop"></header><main id="main"></main></div></div><nav class="abot" id="abot"></nav><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* ---------- Avatars personnalisés « av1:… » ----------
    Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
    Ordre des réglages : peau, coiffure, couleur cheveux, barbe, lunettes, couvre-chef, vêtement, fond, yeux, bouche. */
 const AVB={
@@ -1018,39 +1100,22 @@ async function boot2(){$("main").innerHTML=`<div class="acard narrow">Connexion�
   if(!data.session){renderLogin();return;}curUid=data.session.user.id;
   try{A.me=await rpc("get_my_profile");}catch(e){A.me=null;}
   if(!A.me||!A.me.is_admin){$("main").innerHTML=`<div class="acard narrow"><h2>Accès refusé</h2><p>Le compte <b>${esc(data.session.user.email)}</b> n'est pas administrateur. Demande à un administrateur de te donner les droits depuis l'onglet Joueurs.</p><button class="btn ghost" id="out">Se déconnecter</button></div>`;$("out").onclick=()=>sb.auth.signOut();$("nav").innerHTML="";return;}
-  renderNav();renderTab();}
-function renderLogin(){$("nav").innerHTML="";
+  document.body.classList.add("logged");renderNav();renderTab();refreshBadges();}
+function renderLogin(){document.body.classList.remove("logged");$("nav").innerHTML="";$("abot").innerHTML="";$("atop").innerHTML="";
   $("main").innerHTML=`<div class="acard narrow"><div class="eyebrow">Parcours Biblique</div><h2>Espace admin</h2><p class="muted">Connecte-toi avec le compte Google administrateur (le même que dans le jeu).</p>
   <button class="gbtn" id="g">Continuer avec Google</button><div id="m" class="muted"></div></div>`;
   $("g").onclick=async()=>{$("m").textContent="Ouverture de Google…";try{localStorage.setItem("pb-after-login","admin");}catch(e){}const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/",queryParams:{prompt:"select_account"}}});if(error)$("m").textContent=err(error);};}
-const TABS=[["home","📊 Vue d'ensemble"],["users","👥 Joueurs"],["matches","⚔️ Parties"],["rank","🏆 Classement"],["prizes","🎁 Prix"],["ads","📣 Annonces"],["questions","❓ Questions"]];
-function renderNav(){$("nav").innerHTML=TABS.map(([k,l])=>`<button data-t="${k}" aria-pressed="${A.tab===k}">${l}</button>`).join("")+`<span class="sp"></span><small class="muted">${esc(A.me.display_name)}</small><button class="textlink" id="out">Déconnexion</button><a class="textlink" href="index.html">Ouvrir le jeu</a>`;
-  $("nav").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{A.tab=b.dataset.t;try{localStorage.setItem("pb-admin-tab",A.tab);}catch(e){}renderNav();renderTab();});$("out").onclick=()=>sb.auth.signOut();}
 /* Sur mobile, chaque cellule reçoit le titre de sa colonne (les tableaux s'affichent en fiches). */
 function labelTables(){document.querySelectorAll("#main table.tbl").forEach(t=>{const hr=[...t.querySelectorAll("tr")].find(r=>r.querySelector("th"));if(!hr)return;
   const heads=[...hr.children].map(th=>th.textContent.trim());t.querySelectorAll("tr").forEach(r=>{if(r===hr)return;[...r.children].forEach((td,i)=>{if(td.tagName==="TD"&&!td.hasAttribute("data-l")&&!td.hasAttribute("colspan"))td.setAttribute("data-l",heads[i]||"");});});});}
 new MutationObserver(()=>labelTables()).observe(document.getElementById("main"),{childList:true,subtree:true});
-function renderTab(){$("main").innerHTML=`<div class="acard">Chargement…</div>`;({home:tHome,users:tUsers,matches:tMatches,rank:tRank,prizes:tPrizes,ads:tAds,questions:tQuestions})[A.tab]().catch(e=>{$("main").innerHTML=`<div class="acard"><b>Erreur</b><p>${esc(err(e))}</p></div>`;});}
-
-/* ---- Vue d'ensemble ---- */
-async function tHome(){const o=await rpc("admin_overview");const qb=o.questions_by||{};const cell=(t,d)=>qb[t+"-"+d]||0;
-  $("main").innerHTML=`<div class="kpis">${[["Joueurs",o.users],["Parties en ligne",o.matches_online],["Parties entre amis",o.matches_friend],["Parties ce mois",o.month_matches],["En cours",o.playing_now],["En recherche",o.in_queue],["Questions actives",o.questions],["Comptes suspendus",o.banned]].map(([l,v])=>`<div class="kpi"><small>${l}</small><b>${v}</b></div>`).join("")}</div>
-  <div class="acard"><h3>Banque de questions en ligne</h3><table class="tbl"><tr><th></th><th>Facile</th><th>Moyen</th><th>Difficile</th></tr>${["AT","NT"].map(t=>`<tr><th>${t==="AT"?"Ancien Testament":"Nouveau Testament"}</th>${["facile","moyen","difficile"].map(d=>`<td>${cell(t,d)}</td>`).join("")}</tr>`).join("")}</table>
-  <p class="muted">Chaque partie tire 10 questions au hasard : 5 de l'Ancien et 5 du Nouveau Testament, 3 faciles, 4 moyennes et 3 difficiles, dans un ordre mélangé.</p>
-  <div class="row"><button class="btn small" id="imp" style="width:auto">⬆️ Importer la banque du jeu (≈ 2 400 questions)</button><span id="impMsg" class="muted"></span></div>
-  <p class="muted" style="font-size:12.5px">L'import ajoute les questions des 488 niveaux du jeu. Les questions déjà importées ne sont pas dupliquées : tu peux le relancer sans risque.</p></div>`;
-  $("imp").onclick=async()=>{const b=$("imp");b.disabled=true;$("impMsg").textContent="Téléchargement…";
-    try{const rows=await (await fetch("seed/questions.json",{cache:"no-store"})).json();let added=0;
-      for(let i=0;i<rows.length;i+=200){$("impMsg").textContent=`Import ${Math.min(i+200,rows.length)}/${rows.length}…`;added+=await rpc("admin_import_questions",{p_rows:rows.slice(i,i+200)});}
-      toast(`${added} nouvelle(s) question(s) importée(s).`);tHome();}catch(e){b.disabled=false;$("impMsg").textContent=err(e);}};}
-
 /* ---- Joueurs ---- */
 async function tUsers(){const list=await rpc("admin_users",{p_search:A.users});
   $("main").innerHTML=`<div class="acard"><div class="row"><input id="us" placeholder="Rechercher : nom, e-mail ou code" value="${esc(A.users)}" style="flex:1"><button class="btn small" id="usGo" style="width:auto">Rechercher</button></div>
-  <table class="tbl"><tr><th>Joueur</th><th>E-mail</th><th>Code</th><th>Parties</th><th>Inscrit</th><th>Statut</th><th></th></tr>
-  ${list.map(u=>`<tr class="${u.banned?"off":""}"><td><span class="aav">${adAv(u.avatar)}</span> <b>${esc(u.display_name)}</b></td><td>${esc(u.email)}</td><td><code>${esc(u.referral_code)}</code></td><td>${u.played}</td><td>${fmtD(u.created_at)}</td>
+  <p class="muted" style="margin:0;font-size:13px">${list.length} joueur${list.length>1?"s":""}${list.length>=300?" (300 plus récents)":""} · recherche aussi par ville</p><table class="tbl"><tr><th>Joueur</th><th>E-mail</th><th>Ville</th><th>Parties</th><th>Parrainés</th><th>Dernière activité</th><th>Inscrit</th><th>Statut</th><th></th></tr>
+  ${list.map(u=>`<tr class="${u.banned?"off":""}"><td><span class="aav">${adAv(u.avatar)}</span> <b>${esc(u.display_name)}</b></td><td>${esc(u.email)}<br><small class="muted">Code <code>${esc(u.referral_code)}</code></small></td><td>${esc(u.city||"–")}${u.country?`<br><small class="muted">${esc(u.country)}</small>`:""}</td><td>${u.played}</td><td>${u.referrals||0}</td><td>${u.last_seen?fmtD(u.last_seen):"–"}</td><td>${fmtD(u.created_at)}</td>
     <td>${u.is_admin?`<span class="pill2 adm">Admin</span>`:""}${u.banned?`<span class="pill2 ban">Suspendu</span>`:`<span class="pill2 ok">Actif</span>`}</td>
-    <td class="acts"><button class="textlink" data-ban="${u.id}" data-v="${!u.banned}">${u.banned?"Réactiver":"Suspendre"}</button>${u.id===A.me.id?"":`<button class="textlink" data-adm="${u.id}" data-v="${!u.is_admin}">${u.is_admin?"Retirer admin":"Rendre admin"}</button>`}</td></tr>`).join("")||`<tr><td colspan="7" class="muted">Aucun joueur.</td></tr>`}</table></div>`;
+    <td class="acts"><button class="textlink" data-ban="${u.id}" data-v="${!u.banned}">${u.banned?"Réactiver":"Suspendre"}</button>${u.id===A.me.id?"":`<button class="textlink" data-adm="${u.id}" data-v="${!u.is_admin}">${u.is_admin?"Retirer admin":"Rendre admin"}</button>`}</td></tr>`).join("")||`<tr><td colspan="9" class="muted">Aucun joueur.</td></tr>`}</table></div>`;
   $("usGo").onclick=()=>{A.users=$("us").value.trim();tUsers();};$("us").onkeydown=e=>{if(e.key==="Enter")$("usGo").click();};
   document.querySelectorAll("[data-ban]").forEach(b=>b.onclick=async()=>{const v=b.dataset.v==="true";if(v&&!confirm("Suspendre ce joueur ? Il ne pourra plus jouer en ligne et disparaîtra du classement."))return;try{await rpc("admin_set_user",{p_user:b.dataset.ban,p_banned:v,p_admin:null});toast(v?"Joueur suspendu.":"Joueur réactivé.");tUsers();}catch(e){toast(err(e),1);}});
   document.querySelectorAll("[data-adm]").forEach(b=>b.onclick=async()=>{const v=b.dataset.v==="true";if(!confirm(v?"Donner les droits d'administrateur à ce joueur ?":"Retirer ses droits d'administrateur ?"))return;try{await rpc("admin_set_user",{p_user:b.dataset.adm,p_banned:null,p_admin:v});toast("Droits mis à jour.");tUsers();}catch(e){toast(err(e),1);}});}
@@ -1107,7 +1172,7 @@ async function tQuestions(){const f=A.q;let q=sb.from("questions").select("*",{c
   if(f.t)q=q.eq("testament",f.t);if(f.d)q=q.eq("difficulty",f.d);if(f.k)q=q.eq("kind",f.k);if(f.act)q=q.eq("active",f.act==="1");if(f.s)q=q.or(`prompt.ilike.%${f.s}%,sentence.ilike.%${f.s}%,book.ilike.%${f.s}%`);
   const {data,count,error}=await q;if(error)throw error;const pages=Math.max(1,Math.ceil((count||0)/PAGE));
   const sel=(id,v,opts)=>`<select id="${id}">${opts.map(([k,l])=>`<option value="${k}"${v===k?" selected":""}>${l}</option>`).join("")}</select>`;
-  $("main").innerHTML=`<div class="acard"><div class="row wrap">${sel("ft",f.t,[["","Tous testaments"],["AT","Ancien T."],["NT","Nouveau T."]])}${sel("fd",f.d,[["","Toutes difficultés"],["facile","Facile"],["moyen","Moyen"],["difficile","Difficile"]])}${sel("fk",f.k,[["","Tous types"],["qcm","QCM"],["tf","Vrai / faux"],["fill","Verset à compléter"]])}${sel("fa",f.act,[["1","Actives"],["0","Désactivées"],["","Toutes"]])}
+  $("main").innerHTML=`<div class="acard" id="bank"><h3>Banque de questions en ligne</h3><p class="muted">Chargement…</p></div><div class="acard"><div class="row wrap">${sel("ft",f.t,[["","Tous testaments"],["AT","Ancien T."],["NT","Nouveau T."]])}${sel("fd",f.d,[["","Toutes difficultés"],["facile","Facile"],["moyen","Moyen"],["difficile","Difficile"]])}${sel("fk",f.k,[["","Tous types"],["qcm","QCM"],["tf","Vrai / faux"],["fill","Verset à compléter"]])}${sel("fa",f.act,[["1","Actives"],["0","Désactivées"],["","Toutes"]])}
     <input id="fs" placeholder="Rechercher…" value="${esc(f.s)}" style="flex:1;min-width:160px"><button class="btn small" id="fgo" style="width:auto">Filtrer</button><button class="btn small good" id="qnew" style="width:auto">＋ Nouvelle question</button></div>
   <p class="muted" style="margin:8px 0">${count||0} question(s) · page ${f.page+1}/${pages}</p>
   <table class="tbl"><tr><th>#</th><th>Question</th><th>Livre</th><th>Type</th><th>Niveau</th><th></th></tr>
@@ -1118,7 +1183,7 @@ async function tQuestions(){const f=A.q;let q=sb.from("questions").select("*",{c
   $("fs").onkeydown=e=>{if(e.key==="Enter")$("fgo").click();};
   $("pp").onclick=()=>{f.page--;tQuestions();};$("pn").onclick=()=>{f.page++;tQuestions();};$("qnew").onclick=()=>qEdit(null);
   document.querySelectorAll("[data-qe]").forEach(b=>b.onclick=()=>qEdit(data.find(x=>x.id==b.dataset.qe)));
-  document.querySelectorAll("[data-qa]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("questions").update({active:b.dataset.v==="true"}).eq("id",b.dataset.qa);if(error)toast(err(error),1);else tQuestions();});}
+  document.querySelectorAll("[data-qa]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("questions").update({active:b.dataset.v==="true"}).eq("id",b.dataset.qa);if(error)toast(err(error),1);else tQuestions();});bankCard();}
 function ansText(x){if(x.kind==="tf")return x.answer?"Vrai":"Faux";if(x.kind==="fill")return (x.options||[])[x.answer]||"";return (Array.isArray(x.answer)?x.answer:[x.answer]).map(i=>(x.options||[])[i]).join(", ");}
 function qEdit(x){const n=!x;x=x||{kind:"qcm",prompt:"",sentence:"",options:["","","",""],answer:[0],difficulty:"moyen",testament:"AT",book:"",ref:"",explanation:"",active:true};
   const opts=(x.options||["","","",""]).concat(["","","",""]).slice(0,4),good=x.kind==="qcm"?(Array.isArray(x.answer)?x.answer[0]:x.answer):x.kind==="fill"?x.answer:0;
@@ -1162,25 +1227,23 @@ async function tAds(){
   const now=Date.now();
   const status=a=>a.archived?["Archivée","off"]:!a.active?["En pause","off"]:a.starts_at&&new Date(a.starts_at)>now?["Programmée","wait"]:a.ends_at&&new Date(a.ends_at)<=now?["Terminée","off"]:["En diffusion","on"];
   const showArch=!!A.adArch;const list=ads.filter(a=>showArch||!a.archived);
-  $("main").innerHTML=`<div class="acard" id="adForm"></div>
-  <div class="acard"><h3>Annonces</h3><p class="muted" style="font-size:13px">Les annonces d'une même ville tournent à parts égales : le jeu montre toujours celle que le joueur a le moins vue, puis la moins vue au total.</p>
+  $("main").innerHTML=`<div class="acard" id="adForm" hidden></div>
+  <div class="acard"><div class="row"><h3 style="flex:1;margin:0">Annonces</h3><button class="btn small" id="adNewTop" style="width:auto">＋ Nouvelle annonce</button></div><p class="muted" style="font-size:13px">Les annonces d'une même ville tournent à parts égales : le jeu montre toujours celle que le joueur a le moins vue, puis la moins vue au total.</p>
    <table class="tbl"><tr><th>Annonce</th><th>Villes</th><th>Diffusion</th><th>Période</th><th>Statistiques</th><th></th></tr>
    ${list.map(a=>{const s=st[a.id]||{},[sl,sc]=status(a),ctr=s.views?Math.round(s.clicks/s.views*1000)/10:0;
-     return `<tr class="${sc==="off"?"off":""}"><td>${a.image_url?`<img src="${esc(a.image_url)}" alt="" class="pthumb">`:""}<b>${esc(a.title)}</b><br><small class="muted">${esc(a.body||"")}</small><br><span class="stag ${sc}">${sl}</span></td>
+     return `<tr class="${sc==="off"?"off":""}"><td>${a.image_url?`<img src="${esc(a.image_url)}" alt="" class="pthumb">`:""}<b>${esc(a.title)}</b>${a.advertiser_name?`<br><small>👤 ${esc(a.advertiser_name)}${a.price?` · <b>${Number(a.price).toLocaleString("fr-FR")} ${esc(a.currency||"USD")}</b>`:""}</small>`:""}<br><small class="muted">${esc(a.body||"")}</small><br><span class="stag ${sc}">${sl}</span></td>
      <td>${a.cities&&a.cities.length?a.cities.map(k=>`<span class="ctag">${esc(lab(k))}</span>`).join(" "):"<b>Toutes les villes</b>"}</td>
      <td>${[a.show_banner?"📣 Bandeau":"",a.show_reward?"▶️ Récompense":"",a.video_url?`🎬 Vidéo${a.duration_s?" · "+a.duration_s+" s":""}`:a.duration_s?`⏱️ ${a.duration_s} s`:"",a.audio_url?"🎵 Musique":""].filter(Boolean).join("<br>")||"<span class='muted'>Aucune</span>"}</td>
      <td><small>${a.starts_at?"Du "+fmtD(a.starts_at):"Dès maintenant"}<br>${a.ends_at?"Au "+fmtD(a.ends_at):"Sans fin"}</small></td>
      <td><small><b>${s.views||0}</b> vues · <b>${s.people||0}</b> personnes<br><b>${s.clicks||0}</b> clics (${ctr} %) · <b>${s.rewards||0}</b> récompenses<br><span class="muted">${s.views_24h||0} vues sur 24 h</span></small></td>
-     <td class="acts"><button class="textlink" data-ae="${a.id}">Modifier</button>${a.archived?`<button class="textlink" data-aa="${a.id}" data-v="false">Restaurer</button>`:`<button class="textlink" data-ap="${a.id}" data-v="${!a.active}">${a.active?"Mettre en pause":"Activer"}</button><button class="textlink" data-aa="${a.id}" data-v="true">Archiver</button>`}</td></tr>`;}).join("")||`<tr><td colspan="6" class="muted">Aucune annonce pour l'instant.</td></tr>`}</table>
+     <td class="acts"><button class="textlink" data-sr="${a.id}">🔗 Lien de suivi</button><button class="textlink" data-ae="${a.id}">Modifier</button>${a.archived?`<button class="textlink" data-aa="${a.id}" data-v="false">Restaurer</button>`:`<button class="textlink" data-ap="${a.id}" data-v="${!a.active}">${a.active?"Mettre en pause":"Activer"}</button><button class="textlink" data-aa="${a.id}" data-v="true">Archiver</button>`}</td></tr>`;}).join("")||`<tr><td colspan="6" class="muted">Aucune annonce pour l'instant.</td></tr>`}</table>
    <button class="textlink" id="adArch">${showArch?"Masquer les annonces archivées":"Voir les annonces archivées"}</button></div>
-  <div class="acard"><h3>Réglages</h3><p class="muted" style="font-size:13px">S'appliquent à tous les joueurs, sans mise à jour du jeu.</p>
-   <div class="grid2">${AD_FIELDS.map(([k,l,h])=>`<div class="field"><label for="as_${k}">${l}</label><input type="number" min="0" max="999" id="as_${k}" value="${S[k]??""}">${h?`<small class="muted">${h}</small>`:""}</div>`).join("")}</div>
-   <div class="row"><button class="btn small" id="asSave" style="width:auto">Enregistrer les réglages</button></div></div>`;
-  adForm(null,cities,lab);
+</div>`;
+  adForm(null,cities,lab);if(adDraftGet()||A.adOpen)$("adForm").hidden=false;
+  $("adNewTop").onclick=()=>{adDraftClear();adForm(null,cities,lab);$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});};
   $("adArch").onclick=()=>{A.adArch=!showArch;tAds();};
-  $("asSave").onclick=async()=>{const row={};for(const [k] of AD_FIELDS){const v=parseInt($("as_"+k).value,10);if(!(v>=0)){toast("Valeur invalide : "+AD_FIELDS.find(f=>f[0]===k)[1],1);return;}row[k]=v;}
-    const {error}=await sb.from("ad_settings").update(row).eq("id",1);if(error)toast(err(error),1);else toast("Réglages enregistrés.");};
-  document.querySelectorAll("[data-ae]").forEach(b=>b.onclick=()=>{adDraftClear();adForm(ads.find(x=>x.id==b.dataset.ae),cities,lab);window.scrollTo({top:0,behavior:"smooth"});});
+  document.querySelectorAll("[data-sr]").forEach(b=>b.onclick=()=>shareReport(ads.find(x=>x.id==b.dataset.sr)));
+  document.querySelectorAll("[data-ae]").forEach(b=>b.onclick=()=>{adDraftClear();adForm(ads.find(x=>x.id==b.dataset.ae),cities,lab);$("adForm").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
   document.querySelectorAll("[data-ap]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("ads").update({active:b.dataset.v==="true"}).eq("id",b.dataset.ap);if(error)toast(err(error),1);else tAds();});
   document.querySelectorAll("[data-aa]").forEach(b=>b.onclick=async()=>{const arch=b.dataset.v==="true";if(arch&&!confirm("Archiver cette annonce ? Elle ne sera plus diffusée (ses statistiques sont conservées)."))return;
     const {error}=await sb.from("ads").update(arch?{archived:true,active:false}:{archived:false}).eq("id",b.dataset.aa);if(error)toast(err(error),1);else tAds();});}
@@ -1193,7 +1256,13 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
   let sel=[...(a.cities||[])];let all=a.all!==undefined?a.all:!sel.length;
   const f=$("adForm");
   f.innerHTML=`<h3>${n?"Nouvelle annonce":"Modifier l'annonce"}</h3><p class="muted" style="font-size:13px">Exemple : un concert, une conférence, une campagne d'une organisation partenaire. Le joueur qui touche l'annonce ouvre le lien.</p>
-  <div class="grid2"><div class="field"><label for="aT">Titre</label><input id="aT" maxlength="80" value="${esc(a.title)}" placeholder="Ex. Concert de louange · 14 décembre"></div>
+  <div class="grid2"><div class="field span2 advbox"><div class="eyebrow">Annonceur</div><div class="grid2">
+     <div class="field"><label for="aAn">Nom de l'annonceur</label><input id="aAn" maxlength="80" value="${esc(a.advertiser_name||"")}" placeholder="Ex. Chantre Moïse Mbiye"></div>
+     <div class="field"><label for="aAc">Contact (WhatsApp ou e-mail)</label><input id="aAc" maxlength="80" value="${esc(a.advertiser_contact||"")}" placeholder="Ex. +243 …"></div>
+     <div class="field"><label for="aPr">Montant payé (facultatif)</label><div class="row"><input id="aPr" type="number" min="0" step="0.01" value="${a.price??""}" placeholder="0" style="flex:1"><select id="aCu">${["USD","CDF","EUR"].map(c=>`<option${(a.currency||"USD")===c?" selected":""}>${c}</option>`).join("")}</select></div></div>
+     <div class="field"><label for="aNo">Note interne (facultatif)</label><input id="aNo" maxlength="200" value="${esc(a.notes||"")}" placeholder="Ex. payé par M-Pesa le 5/11"></div></div>
+     <small class="muted">Le nom apparaît dans le message de remerciement de sa page de suivi. Le montant et la note restent privés.</small></div>
+   <div class="field"><label for="aT">Titre</label><input id="aT" maxlength="80" value="${esc(a.title)}" placeholder="Ex. Concert de louange · 14 décembre"></div>
    <div class="field"><label for="aC">Texte du bouton</label><input id="aC" maxlength="24" value="${esc(a.cta||"")}" placeholder="Ex. Réserver"></div>
    <div class="field span2"><label for="aB">Texte court (facultatif)</label><textarea id="aB" rows="2" maxlength="180" placeholder="Ex. Stade des Martyrs, 18 h. Billets dès 5 $.">${esc(a.body||"")}</textarea></div>
    <div class="field span2"><label for="aL">Lien (réservation, inscription, page…)</label><input id="aL" type="url" value="${esc(a.link_url||"")}" placeholder="https://…"></div>
@@ -1212,8 +1281,8 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
      <label class="chk"><input type="checkbox" id="aMR"${a.show_reward?" checked":""}> ▶️ Annonce à regarder pour gagner une vie ou une aide</label></div>
    <div class="field"><label for="aS">Début (facultatif)</label><input type="datetime-local" id="aS" value="${toLocalInput(a.starts_at)}"></div>
    <div class="field"><label for="aE">Fin (facultatif)</label><input type="datetime-local" id="aE" value="${toLocalInput(a.ends_at)}"></div></div>
-  <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button>${n?"":`<button class="textlink" id="aNew">Nouvelle annonce</button>`}</div>`;
-  const draftRow=()=>({title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,audio_url:$("aU").value,video_url:$("aV").value,duration_s:$("aD").value?+$("aD").value:null,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
+  <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button><button class="textlink" id="aCancel">Fermer</button>${n?"":`<button class="textlink" id="aNew">Nouvelle annonce</button>`}</div>`;
+  const draftRow=()=>({advertiser_name:$("aAn").value,advertiser_contact:$("aAc").value,price:$("aPr").value,currency:$("aCu").value,notes:$("aNo").value,title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,audio_url:$("aU").value,video_url:$("aV").value,duration_s:$("aD").value?+$("aD").value:null,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
   const saveDraft=()=>{try{localStorage.setItem(AD_DRAFT,JSON.stringify({id:n?null:a.id,row:draftRow()}));}catch(e){}};
   const setVid=u=>{$("aV").value=u||"";$("aVidPrev").innerHTML=u?`<video controls playsinline preload="metadata" src="${esc(u)}" style="width:100%;max-height:260px;border-radius:12px;background:#000"></video>`:"";$("aVidClr").hidden=!u;};setVid(a.video_url);
   $("aVidClr").onclick=()=>{setVid("");saveDraft();};
@@ -1248,8 +1317,9 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
   $("aCityIn").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();$("aCityAdd").click();}};
   f.querySelectorAll("[data-qc]").forEach(b=>b.onclick=()=>addCity(b.dataset.qc));
   $("aAll").onchange=()=>{$("aCityBox").hidden=$("aAll").checked;};
+  $("aCancel").onclick=()=>{adDraftClear();$("adForm").hidden=true;};
   const nw=$("aNew");if(nw)nw.onclick=()=>{adDraftClear();adForm(null,cities,lab);};
-  $("aSave").onclick=async()=>{const row={title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,video_url:$("aV").value||null,duration_s:$("aD").value?Math.min(120,Math.max(3,parseInt($("aD").value,10)||0)):null,
+  $("aSave").onclick=async()=>{const row={advertiser_name:$("aAn").value.trim()||null,advertiser_contact:$("aAc").value.trim()||null,price:$("aPr").value!==""?Math.max(0,+$("aPr").value):null,currency:$("aCu").value,notes:$("aNo").value.trim()||null,title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,video_url:$("aV").value||null,duration_s:$("aD").value?Math.min(120,Math.max(3,parseInt($("aD").value,10)||0)):null,
       cities:$("aAll").checked?[]:sel,show_banner:$("aMB").checked,show_reward:$("aMR").checked,
       starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null};
     if(!row.title){toast("Donne un titre à l'annonce.",1);return;}
@@ -1257,7 +1327,136 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
     if(!row.show_banner&&!row.show_reward){toast("Choisis au moins un mode de diffusion.",1);return;}
     if(!$("aAll").checked&&!sel.length){toast("Ajoute au moins une ville, ou coche « Toutes les villes ».",1);return;}
     if(row.starts_at&&row.ends_at&&row.ends_at<=row.starts_at){toast("La fin doit être après le début.",1);return;}
-    const {error}=n?await sb.from("ads").insert(row):await sb.from("ads").update(row).eq("id",a.id);
-    if(error)toast(err(error),1);else{adDraftClear();toast(n?"Annonce publiée.":"Annonce enregistrée.");tAds();}};
+    const res=n?await sb.from("ads").insert(row).select().single():await sb.from("ads").update(row).eq("id",a.id).select().single();
+    if(res.error)toast(err(res.error),1);else{adDraftClear();toast(n?"Annonce publiée.":"Annonce enregistrée.");await tAds();if(n&&res.data)shareReport(res.data,true);}};
   if(adDraftGet())$("aMsg").textContent="Brouillon restauré : ta saisie a été gardée.";}
+
+/* ---- Réglages (annonces, vies, parties en ligne) ---- */
+async function tSettings(){const {data:S}=await sb.from("ad_settings").select("*").eq("id",1).maybeSingle();const set=S||{};
+  $("main").innerHTML=`<div class="acard"><h3>Annonces, vies et aides</h3><p class="muted" style="font-size:13px">S'appliquent à tous les joueurs, sans mise à jour du jeu.</p>
+   <div class="grid2">${AD_FIELDS.map(([k,l,h])=>`<div class="field"><label for="as_${k}">${l}</label><input type="number" min="0" max="999" id="as_${k}" value="${set[k]??""}">${h?`<small class="muted">${h}</small>`:""}</div>`).join("")}</div>
+   <div class="row"><button class="btn small" id="asSave" style="width:auto">Enregistrer les réglages</button></div></div>`;
+  $("asSave").onclick=async()=>{const row={};for(const [k] of AD_FIELDS){const v=parseInt($("as_"+k).value,10);if(!(v>=0)){toast("Valeur invalide : "+AD_FIELDS.find(f=>f[0]===k)[1],1);return;}row[k]=v;}
+    const {error}=await sb.from("ad_settings").update(row).eq("id",1);if(error)toast(err(error),1);else toast("Réglages enregistrés.");};}
+
+/* ---- Lien de suivi à partager à l'annonceur ---- */
+const reportUrl=a=>location.origin+"/suivi?k="+a.report_token;
+function shareReport(a,fresh){if(!a||!a.report_token){toast("Lien indisponible pour cette annonce.",1);return;}const u=reportUrl(a);
+  const msg=`Bonjour${a.advertiser_name?" "+a.advertiser_name:""} 🙏\nMerci pour votre confiance ! Votre annonce « ${a.title} » est diffusée dans Parcours Biblique.\nSuivez ses résultats en direct (vues, portée, clics) ici :\n${u}`;
+  const phone=String(a.advertiser_contact||"").replace(/[^0-9]/g,"");
+  $("modal").innerHTML=`<div class="acard modalbox" style="max-width:560px"><h3>${fresh?"✅ Annonce publiée":"🔗 Lien de suivi"}</h3>
+    <p class="muted">Envoie ce lien à ${a.advertiser_name?esc(a.advertiser_name):"l'annonceur"} : il y verra ses statistiques en direct et pourra vous écrire. Le lien est secret, ne le publie pas.</p>
+    <div class="linkbox"><input id="srU" value="${esc(u)}" readonly><button class="btn small" id="srC" style="width:auto">Copier</button></div>
+    <div class="row wrap"><a class="btn small good" style="width:auto" target="_blank" rel="noopener" href="https://wa.me/${phone.length>=8?phone:""}?text=${encodeURIComponent(msg)}">WhatsApp</a><button class="btn small ghost" id="srM" style="width:auto">Copier le message complet</button><a class="btn small ghost" style="width:auto" href="${esc(u)}" target="_blank" rel="noopener">Ouvrir la page</a><span class="sp"></span><button class="textlink" id="srX">Fermer</button></div></div>`;
+  $("modal").hidden=false;
+  const copy=async(t,ok)=>{try{await navigator.clipboard.writeText(t);toast(ok);}catch(e){const i=$("srU");i.select();document.execCommand("copy");toast(ok);}};
+  $("srC").onclick=()=>copy(u,"Lien copié.");$("srM").onclick=()=>copy(msg,"Message copié.");$("srX").onclick=()=>{$("modal").hidden=true;};}
+
+/* ---- Messages des annonceurs ---- */
+async function tMessages(){const list=await rpc("admin_messages");
+  $("main").innerHTML=`<div class="acard"><div class="row"><h3 style="flex:1;margin:0">Messages reçus</h3>${list.some(m=>!m.is_read)?`<button class="btn small ghost" id="mAll" style="width:auto">Tout marquer comme lu</button>`:""}</div>
+   <p class="muted" style="font-size:13px">Envoyés par les annonceurs depuis leur page de suivi.</p>
+   <div class="msgs">${list.map(m=>{const ph=String(m.contact||"").replace(/[^0-9]/g,"");const mail=/@/.test(m.contact||"");
+     return `<div class="msg ${m.is_read?"":"unread"}"><div class="mhd"><b>${esc(m.name||"Sans nom")}</b>${m.is_read?"":`<span class="pill2 adm">Nouveau</span>`}<span class="sp"></span><small class="muted">${fmtD(m.created_at)}</small></div>
+       <div class="mtx">${esc(m.message).replace(/\n/g,"<br>")}</div>
+       <div class="mft"><small class="muted">📣 ${esc(m.ad_title||"Annonce supprimée")}${m.contact?` · ${esc(m.contact)}`:""}</small><span class="sp"></span>
+       ${ph.length>=8?`<a class="textlink" target="_blank" rel="noopener" href="https://wa.me/${ph}">Répondre sur WhatsApp</a>`:mail?`<a class="textlink" href="mailto:${esc(m.contact)}">Répondre par e-mail</a>`:""}
+       <button class="textlink" data-mr="${m.id}" data-v="${!m.is_read}">${m.is_read?"Marquer non lu":"Marquer lu"}</button></div></div>`;}).join("")||`<p class="muted">Aucun message pour l'instant. Les annonceurs peuvent vous écrire depuis leur lien de suivi.</p>`}</div></div>`;
+  document.querySelectorAll("[data-mr]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("ad_messages").update({is_read:b.dataset.v==="true"}).eq("id",b.dataset.mr);if(error)toast(err(error),1);else{tMessages();refreshBadges();}});
+  const all=$("mAll");if(all)all.onclick=async()=>{const {error}=await sb.from("ad_messages").update({is_read:true}).eq("is_read",false);if(error)toast(err(error),1);else{tMessages();refreshBadges();}};}
+
+/* ---- Coquille de l'admin : menu latéral (ordinateur), barre du bas + « Plus » (téléphone), en-tête de page ---- */
+const IC={
+  home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
+  ads:'<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>',
+  messages:'<path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1Z"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/>',
+  matches:'<path d="m14.5 17.5 6-6V4h-7.5l-6 6"/><path d="m4 15 5 5"/><path d="m3 21 3-3"/><path d="M9.5 3.5 3 10l4 4"/>',
+  rank:'<path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3v2a3 3 0 0 1-3 3"/><path d="M7 5H4v2a3 3 0 0 0 3 3"/>',
+  prizes:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+  questions:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7"/><path d="M12 17h.01"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
+  out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
+  game:'<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>'};
+const ico=(k,s=20)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]||""}</svg>`;
+const NAV=[
+  {g:"Pilotage",items:[["home","Tableau de bord","Activité, croissance et annonces en un coup d'œil"],["ads","Annonces","Créer, diffuser et suivre les annonces"],["messages","Messages","Ce que vous écrivent les annonceurs"]]},
+  {g:"Communauté",items:[["users","Joueurs","Comptes, villes, activité"],["matches","Parties","Parties en ligne et entre amis"],["rank","Classement","Le meilleur disciple du mois"],["prizes","Prix","Prix du mois et demandes des gagnants"]]},
+  {g:"Contenu",items:[["questions","Questions","Banque de questions des défis en ligne"]]},
+  {g:"Système",items:[["settings","Réglages","Annonces, vies, aides et parties en ligne"]]}];
+const NAV_FLAT=NAV.flatMap(g=>g.items);
+const BOTTOM=["home","ads","messages","users"];
+const BADGE={messages:0,prizes:0};
+if(!NAV_FLAT.some(x=>x[0]===A.tab))A.tab="home";
+function setTab(k){A.tab=k;try{localStorage.setItem("pb-admin-tab",k);}catch(e){}$("modal").hidden=true;renderNav();renderTab();window.scrollTo({top:0});}
+const badge=k=>BADGE[k]?`<span class="nbadge">${BADGE[k]>99?"99+":BADGE[k]}</span>`:"";
+function renderNav(){const me=A.me||{};
+  $("nav").innerHTML=`<div class="abrand"><img src="icons/icon-192.png" alt=""><div><b>Parcours Biblique</b><small>Administration</small></div></div>
+   ${NAV.map(g=>`<div class="ngroup"><small>${g.g}</small>${g.items.map(([k,l])=>`<button class="nitem" data-t="${k}" aria-current="${A.tab===k?"page":"false"}">${ico(k)}<span>${l}</span>${badge(k)}</button>`).join("")}</div>`).join("")}
+   <div class="nfoot"><a class="nitem" href="index.html" target="_blank" rel="noopener">${ico("game")}<span>Ouvrir le jeu</span></a><button class="nitem" id="out">${ico("out")}<span>Déconnexion</span></button>
+   <div class="nme"><span class="aav">${typeof adAv==="function"?adAv(me.avatar):"🙂"}</span><span><b>${esc(me.display_name||"")}</b><small>Administrateur</small></span></div></div>`;
+  const cur=NAV_FLAT.find(x=>x[0]===A.tab)||NAV_FLAT[0];
+  $("atop").innerHTML=`<div class="tleft"><img class="tlogo" src="icons/icon-192.png" alt=""><div><h1>${cur[1]}</h1><p>${cur[2]}</p></div></div><button class="tref" id="tRef" aria-label="Actualiser" title="Actualiser"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>`;
+  const inMore=!BOTTOM.includes(A.tab);
+  $("abot").innerHTML=BOTTOM.map(k=>{const it=NAV_FLAT.find(x=>x[0]===k);return `<button data-t="${k}" aria-current="${A.tab===k?"page":"false"}">${ico(k,22)}<span>${it[1]==="Tableau de bord"?"Accueil":it[1]}</span>${badge(k)}</button>`;}).join("")+`<button id="bMore" aria-current="${inMore?"page":"false"}">${ico("more",22)}<span>${inMore?cur[1]:"Plus"}</span>${BADGE.prizes&&!inMore?`<span class="nbadge dot"></span>`:""}</button>`;
+  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+  $("out").onclick=()=>{if(confirm("Se déconnecter de l'administration ?"))sb.auth.signOut();};
+  $("tRef").onclick=()=>{renderTab();refreshBadges();};
+  $("bMore").onclick=()=>{$("modal").innerHTML=`<div class="acard modalbox moresheet"><h3>Plus</h3><div class="moregrid">${NAV_FLAT.filter(x=>!BOTTOM.includes(x[0])).map(([k,l])=>`<button data-t="${k}" class="${A.tab===k?"on":""}">${ico(k,24)}<span>${l}</span>${badge(k)}</button>`).join("")}
+      <a href="index.html" target="_blank" rel="noopener">${ico("game",24)}<span>Ouvrir le jeu</span></a><button id="mOut">${ico("out",24)}<span>Déconnexion</span></button></div><button class="btn ghost small" id="mClose">Fermer</button></div>`;
+    $("modal").hidden=false;$("modal").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));$("mClose").onclick=()=>{$("modal").hidden=true;};$("mOut").onclick=()=>{if(confirm("Se déconnecter ?"))sb.auth.signOut();};};}
+function renderTab(){$("main").innerHTML=`<div class="acard"><div class="skel"></div></div>`;
+  ({home:tHome,users:tUsers,matches:tMatches,rank:tRank,prizes:tPrizes,ads:tAds,messages:tMessages,questions:tQuestions,settings:tSettings})[A.tab]().catch(e=>{$("main").innerHTML=`<div class="acard"><b>Erreur</b><p>${esc(err(e))}</p></div>`;});}
+async function refreshBadges(){try{const o=await rpc("admin_activity");A.act=o;const m=+o.unread||0,p=+o.claims_new||0;if(m!==BADGE.messages||p!==BADGE.prizes){BADGE.messages=m;BADGE.prizes=p;renderNav();}}catch(e){}}
+setInterval(()=>{if(document.body.classList.contains("logged")&&document.visibilityState==="visible")refreshBadges();},60000);
+// Retour sur l'onglet du navigateur : on actualise les compteurs sans recharger la page.
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&document.body.classList.contains("logged"))refreshBadges();});
+
+/* ---- Tableau de bord ---- */
+const n0=v=>Number(v||0).toLocaleString("fr-FR");
+function miniChart(series){const W=640,H=180,P={l:30,r:6,t:10,b:24},n=series.length||1;const max=Math.max(4,...series.map(x=>x.a));const step=Math.pow(10,Math.floor(Math.log10(max)));const top=Math.ceil(max/step)*step;
+  const bw=(W-P.l-P.r)/n,y=v=>P.t+(H-P.t-P.b)*(1-v/top);let g="";for(let i=0;i<=3;i++){const v=top*i/3;g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(v)}" y2="${y(v)}" stroke="#e6ecf6"/><text x="${P.l-5}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="#8a96ad">${Math.round(v)}</text>`;}
+  const bars=series.map((x,i)=>{const h=(H-P.t-P.b)*(x.a/top);return `<rect x="${P.l+i*bw+bw*.15}" y="${y(0)-h}" width="${bw*.7}" height="${Math.max(h,x.a?2:0)}" rx="2" fill="#1f4fd1"><title>${x.d} : ${x.a} actifs, ${x.n} inscriptions, ${x.m} parties</title></rect>`;}).join("");
+  const line=series.map((x,i)=>`${P.l+i*bw+bw/2},${y(x.n)}`).join(" ");
+  const lab=series.map((x,i)=>(i%7===0&&n-1-i>=3)||i===n-1?`<text x="${P.l+i*bw+bw/2}" y="${H-6}" text-anchor="middle" font-size="10" fill="#8a96ad">${new Date(x.d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</text>`:"").join("");
+  return `<svg viewBox="0 0 ${W} ${H}" class="mchart" role="img" aria-label="Activité des 30 derniers jours">${g}${bars}<polyline points="${line}" fill="none" stroke="#f0b429" stroke-width="2.2"/>${lab}</svg>`;}
+async function tHome(){const [o,ov]=await Promise.all([rpc("admin_activity"),rpc("admin_overview")]);A.act=o;BADGE.messages=+o.unread||0;BADGE.prizes=+o.claims_new||0;renderNav();
+  const ctr=o.ad_views_30?Math.round(o.ad_clicks_30/o.ad_views_30*1000)/10:0;const pct=v=>v==null?"–":v+" %";
+  const cities=o.cities||[],cmax=Math.max(1,...cities.map(c=>c.n));const pl=o.platforms||{};const PL={web:"Navigateur",pwa:"Raccourci installé",apk:"Appli Android",store:"Play Store"};const ptot=Math.max(1,Object.values(pl).reduce((a,b)=>a+b,0));
+  const alerts=[o.unread?`<button class="alert" data-t="messages">${ico("messages",18)}<span><b>${o.unread} message${o.unread>1?"s":""} non lu${o.unread>1?"s":""}</b> d'annonceurs</span></button>`:"",o.claims_new?`<button class="alert gold" data-t="prizes">${ico("prizes",18)}<span><b>${o.claims_new} demande${o.claims_new>1?"s":""} de prix</b> à traiter</span></button>`:""].join("");
+  $("main").innerHTML=`${alerts?`<div class="alerts">${alerts}</div>`:""}
+  <div class="kpis">
+    <div class="kpi hl"><small>Actifs aujourd'hui</small><b>${n0(o.dau)}</b><span>appareils</span></div>
+    <div class="kpi"><small>Actifs 7 jours</small><b>${n0(o.wau)}</b></div>
+    <div class="kpi"><small>Actifs 30 jours</small><b>${n0(o.mau)}</b></div>
+    <div class="kpi"><small>Comptes Google</small><b>${n0(o.accounts)}</b><span>+${n0(o.new_7)} en 7 j · +${n0(o.new_30)} en 30 j</span></div>
+    <div class="kpi"><small>Reviennent le lendemain</small><b>${pct(o.ret1)}</b><span>rétention J1</span></div>
+    <div class="kpi"><small>Reviennent après 7 jours</small><b>${pct(o.ret7)}</b><span>rétention J7</span></div>
+    <div class="kpi"><small>Parties (30 j)</small><b>${n0(o.online_30+o.friend_30)}</b><span>${n0(o.online_30)} en ligne · ${n0(o.friend_30)} entre amis</span></div>
+    <div class="kpi"><small>En ce moment</small><b>${n0(ov.playing_now)}</b><span>en partie · ${n0(ov.in_queue)} en recherche</span></div>
+  </div>
+  <div class="acard"><div class="row"><h3 style="flex:1;margin:0">Activité des 30 derniers jours</h3><div class="legend"><span><i style="background:#1f4fd1"></i>Actifs</span><span><i style="background:#f0b429"></i>Inscriptions</span></div></div>${miniChart(o.series||[])}
+    <p class="muted" style="font-size:12.5px;margin:0">« Actifs » compte chaque téléphone ou ordinateur qui a ouvert le jeu dans la journée, connecté ou non. Ces chiffres sont ceux à montrer aux annonceurs.</p></div>
+  <div class="grid2">
+    <div class="acard"><h3>Villes des joueurs (30 j)</h3>${cities.length?`<div class="hbars">${cities.map(c=>`<div class="hbar"><span>${esc(c.k==="?"?"Inconnue":cap(c.k))}</span><div><i style="width:${Math.round(c.n/cmax*100)}%"></i></div><b>${n0(c.n)}</b></div>`).join("")}</div>`:`<p class="muted">Les villes apparaîtront avec les premières visites.</p>`}</div>
+    <div class="acard"><h3>Annonces (30 j)</h3><div class="kpis k2">
+      <div class="kpi flat"><small>En diffusion</small><b>${n0(o.ads_live)}</b></div><div class="kpi flat"><small>Vues</small><b>${n0(o.ad_views_30)}</b></div>
+      <div class="kpi flat"><small>Clics</small><b>${n0(o.ad_clicks_30)}</b><span>${String(ctr).replace(".",",")} % des vues</span></div><div class="kpi flat"><small>Récompenses données</small><b>${n0(o.ad_rewards_30)}</b></div></div>
+      <p class="muted" style="font-size:12.5px;margin:4px 0 0">Total encaissé (montants saisis sur les annonces) : <b>${Number(o.ad_revenue||0).toLocaleString("fr-FR")} $</b></p></div>
+    <div class="acard"><h3>Comment ils jouent (30 j)</h3><div class="hbars">${Object.entries(pl).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="hbar"><span>${esc(PL[k]||k)}</span><div><i style="width:${Math.round(v/ptot*100)}%;background:#f0b429"></i></div><b>${Math.round(v/ptot*100)} %</b></div>`).join("")||`<p class="muted">Pas encore de données.</p>`}</div></div>
+    <div class="acard"><h3>Croissance</h3><div class="kpis k2"><div class="kpi flat"><small>Invités par parrainage</small><b>${n0(o.referrals)}</b></div><div class="kpi flat"><small>Questions en ligne</small><b>${n0(ov.questions)}</b></div><div class="kpi flat"><small>Parties en ligne (total)</small><b>${n0(ov.matches_online)}</b></div><div class="kpi flat"><small>Comptes suspendus</small><b>${n0(ov.banned)}</b></div></div></div>
+  </div>`;
+  $("main").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));}
+
+/* ---- Banque de questions (en haut de l'onglet Questions) ---- */
+async function bankCard(){const el=$("bank");if(!el)return;let ov;try{ov=await rpc("admin_overview");}catch(e){el.innerHTML=`<h3>Banque de questions en ligne</h3><p class="muted">${esc(err(e))}</p>`;return;}
+  const qb=ov.questions_by||{},cell=(t,d)=>qb[t+"-"+d]||0;
+  el.innerHTML=`<h3>Banque de questions en ligne · ${n0(ov.questions)}</h3><table class="tbl"><tr><th></th><th>Facile</th><th>Moyen</th><th>Difficile</th></tr>${["AT","NT"].map(t=>`<tr><td><b>${t==="AT"?"Ancien Testament":"Nouveau Testament"}</b></td>${["facile","moyen","difficile"].map(d=>`<td>${cell(t,d)}</td>`).join("")}</tr>`).join("")}</table>
+  <p class="muted" style="font-size:12.5px;margin:0">Chaque partie tire 10 questions au hasard : 5 de l'Ancien et 5 du Nouveau Testament, 3 faciles, 4 moyennes et 3 difficiles. Le nom du livre est ajouté automatiquement aux références (ex. « selon Romains 1:16 »).</p>
+  <div class="row"><button class="btn small ghost" id="imp" style="width:auto">⬆️ Réimporter la banque du jeu</button><span id="impMsg" class="muted"></span></div>`;
+  $("imp").onclick=async()=>{const b=$("imp");b.disabled=true;$("impMsg").textContent="Téléchargement…";
+    try{const rows=await (await fetch("seed/questions.json",{cache:"no-store"})).json();let added=0;
+      for(let i=0;i<rows.length;i+=200){$("impMsg").textContent=`Import ${Math.min(i+200,rows.length)}/${rows.length}…`;added+=await rpc("admin_import_questions",{p_rows:rows.slice(i,i+200)});}
+      toast(`${added} nouvelle(s) question(s) importée(s).`);tQuestions();}catch(e){b.disabled=false;$("impMsg").textContent=err(e);}};}
 </script></body></html>

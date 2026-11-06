@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Suivi de votre annonce · Parcours Biblique</title>
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--ink:#14213d;--lapis:#1f4fd1;--lapis-deep:#163a9c;--lapis-soft:#eef3ff;--mist:#f2f5fb;--stone:#7b879e;--line:#e1e7f1;--good:#1f9d6b;--good-bg:#e3f6ee;--bad:#d6323f;--gold:#f0b429;--f-d:"Baloo 2",system-ui,sans-serif;--f-b:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:var(--f-b);font-size:15px;line-height:1.5}
+a{color:var(--lapis)}
+.top{background:linear-gradient(150deg,#0f1f4d 0%,#1c3a96 55%,#2e5ff0 100%);color:#fff;padding:18px 16px 84px}
+.top .in,.wrap{max-width:980px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-d);font-weight:800;font-size:17px;opacity:.95}
+.brand img{width:30px;height:30px;border-radius:8px}
+.brand small{font-family:var(--f-b);font-weight:600;font-size:12px;opacity:.75;margin-left:auto;text-align:right}
+.hello{margin-top:26px}
+.hello h1{font-family:var(--f-d);font-size:clamp(26px,5vw,38px);line-height:1.12;margin:0 0 8px}
+.hello p{margin:0;max-width:640px;opacity:.88;font-size:15.5px}
+.wrap{padding:0 16px 40px;margin-top:-62px;display:grid;gap:14px}
+.card{background:#fff;border-radius:20px;padding:18px;box-shadow:0 1px 0 rgba(20,33,61,.04),0 10px 30px rgba(20,33,61,.08);min-width:0}
+.card h2{font-family:var(--f-d);font-size:19px;margin:0 0 12px}
+.adrow{display:flex;gap:16px;align-items:center}
+.media{width:112px;height:112px;border-radius:16px;overflow:hidden;flex:none;background:#0f1d3d;display:grid;place-items:center;color:#fff;font-size:36px}
+.media img,.media video{width:100%;height:100%;object-fit:cover}
+.adrow .t{min-width:0;flex:1}
+.adrow h3{margin:0 0 4px;font-size:19px;line-height:1.25}
+.adrow p{margin:0 0 8px;color:#4a5670;font-size:14px}
+.status{display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:12.5px;border-radius:999px;padding:5px 11px;background:#eef1f6;color:#5b6884}
+.status i{width:8px;height:8px;border-radius:50%;background:currentColor}
+.status.live{background:var(--good-bg);color:#11734a}.status.live i{animation:pulse 1.6s infinite}
+.status.scheduled{background:#fff3d6;color:#8a5a00}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(31,157,107,.55)}70%{box-shadow:0 0 0 8px rgba(31,157,107,0)}100%{box-shadow:0 0 0 0 rgba(31,157,107,0)}}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:12px;font-weight:700;background:var(--lapis-soft);color:var(--lapis-deep);border-radius:999px;padding:3px 10px}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kpi{background:#fff;border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(20,33,61,.07);min-width:0}
+.kpi small{display:block;color:var(--stone);font-weight:700;font-size:12.5px}
+.kpi b{display:block;font-family:var(--f-d);font-size:clamp(26px,4.6vw,36px);line-height:1.15;color:var(--lapis-deep);font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--stone)}
+.kpi.hl{background:linear-gradient(150deg,#1c3a96,#2e5ff0);color:#fff}.kpi.hl small,.kpi.hl span{color:rgba(255,255,255,.8)}.kpi.hl b{color:#fff}
+.period{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.period div{background:var(--mist);border-radius:14px;padding:12px}
+.period small{display:block;color:var(--stone);font-weight:700;font-size:12px}.period b{font-size:15.5px}
+.prog{height:8px;border-radius:8px;background:#e6ecf6;overflow:hidden;margin-top:12px}.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--lapis),#4f86ff);border-radius:8px}
+.chart{width:100%;height:220px;display:block}
+.legend{display:flex;gap:14px;font-size:12.5px;color:var(--stone);font-weight:700;margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:110px 1fr 54px;gap:10px;align-items:center;font-size:14px}
+.bar .tr{height:10px;border-radius:10px;background:#e6ecf6;overflow:hidden}.bar .tr i{display:block;height:100%;background:var(--lapis);border-radius:10px}
+.bar b{text-align:right;font-variant-numeric:tabular-nums}
+.bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gloss{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px;font-size:13.5px;color:#4a5670}
+.gloss b{color:var(--ink)}
+form{display:grid;gap:10px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:grid;gap:4px;font-size:12.5px;font-weight:800;color:var(--stone)}
+input,textarea{font:inherit;font-size:16px;color:var(--ink);padding:12px 13px;border-radius:13px;border:2px solid var(--line);background:#fff;width:100%}
+input:focus,textarea:focus{outline:none;border-color:var(--lapis)}
+textarea{min-height:110px;resize:vertical}
+button.send{font:inherit;font-weight:800;font-size:16px;color:#fff;background:var(--lapis);border:0;border-radius:14px;padding:14px;cursor:pointer;box-shadow:0 4px 0 var(--lapis-deep)}
+button.send:disabled{opacity:.6}
+.ok{background:var(--good-bg);color:#11734a;border-radius:14px;padding:12px 14px;font-weight:700}
+.err{color:var(--bad);font-weight:700;font-size:14px}
+.foot{text-align:center;color:var(--stone);font-size:12.5px;padding:8px 0 20px}
+.empty{max-width:520px;margin:-40px auto 0;text-align:center}
+.skel{height:120px;border-radius:20px;background:linear-gradient(90deg,#e9eef7,#f6f8fc,#e9eef7);background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+@media (max-width:720px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .period{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two,.f2,.gloss{grid-template-columns:1fr}
+  .media{width:84px;height:84px}
+  .bar{grid-template-columns:90px 1fr 46px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <div class="brand"><img src="/icons/icon-192.png" alt="">Parcours Biblique<small>Espace annonceur<br><span id="upd">Mise à jour…</span></small></div>
+  <div class="hello" id="hello"><h1>Chargement de vos résultats…</h1><p>&nbsp;</p></div>
+</div></header>
+<main class="wrap" id="app"><div class="skel"></div><div class="skel"></div></main>
+<p class="foot">Parcours Biblique · le jeu biblique gratuit · Statistiques mises à jour automatiquement</p>
+<script>
+const CFG={url:"https://xyuqturdtqmclrjdnaen.supabase.co",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dXF0dXJkdHFtY2xyamRuYWVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NDI3OTUsImV4cCI6MjEwOTQxODc5NX0.RHa_6UtvTfeFBdQ7wcBDby35cgvBYabIDe5grAfmS0E"};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const N=n=>Number(n||0).toLocaleString("fr-FR");
+const D=d=>d?new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}):"";
+const DT=d=>d?new Date(d).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"—";
+const cap=s=>String(s||"").replace(/(^|\s|-)(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());
+const token=new URLSearchParams(location.search).get("k")||"";
+const ST={live:["En diffusion","live"],paused:["En pause","paused"],scheduled:["Programmée","scheduled"],ended:["Terminée","ended"],archived:["Terminée","ended"]};
+async function rpc(fn,body){const r=await fetch(CFG.url+"/rest/v1/rpc/"+fn,{method:"POST",headers:{apikey:CFG.key,Authorization:"Bearer "+CFG.key,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}
+let first=true,sent=false;
+function chart(daily){const W=Math.max(300,Math.min(920,(document.getElementById("app").clientWidth||920)-36)),H=220,P={l:34,r:8,t:12,b:28};const n=daily.length||1;const max=Math.max(4,...daily.map(x=>x.v));const step=Math.pow(10,Math.floor(Math.log10(max)));const top=Math.ceil(max/step)*step;
+  const bw=(W-P.l-P.r)/n;const y=v=>P.t+(H-P.t-P.b)*(1-v/top);
+  let g="";for(let i=0;i<=4;i++){const v=top*i/4,yy=y(v);g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${yy}" y2="${yy}" stroke="#e6ecf6"/><text x="${P.l-6}" y="${yy+4}" text-anchor="end" font-size="11" fill="#7b879e">${Math.round(v)}</text>`;}
+  const bars=daily.map((x,i)=>{const h=(H-P.t-P.b)*(x.v/top);return `<rect x="${P.l+i*bw+bw*.18}" y="${P.t+(H-P.t-P.b)-h}" width="${bw*.64}" height="${Math.max(h,x.v?2:0)}" rx="${Math.min(4,bw*.2)}" fill="#1f4fd1"><title>${new Date(x.d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"})} : ${x.v} vues, ${x.c} clics</title></rect>`;}).join("");
+  const pts=daily.map((x,i)=>`${P.l+i*bw+bw/2},${y(x.c)}`).join(" ");
+  const every=Math.ceil(n/(W<500?4:7));const lab=daily.map((x,i)=>i%every===0||i===n-1?`<text x="${P.l+i*bw+bw/2}" y="${H-8}" text-anchor="middle" font-size="11" fill="#7b879e">${new Date(x.d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</text>`:"").join("");
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Vues et clics par jour">${g}${bars}${n>1?`<polyline points="${pts}" fill="none" stroke="#f0b429" stroke-width="2.5" stroke-linejoin="round"/>`:""}${daily.map((x,i)=>`<circle cx="${P.l+i*bw+bw/2}" cy="${y(x.c)}" r="3" fill="#f0b429"/>`).join("")}${lab}</svg>`;}
+async function load(){
+  if(!token){$("hello").innerHTML=`<h1>Lien incomplet</h1><p>Ce lien de suivi n'est pas valide. Vérifiez le lien reçu.</p>`;$("app").innerHTML="";return;}
+  let r;try{r=await rpc("ad_report",{p_token:token});}catch(e){if(first){$("app").innerHTML=`<div class="card empty"><h2>Connexion impossible</h2><p>Vérifiez votre connexion internet puis rechargez la page.</p></div>`;}return;}
+  if(!r){$("hello").innerHTML=`<h1>Lien introuvable</h1><p>Ce lien de suivi n'existe pas ou a été désactivé.</p>`;$("app").innerHTML="";return;}
+  const name=r.advertiser?esc(r.advertiser):"";const [sl,sc]=ST[r.status]||ST.live;
+  $("hello").innerHTML=`<h1>Merci${name?", "+name:""}, pour votre confiance 🙏</h1><p>Voici les résultats de votre annonce dans Parcours Biblique, le jeu biblique joué chaque jour par des jeunes chrétiens. Les chiffres se mettent à jour automatiquement.</p>`;
+  $("upd").textContent="Mis à jour à "+new Date(r.updated_at).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  const ctr=r.views?Math.round(r.clicks/r.views*1000)/10:0;
+  const start=new Date(r.starts_at),end=r.ends_at?new Date(r.ends_at):null,now=new Date();
+  const ran=Math.max(0,Math.ceil((Math.min(now,end||now)-start)/864e5));const total=end?Math.max(1,Math.ceil((end-start)/864e5)):null;const leftD=end?Math.max(0,Math.ceil((end-now)/864e5)):null;
+  const daily=r.daily||[];const best=daily.reduce((m,x)=>x.v>m.v?x:m,{v:0});
+  const cities=(r.by_city||[]).filter(x=>x.city!=="?");const cmax=Math.max(1,...cities.map(x=>x.v));
+  const modes=[["📣 Bandeau",r.views_banner],["▶️ Plein écran",r.views_reward]].filter(x=>x[1]>0||true);const mmax=Math.max(1,r.views_banner,r.views_reward);
+  const media=r.video_url?`<video src="${esc(r.video_url)}" ${r.image_url?`poster="${esc(r.image_url)}"`:""} muted playsinline loop autoplay></video>`:r.image_url?`<img src="${esc(r.image_url)}" alt="">`:"📣";
+  const y0=scrollY;
+  $("app").innerHTML=`
+  <section class="card"><div class="adrow"><div class="media">${media}</div><div class="t"><span class="status ${sc}"><i></i>${sl}</span><h3 style="margin-top:8px">${esc(r.title)}</h3>${r.body?`<p>${esc(r.body)}</p>`:""}
+    <div class="meta">${(r.cities&&r.cities.length?r.cities.map(c=>`<span class="tag">📍 ${esc(cap(c))}</span>`).join(""):`<span class="tag">📍 Toutes les villes</span>`)}${r.show_banner?`<span class="tag">📣 Bandeau</span>`:""}${r.show_reward?`<span class="tag">▶️ Plein écran${r.duration_s?" · "+r.duration_s+" s":""}</span>`:""}${r.link_url?`<a class="tag" href="${esc(r.link_url)}" target="_blank" rel="noopener">🔗 ${esc(r.cta||"Lien")}</a>`:""}</div></div></div></section>
+  <section class="kpis">
+    <div class="kpi hl"><small>Vues</small><b>${N(r.views)}</b><span>affichages de l'annonce</span></div>
+    <div class="kpi"><small>Portée</small><b>${N(r.people)}</b><span>personnes différentes</span></div>
+    <div class="kpi"><small>Clics</small><b>${N(r.clicks)}</b><span>${N(r.clickers)} personne${r.clickers>1?"s":""} ont ouvert le lien</span></div>
+    <div class="kpi"><small>Taux de clic</small><b>${String(ctr).replace(".",",")} %</b><span>clics ÷ vues</span></div>
+    <div class="kpi"><small>Vues complètes</small><b>${N(r.full_views)}</b><span>regardées jusqu'au bout${r.duration_s?` (${r.duration_s} s)`:""}</span></div>
+    <div class="kpi"><small>Vues par personne</small><b>${r.people?String(Math.round(r.views/r.people*10)/10).replace(".",","):"0"}</b><span>répétition moyenne</span></div>
+  </section>
+  <section class="card"><h2>Période de diffusion</h2><div class="period">
+    <div><small>Début</small><b>${D(r.starts_at)}</b></div><div><small>Fin</small><b>${end?D(r.ends_at):"Sans date de fin"}</b></div>
+    <div><small>Jours de diffusion</small><b>${N(ran)} jour${ran>1?"s":""}</b></div><div><small>${end?"Jours restants":"Dernière vue"}</small><b>${end?N(leftD)+" jour"+(leftD>1?"s":""):DT(r.last_view)}</b></div></div>
+    ${total?`<div class="prog" title="Avancement de la campagne"><i style="width:${Math.min(100,Math.round(ran/total*100))}%"></i></div>`:""}</section>
+  <section class="card"><h2>Vues et clics par jour</h2>${daily.length?chart(daily):`<p>La diffusion n'a pas encore commencé.</p>`}
+    <div class="legend"><span><i style="background:#1f4fd1"></i>Vues</span><span><i style="background:#f0b429"></i>Clics</span>${best.v?`<span style="margin-left:auto">Meilleur jour : ${new Date(best.d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long"})} (${N(best.v)} vues)</span>`:""}</div></section>
+  <section class="two">
+    <div class="card"><h2>Où l'annonce a été vue</h2>${cities.length?`<div class="bars">${cities.map(x=>`<div class="bar"><span>${esc(cap(x.city))}</span><div class="tr"><i style="width:${Math.round(x.v/cmax*100)}%"></i></div><b>${N(x.v)}</b></div>`).join("")}</div>`:`<p style="color:var(--stone)">Pas encore de données.</p>`}</div>
+    <div class="card"><h2>Format des vues</h2><div class="bars">${modes.map(([l,v])=>`<div class="bar"><span>${l}</span><div class="tr"><i style="width:${Math.round(v/mmax*100)}%;background:#f0b429"></i></div><b>${N(v)}</b></div>`).join("")}</div>
+      <p style="font-size:13px;color:var(--stone);margin:12px 0 0">Le plein écran est regardé volontairement par le joueur, sans pouvoir être passé avant la fin pour obtenir sa récompense.</p></div>
+  </section>
+  <section class="card"><h2>Comment lire ces chiffres</h2><div class="gloss">
+    <div><b>Vues</b> : chaque affichage de votre annonce dans le jeu.</div><div><b>Portée</b> : le nombre de téléphones différents qui l'ont vue.</div>
+    <div><b>Clics</b> : les ouvertures de votre lien depuis l'annonce.</div><div><b>Vues complètes</b> : annonces plein écran regardées jusqu'à la fin.</div></div></section>
+  <section class="card" id="msg"><h2>Nous laisser un message</h2>${sent?`<div class="ok">✓ Message envoyé. Merci, nous vous répondons très vite.</div>`:`<form id="mf">
+    <div class="f2"><label>Votre nom<input id="mn" value="${name}" maxlength="80" autocomplete="name"></label><label>Téléphone ou e-mail<input id="mc" maxlength="80" placeholder="Pour vous répondre" autocomplete="tel"></label></div>
+    <label>Message<textarea id="mm" maxlength="2000" placeholder="Une question, une nouvelle campagne, un changement à faire…"></textarea></label>
+    <span class="err" id="me"></span><button class="send" id="ms">Envoyer le message</button></form>`}</section>`;
+  if(!first)scrollTo(0,y0);first=false;
+  const f=$("mf");if(f)f.onsubmit=async e=>{e.preventDefault();const m=$("mm").value.trim();if(m.length<2){$("me").textContent="Écrivez votre message.";return;}
+    $("ms").disabled=true;$("ms").textContent="Envoi…";$("me").textContent="";
+    try{const x=await rpc("ad_report_message",{p_token:token,p_name:$("mn").value,p_contact:$("mc").value,p_message:m});
+      if(x&&x.ok){sent=true;$("msg").innerHTML=`<h2>Nous laisser un message</h2><div class="ok">✓ Message envoyé. Merci, nous vous répondons très vite.</div>`;}
+      else{$("me").textContent=x&&x.reason==="limit"?"Trop de messages envoyés. Réessayez dans une heure.":"Le message n'a pas pu être envoyé.";$("ms").disabled=false;$("ms").textContent="Envoyer le message";}}
+    catch(err){$("me").textContent="Connexion impossible. Réessayez.";$("ms").disabled=false;$("ms").textContent="Envoyer le message";}};}
+load();setInterval(()=>{const a=document.activeElement;if(a&&(a.tagName==="TEXTAREA"||a.tagName==="INPUT"))return;load();},60000);
+</script>
+</body>
+</html>

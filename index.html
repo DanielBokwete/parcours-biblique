@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="0d0d15b5bd";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="313e1a59f4";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5699,7 +5699,13 @@ function adPayMatch(id){const c=adCfg();const cost=+c.online_cost_lives||0;if(!i
   S.olPaid=S.olPaid||{};S.olPaid[id]=Date.now();const ks=Object.keys(S.olPaid);if(ks.length>80)ks.sort((a,b)=>S.olPaid[a]-S.olPaid[b]).slice(0,ks.length-80).forEach(k=>{delete S.olPaid[k];});
   for(let i=0;i<cost;i++)loseHeart();}
 
-setTimeout(()=>{adLoadSettings();adLocate();if(!S.adAt)S.adAt=S.activeSec;},2500);
+/* Activité du jour (une fois par jour et par appareil) : sert au tableau de bord et aux chiffres d'audience pour les annonceurs. */
+function adPlatform(){try{if(typeof IN_STORE_APP!=="undefined"&&IN_STORE_APP)return "store";if(typeof APK_INFO!=="undefined"&&APK_INFO)return "apk";if(matchMedia("(display-mode: standalone)").matches||navigator.standalone)return "pwa";}catch(e){}return "web";}
+async function adPing(){const day=new Date().toLocaleDateString("sv");let last="";try{last=localStorage.getItem("pb-ping")||"";}catch(e){}
+  const key=day+"|"+((OL&&OL.session)?"1":"0");if(last===key)return;const sb=adSb();if(!sb)return;
+  try{const {error}=await sb.rpc("app_ping",{p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||"",p_country:(S.loc&&S.loc.country)||"",p_platform:adPlatform()});if(!error)localStorage.setItem("pb-ping",key);}catch(e){}}
+setTimeout(async()=>{adLoadSettings();await adLocate();if(!S.adAt)S.adAt=S.activeSec;adPing();},2500);
+setInterval(adPing,10*60000);
 
 </script>
 <script>if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script></body></html>
