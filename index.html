@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="67e832afe0";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="0d0d15b5bd";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -823,6 +823,21 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .card.livewarn{background:#fff1f2;box-shadow:0 0 0 2px #ffc9cf;display:grid;gap:8px}
 .card.livewarn b{color:#b4232f}.card.livewarn p{margin:0;font-size:14px;line-height:1.45;color:#5b3a40}
 
+/* Boutons Vies / Aides du haut */
+.statbtns{display:flex;gap:8px;flex:none}
+.sbtn{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;min-width:66px;height:48px;padding:5px 22px 5px 10px;border-radius:14px;background:var(--white);box-shadow:0 4px 0 rgba(20,33,61,.14),0 10px 18px rgba(20,33,61,.12);font-family:inherit;cursor:pointer;line-height:1.1}
+.sbtn .v{font-weight:800;font-size:16px;font-variant-numeric:tabular-nums}
+.sbtn.hp .v{color:var(--bad)}.sbtn.hl .v{color:var(--lapis)}
+.sbtn small{font-size:10px;font-weight:700;color:var(--stone);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sbtn i{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:12px;color:#fff}
+.sbtn.hp i{background:var(--bad)}.sbtn.hl i{background:var(--lapis)}
+.sbtn:active{transform:translateY(2px)}
+.stbig{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:22px;font-family:var(--f-display)}
+.stbig span{font-size:34px}.stbig b{font-size:40px;font-weight:800}.stbig b small{font-size:20px;opacity:.6}
+.stbig.hp{background:var(--bad-bg);color:var(--bad)}.stbig.hl{background:#eaf1ff;color:var(--lapis)}
+.bookchip .u{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.04em}
+.bookchip{padding:8px 10px;gap:8px}.bookchip .av{width:30px;height:30px;font-size:16px}
+
 </style>
 <div class="app" id="app">
 
@@ -837,8 +852,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
         <span class="t"><span class="u" id="chipUnit"></span><span class="n" id="chipName"></span></span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8a96ad" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
       </button>
-      <div class="pill" id="pillHearts"></div>
-      <button class="adbtn" id="adTop" aria-label="Gagner des vies"><b>♥+</b>Vies</button>
+      <div class="statbtns" id="pillHearts"></div>
     </div>
     <div class="scroll" id="scroll"><div class="track" id="track"></div></div>
   </section>
@@ -4547,7 +4561,10 @@ function bindHold(){const btn=$("hold"),w=$("lampw");let p=0,done=false,t0=0;
   btn.addEventListener("click",go1);btn.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter")go1(e);});}
 
 /* ===================== MONTÉE (chemin du bas vers le haut) ===================== */
-function heartPill(){regen();helpsReset();if(unlimited())return `<span><span style="color:var(--bad)">♥</span> ∞ &nbsp;🪔 ${S.streak}</span><small>Illimité · ${fmt(unlimitedLeft())}</small>`;return `<span><span style="color:var(--bad)">♥</span> ${S.hearts} &nbsp;🪔 ${S.streak}</span>${S.hearts<MAX_HEARTS?`<small>+1 ♥ dans ${fmt(nextHeartIn())}</small>`:`<small>💡 ${S.helps} aides</small>`}`;}
+// Deux boutons en haut : les vies et les aides, chacun ouvre sa fenêtre (avec annonce pour en gagner).
+function heartPill(){regen();helpsReset();const un=unlimited();
+  const lifeSub=un?fmt(unlimitedLeft()):S.hearts<MAX_HEARTS?fmt(nextHeartIn()):"au complet";
+  return `<button class="sbtn hp" data-st="life" aria-label="Mes vies"><span class="v">♥ ${un?"∞":S.hearts}</span><small>${lifeSub}</small><i>+</i></button><button class="sbtn hl" data-st="help" aria-label="Mes aides"><span class="v">💡 ${S.helps}</span><small>aide${S.helps>1?"s":""}</small><i>+</i></button>`;}
 function renderTop(){const b=curBook();const L=Math.min(doneOf(b)+1,b.levels);const u=unitOfLevel(b,L);
   $("chipAv").textContent=b.ic;$("chipAv").style.background=S.testament==="AT"?"#f6e7c7":"#dbe9ff";
   $("chipUnit").textContent=`${b.name} · Étape ${u.i}`;$("chipName").textContent=u.name;$("pillHearts").innerHTML=heartPill();}
@@ -4611,7 +4628,7 @@ $("bookchip").onclick=()=>{sfx("tap");const bs=books();
 /* Application installée depuis le Play Store (détectée par le référent Android). */
 const IN_STORE_APP=(()=>{try{if(document.referrer==="android-app://app.parcoursbiblique/"||document.referrer==="android-app://app.parcoursbiblique"){sessionStorage.setItem("pb-store","1");}return sessionStorage.getItem("pb-store")==="1";}catch(e){return false;}})();
 if(IN_STORE_APP)document.documentElement.classList.add("store-app");
-$("adTop").onclick=()=>{sfx("tap");adReward("life");};
+$("pillHearts").onclick=e=>{const b=e.target.closest("[data-st]");if(!b)return;if(typeof statSheet==="function")statSheet(b.dataset.st);};
 
 /* ===================== MOTEUR DE QUESTIONS =====================
    mode "level" : cœurs, chrono 20 s, aides ; on réessaie jusqu'à trouver (la bonne réponse n'est jamais montrée).
@@ -4788,9 +4805,8 @@ function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("
   $("lbody").innerHTML=`<div class="center"><div class="medal big">💔</div><h2 style="font-size:28px">Plus de cœurs pour le moment</h2><p>Un cœur revient toutes les 25 minutes. Le prochain dans :</p><div class="clock" id="cd">--:--</div><p style="font-size:13px" class="muted">En attendant, lis la Bible ou lance une méditation : ça ne coûte aucun cœur.</p></div>`;
   $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter un ami · 24 h de vies illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
   $("toAd").onclick=()=>adReward("life",()=>{if(S.hearts>0)go("path");});$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
-{const helpAd=()=>{if(!LS||LS.mode!=="level"||typeof adReward!=="function")return;adReward("help",()=>{if(curScreen==="lesson"&&LS&&!LS.answered)askFoot();setHead();});};
- $("lHelps").onclick=helpAd;$("lXp").onclick=helpAd;
- $("lHearts").onclick=()=>{if(!LS||LS.mode!=="level"||typeof adReward!=="function")return;adReward("life",()=>{if(curScreen==="lesson")setHead();});};}
+{const lessonSheet=k=>{if(!LS||LS.mode!=="level"||typeof statSheet!=="function")return;statSheet(k,()=>{if(curScreen==="lesson"){setHead();if(LS&&!LS.answered&&LS.q)askFoot();}});};
+ $("lHelps").onclick=()=>lessonSheet("help");$("lXp").onclick=()=>lessonSheet("help");$("lHearts").onclick=()=>lessonSheet("life");}
 $("quit").onclick=()=>{sfx("tap");if(LS&&LS.kind==="med"){S.med.state="due";save();go("medit");}else go(LS&&LS.mode==="test"?(LS.kind==="memo"?"bible":"medit"):"path");};
 $("replay").onclick=()=>{if(LS&&LS.say)speak(LS.say,true);};
 
@@ -5272,8 +5288,7 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
     <div class="segtabs seg3">${[["play","⚔️ Jouer"],["rank","🏆 Classement"],["friends","🤝 Amis"]].map(([k,l])=>`<button data-olt="${k}" aria-pressed="${t===k}">${l}${k==="friends"&&OL.invites.length?` <span class="dot">${OL.invites.length}</span>`:""}</button>`).join("")}</div>
     <p class="tabhint">${{play:"⚔️ <b>Jouer</b> : affronte un disciple au hasard. Chaque victoire rapporte des points pour le classement du mois.",rank:"🏆 <b>Classement</b> : les 10 meilleurs disciples du mois et ta place. Seules les parties en ligne comptent, et tout repart à zéro le 1er de chaque mois.",friends:"🤝 <b>Amis</b> : invite tes proches, défie-les quand tu veux et suis vos confrontations. Ces parties ne comptent pas pour le classement."}[t]}</p>`;
   if(OL.win)h+=olWinCard();
-    const gc=typeof adCfg==="function"?adCfg():{online_min_lives:0},need=+gc.online_min_lives||0,cost=+gc.online_cost_lives||0;regen();const low=need>0&&!unlimited()&&S.hearts<need;
-  if(low&&(t==="play"||t==="friends"))h+=`<div class="card livewarn"><b>💔 Il te faut ${need} ♥ pour jouer en ligne</b><p>Tu en as ${S.hearts}. Regarde une annonce pour gagner +${+gc.reward_lives||1} ♥ à chaque fois, ou attends le prochain cœur (${fmt(nextHeartIn())}).</p><button class="btn warm" id="olAdLife">▶️ Regarder une annonce · +${+gc.reward_lives||1} ♥</button></div>`;
+    const gc=typeof adCfg==="function"?adCfg():{online_min_lives:0},need=+gc.online_min_lives||0,cost=+gc.online_cost_lives||0;
   if(t==="play"){
     h+=olPrizeCard()+`<button class="btn big" id="olFind">⚔️ Trouver un adversaire</button>
       <div class="card rules"><b>Comment ça marche</b><ul><li>10 questions tirées au hasard, Ancien et Nouveau Testament mélangés, du facile au difficile.</li><li>⚡ Course de vitesse : le premier qui trouve la bonne réponse remporte la question, et on passe à la suivante pour les deux.</li><li>Une mauvaise réponse te bloque sur cette question : ton adversaire peut encore la trouver. 20 secondes maximum par question.</li><li>Victoire : <b>+${OL_POINTS.win} points</b> · égalité : <b>+${OL_POINTS.draw} points</b> chacun.</li><li>Seuls les points des parties en ligne comptent pour le classement du mois.</li>${need>0?`<li>♥ Il faut au moins <b>${need} vies</b> pour lancer ou accepter une partie (en ligne ou entre amis)${cost>0?`, et chaque partie en utilise ${cost}`:""}. Il en manque ? Regarde une annonce : +${+gc.reward_lives||1} ♥ par annonce.</li>`:""}</ul></div>`;
@@ -5300,7 +5315,7 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
   p.innerHTML=h;
   p.querySelectorAll("[data-olt]").forEach(b=>b.onclick=()=>{sfx("tap");OL.tab=b.dataset.olt;renderOnline();if(OL.tab!=="play")olLoadAll();});
   const on=(id,fn)=>{const e=$(id);if(e)e.onclick=fn;};
-  on("olFind",()=>{sfx("tap");olSearch();});on("olAdLife",()=>{if(typeof adReward==="function")adReward("life",()=>{if(curScreen==="online")renderOnline();});});on("olFriend",()=>{sfx("tap");OL.tab="friends";renderOnline();olLoadAll();});on("olRefresh",()=>{sfx("tap");olLoadAll();});
+  on("olFind",()=>{sfx("tap");olSearch();});on("olFriend",()=>{sfx("tap");OL.tab="friends";renderOnline();olLoadAll();});on("olRefresh",()=>{sfx("tap");olLoadAll();});
   on("olClaim",()=>{sfx("tap");olClaimSheet();});
   on("olInv",()=>{sfx("tap");olShareInvite();});
   on("olShare",async()=>{const c=OL.me.referral_code,txt=`Viens me défier sur Parcours Biblique ! Mon code : ${c}\n${location.origin+location.pathname}`;
@@ -5659,6 +5674,21 @@ function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||docu
     $("adfKeep").onclick=()=>{cf.remove();last=performance.now();if(v)v.play().catch(()=>{});};$("adfQuit").onclick=()=>{cf.remove();close();};};
   const open=e=>{if(e)e.stopPropagation();if(!ad.link_url)return;adOpen(ad,"reward");if(!done)finish(true);};
   $("adfCard").onclick=open;const m=el.querySelector(".adf-media");if(m&&ad.link_url)m.onclick=open;}
+
+/* ---------- Fenêtres « Mes vies » et « Mes aides » ---------- */
+function statSheet(kind,after){sfx("tap");regen();helpsReset();const c=adCfg();const life=kind==="life";const un=unlimited();
+  const gain=life?(+c.reward_lives||0):(+c.reward_helps||0);
+  const draw=()=>{regen();helpsReset();const full=life&&(un||S.hearts>=MAX_HEARTS);
+    const big=life?(un?"∞":`${S.hearts}<small>/${MAX_HEARTS}</small>`):`${S.helps}`;
+    const sub=life?(un?`Vies illimitées encore ${fmt(unlimitedLeft())}`:S.hearts<MAX_HEARTS?`+1 ♥ dans <b id="stCd">${fmt(nextHeartIn())}</b> · un cœur revient toutes les 25 minutes`:"Tes vies sont au complet"):`Tu reçois ${DAILY_HELPS} aides chaque jour, à minuit. Une aide retire une mauvaise réponse pendant un niveau.`;
+    openSheet(`<div class="center" style="padding-top:2px"><div class="stbig ${life?"hp":"hl"}"><span>${life?"♥":"💡"}</span><b>${big}</b></div><h2 style="font-size:24px;margin:6px 0 4px">${life?"Mes vies":"Mes aides"}</h2><p style="line-height:1.5;margin:0 0 14px">${sub}</p></div>
+      <div style="display:grid;gap:10px">${gain>0?`<button class="btn warm" id="stAd"${full?" disabled":""}>▶️ Regarder une annonce · +${gain} ${life?"♥":`aide${gain>1?"s":""}`}</button>`:""}
+      ${life?`<button class="btn ghost" id="stInv">📤 Inviter un ami · 24 h de vies illimitées</button>`:""}<button class="textlink" id="stClose">Fermer</button></div>
+      ${life&&+c.online_min_lives>0?`<p class="muted" style="font-size:12.5px;text-align:center;margin:10px 0 0">Il faut au moins ${+c.online_min_lives} ♥ pour jouer en ligne ou entre amis.</p>`:""}`);
+    const ad=$("stAd");if(ad)ad.onclick=()=>{closeSheet();adReward(kind,()=>{if(curScreen==="path")renderTop();if(after)after();});};
+    const iv=$("stInv");if(iv)iv.onclick=()=>{closeSheet();if(typeof olShareInvite==="function")olShareInvite();};
+    $("stClose").onclick=()=>{closeSheet();if(after)after();};};
+  draw();clearInterval(AD.stT);AD.stT=setInterval(()=>{const e=$("stCd");if(!e||$("veil").hidden){clearInterval(AD.stT);return;}e.textContent=fmt(nextHeartIn());},1000);}
 
 /* ---------- Jouer en ligne / entre amis : un minimum de vies ---------- */
 function adGate(retry){const c=adCfg();const need=+c.online_min_lives||0;if(unlimited()||need<=0)return true;regen();if(S.hearts>=need)return true;
