@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="54ac452d02";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="7ca8c74395";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -781,6 +781,42 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .adban .adcta{flex:none;font-weight:800;font-size:12.5px;color:#fff;background:var(--lapis);border-radius:999px;padding:7px 11px}
 .adban .adx{position:absolute;top:-8px;right:-6px;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--stone);font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(15,29,61,.25)}
 .adsheet .adimg{display:block;width:100%;max-height:46vh;object-fit:contain;border-radius:16px;background:#0f1d3d;margin-top:10px}
+
+/* ---------- Annonce plein écran ---------- */
+.adfull{position:absolute;inset:0;z-index:90;background:#05070d;color:#fff;overflow:hidden;animation:adfIn .25s ease both}
+.adfull.out{animation:adfOut .25s ease both}
+@keyframes adfIn{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:none}}@keyframes adfOut{to{opacity:0}}
+.adf-bg{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(30px) brightness(.45);transform:scale(1.1)}
+.adf-media{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:calc(64px + env(safe-area-inset-top,0px)) 0 150px}
+.adf-media video,.adf-media img{width:100%;height:100%;object-fit:contain;display:block}
+.adf-txt{font-family:var(--f-display);font-size:30px;font-weight:800;text-align:center;padding:24px}
+.adf-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 12px;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0));z-index:2}
+.adf-l,.adf-r{display:flex;align-items:center;gap:8px}
+.adf-tag{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:3px 7px;backdrop-filter:blur(6px)}
+.adf-ic{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:16px;display:grid;place-items:center}
+.adf-pill{display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.55);border-radius:999px;padding:4px 12px 4px 4px;font-size:12.5px;font-weight:700;backdrop-filter:blur(6px);position:relative}
+.adf-pill b{position:absolute;left:4px;width:30px;height:30px;display:grid;place-items:center;font-size:12px}
+.adf-pill.wait b{display:none}
+.adf-ring{width:30px;height:30px;transform:rotate(-90deg);flex:none}
+.adf-ring circle{fill:none;stroke-width:3}.adf-ring .t{stroke:rgba(255,255,255,.22)}.adf-ring .p{stroke:#38d27a;stroke-linecap:round;transition:stroke-dashoffset .1s linear}
+.adf-x{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.45);color:rgba(255,255,255,.75);font-size:16px;font-weight:800}
+.adf-x.ready{background:#fff;color:#111;box-shadow:0 4px 14px rgba(0,0,0,.4);animation:adfPop .35s cubic-bezier(.3,1.6,.5,1)}
+@keyframes adfPop{from{transform:scale(.6)}to{transform:none}}
+.adf-done{position:absolute;top:calc(60px + env(safe-area-inset-top,0px));left:12px;right:12px;z-index:3;display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.97);color:var(--ink);border-radius:16px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.4);transform:translateY(-14px);opacity:0;transition:.35s cubic-bezier(.3,1.3,.5,1)}
+.adf-done.on{transform:none;opacity:1}
+.adf-done .ok{width:34px;height:34px;border-radius:50%;background:#1fa45a;color:#fff;font-weight:900;font-size:18px;display:grid;place-items:center;flex:none}.adf-done .ok.bad{background:var(--bad)}
+.adf-done span{display:grid;gap:2px}.adf-done b{font-size:15px}.adf-done small{font-size:12px;color:var(--stone)}
+.adf-bot{position:absolute;left:0;right:0;bottom:0;padding:0 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:2}
+.adf-card{display:flex;gap:12px;align-items:center;background:rgba(28,30,40,.88);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px 12px;backdrop-filter:blur(12px);cursor:pointer;transform:translateY(130%);opacity:0;transition:.45s cubic-bezier(.3,1.2,.5,1);margin-bottom:12px}
+.adf-card.on{transform:none;opacity:1}
+.adf-card img{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none}
+.adf-ico{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:#fff3d6;font-size:24px;flex:none}
+.adf-ct{flex:1;min-width:0;display:grid;gap:2px}.adf-ct b{font-size:14.5px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.adf-ct span{font-size:12.5px;color:rgba(255,255,255,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adf-go{flex:none;background:#3d7bff;color:#fff;font-weight:800;font-size:13.5px;border-radius:999px;padding:9px 14px}
+.adf-bar{height:4px;border-radius:4px;background:rgba(255,255,255,.18);overflow:hidden}.adf-bar i{display:block;height:100%;width:0;background:#38d27a;transition:width .1s linear}
+.adf-confirm{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:24px}
+.adf-confirm>div{background:#1c1f2b;border-radius:20px;padding:22px;display:grid;gap:10px;text-align:center;max-width:320px}
+.adf-confirm p{margin:0 0 6px;color:rgba(255,255,255,.75);font-size:14px;line-height:1.45}
 
 </style>
 <div class="app" id="app">
@@ -4660,7 +4696,7 @@ function askFoot(msg){helpsReset();const f=$("lfoot"),q=LS.q,lvl=LS.mode==="leve
   f.innerHTML=`${msg?`<div class="fb"><b>${msg[0]}</b><p>${msg[1]}</p></div>`:""}<div class="actions">${lvl?`<button class="btn ghost helpbtn" id="help">💡 Aide · ${S.helps}</button>`:""}${needCheck?`<button class="btn" id="check" ${dis?"disabled":""}>${q.graded===false?"Valider":"Vérifier"}</button>`:""}</div>`;
   const c=$("check");if(c)c.onclick=check;const h=$("help");if(h)h.onclick=useHelp;}
 function startTimer(){stopTimer();$("timer").hidden=false;$("timer").classList.remove("urgent");let t0=Date.now(),tl=t0;let lastSec=Q_SECONDS;$("tbar").style.transform="scaleX(1)";$("tnum").textContent=Q_SECONDS+"s";
-  TM=setInterval(()=>{const nw=Date.now();if(!$("veil").hidden){t0+=nw-tl;tl=nw;return;}tl=nw;const left=Math.max(0,Q_SECONDS-(Date.now()-t0)/1000);$("tbar").style.transform=`scaleX(${left/Q_SECONDS})`;const s=Math.ceil(left);$("tnum").textContent=s+"s";
+  TM=setInterval(()=>{const nw=Date.now();if(!$("veil").hidden||document.getElementById("adFull")){t0+=nw-tl;tl=nw;return;}tl=nw;const left=Math.max(0,Q_SECONDS-(Date.now()-t0)/1000);$("tbar").style.transform=`scaleX(${left/Q_SECONDS})`;const s=Math.ceil(left);$("tnum").textContent=s+"s";
     if(left<=5)$("timer").classList.add("urgent");if(s<lastSec&&s<=5&&s>0)sfx("tick");lastSec=s;if(left<=0){stopTimer();penalize(true);}},80);}
 function stopTimer(){if(TM){clearInterval(TM);TM=null;}}
 function floatXp(n){if(!n)return;const e=document.createElement("span");e.className="xpfloat";e.textContent="+"+n;const r=$("lXp").getBoundingClientRect(),a=$("app").getBoundingClientRect();e.style.left=(r.left-a.left+8)+"px";e.style.top=(r.top-a.top+18)+"px";$("app").appendChild(e);setTimeout(()=>e.remove(),1000);}
@@ -5514,7 +5550,8 @@ function bindCityCard(){const b=$("cityEdit");if(!b)return;b.onclick=()=>{sfx("t
 /* ---------- Statistiques (vues, clics) ---------- */
 function adLog(ad,kind,mode){const sb=adSb();if(!sb||!ad)return Promise.resolve();
   return sb.rpc("ad_log",{p_ad:ad.id,p_kind:kind,p_mode:mode,p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||""}).then(()=>{},()=>{});}
-function adOpen(ad,mode){if(!ad||!ad.link_url)return;adLog(ad,"click",mode);const w=window.open(ad.link_url,"_blank","noopener");if(!w)location.href=ad.link_url;}
+// Ouvre le lien dans un nouvel onglet / le navigateur, sans jamais quitter le jeu.
+function adOpen(ad,mode){if(!ad||!ad.link_url)return;adLog(ad,"click",mode);const a=document.createElement("a");a.href=ad.link_url;a.target="_blank";a.rel="noopener noreferrer";document.body.appendChild(a);a.click();a.remove();}
 async function adNext(mode){const sb=adSb();if(!sb)return null;try{const {data,error}=await sb.rpc("next_ad",{p_mode:mode,p_city:(S.loc&&S.loc.city)||"",p_viewer:adViewer()});if(error)return null;return data||null;}catch(e){return null;}}
 
 /* ---------- Bandeau en haut de l'écran ---------- */
@@ -5541,7 +5578,9 @@ function adAudioPlay(url){const a=AD.au;if(!a||!url||!adSoundOn())return false;t
   a.pause();a.src=url;a.loop=true;a.volume=0.85;a.currentTime=0;const p=a.play();if(p&&p.catch)p.catch(()=>{const b=$("adSnd");if(b)b.textContent="🔇 Son coupé · toucher pour écouter";});return true;}catch(e){return false;}}
 function adAudioStop(){const a=AD.au;if(a){try{a.pause();a.removeAttribute("src");a.load();}catch(e){}}if(AD.musicWas&&S.set.music&&typeof startMusic==="function")startMusic();AD.musicWas=false;}
 
-/* ---------- Annonce à regarder pour gagner une vie ou une aide ---------- */
+/* ---------- Annonce à regarder pour gagner une vie ou une aide (plein écran) ----------
+   Vidéo ou image en plein écran, minuteur et barre de progression ; la récompense est accordée
+   automatiquement à la fin de la durée, ou dès que le joueur touche le lien de l'annonce. */
 async function adReward(kind,after){sfx("tap");adAudioUnlock();const c=await adLoadSettings();const life=kind==="life";
   const gain=life?(+c.reward_lives||0):(+c.reward_helps||0);
   if(life&&unlimited()){notify("♥","Vies illimitées","Tu as déjà des vies illimitées en ce moment.");return;}
@@ -5557,33 +5596,58 @@ async function adReward(kind,after){sfx("tap");adAudioUnlock();const c=await adL
   if(left<=0){sorry("C'est tout pour aujourd'hui","Tu as regardé toutes les annonces récompensées du jour. "+later);return;}
   const ad=await adNext("reward");
   if(!ad){sorry("Pas d'annonce pour le moment","Aucune annonce n'est disponible dans ta ville pour l'instant. "+later);return;}
-  const secs=Math.max(3,+c.reward_seconds||8);
-  openSheet(`<div class="adsheet"><div class="eyebrow">Annonce · ${prize} à la fin</div>
-    ${ad.image_url?`<img class="adimg" src="${esc(ad.image_url)}" alt="">`:""}
-    <h2 style="font-size:22px;margin:10px 0 4px">${esc(ad.title)}</h2>${ad.body?`<p style="margin:0 0 12px;line-height:1.5;color:#3a4766">${esc(ad.body)}</p>`:""}
-    <div style="display:grid;gap:10px">${ad.link_url?`<button class="btn ghost" id="adGo">${esc(ad.cta||"En savoir plus")} ↗</button>`:""}
-    <button class="btn warm" id="adClaim" disabled>Récompense dans ${secs} s</button>${ad.audio_url?`<button class="textlink" id="adSnd">${adSoundOn()?"🔊 Couper le son":"🔇 Écouter la musique"}</button>`:""}</div></div>`);
-  if(ad.audio_url)adAudioPlay(ad.audio_url);
-  const snd=$("adSnd");if(snd)snd.onclick=()=>{if(!AD.au)adAudioUnlock();const a=AD.au;
-    if(!a.paused&&a.getAttribute("src")===ad.audio_url){a.pause();snd.textContent="🔇 Écouter la musique";return;}
-    if(a.getAttribute("src")!==ad.audio_url){a.src=ad.audio_url;a.loop=true;a.volume=.85;}if(typeof stopMusic==="function")stopMusic();AD.musicWas=!!S.set.music;
-    a.play().then(()=>{snd.textContent="🔊 Couper le son";},()=>{});};
+  closeSheet();adPlayer(ad,{life,prize,later,sorry,after});}
+
+function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||document.body;
+  const old=$("adFull");if(old)old.remove();
+  const vid=!!ad.video_url;const base=Math.min(120,Math.max(3,+ad.duration_s||+c.reward_seconds||8));
+  const el=document.createElement("div");el.id="adFull";el.className="adfull";el.setAttribute("role","dialog");el.setAttribute("aria-label","Annonce");
+  const bg=ad.image_url?`<div class="adf-bg" style="background-image:url('${esc(ad.image_url)}')"></div>`:"";
+  el.innerHTML=`${bg}<div class="adf-media">${vid?`<video id="adfV" src="${esc(ad.video_url)}" ${ad.image_url?`poster="${esc(ad.image_url)}"`:""} playsinline webkit-playsinline preload="auto"></video>`:ad.image_url?`<img src="${esc(ad.image_url)}" alt="">`:`<div class="adf-txt">${esc(ad.title)}</div>`}</div>
+    <div class="adf-top"><div class="adf-l"><span class="adf-tag">Annonce</span>${vid||ad.audio_url?`<button class="adf-ic" id="adfSnd" aria-label="Son">🔇</button>`:""}</div>
+      <div class="adf-r"><span class="adf-pill" id="adfPill"><svg viewBox="0 0 36 36" class="adf-ring"><circle cx="18" cy="18" r="15.5" class="t"/><circle cx="18" cy="18" r="15.5" class="p" id="adfRing"/></svg><b id="adfSec">${base}</b><span id="adfLbl">Récompense dans ${base} s</span></span><button class="adf-x" id="adfX" aria-label="Fermer l'annonce">✕</button></div></div>
+    <div class="adf-done" id="adfDone" hidden></div>
+    <div class="adf-bot"><div class="adf-card" id="adfCard">${ad.image_url?`<img src="${esc(ad.image_url)}" alt="">`:`<span class="adf-ico">📣</span>`}<div class="adf-ct"><b>${esc(ad.title)}</b>${ad.body?`<span>${esc(ad.body)}</span>`:""}</div>${ad.link_url?`<span class="adf-go">${esc(ad.cta||"Voir")}</span>`:""}</div>
+      <div class="adf-bar"><i id="adfBar"></i></div></div>`;
+  app.appendChild(el);hush&&hush();
+  let need=base,el0=0,last=performance.now(),done=false,granted=false,closed=false,raf=0;const v=$("adfV");
+  const snd=$("adfSnd");const setSnd=on=>{if(snd)snd.textContent=on?"🔊":"🔇";};
+  // Son : la vidéo essaie avec le son (le joueur vient de toucher), sinon en muet ; l'image joue sa musique éventuelle.
+  if(v){v.muted=!adSoundOn();AD.musicWas=!!S.set.music;if(typeof stopMusic==="function")stopMusic();
+    v.addEventListener("loadedmetadata",()=>{if(!ad.duration_s&&isFinite(v.duration)&&v.duration>1)need=Math.min(120,Math.max(3,Math.floor(v.duration)));});
+    v.addEventListener("ended",()=>{if(!done){try{v.currentTime=0;v.play();}catch(e){}}});
+    const p=v.play();if(p&&p.catch)p.catch(()=>{v.muted=true;setSnd(false);v.play().catch(()=>{});});setSnd(!v.muted);
+    v.addEventListener("volumechange",()=>setSnd(!v.muted));
+    if(snd)snd.onclick=e=>{e.stopPropagation();v.muted=!v.muted;if(!v.muted)v.play().catch(()=>{});};}
+  else if(ad.audio_url){const ok=adAudioPlay(ad.audio_url);setSnd(ok&&adSoundOn());
+    if(snd)snd.onclick=e=>{e.stopPropagation();const a=AD.au;if(!a)return;if(!a.paused&&a.getAttribute("src")===ad.audio_url){a.pause();setSnd(false);}else{if(a.getAttribute("src")!==ad.audio_url){a.src=ad.audio_url;a.loop=true;a.volume=.85;}if(typeof stopMusic==="function")stopMusic();AD.musicWas=AD.musicWas||!!S.set.music;a.play().then(()=>setSnd(true),()=>{});}};}
   adLog(ad,"view","reward");
-  const go=$("adGo");if(go)go.onclick=()=>adOpen(ad,"reward");
-  const btn=$("adClaim");let n=secs;clearInterval(AD.tick);
-  AD.tick=setInterval(()=>{if(!document.body.contains(btn)||$("veil").hidden){clearInterval(AD.tick);return;}n--;
-    if(n>0){btn.textContent=`Récompense dans ${n} s`;return;}clearInterval(AD.tick);btn.disabled=false;btn.textContent=`Récupérer ${prize}`;sfx("bell");},1000);
-  clearInterval(AD.watch);AD.watch=setInterval(()=>{if(!document.body.contains(btn)||$("veil").hidden){clearInterval(AD.watch);adAudioStop();}},400);
-  btn.onclick=async()=>{btn.disabled=true;btn.textContent="Un instant…";
+  setTimeout(()=>{const cd=$("adfCard");if(cd)cd.classList.add("on");},1200);
+  const ring=$("adfRing"),C=2*Math.PI*15.5;if(ring){ring.style.strokeDasharray=C;ring.style.strokeDashoffset=0;}
+  const finish=async(viaClick)=>{if(done)return;done=true;cancelAnimationFrame(raf);
+    $("adfPill").classList.add("wait");$("adfLbl").textContent="Validation…";$("adfSec").textContent="";
     const claim=async()=>{const {data,error}=await sb.rpc("claim_ad_reward",{p_ad:ad.id,p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||""});if(error)throw error;return data||{};};
-    let r;try{r=await claim();if(!r.ok&&r.reason==="too_soon"){await new Promise(z=>setTimeout(z,2500));r=await claim();}}catch(e){r={ok:false,reason:"error"};}
-    if(!r.ok){btn.disabled=false;btn.textContent=`Récupérer ${prize}`;
-      if(r.reason==="limit"){sorry("C'est tout pour aujourd'hui","Tu as atteint le nombre d'annonces récompensées du jour. "+later);}
-      else if(r.reason==="already"){closeSheet();}
-      else notify("⚠️","Réessaie dans un instant","La récompense n'a pas pu être validée.");return;}
-    if(life){regen();S.hearts=Math.min(MAX_HEARTS,S.hearts+(+r.lives||0));if(S.hearts>=MAX_HEARTS)S.heartAt=0;}else{helpsReset();S.helps+=(+r.helps||0);}
-    save();sfx("coin");closeSheet();notify(life?"♥":"💡",life?`${prize} !`:`${prize} !`,typeof r.left==="number"&&r.left>0?`Encore ${r.left} annonce${r.left>1?"s":""} récompensée${r.left>1?"s":""} aujourd'hui.`:"Merci d'avoir regardé l'annonce.");
-    if(curScreen==="path")renderTop();if(curScreen==="profile")renderProfile();if(after)after();};}
+    let r;try{if(viaClick)await new Promise(z=>setTimeout(z,600));r=await claim();if(!r.ok&&r.reason==="too_soon"){await new Promise(z=>setTimeout(z,2500));r=await claim();}}catch(e){r={ok:false,reason:"error"};}
+    if(closed)return;const pill=$("adfPill"),box=$("adfDone");pill.hidden=true;$("adfBar").style.width="100%";
+    if(r.ok){granted=true;if(o.life){regen();S.hearts=Math.min(MAX_HEARTS,S.hearts+(+r.lives||0));if(S.hearts>=MAX_HEARTS)S.heartAt=0;}else{helpsReset();S.helps+=(+r.helps||0);}save();sfx("coin");
+      box.innerHTML=`<span class="ok">✓</span><span><b>Récompense accordée : ${o.prize}</b><small>${typeof r.left==="number"&&r.left>0?`Encore ${r.left} annonce${r.left>1?"s":""} récompensée${r.left>1?"s":""} aujourd'hui`:"Merci d'avoir regardé l'annonce"}</small></span>`;}
+    else if(r.reason==="already"){granted=true;box.innerHTML=`<span class="ok">✓</span><span><b>Récompense déjà accordée</b></span>`;}
+    else box.innerHTML=`<span class="ok bad">!</span><span><b>${r.reason==="limit"?"Limite du jour atteinte":"Récompense non validée"}</b><small>${r.reason==="limit"?o.later:"Vérifie ta connexion et réessaie."}</small></span>`;
+    box.hidden=false;requestAnimationFrame(()=>box.classList.add("on"));$("adfX").classList.add("ready");};
+  // Minuteur : avance seulement quand l'annonce est réellement à l'écran (et que la vidéo joue).
+  const step=t=>{if(closed||done)return;const dt=Math.min(250,t-last);last=t;
+    const running=document.visibilityState==="visible"&&(!v||(!v.paused&&v.readyState>=3));if(running)el0+=dt;
+    const rem=Math.max(0,need-el0/1000),k=Math.min(1,el0/1000/need);$("adfBar").style.width=(k*100)+"%";if(ring)ring.style.strokeDashoffset=C*k;
+    const s=Math.ceil(rem);$("adfSec").textContent=s;$("adfLbl").textContent=`Récompense dans ${s} s`;
+    if(rem<=0){finish(false);return;}raf=requestAnimationFrame(step);};raf=requestAnimationFrame(step);
+  const close=()=>{closed=true;cancelAnimationFrame(raf);if(v){try{v.pause();v.removeAttribute("src");v.load();}catch(e){}}adAudioStop();if(v&&AD.musicWas&&S.set.music&&typeof startMusic==="function")startMusic();AD.musicWas=false;
+    el.classList.add("out");setTimeout(()=>el.remove(),250);if(curScreen==="path")renderTop();if(curScreen==="profile")renderProfile();if(granted&&o.after)o.after();};
+  $("adfX").onclick=e=>{e.stopPropagation();if(done){close();return;}
+    if(v)v.pause();const cf=document.createElement("div");cf.className="adf-confirm";
+    cf.innerHTML=`<div><b>Quitter l'annonce ?</b><p>Tu ne recevras pas ta récompense (${o.prize}).</p><button class="btn" id="adfKeep">Continuer l'annonce</button><button class="textlink" id="adfQuit" style="color:#fff">Quitter</button></div>`;el.appendChild(cf);
+    $("adfKeep").onclick=()=>{cf.remove();last=performance.now();if(v)v.play().catch(()=>{});};$("adfQuit").onclick=()=>{cf.remove();close();};};
+  const open=e=>{if(e)e.stopPropagation();if(!ad.link_url)return;adOpen(ad,"reward");if(!done)finish(true);};
+  $("adfCard").onclick=open;const m=el.querySelector(".adf-media");if(m&&ad.link_url)m.onclick=open;}
 
 /* ---------- Jouer en ligne / entre amis : un minimum de vies ---------- */
 function adGate(retry){const c=adCfg();const need=+c.online_min_lives||0;if(unlimited()||need<=0)return true;regen();if(S.hearts>=need)return true;

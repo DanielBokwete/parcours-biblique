@@ -777,6 +777,42 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .adban .adcta{flex:none;font-weight:800;font-size:12.5px;color:#fff;background:var(--lapis);border-radius:999px;padding:7px 11px}
 .adban .adx{position:absolute;top:-8px;right:-6px;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--stone);font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(15,29,61,.25)}
 .adsheet .adimg{display:block;width:100%;max-height:46vh;object-fit:contain;border-radius:16px;background:#0f1d3d;margin-top:10px}
+
+/* ---------- Annonce plein écran ---------- */
+.adfull{position:absolute;inset:0;z-index:90;background:#05070d;color:#fff;overflow:hidden;animation:adfIn .25s ease both}
+.adfull.out{animation:adfOut .25s ease both}
+@keyframes adfIn{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:none}}@keyframes adfOut{to{opacity:0}}
+.adf-bg{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(30px) brightness(.45);transform:scale(1.1)}
+.adf-media{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:calc(64px + env(safe-area-inset-top,0px)) 0 150px}
+.adf-media video,.adf-media img{width:100%;height:100%;object-fit:contain;display:block}
+.adf-txt{font-family:var(--f-display);font-size:30px;font-weight:800;text-align:center;padding:24px}
+.adf-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 12px;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0));z-index:2}
+.adf-l,.adf-r{display:flex;align-items:center;gap:8px}
+.adf-tag{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:3px 7px;backdrop-filter:blur(6px)}
+.adf-ic{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:16px;display:grid;place-items:center}
+.adf-pill{display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.55);border-radius:999px;padding:4px 12px 4px 4px;font-size:12.5px;font-weight:700;backdrop-filter:blur(6px);position:relative}
+.adf-pill b{position:absolute;left:4px;width:30px;height:30px;display:grid;place-items:center;font-size:12px}
+.adf-pill.wait b{display:none}
+.adf-ring{width:30px;height:30px;transform:rotate(-90deg);flex:none}
+.adf-ring circle{fill:none;stroke-width:3}.adf-ring .t{stroke:rgba(255,255,255,.22)}.adf-ring .p{stroke:#38d27a;stroke-linecap:round;transition:stroke-dashoffset .1s linear}
+.adf-x{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.45);color:rgba(255,255,255,.75);font-size:16px;font-weight:800}
+.adf-x.ready{background:#fff;color:#111;box-shadow:0 4px 14px rgba(0,0,0,.4);animation:adfPop .35s cubic-bezier(.3,1.6,.5,1)}
+@keyframes adfPop{from{transform:scale(.6)}to{transform:none}}
+.adf-done{position:absolute;top:calc(60px + env(safe-area-inset-top,0px));left:12px;right:12px;z-index:3;display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.97);color:var(--ink);border-radius:16px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.4);transform:translateY(-14px);opacity:0;transition:.35s cubic-bezier(.3,1.3,.5,1)}
+.adf-done.on{transform:none;opacity:1}
+.adf-done .ok{width:34px;height:34px;border-radius:50%;background:#1fa45a;color:#fff;font-weight:900;font-size:18px;display:grid;place-items:center;flex:none}.adf-done .ok.bad{background:var(--bad)}
+.adf-done span{display:grid;gap:2px}.adf-done b{font-size:15px}.adf-done small{font-size:12px;color:var(--stone)}
+.adf-bot{position:absolute;left:0;right:0;bottom:0;padding:0 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:2}
+.adf-card{display:flex;gap:12px;align-items:center;background:rgba(28,30,40,.88);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px 12px;backdrop-filter:blur(12px);cursor:pointer;transform:translateY(130%);opacity:0;transition:.45s cubic-bezier(.3,1.2,.5,1);margin-bottom:12px}
+.adf-card.on{transform:none;opacity:1}
+.adf-card img{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none}
+.adf-ico{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:#fff3d6;font-size:24px;flex:none}
+.adf-ct{flex:1;min-width:0;display:grid;gap:2px}.adf-ct b{font-size:14.5px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.adf-ct span{font-size:12.5px;color:rgba(255,255,255,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adf-go{flex:none;background:#3d7bff;color:#fff;font-weight:800;font-size:13.5px;border-radius:999px;padding:9px 14px}
+.adf-bar{height:4px;border-radius:4px;background:rgba(255,255,255,.18);overflow:hidden}.adf-bar i{display:block;height:100%;width:0;background:#38d27a;transition:width .1s linear}
+.adf-confirm{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:24px}
+.adf-confirm>div{background:#1c1f2b;border-radius:20px;padding:22px;display:grid;gap:10px;text-align:center;max-width:320px}
+.adf-confirm p{margin:0 0 6px;color:rgba(255,255,255,.75);font-size:14px;line-height:1.45}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -1112,7 +1148,7 @@ async function tAds(){
    ${list.map(a=>{const s=st[a.id]||{},[sl,sc]=status(a),ctr=s.views?Math.round(s.clicks/s.views*1000)/10:0;
      return `<tr class="${sc==="off"?"off":""}"><td>${a.image_url?`<img src="${esc(a.image_url)}" alt="" class="pthumb">`:""}<b>${esc(a.title)}</b><br><small class="muted">${esc(a.body||"")}</small><br><span class="stag ${sc}">${sl}</span></td>
      <td>${a.cities&&a.cities.length?a.cities.map(k=>`<span class="ctag">${esc(lab(k))}</span>`).join(" "):"<b>Toutes les villes</b>"}</td>
-     <td>${[a.show_banner?"📣 Bandeau":"",a.show_reward?"▶️ Récompense":"",a.audio_url?"🎵 Musique":""].filter(Boolean).join("<br>")||"<span class='muted'>Aucune</span>"}</td>
+     <td>${[a.show_banner?"📣 Bandeau":"",a.show_reward?"▶️ Récompense":"",a.video_url?`🎬 Vidéo${a.duration_s?" · "+a.duration_s+" s":""}`:a.duration_s?`⏱️ ${a.duration_s} s`:"",a.audio_url?"🎵 Musique":""].filter(Boolean).join("<br>")||"<span class='muted'>Aucune</span>"}</td>
      <td><small>${a.starts_at?"Du "+fmtD(a.starts_at):"Dès maintenant"}<br>${a.ends_at?"Au "+fmtD(a.ends_at):"Sans fin"}</small></td>
      <td><small><b>${s.views||0}</b> vues · <b>${s.people||0}</b> personnes<br><b>${s.clicks||0}</b> clics (${ctr} %) · <b>${s.rewards||0}</b> récompenses<br><span class="muted">${s.views_24h||0} vues sur 24 h</span></small></td>
      <td class="acts"><button class="textlink" data-ae="${a.id}">Modifier</button>${a.archived?`<button class="textlink" data-aa="${a.id}" data-v="false">Restaurer</button>`:`<button class="textlink" data-ap="${a.id}" data-v="${!a.active}">${a.active?"Mettre en pause":"Activer"}</button><button class="textlink" data-aa="${a.id}" data-v="true">Archiver</button>`}</td></tr>`;}).join("")||`<tr><td colspan="6" class="muted">Aucune annonce pour l'instant.</td></tr>`}</table>
@@ -1142,6 +1178,8 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
    <div class="field span2"><label for="aB">Texte court (facultatif)</label><textarea id="aB" rows="2" maxlength="180" placeholder="Ex. Stade des Martyrs, 18 h. Billets dès 5 $.">${esc(a.body||"")}</textarea></div>
    <div class="field span2"><label for="aL">Lien (réservation, inscription, page…)</label><input id="aL" type="url" value="${esc(a.link_url||"")}" placeholder="https://…"></div>
    <div class="field span2"><label>Image (facultatif)</label><div class="pimg"><div class="pprev" id="aPrev"><span>📣</span></div><div style="display:grid;gap:6px"><label class="btn small ghost" style="width:auto;cursor:pointer">🖼️ Importer une image<input type="file" id="aFile" accept="image/jpeg,image/png,image/webp" hidden></label><button class="textlink" id="aClr" hidden style="justify-self:start">Retirer l'image</button><small class="muted" id="aMsg">Format carré ou paysage · 3 Mo maximum</small></div></div><input type="hidden" id="aI"></div>
+   <div class="field span2"><label>Vidéo courte (facultatif)</label><div style="display:grid;gap:6px"><div class="row" style="flex-wrap:wrap;gap:8px"><label class="btn small ghost" style="width:auto;cursor:pointer">🎬 Importer une vidéo<input type="file" id="aVid" accept="video/mp4,video/webm,video/quicktime" hidden></label><button class="textlink" id="aVidClr" hidden>Retirer la vidéo</button></div><div id="aVidPrev"></div><small class="muted" id="aVidMsg">MP4 · 25 Mo maximum · idéalement 15 à 30 s, format vertical ou carré. Si tu n'as pas mis d'image, une image de la vidéo est prise automatiquement pour le bandeau.</small></div><input type="hidden" id="aV"></div>
+   <div class="field"><label for="aD">Durée de l'annonce (secondes)</label><input type="number" id="aD" min="3" max="120" value="${a.duration_s??""}" placeholder="Réglage général"><small class="muted">Temps à regarder avant la récompense (3 à 120 s). Rempli tout seul avec la durée de la vidéo.</small></div><div></div>
    <div class="field span2"><label>Musique (facultatif)</label><div style="display:grid;gap:6px"><div class="row" style="flex-wrap:wrap;gap:8px"><label class="btn small ghost" style="width:auto;cursor:pointer">🎵 Importer une musique<input type="file" id="aAud" accept="audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/aac,audio/ogg,audio/wav" hidden></label><button class="textlink" id="aAudClr" hidden>Retirer la musique</button></div><div id="aAudPrev"></div><small class="muted" id="aAudMsg">MP3 ou M4A · 5 Mo maximum. Jouée seulement pendant l'annonce à regarder (le bandeau reste silencieux).</small></div><input type="hidden" id="aU"></div>
    <div class="field span2"><label>Villes de diffusion</label>
      <label class="chk"><input type="checkbox" id="aAll"${all?" checked":""}> Toutes les villes</label>
@@ -1155,8 +1193,21 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
    <div class="field"><label for="aS">Début (facultatif)</label><input type="datetime-local" id="aS" value="${toLocalInput(a.starts_at)}"></div>
    <div class="field"><label for="aE">Fin (facultatif)</label><input type="datetime-local" id="aE" value="${toLocalInput(a.ends_at)}"></div></div>
   <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button>${n?"":`<button class="textlink" id="aNew">Nouvelle annonce</button>`}</div>`;
-  const draftRow=()=>({title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,audio_url:$("aU").value,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
+  const draftRow=()=>({title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,audio_url:$("aU").value,video_url:$("aV").value,duration_s:$("aD").value?+$("aD").value:null,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
   const saveDraft=()=>{try{localStorage.setItem(AD_DRAFT,JSON.stringify({id:n?null:a.id,row:draftRow()}));}catch(e){}};
+  const setVid=u=>{$("aV").value=u||"";$("aVidPrev").innerHTML=u?`<video controls playsinline preload="metadata" src="${esc(u)}" style="width:100%;max-height:260px;border-radius:12px;background:#000"></video>`:"";$("aVidClr").hidden=!u;};setVid(a.video_url);
+  $("aVidClr").onclick=()=>{setVid("");saveDraft();};
+  const grabFrame=file=>new Promise(res=>{try{const v=document.createElement("video");v.muted=true;v.playsInline=true;v.preload="auto";const u=URL.createObjectURL(file);v.src=u;
+    v.onloadedmetadata=()=>{v.currentTime=Math.min(1,(v.duration||2)/3);};
+    v.onseeked=()=>{try{const cv=document.createElement("canvas");const sc=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight));cv.width=Math.round(v.videoWidth*sc);cv.height=Math.round(v.videoHeight*sc);cv.getContext("2d").drawImage(v,0,0,cv.width,cv.height);cv.toBlob(b=>{URL.revokeObjectURL(u);res({blob:b,dur:v.duration});},"image/jpeg",.82);}catch(e){res({blob:null,dur:v.duration});}};
+    v.onerror=()=>res({blob:null,dur:0});setTimeout(()=>res({blob:null,dur:v.duration||0}),8000);}catch(e){res({blob:null,dur:0});}});
+  $("aVid").onchange=async()=>{const fl=$("aVid").files[0];if(!fl)return;if(fl.size>25*1024*1024){$("aVidMsg").textContent="Vidéo trop lourde (25 Mo maximum). Exporte-la en 720p ou raccourcis-la.";return;}
+    $("aVidMsg").textContent="Préparation de la vidéo…";const fr=await grabFrame(fl);
+    if(fr.dur&&isFinite(fr.dur)){$("aD").value=Math.min(120,Math.max(3,Math.round(fr.dur)));}
+    if(!$("aI").value&&fr.blob){const p=`annonce-${Date.now()}.jpg`;const {error:e1}=await sb.storage.from("prizes").upload(p,fr.blob,{contentType:"image/jpeg",upsert:false});if(!e1)setImg(sb.storage.from("prizes").getPublicUrl(p).data.publicUrl);}
+    $("aVidMsg").textContent=`Envoi de la vidéo (${Math.round(fl.size/1024/1024*10)/10} Mo)…`;const ext=(fl.name.split(".").pop()||"mp4").toLowerCase().replace(/[^a-z0-9]/g,"")||"mp4",path=`video-${Date.now()}.${ext}`;
+    const {error}=await sb.storage.from("ads-media").upload(path,fl,{contentType:fl.type||"video/mp4",upsert:false});
+    if(error){$("aVidMsg").textContent="Échec de l'envoi : "+err(error);return;}setVid(sb.storage.from("ads-media").getPublicUrl(path).data.publicUrl);$("aVidMsg").textContent="Vidéo prête.";saveDraft();};
   const setAud=u=>{$("aU").value=u||"";$("aAudPrev").innerHTML=u?`<audio controls preload="none" src="${esc(u)}" style="width:100%"></audio>`:"";$("aAudClr").hidden=!u;};setAud(a.audio_url);
   $("aAudClr").onclick=()=>{setAud("");saveDraft();};
   $("aAud").onchange=async()=>{const fl=$("aAud").files[0];if(!fl)return;if(fl.size>5*1024*1024){$("aAudMsg").textContent="Musique trop lourde (5 Mo maximum). Raccourcis-la ou exporte-la en MP3 128 kbps.";return;}
@@ -1178,7 +1229,7 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
   f.querySelectorAll("[data-qc]").forEach(b=>b.onclick=()=>addCity(b.dataset.qc));
   $("aAll").onchange=()=>{$("aCityBox").hidden=$("aAll").checked;};
   const nw=$("aNew");if(nw)nw.onclick=()=>{adDraftClear();adForm(null,cities,lab);};
-  $("aSave").onclick=async()=>{const row={title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,
+  $("aSave").onclick=async()=>{const row={title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,video_url:$("aV").value||null,duration_s:$("aD").value?Math.min(120,Math.max(3,parseInt($("aD").value,10)||0)):null,
       cities:$("aAll").checked?[]:sel,show_banner:$("aMB").checked,show_reward:$("aMR").checked,
       starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null};
     if(!row.title){toast("Donne un titre à l'annonce.",1);return;}
