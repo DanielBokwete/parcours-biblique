@@ -861,6 +861,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .field label.chk{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer;padding:4px 0}
 .field label.chk input{width:20px;height:20px;flex:none;accent-color:var(--lapis)}
+.field label.btn{text-transform:none;letter-spacing:0;font-size:14px;color:var(--lapis);width:auto;justify-self:start}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <header class="ahead"><b>✝️ Parcours Biblique · Admin</b></header><nav class="anav" id="nav"></nav><main id="main"></main><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>/* ---------- Avatars personnalisés « av1:… » ----------
    Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
@@ -1111,7 +1112,7 @@ async function tAds(){
    ${list.map(a=>{const s=st[a.id]||{},[sl,sc]=status(a),ctr=s.views?Math.round(s.clicks/s.views*1000)/10:0;
      return `<tr class="${sc==="off"?"off":""}"><td>${a.image_url?`<img src="${esc(a.image_url)}" alt="" class="pthumb">`:""}<b>${esc(a.title)}</b><br><small class="muted">${esc(a.body||"")}</small><br><span class="stag ${sc}">${sl}</span></td>
      <td>${a.cities&&a.cities.length?a.cities.map(k=>`<span class="ctag">${esc(lab(k))}</span>`).join(" "):"<b>Toutes les villes</b>"}</td>
-     <td>${[a.show_banner?"📣 Bandeau":"",a.show_reward?"▶️ Récompense":""].filter(Boolean).join("<br>")||"<span class='muted'>Aucune</span>"}</td>
+     <td>${[a.show_banner?"📣 Bandeau":"",a.show_reward?"▶️ Récompense":"",a.audio_url?"🎵 Musique":""].filter(Boolean).join("<br>")||"<span class='muted'>Aucune</span>"}</td>
      <td><small>${a.starts_at?"Du "+fmtD(a.starts_at):"Dès maintenant"}<br>${a.ends_at?"Au "+fmtD(a.ends_at):"Sans fin"}</small></td>
      <td><small><b>${s.views||0}</b> vues · <b>${s.people||0}</b> personnes<br><b>${s.clicks||0}</b> clics (${ctr} %) · <b>${s.rewards||0}</b> récompenses<br><span class="muted">${s.views_24h||0} vues sur 24 h</span></small></td>
      <td class="acts"><button class="textlink" data-ae="${a.id}">Modifier</button>${a.archived?`<button class="textlink" data-aa="${a.id}" data-v="false">Restaurer</button>`:`<button class="textlink" data-ap="${a.id}" data-v="${!a.active}">${a.active?"Mettre en pause":"Activer"}</button><button class="textlink" data-aa="${a.id}" data-v="true">Archiver</button>`}</td></tr>`;}).join("")||`<tr><td colspan="6" class="muted">Aucune annonce pour l'instant.</td></tr>`}</table>
@@ -1141,6 +1142,7 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
    <div class="field span2"><label for="aB">Texte court (facultatif)</label><textarea id="aB" rows="2" maxlength="180" placeholder="Ex. Stade des Martyrs, 18 h. Billets dès 5 $.">${esc(a.body||"")}</textarea></div>
    <div class="field span2"><label for="aL">Lien (réservation, inscription, page…)</label><input id="aL" type="url" value="${esc(a.link_url||"")}" placeholder="https://…"></div>
    <div class="field span2"><label>Image (facultatif)</label><div class="pimg"><div class="pprev" id="aPrev"><span>📣</span></div><div style="display:grid;gap:6px"><label class="btn small ghost" style="width:auto;cursor:pointer">🖼️ Importer une image<input type="file" id="aFile" accept="image/jpeg,image/png,image/webp" hidden></label><button class="textlink" id="aClr" hidden style="justify-self:start">Retirer l'image</button><small class="muted" id="aMsg">Format carré ou paysage · 3 Mo maximum</small></div></div><input type="hidden" id="aI"></div>
+   <div class="field span2"><label>Musique (facultatif)</label><div style="display:grid;gap:6px"><div class="row" style="flex-wrap:wrap;gap:8px"><label class="btn small ghost" style="width:auto;cursor:pointer">🎵 Importer une musique<input type="file" id="aAud" accept="audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/aac,audio/ogg,audio/wav" hidden></label><button class="textlink" id="aAudClr" hidden>Retirer la musique</button></div><div id="aAudPrev"></div><small class="muted" id="aAudMsg">MP3 ou M4A · 5 Mo maximum. Jouée seulement pendant l'annonce à regarder (le bandeau reste silencieux).</small></div><input type="hidden" id="aU"></div>
    <div class="field span2"><label>Villes de diffusion</label>
      <label class="chk"><input type="checkbox" id="aAll"${all?" checked":""}> Toutes les villes</label>
      <div id="aCityBox"${all?" hidden":""}><div class="chips" id="aChips"></div>
@@ -1153,8 +1155,14 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
    <div class="field"><label for="aS">Début (facultatif)</label><input type="datetime-local" id="aS" value="${toLocalInput(a.starts_at)}"></div>
    <div class="field"><label for="aE">Fin (facultatif)</label><input type="datetime-local" id="aE" value="${toLocalInput(a.ends_at)}"></div></div>
   <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button>${n?"":`<button class="textlink" id="aNew">Nouvelle annonce</button>`}</div>`;
-  const draftRow=()=>({title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
+  const draftRow=()=>({title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,audio_url:$("aU").value,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
   const saveDraft=()=>{try{localStorage.setItem(AD_DRAFT,JSON.stringify({id:n?null:a.id,row:draftRow()}));}catch(e){}};
+  const setAud=u=>{$("aU").value=u||"";$("aAudPrev").innerHTML=u?`<audio controls preload="none" src="${esc(u)}" style="width:100%"></audio>`:"";$("aAudClr").hidden=!u;};setAud(a.audio_url);
+  $("aAudClr").onclick=()=>{setAud("");saveDraft();};
+  $("aAud").onchange=async()=>{const fl=$("aAud").files[0];if(!fl)return;if(fl.size>5*1024*1024){$("aAudMsg").textContent="Musique trop lourde (5 Mo maximum). Raccourcis-la ou exporte-la en MP3 128 kbps.";return;}
+    $("aAudMsg").textContent="Envoi de la musique…";const ext=(fl.name.split(".").pop()||"mp3").toLowerCase().replace(/[^a-z0-9]/g,"")||"mp3",path=`musique-${Date.now()}.${ext}`;
+    const {error}=await sb.storage.from("ads-media").upload(path,fl,{contentType:fl.type||"audio/mpeg",upsert:false});
+    if(error){$("aAudMsg").textContent="Échec de l'envoi : "+err(error);return;}setAud(sb.storage.from("ads-media").getPublicUrl(path).data.publicUrl);$("aAudMsg").textContent="Musique prête.";saveDraft();};
   const setImg=u=>{$("aI").value=u||"";$("aPrev").innerHTML=u?`<img src="${esc(u)}" alt="">`:"<span>📣</span>";$("aClr").hidden=!u;};setImg(a.image_url);
   f.addEventListener("input",saveDraft);f.addEventListener("change",saveDraft);
   $("aClr").onclick=()=>{setImg("");saveDraft();};
@@ -1170,7 +1178,7 @@ function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.
   f.querySelectorAll("[data-qc]").forEach(b=>b.onclick=()=>addCity(b.dataset.qc));
   $("aAll").onchange=()=>{$("aCityBox").hidden=$("aAll").checked;};
   const nw=$("aNew");if(nw)nw.onclick=()=>{adDraftClear();adForm(null,cities,lab);};
-  $("aSave").onclick=async()=>{const row={title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,
+  $("aSave").onclick=async()=>{const row={title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,
       cities:$("aAll").checked?[]:sel,show_banner:$("aMB").checked,show_reward:$("aMR").checked,
       starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null};
     if(!row.title){toast("Donne un titre à l'annonce.",1);return;}

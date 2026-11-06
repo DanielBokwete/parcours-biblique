@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="eec8cfbef0";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="54ac452d02";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5533,8 +5533,16 @@ async function adBanner(){if(AD.busy)return;AD.busy=true;
   }catch(e){}finally{AD.busy=false;}}
 function adHideBan(){const b=$("adBan");if(!b||b.hidden)return;b.classList.remove("on");clearTimeout(AD.banT);setTimeout(()=>{if(!b.classList.contains("on"))b.hidden=true;},380);}
 
+/* ---------- Musique d'annonce : seulement pendant une annonce que le joueur a choisi de regarder ---------- */
+const AD_SILENT="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjU0AAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRBqpAAAAAAD/+xDEAAPAAAGkAAAAIAAANIAAAARMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
+function adAudioUnlock(){try{if(!AD.au){AD.au=new Audio();AD.au.preload="auto";}const a=AD.au;a.src=AD_SILENT;a.volume=0;const p=a.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}}
+const adSoundOn=()=>!!(S.set.music||S.set.sfx);
+function adAudioPlay(url){const a=AD.au;if(!a||!url||!adSoundOn())return false;try{AD.musicWas=!!S.set.music;if(typeof stopMusic==="function")stopMusic();
+  a.pause();a.src=url;a.loop=true;a.volume=0.85;a.currentTime=0;const p=a.play();if(p&&p.catch)p.catch(()=>{const b=$("adSnd");if(b)b.textContent="🔇 Son coupé · toucher pour écouter";});return true;}catch(e){return false;}}
+function adAudioStop(){const a=AD.au;if(a){try{a.pause();a.removeAttribute("src");a.load();}catch(e){}}if(AD.musicWas&&S.set.music&&typeof startMusic==="function")startMusic();AD.musicWas=false;}
+
 /* ---------- Annonce à regarder pour gagner une vie ou une aide ---------- */
-async function adReward(kind,after){sfx("tap");const c=await adLoadSettings();const life=kind==="life";
+async function adReward(kind,after){sfx("tap");adAudioUnlock();const c=await adLoadSettings();const life=kind==="life";
   const gain=life?(+c.reward_lives||0):(+c.reward_helps||0);
   if(life&&unlimited()){notify("♥","Vies illimitées","Tu as déjà des vies illimitées en ce moment.");return;}
   if(life){regen();if(S.hearts>=MAX_HEARTS){notify("♥","Tes vies sont au complet","Reviens quand il t'en manquera.");return;}}
@@ -5554,12 +5562,18 @@ async function adReward(kind,after){sfx("tap");const c=await adLoadSettings();co
     ${ad.image_url?`<img class="adimg" src="${esc(ad.image_url)}" alt="">`:""}
     <h2 style="font-size:22px;margin:10px 0 4px">${esc(ad.title)}</h2>${ad.body?`<p style="margin:0 0 12px;line-height:1.5;color:#3a4766">${esc(ad.body)}</p>`:""}
     <div style="display:grid;gap:10px">${ad.link_url?`<button class="btn ghost" id="adGo">${esc(ad.cta||"En savoir plus")} ↗</button>`:""}
-    <button class="btn warm" id="adClaim" disabled>Récompense dans ${secs} s</button></div></div>`);
+    <button class="btn warm" id="adClaim" disabled>Récompense dans ${secs} s</button>${ad.audio_url?`<button class="textlink" id="adSnd">${adSoundOn()?"🔊 Couper le son":"🔇 Écouter la musique"}</button>`:""}</div></div>`);
+  if(ad.audio_url)adAudioPlay(ad.audio_url);
+  const snd=$("adSnd");if(snd)snd.onclick=()=>{if(!AD.au)adAudioUnlock();const a=AD.au;
+    if(!a.paused&&a.getAttribute("src")===ad.audio_url){a.pause();snd.textContent="🔇 Écouter la musique";return;}
+    if(a.getAttribute("src")!==ad.audio_url){a.src=ad.audio_url;a.loop=true;a.volume=.85;}if(typeof stopMusic==="function")stopMusic();AD.musicWas=!!S.set.music;
+    a.play().then(()=>{snd.textContent="🔊 Couper le son";},()=>{});};
   adLog(ad,"view","reward");
   const go=$("adGo");if(go)go.onclick=()=>adOpen(ad,"reward");
   const btn=$("adClaim");let n=secs;clearInterval(AD.tick);
   AD.tick=setInterval(()=>{if(!document.body.contains(btn)||$("veil").hidden){clearInterval(AD.tick);return;}n--;
     if(n>0){btn.textContent=`Récompense dans ${n} s`;return;}clearInterval(AD.tick);btn.disabled=false;btn.textContent=`Récupérer ${prize}`;sfx("bell");},1000);
+  clearInterval(AD.watch);AD.watch=setInterval(()=>{if(!document.body.contains(btn)||$("veil").hidden){clearInterval(AD.watch);adAudioStop();}},400);
   btn.onclick=async()=>{btn.disabled=true;btn.textContent="Un instant…";
     const claim=async()=>{const {data,error}=await sb.rpc("claim_ad_reward",{p_ad:ad.id,p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||""});if(error)throw error;return data||{};};
     let r;try{r=await claim();if(!r.ok&&r.reason==="too_soon"){await new Promise(z=>setTimeout(z,2500));r=await claim();}}catch(e){r={ok:false,reason:"error"};}
