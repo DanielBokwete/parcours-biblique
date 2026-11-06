@@ -944,7 +944,7 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 let adLock=Promise.resolve();
 const sb=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,lock:(n,t,fn)=>{const r=adLock.then(()=>fn());adLock=r.catch(()=>{});return r;}}});
 const rpc=async(fn,a)=>{const {data,error}=await sb.rpc(fn,a||{});if(error)throw error;return data;};
-const A={me:null,tab:"home",q:{page:0,t:"",d:"",k:"",s:"",act:"1"},month:new Date().toISOString().slice(0,7),users:"",busy:false};
+const A={me:null,tab:(()=>{try{return localStorage.getItem("pb-admin-tab")||"home";}catch(e){return "home";}})(),q:{page:0,t:"",d:"",k:"",s:"",act:"1"},month:new Date().toISOString().slice(0,7),users:"",busy:false};
 const fmtD=d=>d?new Date(d).toLocaleString("fr-FR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"–";
 const DIFF={facile:"Facile",moyen:"Moyen",difficile:"Difficile"},KIND={qcm:"QCM",tf:"Vrai / faux",fill:"Verset à compléter"};
 function toast(t,bad){const e=$("toast");e.textContent=t;e.className="atoast"+(bad?" bad":"");e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,3500);}
@@ -952,12 +952,13 @@ const adAv=v=>/^https:/.test(v||"")?`<img src="${esc(v)}" alt="">`:avIsCfg(v)?av
 function err(e){return (e&&(e.message||e.error_description))||String(e);}
 
 // Ne jamais attendre une requête Supabase dans ce rappel (blocage connu) : on relance boot() juste après.
-sb.auth.onAuthStateChange(ev=>{if(ev==="SIGNED_IN"||ev==="SIGNED_OUT")setTimeout(boot,0);});
+let curUid=null;
+sb.auth.onAuthStateChange((ev,s)=>{const uid=s&&s.user?s.user.id:null;if(ev==="SIGNED_OUT"){curUid=null;setTimeout(boot,0);return;}if(ev==="SIGNED_IN"&&uid!==curUid){curUid=uid;setTimeout(boot,0);}});
 let booting=false;
 async function boot(){if(booting)return;booting=true;try{await boot2();}finally{booting=false;}}
 async function boot2(){$("main").innerHTML=`<div class="acard narrow">Connexion…</div>`;
   const {data}=await Promise.race([sb.auth.getSession(),new Promise(r=>setTimeout(()=>r({data:{session:null}}),6000))]);
-  if(!data.session){renderLogin();return;}
+  if(!data.session){renderLogin();return;}curUid=data.session.user.id;
   try{A.me=await rpc("get_my_profile");}catch(e){A.me=null;}
   if(!A.me||!A.me.is_admin){$("main").innerHTML=`<div class="acard narrow"><h2>Accès refusé</h2><p>Le compte <b>${esc(data.session.user.email)}</b> n'est pas administrateur. Demande à un administrateur de te donner les droits depuis l'onglet Joueurs.</p><button class="btn ghost" id="out">Se déconnecter</button></div>`;$("out").onclick=()=>sb.auth.signOut();$("nav").innerHTML="";return;}
   renderNav();renderTab();}
@@ -967,7 +968,7 @@ function renderLogin(){$("nav").innerHTML="";
   $("g").onclick=async()=>{$("m").textContent="Ouverture de Google…";try{localStorage.setItem("pb-after-login","admin");}catch(e){}const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+"/",queryParams:{prompt:"select_account"}}});if(error)$("m").textContent=err(error);};}
 const TABS=[["home","📊 Vue d'ensemble"],["users","👥 Joueurs"],["matches","⚔️ Parties"],["rank","🏆 Classement"],["prizes","🎁 Prix"],["ads","📣 Annonces"],["questions","❓ Questions"]];
 function renderNav(){$("nav").innerHTML=TABS.map(([k,l])=>`<button data-t="${k}" aria-pressed="${A.tab===k}">${l}</button>`).join("")+`<span class="sp"></span><small class="muted">${esc(A.me.display_name)}</small><button class="textlink" id="out">Déconnexion</button><a class="textlink" href="index.html">Ouvrir le jeu</a>`;
-  $("nav").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{A.tab=b.dataset.t;renderNav();renderTab();});$("out").onclick=()=>sb.auth.signOut();}
+  $("nav").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{A.tab=b.dataset.t;try{localStorage.setItem("pb-admin-tab",A.tab);}catch(e){}renderNav();renderTab();});$("out").onclick=()=>sb.auth.signOut();}
 /* Sur mobile, chaque cellule reçoit le titre de sa colonne (les tableaux s'affichent en fiches). */
 function labelTables(){document.querySelectorAll("#main table.tbl").forEach(t=>{const hr=[...t.querySelectorAll("tr")].find(r=>r.querySelector("th"));if(!hr)return;
   const heads=[...hr.children].map(th=>th.textContent.trim());t.querySelectorAll("tr").forEach(r=>{if(r===hr)return;[...r.children].forEach((td,i)=>{if(td.tagName==="TD"&&!td.hasAttribute("data-l")&&!td.hasAttribute("colspan"))td.setAttribute("data-l",heads[i]||"");});});});}
@@ -1099,7 +1100,7 @@ const cap=s=>String(s||"").replace(/(^|\s|-)(\p{L})/gu,(m,a,b)=>a+b.toUpperCase(
 const AD_FIELDS=[["banner_every_min","Bandeau : toutes les … minutes","0 = aucun bandeau"],["banner_seconds","Bandeau : durée d'affichage (secondes)",""],["reward_seconds","Annonce récompensée : durée minimale (secondes)","Avant de pouvoir récupérer la récompense"],["reward_lives","Vies gagnées par annonce",""],["reward_helps","Aides gagnées par annonce",""],["reward_daily_max","Annonces récompensées par jour et par joueur",""],["online_min_lives","Vies minimum pour jouer en ligne ou entre amis","0 = aucune condition"],["online_cost_lives","Vies consommées par partie en ligne ou entre amis","0 = gratuit"]];
 async function tAds(){
   const [{data:ads,error},{data:set},stats,cities]=await Promise.all([sb.from("ads").select("*").order("created_at",{ascending:false}),sb.from("ad_settings").select("*").eq("id",1).maybeSingle(),rpc("admin_ad_stats").catch(()=>[]),rpc("admin_known_cities").catch(()=>[])]);
-  if(error)throw error;const S=set||{};const st={};(stats||[]).forEach(x=>st[x.id]=x);
+  if(error)throw error;window.__ads=ads;const S=set||{};const st={};(stats||[]).forEach(x=>st[x.id]=x);
   const label={};(cities||[]).forEach(c=>label[c.k]=c.label||cap(c.k));const lab=k=>label[k]||cap(k);
   const now=Date.now();
   const status=a=>a.archived?["Archivée","off"]:!a.active?["En pause","off"]:a.starts_at&&new Date(a.starts_at)>now?["Programmée","wait"]:a.ends_at&&new Date(a.ends_at)<=now?["Terminée","off"]:["En diffusion","on"];
@@ -1122,13 +1123,17 @@ async function tAds(){
   $("adArch").onclick=()=>{A.adArch=!showArch;tAds();};
   $("asSave").onclick=async()=>{const row={};for(const [k] of AD_FIELDS){const v=parseInt($("as_"+k).value,10);if(!(v>=0)){toast("Valeur invalide : "+AD_FIELDS.find(f=>f[0]===k)[1],1);return;}row[k]=v;}
     const {error}=await sb.from("ad_settings").update(row).eq("id",1);if(error)toast(err(error),1);else toast("Réglages enregistrés.");};
-  document.querySelectorAll("[data-ae]").forEach(b=>b.onclick=()=>{adForm(ads.find(x=>x.id==b.dataset.ae),cities,lab);window.scrollTo({top:0,behavior:"smooth"});});
+  document.querySelectorAll("[data-ae]").forEach(b=>b.onclick=()=>{adDraftClear();adForm(ads.find(x=>x.id==b.dataset.ae),cities,lab);window.scrollTo({top:0,behavior:"smooth"});});
   document.querySelectorAll("[data-ap]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("ads").update({active:b.dataset.v==="true"}).eq("id",b.dataset.ap);if(error)toast(err(error),1);else tAds();});
   document.querySelectorAll("[data-aa]").forEach(b=>b.onclick=async()=>{const arch=b.dataset.v==="true";if(arch&&!confirm("Archiver cette annonce ? Elle ne sera plus diffusée (ses statistiques sont conservées)."))return;
     const {error}=await sb.from("ads").update(arch?{archived:true,active:false}:{archived:false}).eq("id",b.dataset.aa);if(error)toast(err(error),1);else tAds();});}
 const toLocalInput=iso=>{if(!iso)return "";const d=new Date(iso);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);};
-function adForm(a,cities,lab){const n=!a;a=a||{title:"",body:"",cta:"En savoir plus",link_url:"",image_url:"",cities:[],show_banner:true,show_reward:true,starts_at:null,ends_at:null};
-  let sel=[...(a.cities||[])];let all=!sel.length&&!n?true:!sel.length;
+const AD_DRAFT="pb-admin-ad-draft";
+const adDraftGet=()=>{try{return JSON.parse(localStorage.getItem(AD_DRAFT)||"null");}catch(e){return null;}};
+const adDraftClear=()=>{try{localStorage.removeItem(AD_DRAFT);}catch(e){}};
+function adForm(a,cities,lab){const dr=adDraftGet();if(dr&&(dr.id||null)===(a?a.id:null))a=Object.assign({},a||{},dr.row);else if(dr&&a===null&&dr.id){const x=(window.__ads||[]).find(y=>y.id===dr.id);if(x)a=Object.assign({},x,dr.row);}
+  const n=!a||!a.id;a=a||{title:"",body:"",cta:"En savoir plus",link_url:"",image_url:"",cities:[],show_banner:true,show_reward:true,starts_at:null,ends_at:null};
+  let sel=[...(a.cities||[])];let all=a.all!==undefined?a.all:!sel.length;
   const f=$("adForm");
   f.innerHTML=`<h3>${n?"Nouvelle annonce":"Modifier l'annonce"}</h3><p class="muted" style="font-size:13px">Exemple : un concert, une conférence, une campagne d'une organisation partenaire. Le joueur qui touche l'annonce ouvre le lien.</p>
   <div class="grid2"><div class="field"><label for="aT">Titre</label><input id="aT" maxlength="80" value="${esc(a.title)}" placeholder="Ex. Concert de louange · 14 décembre"></div>
@@ -1148,20 +1153,23 @@ function adForm(a,cities,lab){const n=!a;a=a||{title:"",body:"",cta:"En savoir p
    <div class="field"><label for="aS">Début (facultatif)</label><input type="datetime-local" id="aS" value="${toLocalInput(a.starts_at)}"></div>
    <div class="field"><label for="aE">Fin (facultatif)</label><input type="datetime-local" id="aE" value="${toLocalInput(a.ends_at)}"></div></div>
   <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button>${n?"":`<button class="textlink" id="aNew">Nouvelle annonce</button>`}</div>`;
+  const draftRow=()=>({title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
+  const saveDraft=()=>{try{localStorage.setItem(AD_DRAFT,JSON.stringify({id:n?null:a.id,row:draftRow()}));}catch(e){}};
   const setImg=u=>{$("aI").value=u||"";$("aPrev").innerHTML=u?`<img src="${esc(u)}" alt="">`:"<span>📣</span>";$("aClr").hidden=!u;};setImg(a.image_url);
-  $("aClr").onclick=()=>setImg("");
+  f.addEventListener("input",saveDraft);f.addEventListener("change",saveDraft);
+  $("aClr").onclick=()=>{setImg("");saveDraft();};
   $("aFile").onchange=async()=>{const fl=$("aFile").files[0];if(!fl)return;if(fl.size>3*1024*1024){$("aMsg").textContent="Image trop lourde (3 Mo maximum).";return;}
     $("aMsg").textContent="Envoi de l'image…";const ext=(fl.type.split("/")[1]||"jpg").replace("jpeg","jpg"),path=`annonce-${Date.now()}.${ext}`;
     const {error}=await sb.storage.from("prizes").upload(path,fl,{contentType:fl.type,upsert:false});
-    if(error){$("aMsg").textContent="Échec de l'envoi : "+err(error);return;}setImg(sb.storage.from("prizes").getPublicUrl(path).data.publicUrl);$("aMsg").textContent="Image prête.";};
-  const drawChips=()=>{$("aChips").innerHTML=sel.map(k=>`<span class="ctag">${esc(lab(k))} <button data-rc="${esc(k)}" aria-label="Retirer">✕</button></span>`).join("")||`<small class="muted">Aucune ville choisie.</small>`;
+    if(error){$("aMsg").textContent="Échec de l'envoi : "+err(error);return;}setImg(sb.storage.from("prizes").getPublicUrl(path).data.publicUrl);$("aMsg").textContent="Image prête.";saveDraft();};
+  const drawChips=()=>{setTimeout(()=>{try{saveDraft();}catch(e){}},0);$("aChips").innerHTML=sel.map(k=>`<span class="ctag">${esc(lab(k))} <button data-rc="${esc(k)}" aria-label="Retirer">✕</button></span>`).join("")||`<small class="muted">Aucune ville choisie.</small>`;
     $("aChips").querySelectorAll("[data-rc]").forEach(b=>b.onclick=()=>{sel=sel.filter(k=>k!==b.dataset.rc);drawChips();});};drawChips();
   const addCity=v=>{const k=cityKey(v);if(!k)return;if(!sel.includes(k))sel.push(k);drawChips();};
   $("aCityAdd").onclick=()=>{addCity($("aCityIn").value);$("aCityIn").value="";$("aCityIn").focus();};
   $("aCityIn").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();$("aCityAdd").click();}};
   f.querySelectorAll("[data-qc]").forEach(b=>b.onclick=()=>addCity(b.dataset.qc));
   $("aAll").onchange=()=>{$("aCityBox").hidden=$("aAll").checked;};
-  const nw=$("aNew");if(nw)nw.onclick=()=>adForm(null,cities,lab);
+  const nw=$("aNew");if(nw)nw.onclick=()=>{adDraftClear();adForm(null,cities,lab);};
   $("aSave").onclick=async()=>{const row={title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,
       cities:$("aAll").checked?[]:sel,show_banner:$("aMB").checked,show_reward:$("aMR").checked,
       starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null};
@@ -1171,5 +1179,6 @@ function adForm(a,cities,lab){const n=!a;a=a||{title:"",body:"",cta:"En savoir p
     if(!$("aAll").checked&&!sel.length){toast("Ajoute au moins une ville, ou coche « Toutes les villes ».",1);return;}
     if(row.starts_at&&row.ends_at&&row.ends_at<=row.starts_at){toast("La fin doit être après le début.",1);return;}
     const {error}=n?await sb.from("ads").insert(row):await sb.from("ads").update(row).eq("id",a.id);
-    if(error)toast(err(error),1);else{toast(n?"Annonce publiée.":"Annonce enregistrée.");tAds();}};}
+    if(error)toast(err(error),1);else{adDraftClear();toast(n?"Annonce publiée.":"Annonce enregistrée.");tAds();}};
+  if(adDraftGet())$("aMsg").textContent="Brouillon restauré : ta saisie a été gardée.";}
 </script></body></html>
