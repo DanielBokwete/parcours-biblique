@@ -851,6 +851,13 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .track.img .node.done.s-mid{background:radial-gradient(circle at 38% 28%,#ffd9a8 0,#f7a043 30%,#dc7414 68%,#9a520a 100%) padding-box,linear-gradient(160deg,#fff1c2,#e0a92e 40%,#8a5a0a 75%,#f4cf6b) border-box}
 .track.img .node.done.s-full{background:radial-gradient(circle at 38% 28%,#b5f0cc 0,#3cc27a 30%,#1a9150 68%,#0d5a2f 100%) padding-box,linear-gradient(160deg,#fff1c2,#e0a92e 40%,#8a5a0a 75%,#f4cf6b) border-box}
 .track.img .node.done.s-lo,.track.img .node.done.s-mid,.track.img .node.done.s-full{box-shadow:0 7px 0 #6b4508,0 14px 18px rgba(0,0,0,.45),inset 0 -6px 10px rgba(0,0,0,.3),inset 0 4px 6px rgba(255,255,255,.35)}
+
+/* Badge « niveau difficile » sur le médaillon (visible même cadenassé) */
+.node .hardb{position:absolute;left:-12px;top:-8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(160deg,#7b3fe4,#4a1fa8);border:2.5px solid #fff;box-shadow:0 3px 8px rgba(30,10,80,.45);z-index:3}
+.node.lock .hardb{filter:none;opacity:1}
+.hardtag{display:inline-flex;align-items:center;gap:6px;margin:4px 0 2px;padding:3px 10px 3px 3px;border-radius:999px;background:#efe7ff;color:#4a1fa8;font-weight:800;font-size:12.5px}
+.hardtag .hardb{position:static;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(160deg,#7b3fe4,#4a1fa8)}
+.hardtag .hardb svg{width:13px;height:13px}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
