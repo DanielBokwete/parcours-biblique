@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="d634015cd0";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="d72ba22012";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5455,13 +5455,22 @@ async function olEnter(){if(olEntering)return;olEntering=true;
   catch(e){console.error(e);bootApp();}finally{olEntering=false;}}
 
 /* ---------- Recherche d'un adversaire ---------- */
+const OL_SEARCH_MAX=30;   // durée maximale de recherche d'un adversaire (secondes)
+function olNoOpponent(){sfx("timeout");
+  openSheet(`<div class="center" style="padding-block:10px;gap:10px"><div style="font-size:52px">😕</div><h2 style="font-size:24px;margin:0">Aucun adversaire trouvé</h2>
+    <p class="muted" style="margin:0">Aucun autre disciple n'est en recherche en ce moment. Réessaie dans un instant, ou défie un ami pour jouer tout de suite.</p>
+    <div style="display:grid;gap:10px;width:100%;margin-top:6px"><button class="btn" id="olRetry">🔄 Réessayer</button><button class="btn ghost" id="olFriendPlay">🤝 Jouer avec un ami</button></div></div>`);
+  $("olRetry").onclick=()=>{sfx("tap");closeSheet();olSearch();};
+  $("olFriendPlay").onclick=()=>{sfx("tap");closeSheet();OL.tab="friends";if(curScreen!=="online")go("online");else renderOnline();olLoadAll();};}
 function olSearch(){if(OL.searching)return;if(typeof adGate==="function"&&!adGate(olSearch))return;OL.searching=true;OL.searchStart=Date.now();
   openSheet(`<div class="center" style="padding-block:10px"><div class="radar"><span>⚔️</span></div><h2 style="font-size:24px">Recherche d'un adversaire…</h2><p id="olSrchTxt">Dès qu'un autre disciple lance une recherche, la partie commence.</p><button class="btn ghost" id="olStop">Annuler</button></div>`);
   $("olStop").onclick=()=>{sfx("tap");olStopSearch();closeSheet();};
   const tick=async()=>{if(!OL.searching)return;
     try{const m=await olRpc("join_queue");if(!OL.searching)return;if(m){olStopSearch(true);closeSheet();olOpenMatch(m);return;}}
     catch(e){olStopSearch(true);closeSheet();notify("⚠️","Recherche impossible",olErr(e));return;}
-    const s=Math.round((Date.now()-OL.searchStart)/1000),t=$("olSrchTxt");if(t&&s>45)t.textContent="Personne pour l'instant… On continue de chercher. Invite un ami avec ton code pour jouer tout de suite !";
+    const s=Math.round((Date.now()-OL.searchStart)/1000),t=$("olSrchTxt");
+    if(s>=OL_SEARCH_MAX){olStopSearch();olNoOpponent();return;}
+    if(t&&s>=15)t.textContent=`Toujours en recherche… encore ${OL_SEARCH_MAX-s} s.`;
     OL.searchT=setTimeout(tick,2500);};
   tick();}
 function olStopSearch(silent){const was=OL.searching;OL.searching=false;clearTimeout(OL.searchT);if(was&&OL.sb&&OL.session)olRpc("leave_queue").catch(()=>{});}
