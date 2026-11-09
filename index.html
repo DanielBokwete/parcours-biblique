@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="9b9d803489";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="d634015cd0";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5231,7 +5231,9 @@ function olInit(){if(OL.sb)return OL.sb;if(!window.supabase||!window.supabase.cr
   setInterval(()=>{if(OL.me)olLoadInvites(true);},20000);
   setInterval(async()=>{if(!OL.me)return;try{const p=await olRpc("get_my_profile");if(p){OL.me.bonus_until=p.bonus_until;OL.me.referrals=p.referrals;olApplyBonus();}}catch(e){}},60000);
   return OL.sb;}
-const olRpc=async(fn,args)=>{const {data,error}=await OL.sb.rpc(fn,args||{});if(error)throw error;return data;};
+// Appel serveur avec délai maximal : une requête bloquée (réseau, session) ne doit jamais figer le jeu.
+const olRpc=async(fn,args,ms)=>{let t;const to=new Promise((_,j)=>{t=setTimeout(()=>j(new Error("délai dépassé")),ms||15000);});
+  try{const {data,error}=await Promise.race([OL.sb.rpc(fn,args||{}),to]);if(error)throw error;return data;}finally{clearTimeout(t);}};
 function olErr(e){const m=(e&&(e.message||e.error_description||e.msg))||String(e);
   const map={not_signed_in:"Connecte-toi d'abord.",banned:"Ton compte est suspendu. Contacte l'équipe Parcours Biblique.",code_inconnu:"Ce code n'existe pas. Vérifie les 6 caractères.",
     propre_code:"C'est ton propre code 😉 Entre celui de ton ami.",pas_ami:"Ajoute d'abord ce joueur avec son code.",invitation_expiree:"Cette invitation a expiré.",
@@ -5489,7 +5491,7 @@ async function olOpenMatch(id){olStopSearch(true);closeSheet();olStopDuelTimers(
   OL.clockT=setInterval(olClock,1000);
   olApply({status:d.status,cur_idx:d.cur_idx,cur_started:d.cur_started,me_locked:d.me_locked,opp_locked:d.opp_locked,my_score:d.me.score,opp_score:d.opp.score,last_result:d.last_result});
   olPoll();}
-async function olReload(){const d=await olRpc("get_match",{m:OL.m.id});OL.m.data=d;OL.m.skew=new Date(d.now).getTime()-Date.now();return d;}
+async function olReload(ms){const d=await olRpc("get_match",{m:OL.m.id},ms);OL.m.data=d;OL.m.skew=new Date(d.now).getTime()-Date.now();return d;}
 const olAt=ts=>new Date(ts).getTime()-(OL.m?OL.m.skew:0);            // heure serveur -> heure de ce téléphone
 function olLeft(){const d=OL.m&&OL.m.data;if(!d||!d.deadline)return 0;return Math.max(0,olAt(d.deadline)-Date.now());}
 function olClock(){const el=$("dclock");if(!el||!OL.m)return;const s=Math.ceil(olLeft()/1000);el.textContent="⏱ "+Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
@@ -5501,7 +5503,7 @@ function olLive(r){const d=OL.m&&OL.m.data;if(!d)return;const p1=d.me_is_p1;
 function olApply(st){if(!OL.m||OL.m.shown||!st||typeof st.cur_idx!=="number")return;const d=OL.m.data,prev=OL.m.st||{};OL.m.st=st;
   d.me.score=st.my_score;d.opp.score=st.opp_score;const a=$("dMe"),b=$("dOp");if(a)a.textContent=st.my_score;if(b)b.textContent=st.opp_score;
   const lr=st.last_result;if(lr&&lr.idx!==OL.m.shownRes&&lr.idx>=0){OL.m.shownRes=lr.idx;olShowResult(lr);}
-  if(st.status==="finished"||st.status==="cancelled"){if(!OL.m.ending){OL.m.ending=true;clearTimeout(OL.nextT);clearInterval(OL.dT);clearTimeout(OL.pollT);OL.nextT=setTimeout(olResult,lr?2200:300);}return;}
+  if(st.status==="finished"||st.status==="cancelled"){if(!OL.m.ending){OL.m.ending=true;clearTimeout(OL.nextT);clearInterval(OL.dT);clearTimeout(OL.pollT);OL.nextT=setTimeout(olResult,lr?2200:300);setTimeout(()=>{if(OL.m&&OL.m.ending&&!OL.m.shown)olResult();},6000);}return;}
   if(st.cur_idx===OL.m.idx&&st.opp_locked&&!prev.opp_locked&&!OL.m.locked)olOppWrong();
   if(st.cur_idx!==OL.m.idx&&st.cur_idx!==OL.m.pending){OL.m.pending=st.cur_idx;clearTimeout(OL.nextT);
     const wait=Math.max(0,olAt(st.cur_started)-Date.now());
@@ -5563,7 +5565,11 @@ async function olResult(){try{await olResult2();}catch(e){console.error(e);const
   $("dbody").innerHTML=`<div class="center"><div class="medal big">🏁</div><h2>Partie terminée</h2>${d?`<div class="final"><span>${d.me.score}</span><small>contre</small><span>${d.opp.score}</span></div>`:""}<button class="btn" id="dHome2">Retour aux défis</button></div>`;
   $("dHome2").onclick=()=>{OL.m=null;go("online");olLoadAll();};}}
 async function olResult2(){if(!OL.m||OL.m.shown)return;OL.m.shown=true;olStopDuelTimers();$("dtimer").hidden=true;
-  let d;try{d=await olReload();}catch(e){d=OL.m.data;}const n=d.questions.length,won=d.winner===d.me.id,draw=d.is_draw&&!d.forfeit_by,quit=d.forfeit_by===d.me.id;
+  let d;try{d=await olReload(5000);}catch(e){d=OL.m.data;const st=OL.m.st||{};
+    // Résultat calculé sur place si le serveur tarde à répondre
+    if(typeof st.my_score==="number"){d.me.score=st.my_score;d.opp.score=st.opp_score;}
+    if(!d.forfeit_by){d.winner=d.me.score>d.opp.score?d.me.id:d.opp.score>d.me.score?d.opp.id:null;d.is_draw=d.me.score===d.opp.score;}}
+  const n=d.questions.length,won=d.winner===d.me.id,draw=d.is_draw&&!d.forfeit_by,quit=d.forfeit_by===d.me.id;
   olHead();const qn=document.querySelector(".vs .qn");if(qn)qn.textContent="Terminé";const cl=$("dclock");if(cl)cl.textContent="";
   let h2h="";if(d.mode==="friend"){try{const fr=await olRpc("list_friends");const f=fr.find(x=>x.id===d.opp.id);if(f)h2h=`<div class="card h2hbig"><div class="eyebrow">Vos confrontations</div><b>${f.played} match${f.played>1?"s":""}</b><div class="h2hbar"><span class="w" style="flex:${f.my_wins||0.001}">${f.my_wins} vous</span>${f.draws?`<span class="d" style="flex:${f.draws}">${f.draws}</span>`:""}<span class="l" style="flex:${f.their_wins||0.001}">${f.their_wins} ${olName(d.opp.name.split(" ")[0])}</span></div></div>`;}catch(e){}}
   $("dbody").innerHTML=`<div class="center" style="justify-content:flex-start;padding-top:8px">
