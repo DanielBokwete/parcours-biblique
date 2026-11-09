@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="d72ba22012";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="8761fe14c3";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -865,6 +865,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 @keyframes adpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
 @media (prefers-reduced-motion:reduce){.btn.adcta{animation:none}}
 .adth{pointer-events:none;background:#000}
+.tag.ref{align-self:flex-start;justify-self:start;width:auto;font-size:12.5px;padding:4px 10px;background:#eef3fb;color:#1f4fd1;text-transform:none;letter-spacing:0;font-weight:800}
 
 </style>
 <div class="app" id="app">
@@ -4719,7 +4720,7 @@ function renderStep(){stopTimer();setHead();const st=LS.steps[LS.si];$("timer").
     LS.say=`${c.key}. ${c.txt}`;speak(LS.say);return;}
   const q=st.q;LS.q=q;LS.sel=new Set();LS.out=new Set();LS.tries=0;LS.answered=false;LS.mL=null;LS.mR=null;LS.matched=[];LS.ord=[];
   const combo=LS.combo>=2?`<div class="combo">✨ ${LS.combo} d'affilée sans faute</div>`:"";
-  const tag=q.tag?`<span class="tag ${q.tagc||""}">${q.tag}</span>`:"";
+  const tag=(q.tag?`<span class="tag ${q.tagc||""}">${q.tag}</span>`:"")+(q.ref&&q.type!=="recite"?`<span class="tag ref">📖 ${esc(q.ref)}</span>`:"");
   if(q.type==="choice"){const multi=q.a.length>1,tf=q.disp==="tf";
     body.innerHTML=`${combo}${tag}${tf?`<div class="eyebrow">Vrai ou faux ?</div><div class="qtitle">${esc(q.q)}</div>`:`<div class="illu">${q.ill?`<div class="medal sm">${q.ill}</div>`:""}<div><div class="eyebrow">${q.graded===false?"Réflexion personnelle":multi?q.a.length+" réponses":"1 réponse"}</div><div class="qtitle">${esc(q.q)}</div></div></div>`}
      ${q.quote?`<div class="sentence" style="font-size:16px;line-height:1.6">${esc(q.quote)}</div>`:""}
@@ -5534,7 +5535,7 @@ function olIntro(wait){const d=OL.m.data;olHead();$("dtimer").hidden=true;
   sfx("bell");vibrate([40,30,40]);const t0=Date.now()+wait;const t=setInterval(()=>{const e=$("dCount");const s=Math.ceil((t0-Date.now())/1000);if(!e||s<=0){clearInterval(t);return;}if(e.textContent!==String(s)){e.textContent=s;sfx("tick");}},200);}
 function olAsk(idx){if(!OL.m||OL.m.shown)return;const d=OL.m.data,n=d.questions.length;if(idx>=n)return;
   OL.m.idx=idx;OL.m.pending=-1;OL.m.locked=!!(OL.m.st&&OL.m.st.cur_idx===idx&&OL.m.st.me_locked);const q=d.questions[idx];olHead();
-  const tag=`<div class="qtags"><span class="tag">${esc(q.book||"")}</span><span class="tag ${q.testament==="AT"?"":"warm"}">${q.testament==="AT"?"Ancien T.":"Nouveau T."}</span><span class="tag diff ${q.difficulty}">${{facile:"Facile",moyen:"Moyen",difficile:"Difficile"}[q.difficulty]||""}</span></div>`;
+  const tag=`<div class="qtags"><span class="tag ref">📖 ${esc(q.ref||q.book||"")}</span><span class="tag ${q.testament==="AT"?"":"warm"}">${q.testament==="AT"?"Ancien T.":"Nouveau T."}</span><span class="tag diff ${q.difficulty}">${{facile:"Facile",moyen:"Moyen",difficile:"Difficile"}[q.difficulty]||""}</span></div>`;
   const opt=(o,i)=>`<button class="opt radio" data-c="${i}"><span class="box">${"ABCD"[i]||""}</span>${esc(o)}</button>`;
   let body="";
   if(q.kind==="tf")body=`<div class="qtitle">${esc(q.prompt)}</div><p class="muted" style="margin:0">Vrai ou faux ?</p><div class="tfgrid"><button class="opt radio" data-c="true"><span class="box"></span><span class="emo">✅</span>Vrai</button><button class="opt radio" data-c="false"><span class="box"></span><span class="emo">❌</span>Faux</button></div>`;
