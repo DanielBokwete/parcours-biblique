@@ -772,7 +772,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 /* ---------- Annonces ---------- */
 .adban{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));left:10px;right:10px;z-index:58;display:flex;gap:12px;align-items:center;text-align:left;background:rgba(255,255,255,.98);border-radius:18px;padding:10px 12px;box-shadow:0 14px 34px rgba(15,29,61,.32),0 0 0 1.5px rgba(240,180,41,.55);transform:translateY(calc(-100% - 30px));opacity:0;transition:transform .38s cubic-bezier(.3,1.3,.5,1),opacity .3s;cursor:pointer}
 .adban.on{transform:none;opacity:1}
-.adban img{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none;background:#eef2f9}
+.adban img,.adban .adth{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none;background:#eef2f9}
 .adban .adic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-size:24px;background:#fff3d6;flex:none}
 .adban .adtx{flex:1;min-width:0;display:grid;gap:1px}
 .adban .adtx small{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b07a00}
@@ -809,7 +809,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .adf-bot{position:absolute;left:0;right:0;bottom:0;padding:0 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:2}
 .adf-card{display:flex;gap:12px;align-items:center;background:rgba(28,30,40,.88);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px 12px;backdrop-filter:blur(12px);cursor:pointer;transform:translateY(130%);opacity:0;transition:.45s cubic-bezier(.3,1.2,.5,1);margin-bottom:12px}
 .adf-card.on{transform:none;opacity:1}
-.adf-card img{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none}
+.adf-card img,.adf-card .adth{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none}
 .adf-ico{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:#fff3d6;font-size:24px;flex:none}
 .adf-ct{flex:1;min-width:0;display:grid;gap:2px}.adf-ct b{font-size:14.5px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.adf-ct span{font-size:12.5px;color:rgba(255,255,255,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .adf-go{flex:none;background:#3d7bff;color:#fff;font-weight:800;font-size:13.5px;border-radius:999px;padding:9px 14px}
@@ -860,6 +860,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .btn.adcta:not(:disabled){animation:adpulse 1.8s ease-in-out infinite}
 @keyframes adpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
 @media (prefers-reduced-motion:reduce){.btn.adcta{animation:none}}
+.adth{pointer-events:none;background:#000}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -1352,7 +1353,7 @@ function adForm(a){const cities=A.adCities||[],lab=A.adLab||(k=>cap(k));const dr
    <div class="field"><label for="aC">Texte du bouton</label><input id="aC" maxlength="24" value="${esc(a.cta||"")}" placeholder="Ex. Réserver"></div>
    <div class="field span2"><label for="aB">Texte court (facultatif)</label><textarea id="aB" rows="2" maxlength="180" placeholder="Ex. Stade des Martyrs, 18 h. Billets dès 5 $.">${esc(a.body||"")}</textarea></div>
    <div class="field span2"><label for="aL">Lien (réservation, inscription, page…)</label><input id="aL" type="url" value="${esc(a.link_url||"")}" placeholder="https://…"></div>
-   <div class="field span2"><label>Image (facultatif)</label><div class="pimg"><div class="pprev" id="aPrev"><span>📣</span></div><div style="display:grid;gap:6px"><label class="btn small ghost" style="width:auto;cursor:pointer">🖼️ Importer une image<input type="file" id="aFile" accept="image/jpeg,image/png,image/webp" hidden></label><button class="textlink" id="aClr" hidden style="justify-self:start">Retirer l'image</button><small class="muted" id="aMsg">Format carré ou paysage · 3 Mo maximum</small></div></div><input type="hidden" id="aI"></div>
+   <div class="field span2"><label id="aILbl">Image (facultatif)</label><div class="pimg"><div class="pprev" id="aPrev"><span>📣</span></div><div style="display:grid;gap:6px"><label class="btn small ghost" style="width:auto;cursor:pointer">🖼️ Importer une image<input type="file" id="aFile" accept="image/jpeg,image/png,image/webp" hidden></label><button class="btn small ghost" id="aGrab" hidden style="width:auto">📸 Prendre l'image actuelle de la vidéo</button><button class="textlink" id="aClr" hidden style="justify-self:start">Retirer l'image</button><small class="muted" id="aMsg">Format carré ou paysage · 3 Mo maximum</small></div></div><input type="hidden" id="aI"></div>
    <div class="field span2"><label>Vidéo courte (facultatif)</label><div style="display:grid;gap:6px"><div class="row" style="flex-wrap:wrap;gap:8px"><label class="btn small ghost" style="width:auto;cursor:pointer">🎬 Importer une vidéo<input type="file" id="aVid" accept="video/mp4,video/webm,video/quicktime" hidden></label><button class="textlink" id="aVidClr" hidden>Retirer la vidéo</button></div><div id="aVidPrev"></div><small class="muted" id="aVidMsg">MP4 · 25 Mo maximum · idéalement 15 à 30 s, format vertical ou carré. Si tu n'as pas mis d'image, une image de la vidéo est prise automatiquement pour le bandeau.</small></div><input type="hidden" id="aV"></div>
    <div class="field"><label for="aD">Durée de l'annonce (secondes)</label><input type="number" id="aD" min="3" max="120" value="${a.duration_s??""}" placeholder="Réglage général"><small class="muted">Temps à regarder avant la récompense (3 à 120 s). Rempli tout seul avec la durée de la vidéo.</small></div><div></div>
    <div class="field span2"><label>Musique (facultatif)</label><div style="display:grid;gap:6px"><div class="row" style="flex-wrap:wrap;gap:8px"><label class="btn small ghost" style="width:auto;cursor:pointer">🎵 Importer une musique<input type="file" id="aAud" accept="audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/aac,audio/ogg,audio/wav" hidden></label><button class="textlink" id="aAudClr" hidden>Retirer la musique</button></div><div id="aAudPrev"></div><small class="muted" id="aAudMsg">MP3 ou M4A · 5 Mo maximum. Jouée seulement pendant l'annonce à regarder (le bandeau reste silencieux).</small></div><input type="hidden" id="aU"></div>
@@ -1370,8 +1371,18 @@ function adForm(a){const cities=A.adCities||[],lab=A.adLab||(k=>cap(k));const dr
   <div class="row"><button class="btn small" id="aSave" style="width:auto">${n?"Publier l'annonce":"Enregistrer"}</button><button class="textlink" id="aCancel">Fermer</button></div>`;
   const draftRow=()=>({campaign_id:+$("aCamp").value,title:$("aT").value,body:$("aB").value,cta:$("aC").value,link_url:$("aL").value,image_url:$("aI").value,audio_url:$("aU").value,video_url:$("aV").value,duration_s:$("aD").value?+$("aD").value:null,cities:$("aAll").checked?[]:sel,all:$("aAll").checked,show_banner:$("aMB").checked,show_reward:$("aMR").checked,starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null});
   const saveDraft=()=>{try{localStorage.setItem(AD_DRAFT,JSON.stringify({id:n?null:a.id,row:draftRow()}));}catch(e){}};
-  const setVid=u=>{$("aV").value=u||"";$("aVidPrev").innerHTML=u?`<video controls playsinline preload="metadata" src="${esc(u)}" style="width:100%;max-height:260px;border-radius:12px;background:#000"></video>`:"";$("aVidClr").hidden=!u;};setVid(a.video_url);
+  const thumbLbl=()=>{const v=!!$("aV").value;$("aILbl").textContent=v?"Miniature de la vidéo (photo affichée en bas de l'annonce)":"Image (facultatif)";
+    $("aGrab").hidden=!v;$("aMsg").textContent=v?"Importe une photo, ou arrête la vidéo au bon moment et touche « Prendre l'image actuelle ». Sans photo, une image de la vidéo est prise automatiquement.":"Format carré ou paysage · 3 Mo maximum";};
+  const setVid=u=>{$("aV").value=u||"";$("aVidPrev").innerHTML=u?`<video id="aVidEl" controls playsinline preload="metadata" crossorigin="anonymous" src="${esc(u)}" style="width:100%;max-height:260px;border-radius:12px;background:#000"></video>`:"";$("aVidClr").hidden=!u;thumbLbl();};
+  /* Miniature tirée de la vidéo : l'image à l'instant choisi (ou vers 1 s), envoyée comme image de l'annonce. */
+  const frameOf=(v,t)=>new Promise(res=>{const go=()=>{try{const cv=document.createElement("canvas");const sc=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight));cv.width=Math.round(v.videoWidth*sc);cv.height=Math.round(v.videoHeight*sc);cv.getContext("2d").drawImage(v,0,0,cv.width,cv.height);cv.toBlob(b=>res(b),"image/jpeg",.84);}catch(e){res(null);}};
+    if(t===undefined){go();return;}v.onseeked=()=>{v.onseeked=null;go();};v.currentTime=t;setTimeout(()=>res(null),8000);});
+  const uploadThumb=async blob=>{if(!blob)return false;const p=`miniature-${Date.now()}.jpg`;const {error}=await sb.storage.from("prizes").upload(p,blob,{contentType:"image/jpeg",upsert:false});if(error)return false;setImg(sb.storage.from("prizes").getPublicUrl(p).data.publicUrl);saveDraft();return true;};
+  const autoThumb=async()=>{const u=$("aV").value;if(!u||$("aI").value)return;try{const v=document.createElement("video");v.muted=true;v.playsInline=true;v.crossOrigin="anonymous";v.preload="auto";v.src=u;
+    await new Promise((r,j)=>{v.onloadedmetadata=r;v.onerror=j;setTimeout(j,10000);});await uploadThumb(await frameOf(v,Math.min(1,(v.duration||2)/3)));}catch(e){}};
   $("aVidClr").onclick=()=>{setVid("");saveDraft();};
+  $("aGrab").onclick=async()=>{const v=$("aVidEl");if(!v)return;$("aMsg").textContent="Capture de l'image…";
+    const ok=v.readyState>=2&&await uploadThumb(await frameOf(v));$("aMsg").textContent=ok?"Miniature mise à jour avec l'image de la vidéo.":"Impossible de prendre l'image : lance la vidéo une seconde, mets-la en pause puis réessaie.";};
   const grabFrame=file=>new Promise(res=>{try{const v=document.createElement("video");v.muted=true;v.playsInline=true;v.preload="auto";const u=URL.createObjectURL(file);v.src=u;
     v.onloadedmetadata=()=>{v.currentTime=Math.min(1,(v.duration||2)/3);};
     v.onseeked=()=>{try{const cv=document.createElement("canvas");const sc=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight));cv.width=Math.round(v.videoWidth*sc);cv.height=Math.round(v.videoHeight*sc);cv.getContext("2d").drawImage(v,0,0,cv.width,cv.height);cv.toBlob(b=>{URL.revokeObjectURL(u);res({blob:b,dur:v.duration});},"image/jpeg",.82);}catch(e){res({blob:null,dur:v.duration});}};
@@ -1389,7 +1400,7 @@ function adForm(a){const cities=A.adCities||[],lab=A.adLab||(k=>cap(k));const dr
     $("aAudMsg").textContent="Envoi de la musique…";const ext=(fl.name.split(".").pop()||"mp3").toLowerCase().replace(/[^a-z0-9]/g,"")||"mp3",path=`musique-${Date.now()}.${ext}`;
     const {error}=await sb.storage.from("ads-media").upload(path,fl,{contentType:fl.type||"audio/mpeg",upsert:false});
     if(error){$("aAudMsg").textContent="Échec de l'envoi : "+err(error);return;}setAud(sb.storage.from("ads-media").getPublicUrl(path).data.publicUrl);$("aAudMsg").textContent="Musique prête.";saveDraft();};
-  const setImg=u=>{$("aI").value=u||"";$("aPrev").innerHTML=u?`<img src="${esc(u)}" alt="">`:"<span>📣</span>";$("aClr").hidden=!u;};setImg(a.image_url);
+  const setImg=u=>{$("aI").value=u||"";$("aPrev").innerHTML=u?`<img src="${esc(u)}" alt="">`:"<span>📣</span>";$("aClr").hidden=!u;};setImg(a.image_url);setVid(a.video_url);
   f.addEventListener("input",saveDraft);f.addEventListener("change",saveDraft);
   $("aClr").onclick=()=>{setImg("");saveDraft();};
   $("aFile").onchange=async()=>{const fl=$("aFile").files[0];if(!fl)return;if(fl.size>3*1024*1024){$("aMsg").textContent="Image trop lourde (3 Mo maximum).";return;}
@@ -1405,7 +1416,7 @@ function adForm(a){const cities=A.adCities||[],lab=A.adLab||(k=>cap(k));const dr
   $("aAll").onchange=()=>{$("aCityBox").hidden=$("aAll").checked;};
   $("aCancel").onclick=()=>{adDraftClear();$("adForm").hidden=true;};
   
-  $("aSave").onclick=async()=>{const row={campaign_id:+$("aCamp").value||null,title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,video_url:$("aV").value||null,duration_s:$("aD").value?Math.min(120,Math.max(3,parseInt($("aD").value,10)||0)):null,
+  $("aSave").onclick=async()=>{await autoThumb();const row={campaign_id:+$("aCamp").value||null,title:$("aT").value.trim(),body:$("aB").value.trim()||null,cta:$("aC").value.trim()||"En savoir plus",link_url:$("aL").value.trim()||null,image_url:$("aI").value||null,audio_url:$("aU").value||null,video_url:$("aV").value||null,duration_s:$("aD").value?Math.min(120,Math.max(3,parseInt($("aD").value,10)||0)):null,
       cities:$("aAll").checked?[]:sel,show_banner:$("aMB").checked,show_reward:$("aMR").checked,
       starts_at:$("aS").value?new Date($("aS").value).toISOString():null,ends_at:$("aE").value?new Date($("aE").value).toISOString():null};
     if(!row.campaign_id){toast("Choisis l'annonceur (ou crée-le d'abord).",1);return;}

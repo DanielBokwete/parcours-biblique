@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="3a011c44f5";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="9b9d803489";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -776,7 +776,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 /* ---------- Annonces ---------- */
 .adban{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));left:10px;right:10px;z-index:58;display:flex;gap:12px;align-items:center;text-align:left;background:rgba(255,255,255,.98);border-radius:18px;padding:10px 12px;box-shadow:0 14px 34px rgba(15,29,61,.32),0 0 0 1.5px rgba(240,180,41,.55);transform:translateY(calc(-100% - 30px));opacity:0;transition:transform .38s cubic-bezier(.3,1.3,.5,1),opacity .3s;cursor:pointer}
 .adban.on{transform:none;opacity:1}
-.adban img{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none;background:#eef2f9}
+.adban img,.adban .adth{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none;background:#eef2f9}
 .adban .adic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-size:24px;background:#fff3d6;flex:none}
 .adban .adtx{flex:1;min-width:0;display:grid;gap:1px}
 .adban .adtx small{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b07a00}
@@ -813,7 +813,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .adf-bot{position:absolute;left:0;right:0;bottom:0;padding:0 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:2}
 .adf-card{display:flex;gap:12px;align-items:center;background:rgba(28,30,40,.88);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px 12px;backdrop-filter:blur(12px);cursor:pointer;transform:translateY(130%);opacity:0;transition:.45s cubic-bezier(.3,1.2,.5,1);margin-bottom:12px}
 .adf-card.on{transform:none;opacity:1}
-.adf-card img{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none}
+.adf-card img,.adf-card .adth{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none}
 .adf-ico{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:#fff3d6;font-size:24px;flex:none}
 .adf-ct{flex:1;min-width:0;display:grid;gap:2px}.adf-ct b{font-size:14.5px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.adf-ct span{font-size:12.5px;color:rgba(255,255,255,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .adf-go{flex:none;background:#3d7bff;color:#fff;font-weight:800;font-size:13.5px;border-radius:999px;padding:9px 14px}
@@ -864,6 +864,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .btn.adcta:not(:disabled){animation:adpulse 1.8s ease-in-out infinite}
 @keyframes adpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
 @media (prefers-reduced-motion:reduce){.btn.adcta{animation:none}}
+.adth{pointer-events:none;background:#000}
 
 </style>
 <div class="app" id="app">
@@ -5638,7 +5639,7 @@ function adTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S
 async function adBanner(){if(AD.busy)return;AD.busy=true;
   try{const c=await adLoadSettings();const ad=await adNext("banner");if(!ad)return;
     const b=$("adBan");
-    b.innerHTML=`${ad.image_url?`<img src="${esc(ad.image_url)}" alt="">`:`<span class="adic">📣</span>`}<span class="adtx"><small>Annonce</small><b>${esc(ad.title)}</b>${ad.body?`<span>${esc(ad.body)}</span>`:""}</span>${ad.link_url?`<span class="adcta">${esc(ad.cta||"Voir")}</span>`:""}<button class="adx" aria-label="Fermer l'annonce">✕</button>`;
+    b.innerHTML=`${adThumb(ad,"adic")}<span class="adtx"><small>Annonce</small><b>${esc(ad.title)}</b>${ad.body?`<span>${esc(ad.body)}</span>`:""}</span>${ad.link_url?`<span class="adcta">${esc(ad.cta||"Voir")}</span>`:""}<button class="adx" aria-label="Fermer l'annonce">✕</button>`;
     b.hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add("on")));adLog(ad,"view","banner");
     b.onclick=e=>{if(e.target.closest(".adx")){adHideBan();return;}if(ad.link_url){adOpen(ad,"banner");adHideBan();}};
     let y0=null;b.ontouchstart=e=>{y0=e.touches[0].clientY;};b.ontouchmove=e=>{if(y0!==null&&e.touches[0].clientY-y0<-24){y0=null;adHideBan();}};
@@ -5683,7 +5684,7 @@ function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||docu
     <div class="adf-top"><div class="adf-l"><span class="adf-tag">Annonce</span>${vid||ad.audio_url?`<button class="adf-ic" id="adfSnd" aria-label="Son">🔇</button>`:""}</div>
       <div class="adf-r"><span class="adf-pill" id="adfPill"><svg viewBox="0 0 36 36" class="adf-ring"><circle cx="18" cy="18" r="15.5" class="t"/><circle cx="18" cy="18" r="15.5" class="p" id="adfRing"/></svg><b id="adfSec">${base}</b><span id="adfLbl">Récompense dans ${base} s</span></span><button class="adf-x" id="adfX" aria-label="Fermer l'annonce">✕</button></div></div>
     <div class="adf-done" id="adfDone" hidden></div>
-    <div class="adf-bot"><div class="adf-card" id="adfCard">${ad.image_url?`<img src="${esc(ad.image_url)}" alt="">`:`<span class="adf-ico">📣</span>`}<div class="adf-ct"><b>${esc(ad.title)}</b>${ad.body?`<span>${esc(ad.body)}</span>`:""}</div>${ad.link_url?`<span class="adf-go">${esc(ad.cta||"Voir")}</span>`:""}</div>
+    <div class="adf-bot"><div class="adf-card" id="adfCard">${adThumb(ad,"adf-ico")}<div class="adf-ct"><b>${esc(ad.title)}</b>${ad.body?`<span>${esc(ad.body)}</span>`:""}</div>${ad.link_url?`<span class="adf-go">${esc(ad.cta||"Voir")}</span>`:""}</div>
       <div class="adf-bar"><i id="adfBar"></i></div></div>`;
   app.appendChild(el);hush&&hush();
   let need=base,el0=0,last=performance.now(),done=false,granted=false,closed=false,raf=0;const v=$("adfV");
@@ -5730,6 +5731,11 @@ let AD_LEFT=null;
 function adLeftTxt(){const mx=+adCfg().reward_daily_max||10;if(AD_LEFT===null)return `🎬 Jusqu'à ${mx} annonces récompensées par jour · renouvelées à minuit`;
   return AD_LEFT>0?`🎬 Encore <b>${AD_LEFT}/${mx}</b> annonces récompensées aujourd'hui · renouvelées à minuit`:`🎬 Tes ${mx} annonces du jour sont utilisées · elles reviennent à minuit`;}
 async function adLeftFetch(){const sb=adSb();if(!sb)return;try{const {data}=await sb.rpc("ad_rewards_left",{p_viewer:adViewer()});if(typeof data==="number"){AD_LEFT=data;const e=$("stLeft");if(e)e.innerHTML=adLeftTxt();const b=$("stAd");if(b&&data<=0)b.disabled=true;}}catch(e){}}
+
+/* Miniature d'une annonce : la photo choisie, sinon une image tirée de la vidéo. */
+function adThumb(ad,ico){if(ad.image_url)return `<img src="${esc(ad.image_url)}" alt="">`;
+  if(ad.video_url)return `<video class="adth" src="${esc(ad.video_url)}#t=1" muted playsinline webkit-playsinline preload="metadata" aria-hidden="true"></video>`;
+  return `<span class="${ico}">📣</span>`;}
 
 /* ---------- Fenêtres « Mes vies » et « Mes aides » ---------- */
 function statSheet(kind,after){sfx("tap");regen();helpsReset();const c=adCfg();const life=kind==="life";const un=unlimited();
