@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="1363144672";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="d98ecece11";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5198,20 +5198,26 @@ function bindSettings(root){root.querySelectorAll("[data-set]").forEach(t=>t.onc
 /* Les XP font monter le titre du joueur (affiché dans les défis en ligne). Chaque nouveau titre débloque une récompense. */
 let RANKS=[[0,"Pèlerin","",""],[300,"Semeur","help3","+3 aides"],[1000,"Disciple","avatar_item","un avatar exclusif"],[2500,"Témoin","badge_rare","un badge rare"],
   [5000,"Serviteur","unl30m","30 min de vies illimitées"],[9000,"Berger","avatar_item+help5","un avatar exclusif et +5 aides"],[15000,"Ancien","badge_rare+unl1h","un badge rare et 1 h de vies illimitées"],[25000,"Apôtre","apotre","le badge « ✝️ Apôtre de la Parole »"]];
+const REWARD_LBL={help1:"+1 aide",help3:"+3 aides",help5:"+5 aides",shield:"un bouclier de foi",avatar_item:"un avatar exclusif",badge_rare:"un badge rare",unlock_book:"un livre débloqué",
+  unl10m:"10 min de vies illimitées",unl30m:"30 min de vies illimitées",unl1h:"1 h de vies illimitées",lifefull:"des vies pleines",xp2:"des XP doublés",apotre:"le badge « ✝️ Apôtre de la Parole »"};
+const rewardLabel=k=>String(k||"").split("+").filter(Boolean).map(x=>REWARD_LBL[x]||x).join(" et ");
+/* Titres réglés dans l'admin (liste complète : nom, XP, récompense) */
+function setRanksFrom(list){if(!Array.isArray(list)||list.length<2)return false;const L=list.filter(r=>r&&r.name&&+r.xp>=0).map(r=>[+r.xp,String(r.name),String(r.reward||""),rewardLabel(r.reward)]).sort((a,b)=>a[0]-b[0]);
+  if(!L.length)return false;L[0][0]=0;RANKS=L;return true;}
 function rankInfo(xp){xp=xp||0;let i=0;RANKS.forEach((r,j)=>{if(xp>=r[0])i=j;});const r=RANKS[i],nx=RANKS[i+1]||null;
   return {i,name:r[1],next:nx?nx[1]:null,need:nx?nx[0]-xp:0,pct:nx?Math.round((xp-r[0])/(nx[0]-r[0])*100):100,reward:nx?nx[3]:""};}
 /* Vérifie si le joueur vient de passer un ou plusieurs titres, applique les récompenses et renvoie le texte à afficher. */
-function rankUpCheck(){const now=rankInfo(S.xp).i;if(S.rankIdx===undefined){S.rankIdx=now;save();return null;}if(now<=S.rankIdx)return null;
-  const out=[];for(let j=S.rankIdx+1;j<=now;j++){const r=RANKS[j];const got=[];
+function rankUpCheck(){const now=rankInfo(S.xp).i,curXp=RANKS[now][0];if(S.rankXp===undefined){S.rankXp=curXp;save();return null;}if(curXp<=S.rankXp)return null;
+  const out=[];for(let j=0;j<=now;j++){const r=RANKS[j];if(r[0]<=S.rankXp)continue;const got=[];
     r[2].split("+").filter(Boolean).forEach(k=>{if(k==="apotre"){S.rareBadges=S.rareBadges||[];const x="✝️ Apôtre de la Parole";if(!S.rareBadges.includes(x))S.rareBadges.push(x);S.rareBadge=x;got.push(`<span class="btag big">🏅 ${x}</span>`);}
       else{const G=applyGift(k);got.push(G.extra||`${G.ic} ${esc(G.t)}`);}});
     out.push({name:r[1],got});}
-  S.rankIdx=now;save();if(typeof olSyncTitle==="function")try{olSyncTitle();}catch(e){}return out;}
+  S.rankXp=curXp;save();if(typeof olSyncTitle==="function")try{olSyncTitle();}catch(e){}return out;}
 function rankUpHTML(ups){return ups?ups.map(u=>`<div class="rankup"><div class="ru-h">🎖️ Nouveau titre : <b>${esc(u.name)}</b> !</div><div class="ru-r">Récompense : ${u.got.join("<br>")}</div><small>Ton nouveau titre s'affiche dans les défis en ligne.</small></div>`).join(""):"";}
 function rankBarHTML(){const r=rankInfo(S.xp);return r.next?`<span class="rb-t">🎖️ <b>${esc(r.name)}</b> → ${esc(r.next)} · encore ${r.need} XP</span><span class="rb-bar"><i style="width:${r.pct}%"></i></span>`:`<span class="rb-t">🎖️ <b>${esc(r.name)}</b> · titre le plus élevé atteint !</span><span class="rb-bar"><i style="width:100%"></i></span>`;}
 function openRanks(){const ri=rankInfo(S.xp);sfx("tap");
   openSheet(`<h3 style="margin:0 0 4px">🎖️ Les titres du disciple</h3><p class="muted" style="margin:0 0 12px">Gagne des XP en répondant juste dans le parcours : ton titre monte et chaque nouveau titre t'offre une récompense.</p>
-    <div class="ranklist">${RANKS.map((r,j)=>`<div class="rk ${j<=ri.i?"got":""} ${j===ri.i?"cur":""}"><span class="rk-n">${j<=ri.i?"✅":"🔒"}</span><div><b>${esc(r[1])}</b><small>${r[0]} XP${r[3]?" · 🎁 "+esc(r[3]):""}</small></div></div>`).join("")}</div>
+    <div class="ranklist">${RANKS.map((r,j)=>`<div class="rk ${j<=ri.i?"got":""} ${j===ri.i?"cur":""}"><span class="rk-n">${j<=ri.i?"✅":"🔒"}</span><div><b>${esc(r[1])}</b><small>${r[0].toLocaleString("fr-FR")} XP${r[3]?" · 🎁 "+esc(r[3]):""}</small></div></div>`).join("")}</div>
     <p class="muted" style="font-size:13px;margin:12px 0 0">Tu as <b>${S.xp||0} XP</b>. Astuce : les cadeaux « XP doublés » et « +50 XP » te font monter plus vite !</p>`);}
 
 function renderProfile(){regen();helpsReset();const n=totalDone();const ri=rankInfo(S.xp);const r=[0,ri.name];const u=S.user||{};
@@ -5219,7 +5225,7 @@ function renderProfile(){regen();helpsReset();const n=totalDone();const ri=rankI
   const b=curBook(),upcoming=[];for(let L=doneOf(b)+1;L<=b.levels&&upcoming.length<3;L++)upcoming.push({b,L});
   $("profilePage").innerHTML=`<h2>Profil</h2>${typeof installCard==="function"?installCard():""}
    <div class="card row"><span class="avatarbig">${avatarHTML()}</span><div><b style="font-size:18px">${esc(u.name||"")}</b><br><small>${esc(u.email||"")}${u.provider==="google"?" · Google":""}</small><br><small style="color:var(--lapis);font-weight:700">${u.gender==="f"?"Sœur":"Frère"} · ${esc(r[1])}</small></div><button class="chip" id="editAv">Modifier</button></div>
-   <button class="card row rankcard" id="rankCard" style="box-shadow:0 0 0 2px var(--line)"><span class="ic" style="background:#e7eefc">🎖️</span><div style="flex:1;text-align:left"><small>${ri.next?`<b>${esc(ri.name)}</b> → ${esc(ri.next)} : encore <b>${ri.need} XP</b>${ri.reward?`<br>🎁 À la clé : ${esc(ri.reward)}`:""}`:"Titre le plus élevé atteint : <b>Apôtre</b> !"}</small><span class="bar"><i style="width:${ri.pct}%"></i></span></div><span class="muted">›</span></button>
+   <button class="card row rankcard" id="rankCard" style="box-shadow:0 0 0 2px var(--line)"><span class="ic" style="background:#e7eefc">🎖️</span><div style="flex:1;text-align:left"><small>${ri.next?`<b>${esc(ri.name)}</b> → ${esc(ri.next)} : encore <b>${ri.need} XP</b>${ri.reward?`<br>🎁 À la clé : ${esc(ri.reward)}`:""}`:"Titre le plus élevé atteint : <b>${esc(ri.name)}</b> !"}</small><span class="bar"><i style="width:${ri.pct}%"></i></span></div><span class="muted">›</span></button>
    <div><div class="eyebrow" style="margin-bottom:8px">Ma montée</div><div class="seg"><button aria-pressed="${S.testament==="AT"}" data-t="AT">📜 Ancien Testament</button><button aria-pressed="${S.testament==="NT"}" data-t="NT">✝️ Nouveau Testament</button></div></div>
    <div class="grid3"><div class="card"><b>🪔 ${S.streak}</b><small>Jours de lumière</small></div><div class="card"><b style="color:var(--bad)">♥ ${unlimited()?"∞":S.hearts}</b><small>${unlimited()?"Illimité "+fmt(unlimitedLeft()):S.hearts<MAX_HEARTS?"+1 dans "+fmt(nextHeartIn()):"Cœurs pleins"}</small></div><div class="card"><b>✅ ${n}</b><small>Niveaux réussis</small></div></div>
    <div class="grid3"><div class="card"><b>⭐ ${S.xp}</b><small>XP</small></div><div class="card"><b>💡 ${S.helps}</b><small>Aides du jour</small></div><div class="card"><b>🕊️ ${S.med.history.length}</b><small>Méditations</small></div></div>
@@ -5768,7 +5774,7 @@ const RN=()=>Math.max(1,+adCfg().referral_needed||3),RH=()=>Math.max(1,+adCfg().
 function applyRules(){const c=adCfg(),n=(k,d)=>{const v=+c[k];return v>0?v:d;};
   MAX_HEARTS=n("max_hearts",5);HEART_MS=n("heart_minutes",25)*60000;DAILY_HELPS=n("daily_helps",5);Q_SECONDS=n("question_seconds",20);
   OL_SEARCH_MAX=n("search_seconds",30);AD_SKIP_SEC=n("skip_seconds",5);
-  const th=String(c.rank_thresholds||"").split(/[,; ]+/).map(Number).filter(x=>x>0);if(th.length===RANKS.length-1)th.forEach((x,i)=>{RANKS[i+1][0]=x;});}
+  if(!(typeof setRanksFrom==="function"&&setRanksFrom(c.ranks_json))){const th=String(c.rank_thresholds||"").split(/[,; ]+/).map(Number).filter(x=>x>0);if(th.length===RANKS.length-1)th.forEach((x,i)=>{RANKS[i+1][0]=x;});}}
 const adCfg=()=>Object.assign({},AD_DEF,AD.set||{});
 const adSb=()=>typeof olInit==="function"?olInit():null;
 function adViewer(){let v="";try{v=localStorage.getItem("pb-viewer")||"";if(!v){v=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);localStorage.setItem("pb-viewer",v);}}catch(e){v=v||"invite";}return v;}
