@@ -906,13 +906,32 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .emogrid button .emoface{font-size:28px;line-height:1;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;overflow:hidden}
 .emoface .avsvg,.emobig .avsvg,.giftav .avsvg{width:100%;height:100%;display:block}
 .giftav{display:block;width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px #f5c542}
-.emogrid button small{font-size:10px;font-weight:700;color:var(--stone);line-height:1.15;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.emogrid button small{font-size:10px;font-weight:700;color:var(--stone);line-height:1.4;padding-top:1px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .emoprev{display:flex;gap:14px;align-items:center;background:var(--lapis-soft);border-radius:18px;padding:12px 14px;margin-bottom:10px}
 .emoprev .emobig{font-size:52px;line-height:1;width:84px;height:84px;display:grid;place-items:center;background:#fff;border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px var(--lapis);flex-shrink:0}
 .emoprev.lk .emobig{box-shadow:0 0 0 3px #f5c542}
 .emoprev b{display:block;font-family:var(--f-display);font-size:18px}
 .emoprev small{display:block;color:var(--stone);font-size:13px;margin-bottom:6px}
 .emoprev .emolock{color:#9a6b00;font-weight:700;margin:0}
+.emoface img,.emobig img,.giftav img{width:100%;height:100%;object-fit:cover;display:block}
+.bibimg{background:#f3eee6}
+
+/* Qui suis-je ? */
+.qsjfab{position:absolute;right:14px;bottom:calc(180px + env(safe-area-inset-bottom));z-index:6;display:flex;align-items:center;gap:8px;padding:10px 16px 10px 10px;border-radius:999px;background:linear-gradient(135deg,#7a49d6,#1f4fd1);color:#fff;font:800 14px var(--f-display);box-shadow:0 8px 20px rgba(60,30,160,.35)}
+.qsjfab .qf{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:18px}
+.whobox{display:flex;justify-content:center;margin:6px 0 10px}
+.whoimg{width:min(46vw,190px);aspect-ratio:1;border-radius:28px;overflow:hidden;background:#f3eee6;box-shadow:0 0 0 4px #fff,0 0 0 7px var(--lapis),0 14px 30px rgba(31,79,209,.25);animation:popin .45s cubic-bezier(.2,1.6,.4,1) backwards}
+.whoimg img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
+.whoq{text-align:center;font-size:20px;line-height:1.35}
+.qsjhead{text-align:center}.qsjhead h3{margin:8px 0 2px;font-size:22px}.qsjhead p{margin:0 0 4px;font-size:13.5px}.qsjprog{font-weight:800;color:var(--lapis)}
+.qsjfaces{display:flex;justify-content:center}.qsjfaces span{width:54px;height:54px;border-radius:50%;overflow:hidden;margin:0 -7px;box-shadow:0 0 0 3px #fff;background:#f3eee6}
+.qsjfaces.big span{width:72px;height:72px}
+.qsjfaces img{width:100%;height:100%;object-fit:cover;display:block}
+.qsjlist{display:grid;gap:8px;margin-top:12px;max-height:48vh;overflow-y:auto}
+.qsjrow{display:flex;align-items:center;gap:12px;text-align:left;padding:10px 12px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--line)}
+.qsjrow .qi{font-size:24px;width:40px;height:40px;display:grid;place-items:center;background:var(--lapis-soft);border-radius:12px}
+.qsjrow .qt{flex:1}.qsjrow b{display:block;font-size:15px}.qsjrow small{color:var(--stone);font-size:12.5px}
+.qsjrow .qs{font-size:18px;color:var(--lapis)}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -1194,59 +1213,34 @@ function avSvg(v,x){x=x||{};const c=typeof v==="string"?avParse(v):v,id="av"+(++
 <ellipse cx="50" cy="46" rx="22.5" ry="25" fill="${sk}"/>${front}${beard}${brows}${eyes}
 <path d="M49 50 Q47 55 50 56" stroke="rgba(0,0,0,.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>${mouth}${gl}${hat}${veilF}${prop}</g></svg>`;}
 
-/* ---------- Personnages bibliques (avatars « bib:… » à gagner dans les cadeaux) ----------
-   c = peau.coiffure.couleurCheveux.barbe.yeux.bouche (indices AVB) ; x = attributs du personnage. */
+/* ---------- Personnages bibliques : portraits /bib/<id>.webp ----------
+   [id, nom (Louis Segond), trait, avatar] ; avatar=0 : sert aux devinettes « Qui suis-je ? » mais ne se gagne pas comme avatar. */
 const BIB=[
- ["noe","Noé","le bâtisseur","3.1.7.3.0.0",{cl:"#8a5a2b",bg:"#cfe8ff",scene:"rainbow",prop:"🔨"}],
- ["abraham","Abraham","le père de la foi","3.1.7.3.1.0",{cl:"#6b4f9e",bg:"#1d2b5c",scene:"stars",turban:"#e9dcc0",staff:1,prop:"✨"}],
- ["sara","Sara","la mère de la promesse","4.4.6.0.1.1",{veil:"#c9a46a",cl:"#a8714d",bg:"#ffe7c2",prop:"👶"}],
- ["isaac","Isaac","le fils de la promesse","3.1.1.2.0.0",{cl:"#16a06b",bg:"#d8f3e6",prop:"🐏"}],
- ["rebecca","Rébecca","la servante du puits","3.4.0.0.1.0",{veil:"#e0573f",cl:"#f5b94a",bg:"#fde0e0",prop:"🏺"}],
- ["jacob","Jacob","le lutteur béni","3.1.1.2.0.2",{cl:"#7a4b23",bg:"#ece2ff",scene:"stars",prop:"🪜"}],
- ["rachel","Rachel","la bergère","3.4.1.0.1.0",{veil:"#0ea5b7",cl:"#f4f4f4",bg:"#d8f3e6",prop:"🐑"}],
- ["joseph","Joseph","le rêveur","3.1.0.0.1.1",{stripes:["#e0573f","#f5b94a","#16a06b","#1f4fd1","#7a49d6","#e85d9a","#0ea5b7"],bg:"#fff3b0",prop:"🌾"}],
- ["moise","Moïse","le libérateur","3.1.7.3.0.2",{veil:"#8a5a2b",cl:"#c9a46a",bg:"#cfe8ff",scene:"sea",staff:1,prop:"📜"}],
- ["aaron","Aaron","le souverain sacrificateur","3.1.6.3.0.0",{turban:"#f4f4f4",gem:"#f5c542",cl:"#1f4fd1",plate:1,bg:"#e6e9ef",prop:"🔥"}],
- ["myriam","Myriam","la chantre de la délivrance","3.4.0.0.1.1",{veil:"#7a49d6",cl:"#f5b94a",bg:"#d6f4f7",scene:"sea",prop:"🪘"}],
- ["josue","Josué","le vaillant conquérant","3.1.0.2.0.2",{helmet:1,cl:"#c8312b",bg:"#ffe7c2",prop:"🎺"}],
- ["gedeon","Gédéon","le vaillant héros","3.1.1.2.0.0",{cl:"#5a7d2a",bg:"#1d2b5c",scene:"stars",prop:"🔥"}],
- ["debora","Débora","la juge d'Israël","2.4.0.0.0.0",{veil:"#16a06b",cl:"#f4f4f4",bg:"#d8f3e6",prop:"🌴"}],
- ["samson","Samson","l'homme fort","2.4.0.2.0.2",{cl:"#8a5a2b",bg:"#ffe7c2",prop:"🦁"}],
- ["ruth","Ruth","la fidèle","3.4.1.0.1.0",{veil:"#f5b94a",cl:"#a8714d",bg:"#fff3b0",scene:"sun",prop:"🌾"}],
- ["boaz","Boaz","le rédempteur généreux","3.1.6.2.1.0",{turban:"#e9dcc0",cl:"#14275e",bg:"#fff3b0",scene:"sun",prop:"🤝"}],
- ["anne","Anne","la mère qui prie","3.4.0.0.0.2",{veil:"#e85d9a",cl:"#f4f4f4",bg:"#fde0e0",prop:"🙏"}],
- ["samuel","Samuel","l'enfant qui écoute","4.1.0.0.3.3",{cl:"#f4f4f4",bg:"#1d2b5c",scene:"stars",prop:"🪔"}],
- ["david","David","le roi puissant","3.7.1.2.1.1",{crown:true,cl:"#c8312b",bg:"#fde0e0",prop:"🪨"}],
- ["salomon","Salomon","le roi sage","3.1.0.2.0.0",{crown:"#1f4fd1",cl:"#7a49d6",bg:"#fff3b0",prop:"📜"}],
- ["elie","Élie","le prophète de feu","2.3.0.3.0.2",{veil:"#7a4b23",cl:"#8a5a2b",bg:"#fde0e0",shaggy:1,prop:"🔥"}],
- ["elisee","Élisée","le prophète au double esprit","3.0.0.2.0.0",{cl:"#14275e",bg:"#e6e9ef",prop:"💧"}],
- ["esther","Esther","la reine courageuse","3.4.0.0.1.0",{crown:"#e85d9a",cl:"#7a49d6",bg:"#ece2ff",prop:"✨"}],
- ["nehemie","Néhémie","le bâtisseur de murailles","3.1.0.2.0.0",{turban:"#1f4fd1",cl:"#f4f4f4",bg:"#ffe7c2",prop:"🧱"}],
- ["esdras","Esdras","le scribe de la Loi","3.1.7.3.0.2",{turban:"#f4f4f4",cl:"#14275e",bg:"#e6e9ef",prop:"📖"}],
- ["job","Job","le patient","3.1.6.3.0.2",{cl:"#7a4b23",bg:"#e6e9ef",prop:"⛈️"}],
- ["daniel","Daniel","le fidèle de Babylone","3.1.0.0.0.0",{turban:"#e0573f",gem:"#f5c542",cl:"#f5b94a",bg:"#ffe7c2",prop:"🦁"}],
- ["jonas","Jonas","le prophète envoyé","3.1.1.2.3.3",{cl:"#0ea5b7",bg:"#cfe8ff",scene:"sea",prop:"🐋"}],
- ["esaie","Ésaïe","« Me voici, envoie-moi »","3.1.1.3.0.0",{cl:"#14275e",bg:"#fff6c8",scene:"light",prop:"🪶"}],
- ["jeremie","Jérémie","le prophète au cœur brisé","3.1.1.2.0.2",{cl:"#2a2f3a",bg:"#e6e9ef",prop:"🏺"}],
- ["marie","Marie","la servante du Seigneur","3.4.0.0.1.0",{veil:"#3b6fd1",cl:"#f4f4f4",bg:"#fff6c8",scene:"light",prop:"⭐"}],
- ["jeanbaptiste","Jean-Baptiste","la voix dans le désert","2.3.0.3.0.2",{cl:"#a0682f",shaggy:1,bg:"#f3dfa8",scene:"sun",prop:"💧"}],
- ["pierre","Pierre","le pêcheur d'hommes","3.1.6.2.0.1",{cl:"#1f4fd1",bg:"#cfe8ff",scene:"sea",prop:"🐟"}],
- ["jean","Jean","le disciple bien-aimé","3.4.1.0.1.0",{cl:"#e0573f",bg:"#fde0e0",prop:"❤️"}],
- ["matthieu","Matthieu","le publicain appelé","3.1.0.5.0.0",{turban:"#f5b94a",cl:"#16a06b",bg:"#d8f3e6",prop:"💰"}],
- ["mariemadeleine","Marie de Magdala","le témoin du matin de Pâques","3.4.0.0.1.1",{veil:"#e85d9a",cl:"#f4f4f4",bg:"#ffe7c2",scene:"sun",prop:"🌅"}],
- ["marthe","Marthe","l'hôte dévouée","3.6.1.0.1.0",{veil:"#16a06b",cl:"#f5b94a",bg:"#d8f3e6",prop:"🍞"}],
- ["zachee","Zachée","le petit homme transformé","3.1.0.5.1.1",{cl:"#7a49d6",bg:"#d8f3e6",prop:"🌳"}],
- ["etienne","Étienne","le premier martyr","3.1.0.0.0.0",{cl:"#f4f4f4",bg:"#fff6c8",scene:"light",prop:"🕊️"}],
- ["paul","Paul","l'apôtre des nations","3.8.0.2.0.2",{cl:"#14275e",bg:"#e6e9ef",prop:"✉️"}],
- ["luc","Luc","le médecin bien-aimé","3.1.0.1.0.0",{cl:"#0ea5b7",bg:"#d6f4f7",prop:"🩺"}],
- ["lydie","Lydie","la marchande de pourpre","3.4.0.0.1.0",{veil:"#7a49d6",cl:"#7a49d6",bg:"#ece2ff",prop:"🧵"}],
- ["priscille","Priscille","l'enseignante","3.6.0.0.0.0",{veil:"#0ea5b7",cl:"#f5b94a",bg:"#d6f4f7",prop:"⛺"}],
- ["timothee","Timothée","le jeune disciple","4.2.0.0.1.0",{cl:"#16a06b",bg:"#d8f3e6",prop:"📖"}],
- ["corneille","Corneille","le centenier","3.1.0.1.0.2",{helmet:1,cl:"#c8312b",bg:"#e6e9ef",prop:"🛡️"}]];
+ ["adam","Adam","le premier homme",1],["eve","Ève","la mère des vivants",1],["cain","Caïn","le premier meurtrier",0],["abel","Abel","le berger fidèle",1],["enoch","Énoch","celui qui marcha avec Dieu",1],
+ ["mathusalem","Mathusalem","l'homme aux 969 ans",1],["noe","Noé","le bâtisseur de l'arche",1],["sem","Sem","le fils béni de Noé",1],["cham","Cham","le fils de Noé",1],["japhet","Japhet","le fils de Noé",1],
+ ["abraham","Abraham","le père de la foi",1],["sara","Sara","la mère de la promesse",1],["agar","Agar","celle que Dieu a vue",1],["ismael","Ismaël","l'archer du désert",1],["isaac","Isaac","le fils de la promesse",1],
+ ["rebecca","Rébecca","la servante du puits",1],["esau","Ésaü","le chasseur",1],["jacob","Jacob","le lutteur devenu Israël",1],["lea","Léa","la mère de Juda",1],["rachel","Rachel","l'épouse aimée",1],
+ ["joseph","Joseph","le rêveur devenu gouverneur",1],["benjamin","Benjamin","le plus jeune fils de Jacob",1],["moise","Moïse","le libérateur",1],["aaron","Aaron","le souverain sacrificateur",1],["myriam","Myriam","la prophétesse au tambourin",1],
+ ["jethro","Jéthro","le sage beau-père de Moïse",1],["josue","Josué","le vaillant conquérant",1],["caleb","Caleb","l'homme d'un autre esprit",1],["rahab","Rahab","la femme au cordon cramoisi",1],["debora","Débora","la juge d'Israël",1],
+ ["gedeon","Gédéon","le vaillant héros",1],["samson","Samson","l'homme fort",1],["dalila","Dalila","celle qui trahit Samson",0],["ruth","Ruth","la fidèle",1],["boaz","Boaz","le rédempteur généreux",1],
+ ["naomi","Naomi","la belle-mère de Ruth",1],["eli","Éli","le sacrificateur de Silo",1],["anne","Anne","la mère qui prie",1],["samuel","Samuel","l'enfant qui écoute",1],["saul","Saül","le premier roi d'Israël",1],
+ ["jonathan","Jonathan","l'ami fidèle de David",1],["david","David","le roi puissant",1],["goliath","Goliath","le géant de Gath",0],["abigail","Abigaïl","la femme sage",1],["bathscheba","Bath-Schéba","la mère de Salomon",1],
+ ["salomon","Salomon","le roi sage",1],["seba","La reine de Séba","venue écouter Salomon",1],["roboam","Roboam","le fils de Salomon",1],["jeroboam","Jéroboam","le roi des deux veaux d'or",0],["elie","Élie","le prophète de feu",1],
+ ["elisee","Élisée","le prophète au double esprit",1],["jezabel","Jézabel","la reine impie",0],["achab","Achab","le roi impie",0],["josaphat","Josaphat","le roi qui chercha Dieu",1],["esaie","Ésaïe","« Me voici, envoie-moi »",1],
+ ["jeremie","Jérémie","le prophète en larmes",1],["ezechiel","Ézéchiel","le prophète des ossements",1],["osee","Osée","le prophète de l'amour fidèle",1],["joel","Joël","le prophète de l'Esprit",1],["amos","Amos","le berger prophète",1],
+ ["jonas","Jonas","le prophète du grand poisson",1],["michee","Michée","le prophète de Bethléhem",1],["nehemie","Néhémie","le bâtisseur de murailles",1],["esdras","Esdras","le scribe de la Loi",1],["esther","Esther","la reine courageuse",1],
+ ["mardochee","Mardochée","le cousin fidèle d'Esther",1],["aman","Aman","l'ennemi des Juifs",0],["job","Job","le patient",1],["daniel","Daniel","le fidèle de Babylone",1],["schadrac","Schadrac","l'homme de la fournaise",1],
+ ["meschac","Méschac","l'homme de la fournaise",1],["abednego","Abed-Nego","l'homme de la fournaise",1],["eliezer","Éliézer","le serviteur d'Abraham",1],["abischai","Abischaï","le vaillant neveu de David",1],["jeanbaptiste","Jean-Baptiste","la voix dans le désert",1],
+ ["marie","Marie","la servante du Seigneur",1],["josephnt","Joseph de Nazareth","le charpentier juste",1],["elisabeth","Élisabeth","la mère de Jean-Baptiste",1],["zacharie","Zacharie","le sacrificateur muet",1],["jesus","Jésus","le Fils de Dieu",0],
+ ["pierre","Pierre","le pêcheur d'hommes",1],["andre","André","celui qui amène à Jésus",1],["jacques","Jacques","le fils du tonnerre",1],["jean","Jean","le disciple bien-aimé",1],["philippe","Philippe","« Viens, et vois »",1],
+ ["barthelemy","Barthélemy","l'apôtre",1],["thomas","Thomas","celui qui voulut voir",1],["matthieu","Matthieu","le publicain appelé",1],["judas","Judas Iscariot","celui qui trahit Jésus",0],["matthias","Matthias","l'apôtre choisi par le sort",1],
+ ["mariemadeleine","Marie de Magdala","le témoin de la résurrection",1],["marthe","Marthe","l'hôte dévouée",1],["lazare","Lazare","l'ami ressuscité",1],["zachee","Zachée","le petit homme transformé",1],["nicodeme","Nicodème","le visiteur de la nuit",1],
+ ["paul","Paul","l'apôtre des nations",1],["etienne","Étienne","le premier martyr",1],["barnabas","Barnabas","le fils d'exhortation",1],["timothee","Timothée","le jeune disciple",1],["jeanpatmos","Jean à Patmos","le voyant de l'Apocalypse",1]];
 const BIBM=Object.fromEntries(BIB.map(b=>[b[0],b]));
-function bibSvg(id){const b=BIBM[id];if(!b)return "🙂";const [sk,hair,hairCol,beard,eyes,mouth]=b[3].split(".").map(Number);
-  return avSvg({skin:sk,hair,hairCol,beard,glasses:0,hat:0,cloth:0,bg:0,eyes,mouth},b[4]);}
-const isBib=v=>/^bib:[a-z]+$/.test(v||"")&&!!BIBM[String(v).slice(4)];
+const BIB_AV=BIB.filter(b=>b[3]);
+const bibSrc=id=>"/bib/"+id+".webp";
+function bibSvg(id){return BIBM[id]?`<img src="${bibSrc(id)}" alt="" class="avimg bibimg" loading="lazy">`:"🙂";}
+const isBib=v=>/^bib:[a-z]+$/.test(v||"");
 /* Espace admin Parcours Biblique — réservé aux comptes marqués administrateur dans Supabase. */
 const CFG={url:"https://xyuqturdtqmclrjdnaen.supabase.co",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dXF0dXJkdHFtY2xyamRuYWVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NDI3OTUsImV4cCI6MjEwOTQxODc5NX0.RHa_6UtvTfeFBdQ7wcBDby35cgvBYabIDe5grAfmS0E"};
 const $=id=>document.getElementById(id);
