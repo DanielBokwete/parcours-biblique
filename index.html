@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="f8ae81535c";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="fe2d31a2fa";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4534,6 +4534,9 @@ const bibSrc=id=>"/bib/"+id+".webp";
 function bibSvg(id){return BIBM[id]?`<img src="${bibSrc(id)}" alt="" class="avimg bibimg" loading="lazy">`:"🙂";}
 const isBib=v=>/^bib:[a-z]+$/.test(v||"");
 
+/* Image d'une énigme : portrait biblique (id) ou image importée (URL) */
+function rdPic(p){return /^https?:/.test(p||"")?`<img src="${esc(p)}" alt="" class="avimg" loading="lazy">`:p?bibSvg(p):"🎭";}
+
 /* ===================== RÉGLAGES DU JEU ===================== */
 // Valeurs par défaut : remplacées par les « Règles du jeu » réglées dans l'admin (voir applyRules dans ads.js).
 let MAX_HEARTS=5, HEART_MS=25*60*1000, Q_SECONDS=20, DAILY_HELPS=5;
@@ -5524,7 +5527,7 @@ function showRiddle(){rdClose();const o=document.createElement("div");o.id="ridd
   o.innerHTML=`<div class="rdcard" role="dialog" aria-modal="true" aria-labelledby="rdT"><button class="rdx" id="rdX">Plus tard</button>
     <h2 id="rdT">Devinette du jour ! 🌅</h2>${RD.day?`<div class="rddate">${new Date(RD.day+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}</div>`:""}
     <p class="rdsub">Une seule question par jour. Trouve qui c'est et gagne <b>+10 XP</b>. Si tu te trompes… nouvelle chance demain !</p>
-    <div class="rdimg">${RD.portrait?bibSvg(RD.portrait):"🎭"}</div>
+    <div class="rdimg">${rdPic(RD.portrait)}</div>
     <p class="rdclue">« ${esc(RD.clue)} »<br><b>Qui suis-je ?</b></p>
     <div class="rdin"><input id="rdA" placeholder="Écris ta réponse ici…" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="60" aria-label="Ta réponse"><div class="rdsug" id="rdS"></div></div>
     <p class="rdhint">Pas d'inquiétude pour les accents ou une petite faute d'orthographe.</p>
@@ -5546,7 +5549,7 @@ function rdResult(r,given){S.riddleDay=kinDay();const ok=!!r.correct;
   if(ok&&!r.already){S.xp=(S.xp||0)+10;S.riddleWins=(S.riddleWins||0)+1;}save();
   if(ok){sfx("win");confetti();}else{sfx("bad");vibrate(60);}
   const c=document.querySelector("#riddle .rdcard");if(!c)return;
-  c.innerHTML=`<div class="rdimg ${ok?"ok":"ko"}">${RD.portrait?bibSvg(RD.portrait):"🎭"}</div>
+  c.innerHTML=`<div class="rdimg ${ok?"ok":"ko"}">${rdPic(RD.portrait)}</div>
     <h2>${ok?"Bravo ! 🎉":"Ce n'était pas ça…"}</h2>
     <p class="rdsub">${ok?`C'était bien <b>${esc(r.answer)}</b>. <b>+10 XP</b> pour toi !`:`${given?`Tu as répondu « ${esc(given)} ». `:""}C'était <b>${esc(r.answer)}</b>. Nouvelle chance demain !`}</p>
     ${r.ref||r.explanation?`<div class="rdex">${r.ref?`<b>📖 ${esc(r.ref)}</b>`:""}${r.explanation?`<span>${esc(r.explanation)}</span>`:""}</div>`:""}

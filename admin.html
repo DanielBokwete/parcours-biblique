@@ -1147,6 +1147,10 @@ body.admin:not(.logged) .atop,body.admin:not(.logged) .abot,body.admin:not(.logg
 .rdpick small{font-size:10px;font-weight:700;color:var(--stone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .rdpick.on{box-shadow:0 0 0 3px var(--lapis);background:var(--lapis-soft)}
 .pill{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--lapis-soft);color:var(--lapis);font-weight:700;font-size:13px}
+.rdpick.up{cursor:pointer;background:var(--lapis-soft);color:var(--lapis)}
+.rdcal{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.rdday{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px var(--line);text-align:center}
+.rdday small{font-size:11px;color:var(--stone);font-weight:700}.rdday b{font-size:13px}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <div class="ashell"><aside class="aside" id="nav"></aside><div class="acol"><header class="atop" id="atop"></header><main id="main"></main></div></div><nav class="abot" id="abot"></nav><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>const AT_BOOKS=[["gen","Genèse",50,"🌍"],["exo","Exode",40,"🔥"],["lev","Lévitique",27,"🕯️"],["nom","Nombres",36,"⛺"],["deu","Deutéronome",34,"📜"],["jos","Josué",24,"🎺"],["jug","Juges",21,"⚔️"],["rut","Ruth",4,"🌾"],["1sa","1 Samuel",31,"🪔"],["2sa","2 Samuel",24,"👑"],["1ro","1 Rois",22,"🏛️"],["2ro","2 Rois",25,"🔥"],["1ch","1 Chroniques",29,"📜"],["2ch","2 Chroniques",36,"🏛️"],["esd","Esdras",10,"🧱"],["neh","Néhémie",13,"🧱"],["est","Esther",10,"👸"],["job","Job",42,"⛈️"],["psa","Psaumes",150,"🎵"],["pro","Proverbes",31,"🦉"],["ecc","Ecclésiaste",12,"⏳"],["can","Cantique des cantiques",8,"🌸"],["esa","Ésaïe",66,"🪶"],["jer","Jérémie",52,"🏺"],["lam","Lamentations",5,"💧"],["eze","Ézéchiel",48,"🦴"],["dan","Daniel",12,"🦁"],["ose","Osée",14,"💍"],["joe","Joël",3,"🦗"],["amo","Amos",9,"🐑"],["abd","Abdias",1,"⛰️"],["jon","Jonas",4,"🐋"],["mic","Michée",7,"🏘️"],["nah","Nahum",3,"🌊"],["hab","Habacuc",3,"🗼"],["sop","Sophonie",3,"📯"],["agg","Aggée",2,"🏗️"],["zac","Zacharie",14,"🐴"],["mal","Malachie",4,"☀️"]];
 const NT_BOOKS=[["mat","Matthieu",28,"⭐"],["mar","Marc",16,"🦁"],["luc","Luc",24,"🩺"],["jea","Jean",21,"🕊️"],["act","Actes",28,"🔥"],["rom","Romains",16,"✉️"],["1co","1 Corinthiens",16,"✉️"],["2co","2 Corinthiens",13,"✉️"],["gal","Galates",6,"✉️"],["eph","Éphésiens",6,"🛡️"],["phi","Philippiens",4,"😊"],["col","Colossiens",4,"✉️"],["1th","1 Thessaloniciens",5,"✉️"],["2th","2 Thessaloniciens",3,"✉️"],["1ti","1 Timothée",6,"📜"],["2ti","2 Timothée",4,"📜"],["tit","Tite",3,"📜"],["phm","Philémon",1,"🤝"],["heb","Hébreux",13,"⚓"],["jac","Jacques",5,"🌱"],["1pi","1 Pierre",5,"🪨"],["2pi","2 Pierre",3,"🪨"],["1je","1 Jean",5,"❤️"],["2je","2 Jean",1,"✉️"],["3je","3 Jean",1,"✉️"],["jud","Jude",1,"✉️"],["apo","Apocalypse",22,"🌅"]];
@@ -1271,6 +1275,9 @@ const BIB_AV=BIB.filter(b=>b[3]);
 const bibSrc=id=>"/bib/"+id+".webp";
 function bibSvg(id){return BIBM[id]?`<img src="${bibSrc(id)}" alt="" class="avimg bibimg" loading="lazy">`:"🙂";}
 const isBib=v=>/^bib:[a-z]+$/.test(v||"");
+
+/* Image d'une énigme : portrait biblique (id) ou image importée (URL) */
+function rdPic(p){return /^https?:/.test(p||"")?`<img src="${esc(p)}" alt="" class="avimg" loading="lazy">`:p?bibSvg(p):"🎭";}
 /* Espace admin Parcours Biblique — réservé aux comptes marqués administrateur dans Supabase. */
 const CFG={url:"https://xyuqturdtqmclrjdnaen.supabase.co",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dXF0dXJkdHFtY2xyamRuYWVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NDI3OTUsImV4cCI6MjEwOTQxODc5NX0.RHa_6UtvTfeFBdQ7wcBDby35cgvBYabIDe5grAfmS0E"};
 const $=id=>document.getElementById(id);
@@ -1669,50 +1676,75 @@ async function tMessagesList(list){const host=$("msgBox");
   document.querySelectorAll("[data-mr]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("ad_messages").update({is_read:b.dataset.v==="true"}).eq("id",b.dataset.mr);if(error)toast(err(error),1);else{tMessages();refreshBadges();}});
   const all=$("mAll");if(all)all.onclick=async()=>{const {error}=await sb.from("ad_messages").update({is_read:true}).eq("is_read",false);if(error)toast(err(error),1);else{tMessages();refreshBadges();}};}
 
-/* ---------- Énigmes du jour : une devinette par jour et par joueur, jamais deux fois la même ---------- */
+/* ---------- Énigmes du jour : la même énigme pour tous les joueurs à une date donnée ----------
+   Le calendrier (riddle_days) est rempli d'avance. Ici, on ne propose que les dates libres. */
 A.rd=A.rd||{s:"",act:"1"};
+const rdToday=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"Africa/Kinshasa"}).format(new Date());
+const rdFd=(d,long)=>new Date(d+"T12:00:00").toLocaleDateString("fr-FR",long?{weekday:"long",day:"numeric",month:"long",year:"numeric"}:{weekday:"short",day:"numeric",month:"short",year:"2-digit"});
 async function tRiddles(){const f=A.rd;let q=sb.from("riddles").select("*").order("id",{ascending:false});
   if(f.act)q=q.eq("active",f.act==="1");if(f.s)q=q.or(`clue.ilike.%${f.s}%,answer.ilike.%${f.s}%`);
-  const [{data,error},{data:st},{data:days}]=await Promise.all([q,sb.rpc("admin_riddle_stats"),sb.rpc("admin_riddle_days",{p_days:60})]);if(error)throw error;
-  const S2=Object.fromEntries((st||[]).map(x=>[x.riddle_id,x]));const tot=(data||[]).length;
-  const used=new Set((days||[]).map(d=>d.riddle_id));const pct=(a,b)=>b?Math.round(a/b*100)+" %":"—";
-  const today=new Intl.DateTimeFormat("en-CA",{timeZone:"Africa/Kinshasa"}).format(new Date());
-  const fd=d=>new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"});
-  const planned=(data||[]).filter(r=>r.planned_for&&r.planned_for>today).sort((a,b)=>a.planned_for<b.planned_for?-1:1);
-  const D=days||[],sum=k=>D.reduce((a,x)=>a+ +x[k],0);
-  $("main").innerHTML=`<div class="acard"><h3>Énigmes du jour</h3><p class="muted" style="font-size:13px">Tous les joueurs reçoivent <b>la même énigme le même jour</b>, à leur première ouverture du jeu. Si aucune n'est programmée pour une date, le jeu en prend une qui n'a pas encore servi ; quand toutes ont servi, le cycle recommence avec les plus anciennes. Une bonne réponse rapporte 10 XP. Les accents et les petites fautes sont tolérés ; ajoute les autres écritures possibles dans « Autres réponses acceptées ».</p>
-    <div class="kpis"><div class="kpi"><b>${tot}</b><small>énigmes ${f.act==="1"?"actives":""}</small></div><div class="kpi"><b>${sum("shown")}</b><small>affichages (60 j)</small></div><div class="kpi"><b>${pct(sum("answered"),sum("shown"))}</b><small>ont répondu</small></div><div class="kpi"><b>${pct(sum("correct"),sum("answered"))}</b><small>de bonnes réponses</small></div></div></div>
-  <div class="acard"><h3>Suivi jour par jour</h3><p class="muted" style="font-size:13px">« Joueurs actifs » : ceux qui ont ouvert le jeu ce jour-là. « Ignorée » : l'énigme s'est affichée mais le joueur n'a jamais répondu. « Plus tard » : le joueur l'a repoussée au moins une fois.</p>
+  const [{data,error},{data:st},{data:days},{data:cal}]=await Promise.all([q,sb.rpc("admin_riddle_stats"),sb.rpc("admin_riddle_days",{p_days:60}),sb.rpc("admin_riddle_calendar")]);if(error)throw error;
+  const S2=Object.fromEntries((st||[]).map(x=>[x.riddle_id,x]));const tot=(data||[]).length,today=rdToday();
+  const next={},past={};(cal||[]).forEach(c=>{if(!next[c.riddle_id])next[c.riddle_id]=c.day;});(days||[]).forEach(d=>{if(d.day<today&&!past[d.riddle_id])past[d.riddle_id]=d.day;});
+  A.rdCal={next,past};const pct=(a,b)=>b?Math.round(a/b*100)+" %":"—";
+  const D=days||[],sum=k=>D.reduce((a,x)=>a+ +x[k],0),C=cal||[],end=C.length?C[C.length-1].day:null;
+  $("main").innerHTML=`<div class="acard"><h3>Énigmes du jour</h3><p class="muted" style="font-size:13px">Tous les joueurs reçoivent <b>la même énigme le même jour</b>, à leur première ouverture du jeu. Le calendrier est rempli d'avance : une nouvelle énigme prend la première date libre, ou la date libre que tu choisis. Quand toutes ont servi, le cycle recommence avec les plus anciennes. Une bonne réponse rapporte 10 XP ; les accents et petites fautes sont tolérés.</p>
+    <div class="kpis"><div class="kpi"><b>${tot}</b><small>énigmes ${f.act==="1"?"actives":""}</small></div><div class="kpi"><b>${end?rdFd(end):"—"}</b><small>programmées jusqu'au</small></div><div class="kpi"><b>${pct(sum("answered"),sum("shown"))}</b><small>ont répondu (60 j)</small></div><div class="kpi"><b>${pct(sum("correct"),sum("answered"))}</b><small>de bonnes réponses</small></div></div></div>
+  <div class="acard"><h3>Suivi jour par jour</h3><p class="muted" style="font-size:13px">« Joueurs actifs » : ceux qui ont ouvert le jeu ce jour-là. « Ignorée » : affichée mais jamais répondue. « Plus tard » : repoussée au moins une fois.</p>
   <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Date</th><th>Énigme</th><th>Joueurs actifs</th><th>L'ont vue</th><th>Ont répondu</th><th>Ignorée</th><th>Plus tard</th><th>Réussite</th><th>Réponses fausses fréquentes</th></tr></thead><tbody>
-  ${D.map(d=>`<tr${d.day===today?' style="background:var(--lapis-soft)"':""}><td><b>${fd(d.day)}</b>${d.day===today?"<br><small>aujourd'hui</small>":""}</td><td><div class="row" style="gap:8px;flex-wrap:nowrap"><span class="rdth">${d.portrait?bibSvg(d.portrait):"🎭"}</span><b>${esc(d.answer)}</b></div></td><td>${d.active_players}</td><td>${d.shown}</td><td>${d.answered} <small class="muted">(${pct(+d.answered,+d.shown)})</small></td><td>${d.ignored}</td><td>${d.dismissed}</td><td><b>${pct(+d.correct,+d.answered)}</b></td><td><small>${(d.wrong_answers||[]).map(w=>`${esc(w.a||"(vide)")} ×${w.n}`).join(", ")||"—"}</small></td></tr>`).join("")||`<tr><td colspan="9" class="muted">Aucune énigme diffusée pour l'instant.</td></tr>`}
-  </tbody></table></div>
-  ${planned.length?`<h3 style="margin-top:16px">Programmées</h3><div class="row wrap" style="gap:8px">${planned.map(r=>`<span class="pill">${fd(r.planned_for)} · ${esc(r.answer)}</span>`).join("")}</div>`:""}</div>
+  ${D.map(d=>`<tr${d.day===today?' style="background:var(--lapis-soft)"':""}><td><b>${rdFd(d.day)}</b>${d.day===today?"<br><small>aujourd'hui</small>":""}</td><td><div class="row" style="gap:8px;flex-wrap:nowrap"><span class="rdth">${rdPic(d.portrait)}</span><b>${esc(d.answer)}</b></div></td><td>${d.active_players}</td><td>${d.shown}</td><td>${d.answered} <small class="muted">(${pct(+d.answered,+d.shown)})</small></td><td>${d.ignored}</td><td>${d.dismissed}</td><td><b>${pct(+d.correct,+d.answered)}</b></td><td><small>${(d.wrong_answers||[]).map(w=>`${esc(w.a||"(vide)")} ×${w.n}`).join(", ")||"—"}</small></td></tr>`).join("")||`<tr><td colspan="9" class="muted">Aucune énigme diffusée pour l'instant.</td></tr>`}
+  </tbody></table></div></div>
+  <div class="acard"><h3>Calendrier à venir</h3><div class="rdcal">${C.filter(c=>c.day>today).slice(0,21).map(c=>`<button class="rdday" data-ed="${c.riddle_id}"><small>${rdFd(c.day)}</small><span class="rdth">${rdPic(c.portrait)}</span><b>${esc(c.answer)}</b></button>`).join("")}</div>
+    ${C.filter(c=>c.day>today).length>21?`<p class="muted" style="font-size:13px;margin-top:8px">… et ${C.filter(c=>c.day>today).length-21} autres jours, jusqu'au ${rdFd(end,1)}.</p>`:""}</div>
   <div class="acard"><div class="row wrap"><select id="rda"><option value="1"${f.act==="1"?" selected":""}>Actives</option><option value="0"${f.act==="0"?" selected":""}>Désactivées</option><option value=""${!f.act?" selected":""}>Toutes</option></select>
     <input id="rds" placeholder="Rechercher un indice ou un nom…" value="${esc(f.s)}" style="flex:1;min-width:160px"><button class="btn small" id="rdgo" style="width:auto">Filtrer</button><button class="btn small good" id="rdnew" style="width:auto">＋ Nouvelle énigme</button></div>
-  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Portrait</th><th>Indice</th><th>Réponse</th><th>Diffusée</th><th>Trouvée</th><th></th></tr></thead><tbody>
-  ${(data||[]).map((r,i)=>{const x=S2[r.id]||{shown:0,answered:0,correct:0};return `<tr${r.active?"":' style="opacity:.5"'}><td>${i+1}</td><td><span class="rdth">${r.portrait?bibSvg(r.portrait):"🎭"}</span></td><td style="max-width:360px">${esc(r.clue)}<br><small class="muted">${esc(r.ref||"")}</small></td><td><b>${esc(r.answer)}</b>${r.aliases&&r.aliases.length?`<br><small class="muted">${esc(r.aliases.join(", "))}</small>`:""}</td><td>${r.planned_for&&r.planned_for>=today?`📅 ${fd(r.planned_for)}`:used.has(r.id)?`${x.shown} joueurs`:'<small class="muted">pas encore</small>'}</td><td>${x.answered?Math.round(x.correct/x.answered*100)+" %":"—"}</td><td><button class="textlink" data-ed="${r.id}">Modifier</button></td></tr>`;}).join("")||`<tr><td colspan="7" class="muted">Aucune énigme.</td></tr>`}
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Portrait</th><th>Indice</th><th>Réponse</th><th>Date</th><th>Trouvée</th><th></th></tr></thead><tbody>
+  ${(data||[]).map((r,i)=>{const x=S2[r.id]||{answered:0,correct:0},nx=next[r.id];return `<tr${r.active?"":' style="opacity:.5"'}><td>${i+1}</td><td><span class="rdth">${rdPic(r.portrait)}</span></td><td style="max-width:360px">${esc(r.clue)}<br><small class="muted">${esc(r.ref||"")}</small></td><td><b>${esc(r.answer)}</b>${r.aliases&&r.aliases.length?`<br><small class="muted">${esc(r.aliases.join(", "))}</small>`:""}</td>
+    <td>${nx===today?"<b>Aujourd'hui</b>":nx?`📅 ${rdFd(nx)}`:past[r.id]?`<small class="muted">diffusée le ${rdFd(past[r.id])}</small>`:'<small class="muted">non programmée</small>'}</td><td>${x.answered?Math.round(x.correct/x.answered*100)+" %":"—"}</td><td><button class="textlink" data-ed="${r.id}">Modifier</button></td></tr>`;}).join("")||`<tr><td colspan="7" class="muted">Aucune énigme.</td></tr>`}
   </tbody></table></div></div>`;
   $("rdgo").onclick=()=>{f.s=$("rds").value.trim();f.act=$("rda").value;tRiddles();};$("rda").onchange=()=>$("rdgo").click();
-  $("rdnew").onclick=()=>rdEdit(null);document.querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>rdEdit(data.find(r=>r.id==b.dataset.ed)));}
-function rdEdit(x){const n=!x;x=x||{portrait:"",clue:"",answer:"",aliases:[],ref:"",explanation:"",active:true};let por=x.portrait||"";
-  const grid=()=>`<button type="button" class="rdpick${!por?" on":""}" data-p="">🎭<small>Aucun</small></button>`+BIB.map(b=>`<button type="button" class="rdpick${por===b[0]?" on":""}" data-p="${b[0]}">${bibSvg(b[0])}<small>${esc(b[1])}</small></button>`).join("");
+  $("rdnew").onclick=()=>rdEdit(null);
+  document.querySelectorAll("[data-ed]").forEach(b=>b.onclick=async()=>{let r=(data||[]).find(z=>z.id==b.dataset.ed);if(!r){const {data:one}=await sb.from("riddles").select("*").eq("id",b.dataset.ed).maybeSingle();r=one;}if(r)rdEdit(r);});}
+
+/* Image carrée 400×400 (recadrée au centre) avant l'envoi */
+function rdSquare(file){return new Promise((ok,ko)=>{const img=new Image(),u=URL.createObjectURL(file);img.onload=()=>{const s=Math.min(img.width,img.height),c=document.createElement("canvas");c.width=c.height=400;
+  c.getContext("2d").drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,400,400);URL.revokeObjectURL(u);c.toBlob(b=>b?ok(b):ko(new Error("image illisible")),"image/webp",.85);};img.onerror=()=>ko(new Error("image illisible"));img.src=u;});}
+async function rdEdit(x){const n=!x;x=x||{portrait:"",clue:"",answer:"",aliases:[],ref:"",explanation:"",active:true};let por=x.portrait||"";
+  const today=rdToday(),cal=A.rdCal||{next:{},past:{}},cur=!n?cal.next[x.id]:null,was=!n?cal.past[x.id]:null;
+  const [{data:free},{data:files}]=await Promise.all([sb.rpc("admin_riddle_free_days"),sb.storage.from("riddles").list("",{limit:200,sortBy:{column:"created_at",order:"desc"}})]);
+  let mine=(files||[]).filter(f=>f.name&&!f.name.startsWith(".")).map(f=>sb.storage.from("riddles").getPublicUrl(f.name).data.publicUrl);
+  if(/^https?:/.test(por)&&!mine.includes(por))mine.unshift(por);
+  const fr=(free||[]).map(d=>typeof d==="string"?d:d.admin_riddle_free_days);
+  const dateOpts=n?`<option value="">Première date libre${fr[0]?" ("+rdFd(fr[0])+")":""}</option>`
+    :cur===today?`<option value="">Aujourd'hui (déjà diffusée, non modifiable)</option>`
+    :cur?`<option value="">Garder le ${rdFd(cur)}</option>`
+    :`<option value="">${was?"Déjà diffusée le "+rdFd(was)+" · ne pas reprogrammer":"Ne pas programmer pour l'instant"}</option>`;
+  const grid=()=>`<label class="rdpick up">📤<small>Importer</small><input type="file" id="rup" accept="image/*" hidden></label><button type="button" class="rdpick${!por?" on":""}" data-p="">🎭<small>Aucun</small></button>`
+    +mine.map(u=>`<button type="button" class="rdpick${por===u?" on":""}" data-p="${esc(u)}"><img src="${esc(u)}" alt=""><small>Importée</small></button>`).join("")
+    +BIB.map(b=>`<button type="button" class="rdpick${por===b[0]?" on":""}" data-p="${b[0]}">${bibSvg(b[0])}<small>${esc(b[1])}</small></button>`).join("");
   $("modal").innerHTML=`<div class="acard modalbox"><h3>${n?"Nouvelle énigme":"Modifier l'énigme"}</h3>
-  <div class="field"><label>Portrait affiché (l'image principale de la devinette)</label><div class="rdgrid" id="rdg">${grid()}</div></div>
+  <div class="field"><label>Portrait affiché (l'image principale de la devinette)</label><div class="rdgrid" id="rdg">${grid()}</div><small class="muted" id="rupMsg">Importe une image : elle est recadrée en carré automatiquement.</small></div>
   <div class="grid2"><div class="field span2"><label>Indice, à la première personne</label><textarea id="rc" rows="3" placeholder="Ex. J'ai fait entrer le peuple d'Israël dans la terre promise.">${esc(x.clue)}</textarea></div>
   <div class="field"><label>Réponse attendue</label><input id="rans" value="${esc(x.answer)}" placeholder="Ex. Josué"></div>
   <div class="field"><label>Autres réponses acceptées (séparées par des virgules)</label><input id="ral" value="${esc((x.aliases||[]).join(", "))}" placeholder="Ex. Josue, Osée fils de Nun"></div>
   <div class="field"><label>Référence (montrée après la réponse)</label><input id="rref" value="${esc(x.ref||"")}" placeholder="Ex. Josué 3:17"></div>
-  <div class="field"><label>Programmer pour une date (facultatif)</label><input type="date" id="rplan" value="${x.planned_for||""}" min="${new Date(Date.now()+864e5).toISOString().slice(0,10)}"><small class="muted">À partir de demain : l'énigme d'aujourd'hui est déjà fixée.</small></div>
-  <div class="field"><label>Active</label><select id="ract"><option value="1"${x.active?" selected":""}>Oui</option><option value="0"${x.active?"":" selected"}>Non</option></select></div>
+  <div class="field"><label>Date de diffusion</label><select id="rplan"${cur===today?" disabled":""}>${dateOpts}${cur===today?"":`<optgroup label="Dates libres">${fr.map(d=>`<option value="${d}">${rdFd(d,1)}</option>`).join("")}</optgroup>`}</select><small class="muted">Seules les dates libres sont proposées.</small></div>
+  <div class="field"><label>Active</label><select id="ract"><option value="1"${x.active?" selected":""}>Oui</option><option value="0"${x.active?"":" selected"}>Non (retirée du calendrier)</option></select></div>
   <div class="field span2"><label>Explication (facultatif)</label><textarea id="rex" rows="2">${esc(x.explanation||"")}</textarea></div></div>
   <div class="row"><button class="btn small" id="rsave" style="width:auto">Enregistrer</button><button class="btn small ghost" id="rcancel" style="width:auto">Fermer</button>${n?"":`<span class="sp"></span><button class="textlink" id="rdel" style="color:var(--bad)">Supprimer</button>`}</div></div>`;
   $("modal").hidden=false;
-  const bind=()=>document.querySelectorAll("#rdg [data-p]").forEach(b=>b.onclick=()=>{por=b.dataset.p;document.querySelectorAll("#rdg .rdpick").forEach(z=>z.classList.toggle("on",z.dataset.p===por));if(por&&!$("rans").value.trim()&&BIBM[por])$("rans").value=BIBM[por][1];});bind();
+  const bind=()=>{document.querySelectorAll("#rdg [data-p]").forEach(b=>b.onclick=()=>{por=b.dataset.p;document.querySelectorAll("#rdg .rdpick").forEach(z=>z.classList.toggle("on",z.dataset.p===por));if(por&&!$("rans").value.trim()&&BIBM[por])$("rans").value=BIBM[por][1];});
+    $("rup").onchange=async e=>{const fl=e.target.files[0];if(!fl)return;$("rupMsg").textContent="Envoi de l'image…";
+      try{const blob=await rdSquare(fl),path="r-"+Date.now()+".webp";const {error}=await sb.storage.from("riddles").upload(path,blob,{contentType:"image/webp",upsert:false});if(error)throw error;
+        por=sb.storage.from("riddles").getPublicUrl(path).data.publicUrl;mine.unshift(por);$("rdg").innerHTML=grid();bind();$("rupMsg").textContent="Image importée et sélectionnée.";}
+      catch(er){$("rupMsg").textContent="Échec de l'envoi : "+err(er);}};};bind();
   $("rcancel").onclick=()=>$("modal").hidden=true;
-  $("rsave").onclick=async()=>{const row={portrait:por||null,clue:$("rc").value.trim(),answer:$("rans").value.trim(),aliases:$("ral").value.split(",").map(s=>s.trim()).filter(Boolean),ref:$("rref").value.trim()||null,explanation:$("rex").value.trim()||null,active:$("ract").value==="1",planned_for:$("rplan").value||null};
+  $("rsave").onclick=async()=>{const row={portrait:por||null,clue:$("rc").value.trim(),answer:$("rans").value.trim(),aliases:$("ral").value.split(",").map(s=>s.trim()).filter(Boolean),ref:$("rref").value.trim()||null,explanation:$("rex").value.trim()||null,active:$("ract").value==="1"};
     if(row.clue.length<10){toast("Écris un indice un peu plus long.",1);return;}if(!row.answer){toast("Indique la réponse attendue.",1);return;}
-    const {error}=n?await sb.from("riddles").insert(row):await sb.from("riddles").update(row).eq("id",x.id);
-    if(error){toast(/riddles_planned_for|duplicate/.test(error.message||"")?"Une autre énigme est déjà programmée à cette date.":err(error),1);return;}toast(n?"Énigme ajoutée.":"Énigme enregistrée.");$("modal").hidden=true;tRiddles();};
+    const day=$("rplan").value;let error;
+    if(n){({error}=await sb.from("riddles").insert(Object.assign(row,{planned_for:day||null})));}
+    else{({error}=await sb.from("riddles").update(row).eq("id",x.id));if(!error&&day&&row.active)({error}=await sb.rpc("admin_riddle_plan",{p_riddle:x.id,p_day:day}));}
+    if(error){toast(err(error),1);return;}toast(n?"Énigme ajoutée au calendrier.":"Énigme enregistrée.");$("modal").hidden=true;tRiddles();};
   const d=$("rdel");if(d)d.onclick=async()=>{if(!confirm("Supprimer définitivement cette énigme ? Pour la retirer sans perdre ses statistiques, mets plutôt « Active : Non »."))return;
     const {error}=await sb.from("riddles").delete().eq("id",x.id);if(error){toast(err(error),1);return;}toast("Énigme supprimée.");$("modal").hidden=true;tRiddles();};}
 
