@@ -917,21 +917,33 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .bibimg{background:#f3eee6}
 
 /* Qui suis-je ? */
-.qsjfab{position:absolute;right:14px;bottom:calc(180px + env(safe-area-inset-bottom));z-index:6;display:flex;align-items:center;gap:8px;padding:10px 16px 10px 10px;border-radius:999px;background:linear-gradient(135deg,#7a49d6,#1f4fd1);color:#fff;font:800 14px var(--f-display);box-shadow:0 8px 20px rgba(60,30,160,.35)}
-.qsjfab .qf{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:18px}
 .whobox{display:flex;justify-content:center;margin:6px 0 10px}
 .whoimg{width:min(46vw,190px);aspect-ratio:1;border-radius:28px;overflow:hidden;background:#f3eee6;box-shadow:0 0 0 4px #fff,0 0 0 7px var(--lapis),0 14px 30px rgba(31,79,209,.25);animation:popin .45s cubic-bezier(.2,1.6,.4,1) backwards}
 .whoimg img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
 .whoq{text-align:center;font-size:20px;line-height:1.35}
-.qsjhead{text-align:center}.qsjhead h3{margin:8px 0 2px;font-size:22px}.qsjhead p{margin:0 0 4px;font-size:13.5px}.qsjprog{font-weight:800;color:var(--lapis)}
-.qsjfaces{display:flex;justify-content:center}.qsjfaces span{width:54px;height:54px;border-radius:50%;overflow:hidden;margin:0 -7px;box-shadow:0 0 0 3px #fff;background:#f3eee6}
-.qsjfaces.big span{width:72px;height:72px}
-.qsjfaces img{width:100%;height:100%;object-fit:cover;display:block}
-.qsjlist{display:grid;gap:8px;margin-top:12px;max-height:48vh;overflow-y:auto}
-.qsjrow{display:flex;align-items:center;gap:12px;text-align:left;padding:10px 12px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--line)}
-.qsjrow .qi{font-size:24px;width:40px;height:40px;display:grid;place-items:center;background:var(--lapis-soft);border-radius:12px}
-.qsjrow .qt{flex:1}.qsjrow b{display:block;font-size:15px}.qsjrow small{color:var(--stone);font-size:12.5px}
-.qsjrow .qs{font-size:18px;color:var(--lapis)}
+
+/* Énigme du jour */
+.rdveil{position:absolute;inset:0;z-index:60;background:rgba(14,22,48,.55);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px;animation:fadein .25s}
+.rdveil.out{opacity:0;transition:opacity .25s}
+.rdcard{position:relative;width:100%;max-width:400px;max-height:calc(100% - 20px);overflow-y:auto;background:linear-gradient(180deg,#fffaf0,#f6ecd9);border-radius:26px;padding:22px 20px 20px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:popin .4s cubic-bezier(.2,1.5,.4,1) backwards}
+.rdcard h2{font-family:var(--f-display);font-size:24px;margin:16px 0 6px;color:var(--ink)}
+.rdx{position:absolute;top:12px;right:14px;font-size:13px;font-weight:700;color:var(--stone)}
+.rdsub{font-size:14.5px;line-height:1.45;margin:0 0 10px;color:#3a4459}
+.rdimg{width:150px;height:150px;margin:6px auto 10px;border-radius:28px;overflow:hidden;background:#f3eee6;font-size:70px;display:grid;place-items:center;box-shadow:0 0 0 4px #fff,0 0 0 7px #f5c542,0 12px 26px rgba(150,100,20,.25)}
+.rdimg img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
+.rdimg.ok{box-shadow:0 0 0 4px #fff,0 0 0 7px var(--good,#16a06b)}.rdimg.ko{box-shadow:0 0 0 4px #fff,0 0 0 7px var(--bad,#d83a3a)}
+.rdclue{font-size:18px;line-height:1.4;margin:0 0 14px;color:var(--ink)}
+.rdin{position:relative;text-align:left}
+.rdin input{width:100%;box-sizing:border-box;font:600 17px var(--f-body,inherit);padding:14px 18px;border-radius:999px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.rdin input:focus{outline:none;border-color:var(--lapis)}
+.rdsug{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;justify-content:center}
+.rdsug button{padding:7px 12px;border-radius:999px;background:var(--lapis-soft);color:var(--lapis);font-weight:700;font-size:14px}
+.rdhint{font-size:12px;color:var(--stone);margin:8px 0 12px}
+.rdgo{background:linear-gradient(135deg,#7a49d6,#1f4fd1)}
+.rderr{color:var(--bad,#d83a3a);font-size:13px;font-weight:700;margin:8px 0 0}
+.rdex{background:#fff;border-radius:16px;padding:12px 14px;margin:0 0 14px;text-align:left;display:grid;gap:4px;font-size:14px;color:#3a4459;box-shadow:0 0 0 2px var(--line)}
+.rdex b{color:var(--lapis)}
+@keyframes fadein{from{opacity:0}}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -1117,6 +1129,14 @@ body.admin:not(.logged) .atop,body.admin:not(.logged) .abot,body.admin:not(.logg
 .wtag{background:#eef3ff;color:var(--lapis-deep);border-radius:999px;padding:2px 10px;margin-left:-4px}
 .tbl.rules .rcat td{background:#eef3fb;font-weight:800;color:#14275e}.rval{display:flex;align-items:center;gap:8px}.rval input{width:110px}
 #rkTbl input,#rkTbl select{width:100%;min-width:0}
+
+.rdth{display:block;width:46px;height:46px;border-radius:12px;overflow:hidden;background:#f3eee6;font-size:26px;text-align:center;line-height:46px}
+.rdth img{width:100%;height:100%;object-fit:cover;display:block}
+.rdgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:6px;max-height:240px;overflow-y:auto;padding:4px;border:1px solid var(--line);border-radius:12px}
+.rdpick{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px;border-radius:10px;background:#fff;box-shadow:0 0 0 1px var(--line);font-size:26px}
+.rdpick img{width:52px;height:52px;border-radius:10px;object-fit:cover}
+.rdpick small{font-size:10px;font-weight:700;color:var(--stone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.rdpick.on{box-shadow:0 0 0 3px var(--lapis);background:var(--lapis-soft)}
 </style></head><body class="admin"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <div class="ashell"><aside class="aside" id="nav"></aside><div class="acol"><header class="atop" id="atop"></header><main id="main"></main></div></div><nav class="abot" id="abot"></nav><div class="amodal" id="modal" hidden></div><div class="atoast" id="toast" hidden></div><script>const AT_BOOKS=[["gen","Genèse",50,"🌍"],["exo","Exode",40,"🔥"],["lev","Lévitique",27,"🕯️"],["nom","Nombres",36,"⛺"],["deu","Deutéronome",34,"📜"],["jos","Josué",24,"🎺"],["jug","Juges",21,"⚔️"],["rut","Ruth",4,"🌾"],["1sa","1 Samuel",31,"🪔"],["2sa","2 Samuel",24,"👑"],["1ro","1 Rois",22,"🏛️"],["2ro","2 Rois",25,"🔥"],["1ch","1 Chroniques",29,"📜"],["2ch","2 Chroniques",36,"🏛️"],["esd","Esdras",10,"🧱"],["neh","Néhémie",13,"🧱"],["est","Esther",10,"👸"],["job","Job",42,"⛈️"],["psa","Psaumes",150,"🎵"],["pro","Proverbes",31,"🦉"],["ecc","Ecclésiaste",12,"⏳"],["can","Cantique des cantiques",8,"🌸"],["esa","Ésaïe",66,"🪶"],["jer","Jérémie",52,"🏺"],["lam","Lamentations",5,"💧"],["eze","Ézéchiel",48,"🦴"],["dan","Daniel",12,"🦁"],["ose","Osée",14,"💍"],["joe","Joël",3,"🦗"],["amo","Amos",9,"🐑"],["abd","Abdias",1,"⛰️"],["jon","Jonas",4,"🐋"],["mic","Michée",7,"🏘️"],["nah","Nahum",3,"🌊"],["hab","Habacuc",3,"🗼"],["sop","Sophonie",3,"📯"],["agg","Aggée",2,"🏗️"],["zac","Zacharie",14,"🐴"],["mal","Malachie",4,"☀️"]];
 const NT_BOOKS=[["mat","Matthieu",28,"⭐"],["mar","Marc",16,"🦁"],["luc","Luc",24,"🩺"],["jea","Jean",21,"🕊️"],["act","Actes",28,"🔥"],["rom","Romains",16,"✉️"],["1co","1 Corinthiens",16,"✉️"],["2co","2 Corinthiens",13,"✉️"],["gal","Galates",6,"✉️"],["eph","Éphésiens",6,"🛡️"],["phi","Philippiens",4,"😊"],["col","Colossiens",4,"✉️"],["1th","1 Thessaloniciens",5,"✉️"],["2th","2 Thessaloniciens",3,"✉️"],["1ti","1 Timothée",6,"📜"],["2ti","2 Timothée",4,"📜"],["tit","Tite",3,"📜"],["phm","Philémon",1,"🤝"],["heb","Hébreux",13,"⚓"],["jac","Jacques",5,"🌱"],["1pi","1 Pierre",5,"🪨"],["2pi","2 Pierre",3,"🪨"],["1je","1 Jean",5,"❤️"],["2je","2 Jean",1,"✉️"],["3je","3 Jean",1,"✉️"],["jud","Jude",1,"✉️"],["apo","Apocalypse",22,"🌅"]];
@@ -1639,6 +1659,43 @@ async function tMessagesList(list){const host=$("msgBox");
   document.querySelectorAll("[data-mr]").forEach(b=>b.onclick=async()=>{const {error}=await sb.from("ad_messages").update({is_read:b.dataset.v==="true"}).eq("id",b.dataset.mr);if(error)toast(err(error),1);else{tMessages();refreshBadges();}});
   const all=$("mAll");if(all)all.onclick=async()=>{const {error}=await sb.from("ad_messages").update({is_read:true}).eq("is_read",false);if(error)toast(err(error),1);else{tMessages();refreshBadges();}};}
 
+/* ---------- Énigmes du jour : une devinette par jour et par joueur, jamais deux fois la même ---------- */
+A.rd=A.rd||{s:"",act:"1"};
+async function tRiddles(){const f=A.rd;let q=sb.from("riddles").select("*").order("id",{ascending:false});
+  if(f.act)q=q.eq("active",f.act==="1");if(f.s)q=q.or(`clue.ilike.%${f.s}%,answer.ilike.%${f.s}%`);
+  const [{data,error},{data:st}]=await Promise.all([q,sb.rpc("admin_riddle_stats")]);if(error)throw error;
+  const S2=Object.fromEntries((st||[]).map(x=>[x.riddle_id,x]));const tot=(data||[]).length;
+  const shown=(st||[]).reduce((a,x)=>a+ +x.shown,0),good=(st||[]).reduce((a,x)=>a+ +x.correct,0),ans=(st||[]).reduce((a,x)=>a+ +x.answered,0);
+  $("main").innerHTML=`<div class="acard"><h3>Énigmes du jour</h3><p class="muted" style="font-size:13px">Chaque joueur reçoit une énigme par jour à sa première ouverture du jeu, jamais deux fois la même. Une bonne réponse rapporte 10 XP. Les fautes d'orthographe légères et les accents sont tolérés ; ajoute les autres écritures possibles dans « Autres réponses acceptées ».</p>
+    <div class="kpis"><div class="kpi"><b>${tot}</b><small>énigmes ${f.act==="1"?"actives":""}</small></div><div class="kpi"><b>${shown}</b><small>énigmes montrées</small></div><div class="kpi"><b>${ans?Math.round(good/ans*100):0} %</b><small>de bonnes réponses</small></div></div></div>
+  <div class="acard"><div class="row wrap"><select id="rda"><option value="1"${f.act==="1"?" selected":""}>Actives</option><option value="0"${f.act==="0"?" selected":""}>Désactivées</option><option value=""${!f.act?" selected":""}>Toutes</option></select>
+    <input id="rds" placeholder="Rechercher un indice ou un nom…" value="${esc(f.s)}" style="flex:1;min-width:160px"><button class="btn small" id="rdgo" style="width:auto">Filtrer</button><button class="btn small good" id="rdnew" style="width:auto">＋ Nouvelle énigme</button></div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Portrait</th><th>Indice</th><th>Réponse</th><th>Montrée</th><th>Trouvée</th><th></th></tr></thead><tbody>
+  ${(data||[]).map((r,i)=>{const x=S2[r.id]||{shown:0,answered:0,correct:0};return `<tr${r.active?"":' style="opacity:.5"'}><td>${i+1}</td><td><span class="rdth">${r.portrait?bibSvg(r.portrait):"🎭"}</span></td><td style="max-width:360px">${esc(r.clue)}<br><small class="muted">${esc(r.ref||"")}</small></td><td><b>${esc(r.answer)}</b>${r.aliases&&r.aliases.length?`<br><small class="muted">${esc(r.aliases.join(", "))}</small>`:""}</td><td>${x.shown}</td><td>${x.answered?Math.round(x.correct/x.answered*100)+" %":"—"}</td><td><button class="textlink" data-ed="${r.id}">Modifier</button></td></tr>`;}).join("")||`<tr><td colspan="7" class="muted">Aucune énigme.</td></tr>`}
+  </tbody></table></div></div>`;
+  $("rdgo").onclick=()=>{f.s=$("rds").value.trim();f.act=$("rda").value;tRiddles();};$("rda").onchange=()=>$("rdgo").click();
+  $("rdnew").onclick=()=>rdEdit(null);document.querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>rdEdit(data.find(r=>r.id==b.dataset.ed)));}
+function rdEdit(x){const n=!x;x=x||{portrait:"",clue:"",answer:"",aliases:[],ref:"",explanation:"",active:true};let por=x.portrait||"";
+  const grid=()=>`<button type="button" class="rdpick${!por?" on":""}" data-p="">🎭<small>Aucun</small></button>`+BIB.map(b=>`<button type="button" class="rdpick${por===b[0]?" on":""}" data-p="${b[0]}">${bibSvg(b[0])}<small>${esc(b[1])}</small></button>`).join("");
+  $("modal").innerHTML=`<div class="acard modalbox"><h3>${n?"Nouvelle énigme":"Modifier l'énigme"}</h3>
+  <div class="field"><label>Portrait affiché (l'image principale de la devinette)</label><div class="rdgrid" id="rdg">${grid()}</div></div>
+  <div class="grid2"><div class="field span2"><label>Indice, à la première personne</label><textarea id="rc" rows="3" placeholder="Ex. J'ai fait entrer le peuple d'Israël dans la terre promise.">${esc(x.clue)}</textarea></div>
+  <div class="field"><label>Réponse attendue</label><input id="rans" value="${esc(x.answer)}" placeholder="Ex. Josué"></div>
+  <div class="field"><label>Autres réponses acceptées (séparées par des virgules)</label><input id="ral" value="${esc((x.aliases||[]).join(", "))}" placeholder="Ex. Josue, Osée fils de Nun"></div>
+  <div class="field"><label>Référence (montrée après la réponse)</label><input id="rref" value="${esc(x.ref||"")}" placeholder="Ex. Josué 3:17"></div>
+  <div class="field"><label>Active</label><select id="ract"><option value="1"${x.active?" selected":""}>Oui</option><option value="0"${x.active?"":" selected"}>Non</option></select></div>
+  <div class="field span2"><label>Explication (facultatif)</label><textarea id="rex" rows="2">${esc(x.explanation||"")}</textarea></div></div>
+  <div class="row"><button class="btn small" id="rsave" style="width:auto">Enregistrer</button><button class="btn small ghost" id="rcancel" style="width:auto">Fermer</button>${n?"":`<span class="sp"></span><button class="textlink" id="rdel" style="color:var(--bad)">Supprimer</button>`}</div></div>`;
+  $("modal").hidden=false;
+  const bind=()=>document.querySelectorAll("#rdg [data-p]").forEach(b=>b.onclick=()=>{por=b.dataset.p;document.querySelectorAll("#rdg .rdpick").forEach(z=>z.classList.toggle("on",z.dataset.p===por));if(por&&!$("rans").value.trim()&&BIBM[por])$("rans").value=BIBM[por][1];});bind();
+  $("rcancel").onclick=()=>$("modal").hidden=true;
+  $("rsave").onclick=async()=>{const row={portrait:por||null,clue:$("rc").value.trim(),answer:$("rans").value.trim(),aliases:$("ral").value.split(",").map(s=>s.trim()).filter(Boolean),ref:$("rref").value.trim()||null,explanation:$("rex").value.trim()||null,active:$("ract").value==="1"};
+    if(row.clue.length<10){toast("Écris un indice un peu plus long.",1);return;}if(!row.answer){toast("Indique la réponse attendue.",1);return;}
+    const {error}=n?await sb.from("riddles").insert(row):await sb.from("riddles").update(row).eq("id",x.id);
+    if(error){toast(err(error),1);return;}toast(n?"Énigme ajoutée.":"Énigme enregistrée.");$("modal").hidden=true;tRiddles();};
+  const d=$("rdel");if(d)d.onclick=async()=>{if(!confirm("Supprimer définitivement cette énigme ? Pour la retirer sans perdre ses statistiques, mets plutôt « Active : Non »."))return;
+    const {error}=await sb.from("riddles").delete().eq("id",x.id);if(error){toast(err(error),1);return;}toast("Énigme supprimée.");$("modal").hidden=true;tRiddles();};}
+
 /* ---- Coquille de l'admin : menu latéral (ordinateur), barre du bas + « Plus » (téléphone), en-tête de page ---- */
 const IC={
   home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
@@ -1648,6 +1705,7 @@ const IC={
   matches:'<path d="m14.5 17.5 6-6V4h-7.5l-6 6"/><path d="m4 15 5 5"/><path d="m3 21 3-3"/><path d="M9.5 3.5 3 10l4 4"/>',
   rank:'<path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3v2a3 3 0 0 1-3 3"/><path d="M7 5H4v2a3 3 0 0 0 3 3"/>',
   prizes:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+  riddles:'<path d="M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3Z"/><path d="M9.5 20h5"/>',
   questions:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7"/><path d="M12 17h.01"/>',
   settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
   more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
@@ -1657,7 +1715,7 @@ const ico=(k,s=20)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="n
 const NAV=[
   {g:"Pilotage",items:[["home","Tableau de bord","Activité, croissance et annonces en un coup d'œil"],["ads","Annonces","Créer, diffuser et suivre les annonces"],["messages","Messages","Demandes de sponsoring et messages des annonceurs"]]},
   {g:"Communauté",items:[["users","Joueurs","Comptes, villes, activité"],["matches","Parties","Parties en ligne et entre amis"],["rank","Classement","Le meilleur disciple du mois"],["prizes","Prix","Prix du mois et demandes des gagnants"]]},
-  {g:"Contenu",items:[["questions","Questions","Banque de questions des défis en ligne"]]},
+  {g:"Contenu",items:[["questions","Questions","Banque de questions des défis en ligne"],["riddles","Énigmes du jour","Devinettes quotidiennes avec portraits"]]},
   {g:"Système",items:[["settings","Règles du jeu","Vies, aides, défis, annonces, cadeaux et titres"]]}];
 const NAV_FLAT=NAV.flatMap(g=>g.items);
 const BOTTOM=["home","ads","messages","users"];
@@ -1681,7 +1739,7 @@ function renderNav(){const me=A.me||{};
       <a href="index.html" target="_blank" rel="noopener">${ico("game",24)}<span>Ouvrir le jeu</span></a><button id="mOut">${ico("out",24)}<span>Déconnexion</span></button></div><button class="btn ghost small" id="mClose">Fermer</button></div>`;
     $("modal").hidden=false;$("modal").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));$("mClose").onclick=()=>{$("modal").hidden=true;};$("mOut").onclick=()=>{if(confirm("Se déconnecter ?"))sb.auth.signOut();};};}
 function renderTab(){$("main").innerHTML=`<div class="acard"><div class="skel"></div></div>`;
-  ({home:tHome,users:tUsers,matches:tMatches,rank:tRank,prizes:tPrizes,ads:tAds,messages:tMessages,questions:tQuestions,settings:tSettings})[A.tab]().catch(e=>{$("main").innerHTML=`<div class="acard"><b>Erreur</b><p>${esc(err(e))}</p></div>`;});}
+  ({home:tHome,users:tUsers,matches:tMatches,rank:tRank,prizes:tPrizes,ads:tAds,messages:tMessages,questions:tQuestions,riddles:tRiddles,settings:tSettings})[A.tab]().catch(e=>{$("main").innerHTML=`<div class="acard"><b>Erreur</b><p>${esc(err(e))}</p></div>`;});}
 async function refreshBadges(){try{const o=await rpc("admin_activity");A.act=o;const m=(+o.unread||0)+(+o.sponsor_new||0),p=+o.claims_new||0;if(m!==BADGE.messages||p!==BADGE.prizes){BADGE.messages=m;BADGE.prizes=p;renderNav();}}catch(e){}}
 setInterval(()=>{if(document.body.classList.contains("logged")&&document.visibilityState==="visible")refreshBadges();},60000);
 // Retour sur l'onglet du navigateur : on actualise les compteurs sans recharger la page.

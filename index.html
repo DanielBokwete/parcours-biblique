@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="8c73af375e";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="de48a0ac89";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -921,21 +921,33 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .bibimg{background:#f3eee6}
 
 /* Qui suis-je ? */
-.qsjfab{position:absolute;right:14px;bottom:calc(180px + env(safe-area-inset-bottom));z-index:6;display:flex;align-items:center;gap:8px;padding:10px 16px 10px 10px;border-radius:999px;background:linear-gradient(135deg,#7a49d6,#1f4fd1);color:#fff;font:800 14px var(--f-display);box-shadow:0 8px 20px rgba(60,30,160,.35)}
-.qsjfab .qf{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:18px}
 .whobox{display:flex;justify-content:center;margin:6px 0 10px}
 .whoimg{width:min(46vw,190px);aspect-ratio:1;border-radius:28px;overflow:hidden;background:#f3eee6;box-shadow:0 0 0 4px #fff,0 0 0 7px var(--lapis),0 14px 30px rgba(31,79,209,.25);animation:popin .45s cubic-bezier(.2,1.6,.4,1) backwards}
 .whoimg img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
 .whoq{text-align:center;font-size:20px;line-height:1.35}
-.qsjhead{text-align:center}.qsjhead h3{margin:8px 0 2px;font-size:22px}.qsjhead p{margin:0 0 4px;font-size:13.5px}.qsjprog{font-weight:800;color:var(--lapis)}
-.qsjfaces{display:flex;justify-content:center}.qsjfaces span{width:54px;height:54px;border-radius:50%;overflow:hidden;margin:0 -7px;box-shadow:0 0 0 3px #fff;background:#f3eee6}
-.qsjfaces.big span{width:72px;height:72px}
-.qsjfaces img{width:100%;height:100%;object-fit:cover;display:block}
-.qsjlist{display:grid;gap:8px;margin-top:12px;max-height:48vh;overflow-y:auto}
-.qsjrow{display:flex;align-items:center;gap:12px;text-align:left;padding:10px 12px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--line)}
-.qsjrow .qi{font-size:24px;width:40px;height:40px;display:grid;place-items:center;background:var(--lapis-soft);border-radius:12px}
-.qsjrow .qt{flex:1}.qsjrow b{display:block;font-size:15px}.qsjrow small{color:var(--stone);font-size:12.5px}
-.qsjrow .qs{font-size:18px;color:var(--lapis)}
+
+/* Énigme du jour */
+.rdveil{position:absolute;inset:0;z-index:60;background:rgba(14,22,48,.55);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px;animation:fadein .25s}
+.rdveil.out{opacity:0;transition:opacity .25s}
+.rdcard{position:relative;width:100%;max-width:400px;max-height:calc(100% - 20px);overflow-y:auto;background:linear-gradient(180deg,#fffaf0,#f6ecd9);border-radius:26px;padding:22px 20px 20px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:popin .4s cubic-bezier(.2,1.5,.4,1) backwards}
+.rdcard h2{font-family:var(--f-display);font-size:24px;margin:16px 0 6px;color:var(--ink)}
+.rdx{position:absolute;top:12px;right:14px;font-size:13px;font-weight:700;color:var(--stone)}
+.rdsub{font-size:14.5px;line-height:1.45;margin:0 0 10px;color:#3a4459}
+.rdimg{width:150px;height:150px;margin:6px auto 10px;border-radius:28px;overflow:hidden;background:#f3eee6;font-size:70px;display:grid;place-items:center;box-shadow:0 0 0 4px #fff,0 0 0 7px #f5c542,0 12px 26px rgba(150,100,20,.25)}
+.rdimg img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
+.rdimg.ok{box-shadow:0 0 0 4px #fff,0 0 0 7px var(--good,#16a06b)}.rdimg.ko{box-shadow:0 0 0 4px #fff,0 0 0 7px var(--bad,#d83a3a)}
+.rdclue{font-size:18px;line-height:1.4;margin:0 0 14px;color:var(--ink)}
+.rdin{position:relative;text-align:left}
+.rdin input{width:100%;box-sizing:border-box;font:600 17px var(--f-body,inherit);padding:14px 18px;border-radius:999px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.rdin input:focus{outline:none;border-color:var(--lapis)}
+.rdsug{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;justify-content:center}
+.rdsug button{padding:7px 12px;border-radius:999px;background:var(--lapis-soft);color:var(--lapis);font-weight:700;font-size:14px}
+.rdhint{font-size:12px;color:var(--stone);margin:8px 0 12px}
+.rdgo{background:linear-gradient(135deg,#7a49d6,#1f4fd1)}
+.rderr{color:var(--bad,#d83a3a);font-size:13px;font-weight:700;margin:8px 0 0}
+.rdex{background:#fff;border-radius:16px;padding:12px 14px;margin:0 0 14px;text-align:left;display:grid;gap:4px;font-size:14px;color:#3a4459;box-shadow:0 0 0 2px var(--line)}
+.rdex b{color:var(--lapis)}
+@keyframes fadein{from{opacity:0}}
 
 </style>
 <div class="app" id="app">
@@ -955,7 +967,6 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
     </div>
     <button class="rankbar" id="rankBar" aria-label="Mon titre et ma progression"></button>
     <div class="scroll" id="scroll"><div class="track" id="track"></div></div>
-    <button class="qsjfab" id="qsjFab" aria-label="Qui suis-je ? Devine les personnages bibliques"><span class="qf">🎭</span><span>Qui suis-je ?</span></button>
   </section>
 
   <section class="screen" id="online" hidden><div class="page pad" id="onlinePage"></div></section>
@@ -4769,7 +4780,7 @@ const pctTone=p=>p>=100?"full":p>=50?"mid":"lo";
 function renderTop(){if(typeof ageAskMaybe==="function")setTimeout(ageAskMaybe,1500);const b=curBook();const L=Math.min(doneOf(b)+1,b.levels);const u=unitOfLevel(b,L);
   $("chipAv").textContent=b.ic;$("chipAv").style.background=S.testament==="AT"?"#f6e7c7":"#dbe9ff";
   $("chipUnit").textContent=`${b.name} · Étape ${u.i}`;$("chipName").textContent=u.name;$("pillHearts").innerHTML=heartPill();
-  const rb=$("rankBar");if(rb){rb.innerHTML=rankBarHTML();rb.onclick=openRanks;}const qf=$("qsjFab");if(qf)qf.onclick=()=>{sfx("tap");openQsj();};}
+  const rb=$("rankBar");if(rb){rb.innerHTML=rankBarHTML();rb.onclick=openRanks;}if(typeof riddleMaybe==="function")setTimeout(riddleMaybe,2500);}
 function nodeIcon(st){return st==="done"?'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>'
   :st==="cur"?'<svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>'
   :'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';}
@@ -5098,7 +5109,7 @@ function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("
   $("toAd").onclick=()=>adReward("life",()=>{if(S.hearts>0)go("path");});$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
 {const lessonSheet=k=>{if(!LS||LS.mode!=="level"||typeof statSheet!=="function")return;statSheet(k,()=>{if(curScreen==="lesson"){setHead();if(LS&&!LS.answered&&LS.q)askFoot();}});};
  $("lHelps").onclick=()=>lessonSheet("help");$("lXp").onclick=()=>openRanks();$("lHearts").onclick=()=>lessonSheet("life");}
-$("quit").onclick=()=>{sfx("tap");if(LS&&LS.kind==="med"){S.med.state="due";save();go("medit");}else go(LS&&LS.mode==="test"&&LS.kind!=="qsj"?(LS.kind==="memo"?"bible":"medit"):"path");};
+$("quit").onclick=()=>{sfx("tap");if(LS&&LS.kind==="med"){S.med.state="due";save();go("medit");}else go(LS&&LS.mode==="test"?(LS.kind==="memo"?"bible":"medit"):"path");};
 $("replay").onclick=()=>{if(LS&&LS.say)speak(LS.say,true);};
 
 /* ===================== QUESTIONS DE MÉDITATION =====================
@@ -5148,14 +5159,6 @@ function buildMedTest(keys){const vs=keys.map(parseKey),full=vs.length===1,cap=v
   vs.forEach(V=>{const r=genVerseQuestions(V,full);qs.push(...r.qs.slice(0,cap));reci.push(r.last);});
   const refl=genReflection();return [...qs.slice(0,Math.ceil(qs.length/2)),refl[0],...qs.slice(Math.ceil(qs.length/2)),refl[1],...reci];}
 function finishTest(){const k=LS.kind,score=LS.score,tot=LS.graded||1,pct=Math.round(score/tot*100);S.xp+=LS.xp;bumpStreak();
-  if(k==="qsj"){const n=LS.qsj;S.qsj=S.qsj||{};const rec=pct>(S.qsj[n]??-1);if(rec)S.qsj[n]=pct;save();if(typeof rankUpCheck==="function")rankUpCheck();$("progBar").style.width="100%";
-    const good=pct>=80;sfx(good?"win":"good");if(good)confetti();const nx=n+1<QSJ_SERIES.length;
-    $("lbody").innerHTML=`<div class="center"><div class="qsjfaces big">${QSJ.slice(n*10,n*10+4).map(x=>`<span>${bibSvg(x[0])}</span>`).join("")}</div><div class="score">${pct}%</div>
-      <h2 style="font-size:26px">${pct>=100?"Tu les as tous reconnus !":good?"Bien joué !":pct>=50?"Pas mal du tout":"Ces personnages t'ont piégé"}</h2>
-      <p>${score}/${tot} personnages trouvés · +${LS.xp} XP${rec&&pct>0?" · nouveau record":""}.</p><p class="muted" style="font-size:14px">${good?"":"Réussis la série à 80 % pour la valider. "}Série « ${esc(QSJ_SERIES[n][0])} ».</p></div>`;
-    speak(`${score} sur ${tot}.`);$("lfoot").className="lfoot pad";
-    $("lfoot").innerHTML=`<div style="display:grid;gap:12px">${nx&&good?`<button class="btn" id="qNext">Série suivante : ${esc(QSJ_SERIES[n+1][0])}</button>`:`<button class="btn" id="qAgain">Rejouer cette série</button>`}<button class="btn ghost" id="qList">Toutes les séries</button></div>`;
-    const a=$("qNext")||$("qAgain");a.onclick=()=>{sfx("tap");startQsj($("qNext")?n+1:n);};$("qList").onclick=()=>{sfx("tap");go("path");setTimeout(openQsj,250);};return;}
   const good=pct>=80,mid=pct>=50;sfx(good?"win":"good");if(good)confetti();
   if(k==="med"){S.med.history.unshift({at:Date.now(),pct,refs:S.med.sel.map(x=>{const p=parseKey(x);return vref(p.g,p.c,p.v);})});S.med.history=S.med.history.slice(0,12);S.med.state="done";}
   save();$("progBar").style.width="100%";
@@ -5490,132 +5493,55 @@ function showApkUpdate(a){const force=APK_INFO.v<(a.minVersion||0);
 setTimeout(checkUpdates,4000);setInterval(checkUpdates,30*60*1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdates();});
 
-/* ===================== QUI SUIS-JE ? =====================
-   La référence n'est montrée qu'après la réponse (dans l'explication) : « Ruth 1:16 » donnerait la réponse.
-   Devinettes sur les personnages bibliques : le portrait est l'élément principal,
-   l'indice est à la 1re personne, et les 3 pièges sont des personnages proches.
-   [id du portrait (BIB), indice, "piège|piège|piège", référence, explication]  */
-const QSJ_SERIES=[
- ["Les origines","🌳"],["Les patriarches","⛺"],["L'Exode et la conquête","🌊"],["Juges et premiers rois","⚔️"],["Le royaume","👑"],
- ["Rois et prophètes","🔥"],["L'exil et le retour","🧱"],["La venue du Sauveur","⭐"],["Les apôtres","🐟"],["L'Église naissante","🕊️"]];
-const QSJ=[
- ["adam","J'ai donné un nom à tous les animaux. Je suis le premier homme.","Abel|Noé|Énoch","Genèse 2:19-20","Dieu a formé l'homme de la poussière de la terre."],
- ["eve","Je suis la mère de tous les vivants, et le serpent m'a parlé dans le jardin.","Sara|Rachel|Léa","Genèse 3:20","Adam l'appela Ève, car elle a été la mère de tous les vivants."],
- ["cain","Après la mort de mon frère, j'ai répondu à Dieu : « Suis-je le gardien de mon frère ? »","Abel|Cham|Ésaü","Genèse 4:9","Caïn, l'aîné d'Adam et Ève, tua son frère Abel."],
- ["abel","Berger, j'ai offert à Dieu des premiers-nés de mon troupeau, et il a porté un regard favorable sur mon offrande.","Caïn|Isaac|David","Genèse 4:4","Hébreux 11:4 : par la foi, Abel offrit un sacrifice plus excellent."],
- ["enoch","J'ai marché avec Dieu, puis je ne fus plus, parce que Dieu me prit.","Élie|Mathusalem|Noé","Genèse 5:24","Élie aussi fut enlevé au ciel, mais c'est Énoch qui « marcha avec Dieu » avant le déluge."],
- ["mathusalem","Je suis l'homme qui a vécu le plus longtemps dans la Bible : neuf cent soixante-neuf ans.","Adam|Énoch|Noé","Genèse 5:27","Mathusalem était le fils d'Énoch et le grand-père de Noé."],
- ["noe","J'ai construit une arche de trois cents coudées et j'y suis entré avec ma famille et les animaux.","Abraham|Moïse|Sem","Genèse 6:15","Noé trouva grâce aux yeux de l'Éternel."],
- ["sem","Avec mon frère Japhet, j'ai couvert notre père en marchant à reculons. Abraham descend de moi.","Cham|Japhet|Isaac","Genèse 9:23 ; 11:10-26","La lignée de Sem conduit jusqu'à Abraham."],
- ["cham","Je suis le père de Canaan, et j'ai vu la nudité de mon père sans le couvrir.","Sem|Japhet|Caïn","Genèse 9:22","Ses frères Sem et Japhet, eux, couvrirent leur père."],
- ["japhet","Noé a demandé à Dieu d'étendre mes possessions et que j'habite dans les tentes de Sem.","Cham|Sem|Ismaël","Genèse 9:27","« Que Dieu étende les possessions de Japhet. »"],
-
- ["abraham","Dieu m'a dit : « Va-t'en de ton pays », et je suis parti sans savoir où j'allais.","Moïse|Jacob|Noé","Genèse 12:1 ; Hébreux 11:8","Abraham est appelé le père de tous ceux qui croient."],
- ["sara","J'ai ri en moi-même quand Dieu a promis que j'aurais un fils dans ma vieillesse.","Rébecca|Anne|Élisabeth","Genèse 18:12","Son fils s'appela Isaac, qui veut dire « il rit »."],
- ["agar","Servante égyptienne, j'ai appelé l'Éternel « le Dieu qui me voit ».","Rahab|Léa|Dalila","Genèse 16:13","Dans le désert, l'ange de l'Éternel trouva Agar près d'une source."],
- ["ismael","Fils d'Agar, j'ai grandi dans le désert et je suis devenu tireur d'arc.","Ésaü|Isaac|Jonathan","Genèse 21:20","Dieu fut avec l'enfant, qui grandit dans le désert de Paran."],
- ["isaac","J'ai porté le bois de l'holocauste sur la montagne, et Dieu a pourvu un bélier à ma place.","Ismaël|Jacob|Joseph","Genèse 22:6-13","« Dieu se pourvoira lui-même de l'agneau », avait dit Abraham."],
- ["rebecca","J'ai donné à boire au serviteur d'Abraham, puis j'ai aussi puisé pour tous ses chameaux.","Rachel|Léa|Sara","Genèse 24:18-19","Elle devint la femme d'Isaac."],
- ["esau","J'ai vendu mon droit d'aînesse pour du pain et un plat de lentilles.","Jacob|Ismaël|Caïn","Genèse 25:34","« C'est ainsi qu'Ésaü méprisa le droit d'aînesse. »"],
- ["jacob","J'ai lutté jusqu'au lever de l'aurore, et Dieu a changé mon nom en Israël.","Ésaü|Isaac|Joseph","Genèse 32:24-28","Israël veut dire « qui lutte avec Dieu »."],
- ["lea","Jacob m'a épousée en croyant épouser ma sœur cadette.","Rachel|Rébecca|Ruth","Genèse 29:23-25","Laban avait trompé Jacob : il lui donna Léa au lieu de Rachel."],
- ["rachel","Jacob a servi sept ans pour m'épouser, et ils lui parurent quelques jours parce qu'il m'aimait.","Léa|Rébecca|Ruth","Genèse 29:20","Rachel fut la mère de Joseph et de Benjamin."],
-
- ["joseph","Vendu par mes frères, je suis devenu gouverneur de toute l'Égypte.","Benjamin|Moïse|Daniel","Genèse 41:41","« Vous aviez médité de me faire du mal, Dieu l'a changé en bien » (50:20)."],
- ["benjamin","On a trouvé la coupe d'argent du gouverneur d'Égypte dans mon sac.","Joseph|Ruben|Juda","Genèse 44:12","Joseph avait fait cacher sa coupe pour éprouver ses frères."],
- ["moise","J'ai été sauvé des eaux dans une caisse de jonc, puis élevé par la fille du Pharaon.","Joseph|Aaron|Josué","Exode 2:3-10","Moïse veut dire « tiré des eaux »."],
- ["aaron","J'ai parlé au Pharaon à la place de mon frère, et ma verge a fleuri dans le tabernacle.","Moïse|Josué|Éli","Exode 4:14-16 ; Nombres 17:8","Aaron fut le premier souverain sacrificateur."],
- ["myriam","Prophétesse, j'ai pris un tambourin et chanté après la traversée de la mer Rouge.","Débora|Anne|Rahab","Exode 15:20-21","Myriam était la sœur d'Aaron et de Moïse."],
- ["jethro","Sacrificateur de Madian, j'ai conseillé à mon gendre d'établir des chefs pour juger le peuple.","Aaron|Josué|Caleb","Exode 18:13-24","« Ce que tu fais n'est pas bien », dit Jéthro à Moïse, épuisé."],
- ["josue","J'ai fait entrer le peuple d'Israël dans la terre promise, et les murailles de Jéricho sont tombées devant nous.","Moïse|Caleb|Gédéon","Josué 3:17 ; 6:20","Moïse n'est pas entré dans le pays : c'est Josué qui l'y a conduit."],
- ["caleb","À quatre-vingt-cinq ans, j'ai dit : « Donne-moi cette montagne », car j'étais encore aussi fort qu'au temps de Moïse.","Josué|Gédéon|Samson","Josué 14:10-12","Caleb avait « pleinement suivi la voie de l'Éternel »."],
- ["rahab","J'ai caché les espions dans ma maison de Jéricho et attaché un cordon cramoisi à ma fenêtre.","Dalila|Débora|Agar","Josué 2:18","Rahab est citée parmi les héros de la foi (Hébreux 11:31)."],
- ["debora","Prophétesse et juge, je siégeais sous un palmier entre Rama et Béthel.","Myriam|Rahab|Anne","Juges 4:4-5","Débora accompagna Barak au combat contre Sisera."],
-
- ["gedeon","Avec trois cents hommes, des trompettes, des cruches et des flambeaux, j'ai mis en fuite Madian.","Josué|Samson|Saül","Juges 7:16-22","Dieu réduisit l'armée pour qu'Israël ne se glorifie pas lui-même."],
- ["samson","Ma force était liée à ma chevelure, et j'ai déchiré un lion de mes mains.","Gédéon|Goliath|David","Juges 14:6 ; 16:17","Samson était nazaréen dès le ventre de sa mère."],
- ["dalila","Les princes des Philistins m'ont payée pour découvrir le secret de la force de Samson.","Jézabel|Rahab|Bath-Schéba","Juges 16:5","Chacun lui promit mille cent sicles d'argent."],
- ["ruth","J'ai dit à ma belle-mère : « Ton peuple sera mon peuple, et ton Dieu sera mon Dieu. »","Naomi|Esther|Abigaïl","Ruth 1:16","Ruth la Moabite devint l'arrière-grand-mère du roi David."],
- ["boaz","Riche propriétaire de Bethléhem, j'ai racheté le champ d'Élimélec et épousé Ruth.","Obed|Isaï|Élimélec","Ruth 4:9-13","Boaz est le parent qui avait le droit de rachat."],
- ["naomi","Revenue de Moab, j'ai dit : « Ne m'appelez pas Naomi, appelez-moi Mara. »","Ruth|Anne|Sara","Ruth 1:20","Mara veut dire « amère »."],
- ["eli","Sacrificateur à Silo, j'ai cru qu'une femme était ivre alors qu'elle priait en silence.","Samuel|Élie|Aaron","1 Samuel 1:12-14","Cette femme était Anne, la mère de Samuel."],
- ["anne","J'ai prié pour avoir un fils, puis je l'ai consacré à l'Éternel pour toute sa vie.","Élisabeth|Sara|Naomi","1 Samuel 1:27-28","Son fils était Samuel."],
- ["samuel","Enfant, j'ai entendu Dieu m'appeler la nuit et j'ai répondu : « Parle, car ton serviteur écoute. »","Éli|David|Joas","1 Samuel 3:10","Samuel devint prophète et oignit les deux premiers rois d'Israël."],
- ["saul","Premier roi d'Israël, je dépassais tout le peuple de la tête et des épaules.","David|Salomon|Jonathan","1 Samuel 10:23-24","Samuel l'oignit roi, mais Saül désobéit à l'Éternel."],
-
- ["jonathan","Fils du roi Saül, mon âme s'est attachée à celle de David et je l'ai aimé comme moi-même.","Absalom|Abischaï|Salomon","1 Samuel 18:1-4","Jonathan donna à David son manteau, son épée et son arc."],
- ["david","Jeune berger, j'ai vaincu un géant avec une fronde et une pierre.","Samson|Jonathan|Saül","1 Samuel 17:49-50","« Tu marches contre moi avec l'épée ; et moi, je marche contre toi au nom de l'Éternel. »"],
- ["goliath","Géant de Gath, j'ai défié les armées d'Israël matin et soir pendant quarante jours.","Samson|Og|Aman","1 Samuel 17:4 ; 17:16","Il fut vaincu par le jeune David."],
- ["abigail","Femme intelligente, j'ai apporté des provisions à David pour apaiser sa colère contre mon mari Nabal.","Bath-Schéba|Mical|Rahab","1 Samuel 25:3 ; 25:18","Après la mort de Nabal, David la prit pour femme."],
- ["bathscheba","Femme d'Urie le Héthien, je suis devenue la mère du roi Salomon.","Abigaïl|Mical|Jézabel","2 Samuel 11:3 ; 12:24","Le prophète Nathan reprit David pour son péché."],
- ["salomon","J'ai demandé à Dieu un cœur intelligent plutôt que la richesse, et j'ai bâti le temple.","David|Roboam|Ézéchias","1 Rois 3:9 ; 6:14","Dieu lui donna aussi la richesse et la gloire."],
- ["seba","Je suis venue de loin pour éprouver le roi Salomon par des énigmes.","Bath-Schéba|Jézabel|Esther","1 Rois 10:1","Jésus cite la reine du Midi en Matthieu 12:42."],
- ["roboam","Fils de Salomon, j'ai écouté les jeunes plutôt que les anciens, et le royaume s'est divisé.","Jéroboam|Salomon|Asa","1 Rois 12:8-16","Dix tribus se séparèrent et suivirent Jéroboam."],
- ["jeroboam","Premier roi des dix tribus du nord, j'ai fait deux veaux d'or, l'un à Béthel et l'autre à Dan.","Roboam|Achab|Aaron","1 Rois 12:28-29","Piège : Aaron aussi avait fait un veau d'or, mais au désert."],
- ["elie","Des corbeaux m'ont nourri près du torrent, puis un char de feu m'a enlevé au ciel.","Élisée|Énoch|Éli","1 Rois 17:6 ; 2 Rois 2:11","Élie défia aussi les prophètes de Baal au mont Carmel."],
-
- ["elisee","J'ai demandé une double portion de l'esprit de mon maître, puis j'ai ramassé son manteau.","Élie|Samuel|Guéhazi","2 Rois 2:9-13","Élisée succéda au prophète Élie."],
- ["jezabel","Reine, femme d'Achab, j'ai fait mourir Naboth pour donner sa vigne à mon mari.","Athalie|Dalila|Bath-Schéba","1 Rois 21:7-15","Elle écrivit des lettres au nom d'Achab pour faire condamner Naboth."],
- ["achab","Roi d'Israël, j'ai convoité la vigne de mon voisin Naboth.","Jéroboam|Saül|Josaphat","1 Rois 21:2-4","Élie vint annoncer le jugement de Dieu à Achab."],
- ["josaphat","Roi de Juda, j'ai placé des chantres devant l'armée, et l'Éternel a combattu pour nous.","Ézéchias|Achab|Salomon","2 Chroniques 20:21-22","« Louez l'Éternel, car sa miséricorde dure à toujours ! »"],
- ["esaie","J'ai vu le Seigneur assis sur un trône et j'ai répondu : « Me voici, envoie-moi. »","Jérémie|Ézéchiel|Samuel","Ésaïe 6:1-8","Un séraphin toucha ses lèvres avec une pierre ardente."],
- ["jeremie","Dieu m'a dit : « Ne dis pas : Je suis un enfant », et il a mis ses paroles dans ma bouche.","Ésaïe|Samuel|Daniel","Jérémie 1:6-9","Jérémie prophétisa avant et pendant la chute de Jérusalem."],
- ["ezechiel","J'ai prophétisé sur une vallée d'ossements desséchés, et ils ont repris vie.","Ésaïe|Daniel|Élisée","Ézéchiel 37:1-10","« Ossements desséchés, écoutez la parole de l'Éternel ! »"],
- ["osee","Dieu m'a demandé d'épouser Gomer, image de son amour pour un peuple infidèle.","Amos|Jonas|Michée","Osée 1:2-3","Osée montre un Dieu qui aime malgré l'infidélité."],
- ["joel","J'ai annoncé : « Je répandrai mon esprit sur toute chair », parole citée par Pierre à la Pentecôte.","Ésaïe|Amos|Malachie","Joël 2:28 ; Actes 2:16-17","Pierre déclara : « C'est ici ce qui a été dit par le prophète Joël. »"],
- ["amos","J'étais berger et je cultivais des sycomores quand l'Éternel m'a pris pour prophétiser.","Michée|David|Osée","Amos 7:14-15","Amos venait de Tekoa, en Juda."],
-
- ["jonas","J'ai fui loin de Ninive, et un grand poisson m'a englouti pendant trois jours et trois nuits.","Jérémie|Élie|Nahum","Jonas 1:17","Jésus parle du « signe de Jonas » (Matthieu 12:40)."],
- ["michee","J'ai annoncé que le dominateur d'Israël sortirait de Bethléhem Éphrata.","Ésaïe|Malachie|Amos","Michée 5:1","Les scribes citèrent cette prophétie aux mages (Matthieu 2:6)."],
- ["nehemie","Échanson du roi Artaxerxès, j'ai fait rebâtir la muraille de Jérusalem en cinquante-deux jours.","Esdras|Zorobabel|Daniel","Néhémie 2:1 ; 6:15","Les ouvriers travaillaient d'une main et tenaient une arme de l'autre."],
- ["esdras","Scribe versé dans la loi de Moïse, j'ai lu le livre de la loi devant tout le peuple.","Néhémie|Jérémie|Baruc","Esdras 7:6 ; Néhémie 8:1-3","Le peuple écoutait depuis le matin jusqu'au milieu du jour."],
- ["esther","Devenue reine, j'ai risqué ma vie pour sauver mon peuple : « Si je dois périr, je périrai. »","Vasthi|Bath-Schéba|Jézabel","Esther 4:16","Esther et le peuple jeûnèrent trois jours avant qu'elle n'aille vers le roi."],
- ["mardochee","J'ai élevé ma cousine Esther et refusé de me prosterner devant Aman.","Néhémie|Daniel|Aman","Esther 2:7 ; 3:2","Mardochée devint ensuite le second après le roi."],
- ["aman","J'ai fait dresser une potence pour Mardochée, mais c'est moi qu'on y a pendu.","Achab|Mardochée|Nabal","Esther 7:10","Esther dénonça son complot devant le roi."],
- ["job","J'ai tout perdu en un jour et j'ai dit : « L'Éternel a donné, et l'Éternel a ôté. »","Abraham|Jérémie|Jonas","Job 1:21","Dieu bénit ensuite les dernières années de Job plus que les premières."],
- ["daniel","J'ai continué à prier trois fois par jour, et Dieu a fermé la gueule des lions.","Ézéchiel|Mardochée|Samson","Daniel 6:10 ; 6:22","Piège : Samson aussi affronta un lion, mais il le déchira de ses mains."],
- ["schadrac","Mon nom hébreu était Hanania, mais à Babylone on me donna un autre nom.","Méschac|Abed-Nego|Daniel","Daniel 1:7","Hanania devint Schadrac, Mischaël devint Méschac, Azaria devint Abed-Nego."],
-
- ["meschac","Mon nom hébreu était Mischaël, mais à Babylone on me donna un autre nom.","Schadrac|Abed-Nego|Daniel","Daniel 1:7","Avec ses deux amis, il sortit de la fournaise sans odeur de feu."],
- ["abednego","Mon nom hébreu était Azaria, mais à Babylone on me donna un autre nom.","Schadrac|Méschac|Daniel","Daniel 1:7","Un quatrième homme était avec eux dans le feu (Daniel 3:25)."],
- ["eliezer","Intendant de la maison d'Abraham, je venais de Damas.","Laban|Lot|Jéthro","Genèse 15:2","On pense souvent que c'est lui qui alla chercher Rébecca, mais Genèse 24 ne donne pas le nom du serviteur."],
- ["abischai","Neveu de David, je voulais frapper Saül endormi de sa propre lance, mais David m'en a empêché.","Joab|Jonathan|Abner","1 Samuel 26:7-9","« Qui pourrait porter la main sur l'oint de l'Éternel ? »"],
- ["jeanbaptiste","Je baptisais dans le Jourdain et je me nourrissais de sauterelles et de miel sauvage.","Jean|Élie|Pierre","Matthieu 3:4-6","Piège : Jean l'apôtre est un autre Jean."],
- ["marie","L'ange Gabriel m'a annoncé que j'enfanterais le Fils du Très-Haut.","Élisabeth|Anne|Marthe","Luc 1:26-32","« Je suis la servante du Seigneur. »"],
- ["josephnt","Charpentier, un ange m'a dit en songe de prendre Marie pour femme.","Zacharie|Siméon|Joseph d'Arimathée","Matthieu 1:20 ; 13:55","Piège : Joseph d'Arimathée est celui qui mit Jésus au tombeau."],
- ["elisabeth","Âgée et stérile, j'ai enfanté Jean-Baptiste ; mon enfant a tressailli quand Marie m'a saluée.","Anne|Sara|Marie","Luc 1:36 ; 1:41","Élisabeth était une parente de Marie."],
- ["zacharie","Sacrificateur, je suis resté muet jusqu'à la naissance de mon fils Jean.","Siméon|Éli|Joseph de Nazareth","Luc 1:20 ; 1:63-64","Il n'avait pas cru les paroles de l'ange Gabriel."],
- ["jesus","J'ai dit : « Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi. »","Jean-Baptiste|Pierre|Moïse","Jean 14:6","Jésus est le Fils de Dieu venu sauver le monde."],
-
- ["pierre","Pêcheur de Galilée, j'ai marché sur les eaux, puis j'ai renié mon maître trois fois.","André|Jacques|Jean","Matthieu 14:29 ; 26:75","Jésus le rétablit en lui demandant trois fois : « M'aimes-tu ? »"],
- ["andre","Disciple de Jean-Baptiste, j'ai amené mon frère Simon à Jésus.","Philippe|Jean|Jacques","Jean 1:40-42","Simon reçut ensuite le nom de Céphas, c'est-à-dire Pierre."],
- ["jacques","Fils de Zébédée et frère de Jean, j'ai été le premier des douze apôtres mis à mort, par le roi Hérode.","Jean|Pierre|Étienne","Actes 12:1-2","Piège : Étienne fut le premier martyr, mais il n'était pas l'un des Douze."],
- ["jean","Le disciple que Jésus aimait : au pied de la croix, il m'a confié sa mère.","Pierre|Jacques|André","Jean 19:26-27","« Dès ce moment, le disciple la prit chez lui. »"],
- ["philippe","J'ai dit à Nathanaël : « Viens, et vois. » Plus tard, Jésus m'a demandé où acheter du pain pour la foule.","André|Barthélemy|Thomas","Jean 1:46 ; 6:5","Philippe était de Bethsaïda, comme André et Pierre."],
- ["barthelemy","Apôtre, mon nom vient juste après celui de Philippe dans la liste des Douze.","Thomas|Matthias|Philippe","Matthieu 10:3","Beaucoup pensent que Barthélemy est le Nathanaël de l'Évangile de Jean."],
- ["thomas","J'ai dit : « Si je ne vois dans ses mains la marque des clous, je ne croirai point. »","Pierre|Philippe|Judas","Jean 20:25-28","Huit jours après, il s'écria : « Mon Seigneur et mon Dieu ! »"],
- ["matthieu","J'étais assis au bureau des péages quand Jésus m'a dit : « Suis-moi. »","Zachée|Judas|Pierre","Matthieu 9:9","Piège : Zachée aussi était publicain, mais il était chef à Jéricho."],
- ["judas","Je tenais la bourse des disciples, et j'ai livré mon maître pour trente pièces d'argent.","Thomas|Matthieu|Matthias","Jean 12:6 ; Matthieu 26:15","Matthias fut ensuite choisi pour le remplacer."],
- ["matthias","Le sort est tombé sur moi pour remplacer Judas parmi les apôtres.","Barnabas|Joseph Barsabbas|Silas","Actes 1:23-26","Piège : Joseph Barsabbas était l'autre candidat."],
-
- ["mariemadeleine","Jésus avait chassé de moi sept démons, et je l'ai vu la première après sa résurrection.","Marthe|Marie|Jeanne","Marc 16:9","Jésus l'appela par son nom près du tombeau (Jean 20:16)."],
- ["marthe","Je m'agitais pour le service pendant que ma sœur écoutait Jésus, assise à ses pieds.","Marie de Magdala|Lydie|Dorcas","Luc 10:39-41","« Marie a choisi la bonne part. »"],
- ["lazare","Mort depuis quatre jours, je suis sorti du tombeau quand Jésus m'a appelé.","Jaïrus|Zachée|Nicodème","Jean 11:39-44","« Lazare, sors ! »"],
- ["zachee","Chef des publicains, je suis monté sur un sycomore pour voir Jésus.","Matthieu|Nicodème|Bartimée","Luc 19:2-4","« Aujourd'hui le salut est entré dans cette maison. »"],
- ["nicodeme","Chef des Juifs, je suis venu voir Jésus de nuit, et il m'a parlé de naître de nouveau.","Zachée|Gamaliel|Joseph d'Arimathée","Jean 3:1-3","C'est à Nicodème que Jésus dit Jean 3:16."],
- ["paul","Sur le chemin de Damas, une lumière venue du ciel m'a aveuglé.","Pierre|Barnabas|Silas","Actes 9:3-9","Saul de Tarse devint l'apôtre Paul."],
- ["etienne","Premier martyr, j'ai été lapidé en priant pour ceux qui me tuaient.","Jacques|Paul|Philippe","Actes 7:59-60","Saul, le futur Paul, approuvait sa mort (Actes 8:1)."],
- ["barnabas","Mon surnom signifie « fils d'exhortation », et j'ai présenté Saul aux apôtres.","Silas|Timothée|Paul","Actes 4:36 ; 9:27","Barnabas vendit un champ et en apporta le prix aux apôtres."],
- ["timothee","Dès mon enfance je connaissais les saintes lettres ; ma grand-mère Loïs et ma mère Eunice avaient une foi sincère.","Tite|Silas|Marc","2 Timothée 1:5 ; 3:15","Paul lui écrivit deux lettres."],
- ["jeanpatmos","Exilé dans l'île de Patmos, j'ai reçu la révélation des choses à venir.","Paul|Pierre|Jean-Baptiste","Apocalypse 1:9","C'est le livre de l'Apocalypse."]];
-const qsjName=id=>id==="jeanpatmos"?"Jean":BIBM[id]?BIBM[id][1]:id;
-function qsjQuestions(n){return QSJ.slice(n*10,n*10+10).map(([id,clue,traps,ref,ex])=>{const ans=qsjName(id),o=shuffle([ans,...traps.split("|")]);
-  return {type:"choice",disp:"qcm",who:id,q:clue,o,a:[o.indexOf(ans)],ex:"📖 "+ref+" — "+ex};});}
-function startQsj(n){if(!QSJ_SERIES[n])return;closeSheet();startTest("qsj",qsjQuestions(n),{qsj:n,title:"Qui suis-je ?"});}
-function openQsj(){S.qsj=S.qsj||{};const done=QSJ_SERIES.filter((_,i)=>(S.qsj[i]||0)>=80).length;
-  openSheet(`<div class="qsjhead"><div class="qsjfaces">${["moise","esther","david","pierre"].map(id=>`<span>${bibSvg(id)}</span>`).join("")}</div><h3>🎭 Qui suis-je ?</h3><p class="muted">Regarde le portrait, lis l'indice et trouve le personnage. Attention aux pièges !</p><p class="qsjprog">${done}/${QSJ_SERIES.length} séries réussies</p></div>
-   <div class="qsjlist">${QSJ_SERIES.map(([t,ic],i)=>{const sc=S.qsj[i];return `<button class="qsjrow" data-q="${i}"><span class="qi">${ic}</span><span class="qt"><b>${i+1}. ${esc(t)}</b><small>10 personnages${sc!=null?` · record ${sc} %`:""}</small></span><span class="qs ${sc>=80?"ok":""}">${sc>=100?"🏆":sc>=80?"✅":"▶"}</span></button>`;}).join("")}</div>`);
-  $("sheet").querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{sfx("tap");startQsj(+b.dataset.q);});}
+/* ===================== ÉNIGME DU JOUR =====================
+   Une seule devinette par jour (minuit à Kinshasa), affichée automatiquement à la première ouverture du jour.
+   Le serveur choisit une énigme jamais vue par ce joueur (daily_riddle) et vérifie la réponse (answer_riddle) :
+   accents, majuscules et tirets ignorés, petites fautes acceptées, mais pas le nom d'un autre personnage.
+   Les énigmes se gèrent dans l'admin (onglet « Énigmes du jour »). */
+let RD=null,RDnames=null,rdShown=false;
+const kinDay=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"Africa/Kinshasa"}).format(new Date());
+const rdNorm=t=>String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z]/g,"");
+async function riddleMaybe(){const d=kinDay();
+  if(rdShown||riddleMaybe.busy||S.riddleDay===d||!S.onboarded||typeof OL==="undefined"||!OL.me||curScreen!=="path"||!$("veil").hidden||document.getElementById("adFull"))return;
+  riddleMaybe.busy=true;
+  try{const r=await olRpc("daily_riddle",{},10000);if(!r||r.done){S.riddleDay=d;save();return;}RD=r;rdShown=true;
+    if(!RDnames)olRpc("riddle_names",{},8000).then(n=>{RDnames=(n||[]).map(x=>typeof x==="string"?x:x.riddle_names);}).catch(()=>{});
+    showRiddle();}
+  catch(e){}finally{riddleMaybe.busy=false;}}
+function rdClose(){const o=$("riddle");if(o){o.classList.add("out");setTimeout(()=>o.remove(),250);}}
+function showRiddle(){rdClose();const o=document.createElement("div");o.id="riddle";o.className="rdveil";
+  o.innerHTML=`<div class="rdcard" role="dialog" aria-modal="true" aria-labelledby="rdT"><button class="rdx" id="rdX">Plus tard</button>
+    <h2 id="rdT">Devinette du jour ! 🌅</h2>
+    <p class="rdsub">Une seule question par jour. Trouve qui c'est et gagne <b>+10 XP</b>. Si tu te trompes… nouvelle chance demain !</p>
+    <div class="rdimg">${RD.portrait?bibSvg(RD.portrait):"🎭"}</div>
+    <p class="rdclue">« ${esc(RD.clue)} »<br><b>Qui suis-je ?</b></p>
+    <div class="rdin"><input id="rdA" placeholder="Écris ta réponse ici…" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="60" aria-label="Ta réponse"><div class="rdsug" id="rdS"></div></div>
+    <p class="rdhint">Pas d'inquiétude pour les accents ou une petite faute d'orthographe.</p>
+    <button class="btn rdgo" id="rdGo" disabled>Valider la réponse (+10 XP) ⚡</button><p class="rderr" id="rdE" hidden></p></div>`;
+  $("app").appendChild(o);sfx("good");
+  const inp=$("rdA"),go=$("rdGo");
+  const sug=()=>{const v=rdNorm(inp.value);go.disabled=v.length<2;const box=$("rdS");
+    if(v.length<2){box.innerHTML="";return;}
+    const all=[...new Set([...(RDnames||[]),...BIB.map(b=>b[1])])];
+    const m=all.filter(n=>rdNorm(n).startsWith(v)&&rdNorm(n)!==v).slice(0,4);
+    box.innerHTML=m.map(n=>`<button type="button" data-n="${esc(n)}">${esc(n)}</button>`).join("");
+    box.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{sfx("tap");inp.value=b.dataset.n;box.innerHTML="";go.disabled=false;inp.focus();});};
+  inp.oninput=sug;inp.onkeydown=e=>{if(e.key==="Enter"&&!go.disabled)go.click();};
+  $("rdX").onclick=()=>{sfx("tap");rdClose();};
+  go.onclick=async()=>{go.disabled=true;go.textContent="Vérification…";$("rdE").hidden=true;
+    try{const r=await olRpc("answer_riddle",{p_id:RD.id,p_answer:inp.value.trim()},12000);rdResult(r,inp.value.trim());}
+    catch(e){go.disabled=false;go.textContent="Valider la réponse (+10 XP) ⚡";$("rdE").textContent="Pas de connexion. Réessaie dans un instant.";$("rdE").hidden=false;}};}
+function rdResult(r,given){S.riddleDay=kinDay();const ok=!!r.correct;
+  if(ok&&!r.already){S.xp=(S.xp||0)+10;S.riddleWins=(S.riddleWins||0)+1;}save();
+  if(ok){sfx("win");confetti();}else{sfx("bad");vibrate(60);}
+  const c=document.querySelector("#riddle .rdcard");if(!c)return;
+  c.innerHTML=`<div class="rdimg ${ok?"ok":"ko"}">${RD.portrait?bibSvg(RD.portrait):"🎭"}</div>
+    <h2>${ok?"Bravo ! 🎉":"Ce n'était pas ça…"}</h2>
+    <p class="rdsub">${ok?`C'était bien <b>${esc(r.answer)}</b>. <b>+10 XP</b> pour toi !`:`${given?`Tu as répondu « ${esc(given)} ». `:""}C'était <b>${esc(r.answer)}</b>. Nouvelle chance demain !`}</p>
+    ${r.ref||r.explanation?`<div class="rdex">${r.ref?`<b>📖 ${esc(r.ref)}</b>`:""}${r.explanation?`<span>${esc(r.explanation)}</span>`:""}</div>`:""}
+    <button class="btn rdgo" id="rdOk">${ok?"Super, on continue":"À demain !"}</button>`;
+  speak(ok?`Bravo ! C'était bien ${r.answer}.`:`C'était ${r.answer}. Nouvelle chance demain !`);
+  $("rdOk").onclick=()=>{sfx("tap");rdClose();if(typeof rankUpCheck==="function")rankUpCheck();if(curScreen==="path")renderTop();};}
 
 /* ===================== DÉFIS EN LIGNE =====================
    Vrais comptes et parties en direct via Supabase (projet « parcours-biblique »).
@@ -5677,7 +5603,7 @@ function olSignedOut(){OL.me=null;OL.lb=OL.friends=OL.hist=null;OL.invites=[];if
 async function olAfterLogin(){OL.loadingMe=true;
   try{OL.me=await olRpc("get_my_profile");}catch(e){OL.me=null;OL.msg=olErr(e);OL.loadingMe=false;if(curScreen==="online")renderOnline();return;}
   OL.loadingMe=false;await olSyncProfile();olClaimRef();olApplyBonus();if(typeof adFromProfile==="function")adFromProfile();
-  olWatch();olLoadAll();olLoadInvites(true);
+  olWatch();olLoadAll();olLoadInvites(true);if(typeof riddleMaybe==="function")setTimeout(riddleMaybe,3000);
   try{const act=await olRpc("my_active_match");if(act&&curScreen!=="duel")notify("⚔️","Partie en cours","Touche pour reprendre ta partie.",()=>olOpenMatch(act));}catch(e){}}
 function olWatch(){if(OL.chan||!OL.me)return;const id=OL.me.id;
   OL.chan=OL.sb.channel("matches-"+id)
@@ -6117,7 +6043,7 @@ function adTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S
 /* Annonce automatique en plein écran (toutes les X minutes, jamais pendant une partie, ni dans Méditer ou la Bible).
    Pas de récompense ; le joueur peut la passer au bout de 5 secondes. */
 let AD_SKIP_SEC=5;const AD_CALM_TABS=["path","online","profile"];
-async function adInterstitial(){if(AD.busy||document.getElementById("adFull"))return;AD.busy=true;
+async function adInterstitial(){if(AD.busy||document.getElementById("adFull")||document.getElementById("riddle"))return;AD.busy=true;
   try{await adLoadSettings();const ad=await adNext("banner");if(!ad||!AD_CALM_TABS.includes(curScreen))return;adPlayer(ad,{inter:true});}finally{AD.busy=false;}}
 async function adBanner(){if(AD.busy)return;AD.busy=true;
   try{const c=await adLoadSettings();const ad=await adNext("banner");if(!ad)return;
