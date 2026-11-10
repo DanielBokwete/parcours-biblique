@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="d98ecece11";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="adb4f2cb2b";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -971,7 +971,9 @@ const SECTIONS={AT:[["Pentateuque",0,4],["Livres historiques",5,16],["Poésie et
                 NT:[["Évangiles",0,3],["Histoire de l'Église",4,4],["Épîtres de Paul",5,17],["Épîtres générales",18,25],["Prophétie",26,26]]};
 // Nombre de niveaux proportionnel à la taille du livre : 40 % des chapitres, entre 3 et 30.
 const levelsFor=ch=>Math.min(30,Math.max(3,Math.round(ch*0.4)));
-const mk=(arr,t)=>arr.map(([id,name,ch,ic],i)=>({id,name,ch,ic,levels:levelsFor(ch),t,idx:i}));
+// Nombre de niveaux = niveaux réellement rédigés (les lots d'approfondissement s'ajoutent à la fin).
+// « base » = nombre de niveaux d'origine : finir la base suffit pour débloquer le livre suivant.
+const mk=(arr,t)=>arr.map(([id,name,ch,ic],i)=>({id,name,ch,ic,base:levelsFor(ch),get levels(){const c=typeof CONTENT!=="undefined"&&CONTENT[id];return c&&c.levels?Object.keys(c.levels).length:levelsFor(ch);},t,idx:i}));
 const BOOKS={AT:mk(AT_BOOKS,"AT"),NT:mk(NT_BOOKS,"NT")};
 
 /* Contenu rédigé (prototype). Chaque niveau : fiches de révision (cards), suite du cours (mid, après la 2e question), 5 questions.
@@ -1319,7 +1321,7 @@ function BK(id,levels){const book=[...BOOKS.AT,...BOOKS.NT].find(b=>b.id===id);c
         return {q:q[1],ill:q[2],o:ord.map(j=>clean[j]),a:ord.map((j,n)=>good.includes(j)?n:-1).filter(n=>n>=0),ref:R(q[4]),ex:q[5]||""};})};});
   CONTENT[id]=C;}
 /* Ajoute des niveaux à un livre déjà commencé (ex. Matthieu 4 à 11) sans écraser les premiers. */
-function BKADD(id,from,levels){const old=CONTENT[id];BK(id,levels);const n=CONTENT[id];CONTENT[id]=old;levels.forEach((x,i)=>{old.levels[from+i]=n.levels[i+1];});}
+function BKADD(id,from,levels){const old=CONTENT[id];BK(id,levels);const n=CONTENT[id];CONTENT[id]=old;levels.forEach((x,i)=>{old.levels[from+i]=n.levels[i+1];(old.titles=old.titles||[])[from-1+i]=n.titles[i];(old.badges=old.badges||[])[from-1+i]=n.badges[i];});}
 
 BK("lev",[
  ["Les sacrifices","1 – 2","🔥","Offrande agréable",[["🐂","L'holocauste","L'Israélite apporte un animal sans défaut, pose la main sur sa tête, et l'animal est entièrement brûlé sur l'autel."],["🌾","L'offrande de farine","On peut aussi offrir de la fleur de farine avec de l'huile et de l'encens, sans levain ni miel, salée de sel."]],["🧂","Le sel de l'alliance","Toute offrande est salée : le sel rappelle que l'alliance de Dieu ne se corrompt pas."],
@@ -4309,6 +4311,51 @@ BK("apo",[
   ["t","Selon Apocalypse 21:4, la mort ne sera plus.",true,"21:4",""]]
 ]);
 
+/* Lot 1 d'approfondissement : Lévitique 12 → 15, Nombres 15, Deutéronome 15.
+   Chaque question est vérifiée sur le texte Louis Segond 1910 (bible-lsg.json). */
+BKADD("lev",12,[
+ ["Je serai sanctifié","6 ; 10 ; 12","🔥","Cœur révérent",[["🔥","Le feu étranger","Nadab et Abihu apportent devant l'Éternel un feu qu'il n'avait pas ordonné. Dieu rappelle : « Je serai sanctifié par ceux qui s'approchent de moi »."],["🤫","Le silence d'Aaron","Devant ce jugement, Aaron ne proteste pas : « Aaron garda le silence. »"]],["🕊️","Les tourterelles de Marie","La mère trop pauvre pour offrir un agneau apportait deux tourterelles ou deux pigeons. C'est l'offrande de Marie et Joseph pour Jésus (Luc 2:24)."],
+  ["q","Comment Aaron réagit-il quand Moïse lui rapporta la parole de Dieu après la mort de ses fils ?","🤫","Il garda le silence|Il déchira ses vêtements|Il quitta le camp|Il maudit ses fils","10:3","Aaron accepte le jugement de Dieu sans contester."],
+  ["f","Je serai ___ par ceux qui s'approchent de moi","sanctifié|oublié|remplacé|redouté","10:3","S'approcher de Dieu demande du respect."],
+  ["q","Quel jour le petit garçon était-il circoncis selon la loi ?","👶","Le huitième jour|Le septième jour|Le quarantième jour|Le jour de sa naissance","12:3","Jésus lui-même fut circoncis le huitième jour (Luc 2:21)."],
+  ["t","Une mère trop pauvre pour offrir un agneau pouvait apporter deux tourterelles ou deux jeunes pigeons.",true,"12:8","Dieu adapte l'offrande aux moyens de chacun ; Marie offrit ainsi deux tourterelles (Luc 2:24)."],
+  ["q","Où le sacrificateur portait-il les cendres de l'holocauste ?","🪵","Hors du camp, dans un lieu pur|Dans le lieu très saint|Au bord du fleuve|Sous l'autel","6:4","Même les cendres de l'autel étaient traitées avec respect."]],
+ ["Les deux boucs","14 ; 16 ; 18","🐐","Porté par la grâce",[["🐐","Un sort pour l'Éternel","Au jour des expiations, Aaron jette le sort sur deux boucs : l'un est sacrifié, l'autre est envoyé vivant dans le désert."],["🐂","D'abord pour lui-même","Avant d'intercéder pour le peuple, Aaron offre un taureau pour ses propres péchés et pour sa maison."]],["🌿","Cèdre, cramoisi et hysope","Pour le lépreux guéri, le sacrificateur sort du camp, l'examine, puis le purifie avec deux oiseaux, du bois de cèdre, du cramoisi et de l'hysope."],
+  ["q","Comment Aaron désignait-il le bouc réservé à l'Éternel ?","🎲","Il jetait le sort|Il prenait le plus gros|Le peuple votait|Moïse le choisissait","16:8","Le choix revient à Dieu, pas à l'homme."],
+  ["t","Au jour des expiations, Aaron offrait d'abord un taureau pour lui-même et pour sa maison.",true,"16:6","Le souverain sacrificateur avait lui-même besoin de pardon ; Jésus, lui, n'en avait pas besoin (Hébreux 7:27)."],
+  ["q","Que prenait-on, avec deux oiseaux, pour purifier un lépreux guéri ?","🌿","Du bois de cèdre, du cramoisi et de l'hysope|De l'or, de l'encens et de la myrrhe|Du pain, du vin et de l'huile|Du sel, du miel et du lait","14:4",""],
+  ["q","Où le sacrificateur allait-il examiner le lépreux ?","⛺","Hors du camp|Dans le lieu très saint|Dans la maison du lépreux|À la porte de la ville","14:3","Le lépreux vivait hors du camp : c'est le sacrificateur qui allait à lui."],
+  ["f","L'homme qui les mettra en pratique ___ par elles","vivra|grandira|régnera|s'enrichira","18:5","Paul cite ce verset en Romains 10:5 et Galates 3:12."]],
+ ["Soyez saints","19","⚖️","Juste dans les petites choses",[["✨","Saints comme lui","« Soyez saints, car je suis saint » : la sainteté se vit dans la famille, au travail, au marché et au tribunal."],["⚖️","Des poids justes","Dieu veut des balances justes et des poids justes : l'honnêteté dans le commerce fait partie de la foi."]],["🗣️","Reprendre plutôt que haïr","Au lieu de garder de la haine contre son frère, l'Israélite devait le reprendre avec franchise."],
+  ["q","Que ne fallait-il pas garder jusqu'au lendemain ?","💰","Le salaire de l'ouvrier|Le pain de la veille|Les clés du sanctuaire|Le bétail du voisin","19:13","Payer l'ouvrier le jour même, c'est respecter celui qui vit de son travail."],
+  ["q","Que fallait-il faire plutôt que de haïr son frère dans son cœur ?","🗣️","Le reprendre|L'éviter pour toujours|Le dénoncer au roi|Lui rendre le mal","19:17","Jésus enseigne la même démarche en Matthieu 18:15."],
+  ["t","Dieu demandait d'utiliser des balances et des poids justes.",true,"19:36","Tricher sur le poids, c'est voler son prochain."],
+  ["q","Qui chacun devait-il respecter, selon Lévitique 19:3 ?","👪","Sa mère et son père|Le roi d'Égypte|Les devins|Les marchands riches","19:3","Le respect des parents est placé à côté du sabbat."],
+  ["m","Associe chaque domaine à ce que Dieu demande","Les jugements=Ni faveur au grand ni au pauvre|Les paroles=Pas de calomnies|Le commerce=Des poids justes|Les esprits=Ne pas consulter les devins","19:15-36",""]],
+ ["La tête levée","23 – 27","📯","Racheté",[["🏡","Le droit de rachat","Si un Israélite pauvre vendait sa terre, son plus proche parent pouvait la racheter : « le pays est à moi », dit l'Éternel."],["🤝","Prêter sans intérêt","Au frère tombé dans la pauvreté, on prêtait sans intérêt ni usure, pour qu'il vive avec soi."]],["⛓️","Le joug brisé","« J'ai brisé les liens de votre joug, et je vous ai fait marcher la tête levée. » Dieu promet aussi de se souvenir de son alliance."],
+  ["q","Comment était annoncé le jour de repos du premier jour du septième mois ?","📯","Au son des trompettes|Par un feu sur la montagne|Par un messager du roi|Par une colonne de nuée","23:24",""],
+  ["q","Qui pouvait racheter la terre vendue par un Israélite devenu pauvre ?","🏡","Son plus proche parent|Le sacrificateur|N'importe quel étranger|Le roi","25:25","C'est ce que fera Boaz pour la terre d'Élimélec (Ruth 4)."],
+  ["t","Un Israélite pouvait prêter avec intérêt à son frère devenu pauvre.",false,"25:36-37","« Tu ne lui prêteras point ton argent à intérêt. »"],
+  ["q","Selon la promesse de Lévitique 26, cent Israélites fidèles en poursuivraient combien ?","⚔️","Dix mille|Mille|Cent|Cinquante","26:8","« Cinq d'entre vous en poursuivront cent, et cent d'entre vous en poursuivront dix mille. »"],
+  ["f","Je vous ai fait marcher la tête ___","levée|basse|couverte|tournée","26:13","Dieu libère pour redonner la dignité."]]
+]);
+BKADD("nom",15,[
+ ["Un autre esprit","11 – 14 ; 21","🍇","Animé d'un autre esprit",[["🌾","La manne et les cailles","La manne ressemblait à de la graine de coriandre et avait le goût d'un gâteau à l'huile. Quand le peuple réclama de la viande, un vent amena des cailles autour du camp."],["🦁","Caleb fait taire le peuple","Pendant que le peuple murmure, Caleb dit : « Montons, emparons-nous du pays, nous y serons vainqueurs ! »"]],["✍️","Hosée devient Josué","Avant d'envoyer les espions, Moïse donne à Hosée, fils de Nun, le nom de Josué."],
+  ["q","À quoi ressemblait la manne ?","🌾","À de la graine de coriandre|À des grains de riz|À de la neige|À des perles","11:7","Elle avait le goût d'un gâteau à l'huile (11:8)."],
+  ["q","Quel nouveau nom Moïse donna-t-il à Hosée, fils de Nun ?","✍️","Josué|Caleb|Éléazar|Gédéon","13:16","Josué signifie « l'Éternel sauve »."],
+  ["t","Moïse était, selon le texte, un homme très patient, plus qu'aucun homme sur la terre.",true,"12:3",""],
+  ["f","Mon serviteur Caleb a été animé d'un autre ___","esprit|peuple|pays|chemin","14:24","Caleb a « pleinement suivi » la voie de Dieu."],
+  ["q","Que souhaita Moïse quand Josué voulut faire taire Eldad et Médad ?","🗣️","Que tout le peuple soit composé de prophètes|Qu'on les chasse du camp|Qu'on les mette en prison|Qu'ils se taisent pour toujours","11:29","Moïse n'était pas jaloux de son autorité."]]
+]);
+BKADD("deu",15,[
+ ["Comme un aigle","8 ; 10 ; 30 – 34","🦅","Gardé comme la prunelle",[["🧭","Quarante ans d'école","Dieu a conduit Israël quarante ans au désert « afin de t'humilier et de t'éprouver », pour connaître ce qu'il y avait dans son cœur."],["🦅","Porté sur ses ailes","Dieu a gardé Israël comme la prunelle de son œil, pareil à l'aigle qui déploie ses ailes et porte ses petits."]],["🤲","La relève de Josué","Josué était rempli de l'esprit de sagesse, car Moïse avait posé ses mains sur lui."],
+  ["q","Pourquoi Dieu a-t-il fait marcher Israël quarante ans dans le désert ?","🧭","Pour l'humilier et l'éprouver|Pour l'enrichir|Parce qu'il s'était perdu|Pour éviter les Égyptiens","8:2","Le désert révélait ce qu'il y avait dans le cœur du peuple."],
+  ["q","À quel animal Dieu se compare-t-il pour dire comment il a porté Israël ?","🦅","Un aigle|Un lion|Une colombe|Un berger avec son chien","32:11",""],
+  ["f","Il l'a gardé comme la ___ de son œil","prunelle|larme|lumière|paupière","32:10","Une image de la tendresse et de la vigilance de Dieu."],
+  ["t","Après la mort de Moïse, il ne parut plus en Israël de prophète semblable à lui, que l'Éternel connaissait face à face.",true,"34:10","Jésus est le prophète annoncé « comme Moïse » (Deutéronome 18:15, Actes 3:22)."],
+  ["q","Selon Deutéronome 10:12, que demande l'Éternel ?","❤️","De le craindre, de marcher dans ses voies, de l'aimer et de le servir|De lui offrir chaque jour mille sacrifices|De bâtir un temple dans chaque ville|De ne jamais quitter le désert","10:12","Dieu demande un cœur entier, pas seulement des rites."]]
+]);
+
 /* ---------- Avatars personnalisés « av1:… » ----------
    Un avatar est un petit code (ex. "av1:2.3.1.0.2.0.4.1.0.0") que tous les joueurs dessinent pareil en SVG.
    Ordre des réglages : peau, coiffure, couleur cheveux, barbe, lunettes, couvre-chef, vêtement, fond, yeux, bouche. */
@@ -4437,7 +4484,7 @@ const books=()=>BOOKS[S.testament];
 const curBook=()=>books().find(b=>b.id===S.book[S.testament])||books()[0];
 const doneOf=b=>S.done[b.id]||0;
 const bookComplete=b=>doneOf(b)>=b.levels;
-const bookUnlocked=b=>b.idx===0||bookComplete(BOOKS[b.t][b.idx-1])||!!(S.keys||{})[b.id];
+const bookUnlocked=b=>{if(b.idx===0)return true;const p=BOOKS[b.t][b.idx-1];return doneOf(p)>=Math.min(p.levels,p.base)||doneOf(b)>0||!!(S.keys||{})[b.id];};
 const levelTitle=(b,L)=>{const c=CONTENT[b.id];return (c&&c.titles&&c.titles[L-1])||("Niveau "+L);};
 const chapRange=(b,L)=>{const a=Math.floor((L-1)*b.ch/b.levels)+1,z=Math.max(a,Math.floor(L*b.ch/b.levels));return a===z?`${b.name} ${a}`:`${b.name} ${a}–${z}`;};
 const levelRef=(b,L)=>{const c=CONTENT[b.id];return (c&&c.levels[L]&&c.levels[L].ref)||chapRange(b,L);};
