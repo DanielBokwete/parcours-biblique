@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="11798d59ef";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="9b184d5b3a";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,7 +70,8 @@ h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.1;text-wrap:balance
 .guide .bubble{background:var(--white);border-radius:4px 18px 18px 18px;padding:12px 14px;box-shadow:0 3px 0 var(--line);min-width:0}
 .guide .bubble b{font-family:var(--f-display);font-size:19px;line-height:1.2;display:block}
 .guide .bubble small{color:var(--stone);font-size:12.5px}
-.obbody{flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;gap:12px;padding-block:18px}
+.obbody{flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:flex-start;gap:12px;padding-block:18px}
+.obbody>:first-child{margin-top:auto}.obbody>:last-child{margin-bottom:auto}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tile{background:var(--white);border-radius:18px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-weight:700;font-size:13.5px;color:var(--lapis-deep);box-shadow:0 0 0 2px transparent,0 4px 0 var(--line)}
 .tile span{font-size:32px}
@@ -903,6 +904,19 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .ranklist{display:grid;gap:8px}.rk{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:#f4f6fb}
 .rk b{display:block}.rk small{color:var(--muted)}.rk.got{background:#eaf7ef}.rk.cur{box-shadow:0 0 0 2px var(--good)}.rk-n{font-size:20px}
 .agegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.agebtn{padding:14px 10px;border-radius:14px;border:2px solid var(--line);background:#fff;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}.agebtn[aria-pressed="true"]{border-color:var(--lapis);background:#eef3fb;color:var(--lapis)}
+
+.emogrid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));max-height:min(340px,42vh)}
+.emogrid button{aspect-ratio:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px 6px}
+.emogrid button .emoface{font-size:28px;line-height:1;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;overflow:hidden}
+.emoface .avsvg,.emobig .avsvg,.giftav .avsvg{width:100%;height:100%;display:block}
+.giftav{display:block;width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px #f5c542}
+.emogrid button small{font-size:10px;font-weight:700;color:var(--stone);line-height:1.15;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.emoprev{display:flex;gap:14px;align-items:center;background:var(--lapis-soft);border-radius:18px;padding:12px 14px;margin-bottom:10px}
+.emoprev .emobig{font-size:52px;line-height:1;width:84px;height:84px;display:grid;place-items:center;background:#fff;border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px var(--lapis);flex-shrink:0}
+.emoprev.lk .emobig{box-shadow:0 0 0 3px #f5c542}
+.emoprev b{display:block;font-family:var(--f-display);font-size:18px}
+.emoprev small{display:block;color:var(--stone);font-size:13px;margin-bottom:6px}
+.emoprev .emolock{color:#9a6b00;font-weight:700;margin:0}
 
 </style>
 <div class="app" id="app">
@@ -4380,8 +4394,8 @@ const avIsCfg=v=>/^av1:[0-9.]+$/.test(v||"");
 function avRandom(gender){const r=n=>Math.floor(Math.random()*n),f=gender==="f";
   return {skin:r(5),hair:f?[3,4,5,6,7,9][r(6)]:[1,2,3,8,9,0][r(6)],hairCol:r(6),beard:f?0:[0,0,1,2,3,4,5][r(7)],glasses:r(3)?0:1+r(4),hat:r(4)?0:1+r(6),cloth:r(10),bg:r(8),eyes:r(3),mouth:r(3)};}
 let avUid=0;
-function avSvg(v){const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
-  const sk=AVB.skin[c.skin],hc=AVB.hairCol[c.hairCol],cl=AVB.cloth[c.cloth],bg=AVB.bg[c.bg],hatC=AVB.cloth[(c.cloth+4)%AVB.cloth.length];
+function avSvg(v,x){x=x||{};const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
+  const sk=AVB.skin[c.skin],hc=x.hc||AVB.hairCol[c.hairCol],cl=x.cl||AVB.cloth[c.cloth],bg=x.bg||AVB.bg[c.bg],hatC=AVB.cloth[(c.cloth+4)%AVB.cloth.length];
   const dark="rgba(0,0,0,.18)";let back="",front="",hat="",beard="",gl="",eyes="",mouth="";
   // cheveux derrière la tête
   if(c.hair===3)back=`<circle cx="50" cy="40" r="29" fill="${hc}"/>`;
@@ -4426,13 +4440,84 @@ function avSvg(v){const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
   const gs=c.glasses===3?`fill="#1d2433"`:`fill="rgba(255,255,255,.18)"`,gw=c.glasses===4?1.4:2.2;
   if(c.glasses===1)gl=`<g stroke="#1d2433" stroke-width="${gw}" ${gs}><circle cx="41" cy="46" r="7"/><circle cx="59" cy="46" r="7"/></g><path d="M48 46 H52 M34 45 L28 43 M66 45 L72 43" stroke="#1d2433" stroke-width="2"/>`;
   if(c.glasses===2||c.glasses===3||c.glasses===4)gl=`<g stroke="#1d2433" stroke-width="${gw}" ${gs}><rect x="33" y="40" width="15" height="11" rx="${c.glasses===3?4:2}"/><rect x="52" y="40" width="15" height="11" rx="${c.glasses===3?4:2}"/></g><path d="M48 45 H52 M33 44 L28 43 M67 44 L72 43" stroke="#1d2433" stroke-width="2"/>`;
-  return `<svg class="avsvg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#${id})">
-<rect width="100" height="100" fill="${bg}"/>${back}
-<path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z" fill="${cl}"/><path d="M41 72 L50 82 L59 72Z" fill="rgba(255,255,255,.35)"/>
+  // Personnages bibliques : décor, voile, turban, couronne, bâton, vêtement rayé ou en poil de chameau, attribut
+  let scene="",veilB="",veilF="",extra="",cloth2="",prop="",staff="";
+  if(x.scene==="rainbow")scene=["#e0573f","#f5b94a","#f5e04a","#16a06b","#1f4fd1","#7a49d6"].map((k,i)=>`<path d="M-6 70 A56 56 0 0 1 106 70" stroke="${k}" stroke-width="4" fill="none" transform="translate(0 ${i*4}) scale(1 ${1-i*.04})"/>`).join("");
+  if(x.scene==="stars")scene=[[14,16],[30,8],[82,14],[90,32],[10,36],[70,6],[22,28],[86,52],[8,56]].map(([a,b],i)=>`<circle cx="${a}" cy="${b}" r="${i%3?1.3:2}" fill="#fff6c8"/>`).join("");
+  if(x.scene==="sea")scene=`<path d="M0 66 Q12 58 24 66 T48 66 T72 66 T100 66 V100 H0Z" fill="#5fa8e8"/><path d="M0 76 Q12 68 24 76 T48 76 T72 76 T100 76 V100 H0Z" fill="#2f78c9"/>`;
+  if(x.scene==="sun")scene=`<circle cx="80" cy="18" r="12" fill="#ffd56b"/><path d="M0 80 Q30 66 60 78 T100 74 V100 H0Z" fill="#e8c27a"/>`;
+  if(x.scene==="light")scene=`<circle cx="50" cy="44" r="40" fill="#fff6c8" opacity=".7"/>`;
+  if(x.veil){veilB=`<path d="M22 62 C14 14 86 14 78 62 L90 104 H10 Z" fill="${x.veil}"/><path d="M22 62 C14 14 86 14 78 62" stroke="rgba(0,0,0,.12)" stroke-width="2" fill="none"/>`;
+    veilF=`<path d="M26 44 C22 12 78 12 74 44 C70 30 60 25 50 25 C40 25 30 30 26 44Z" fill="${x.veil}"/><path d="M28 36 C36 26 64 26 72 36" stroke="rgba(255,255,255,.35)" stroke-width="1.6" fill="none"/>`;}
+  if(x.turban)veilF+=`<path d="M25 38 C22 10 78 10 75 38 C66 30 34 30 25 38Z" fill="${x.turban}"/><path d="M28 30 C40 22 60 22 72 30 M27 24 C42 14 58 14 73 24" stroke="rgba(0,0,0,.16)" stroke-width="2" fill="none"/>${x.gem?`<circle cx="50" cy="27" r="3" fill="${x.gem}"/>`:""}`;
+  if(x.helmet)veilF+=`<path d="M25 40 C24 14 76 14 75 40 Z" fill="#b8bec9"/><path d="M25 40 H75" stroke="#7d8594" stroke-width="3"/><path d="M38 14 C40 2 60 2 62 14 C56 10 44 10 38 14Z" fill="#c8312b"/>`;
+  if(x.crown)veilF+=`<path d="M31 30 L33 12 L41 21 L50 7 L59 21 L67 12 L69 30 Z" fill="#f5c542" stroke="#c9961c" stroke-width="1.2"/><circle cx="50" cy="21" r="2.4" fill="${x.crown===true?"#e0573f":x.crown}"/><circle cx="38" cy="25" r="1.6" fill="#16a06b"/><circle cx="62" cy="25" r="1.6" fill="#1f4fd1"/>`;
+  if(x.stripes)cloth2=`<g clip-path="url(#${id}b)">${x.stripes.map((k,i)=>`<rect x="${4+i*13}" y="70" width="13" height="40" fill="${k}"/>`).join("")}</g>`;
+  if(x.shaggy)cloth2=`<path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z" fill="none" stroke="rgba(60,30,10,.45)" stroke-width="3" stroke-dasharray="2 3"/><g stroke="rgba(60,30,10,.35)" stroke-width="1.4">${[22,30,38,62,70,78].map(a=>`<path d="M${a} 84 l3 6 l3 -6"/>`).join("")}</g><path d="M14 92 H86" stroke="#6b4a2a" stroke-width="4"/>`;
+  if(x.plate)cloth2=`<rect x="40" y="80" width="20" height="18" rx="2" fill="#f5c542"/>${[0,1,2].flatMap(r=>[0,1,2].map(q=>`<rect x="${42+q*6}" y="${82+r*5.5}" width="4" height="4" fill="${["#e0573f","#16a06b","#1f4fd1"][(r+q)%3]}"/>`)).join("")}`;
+  if(x.staff)staff=`<path d="M15 100 L19 26 Q19 18 25 20" stroke="#7a4b23" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+  if(x.prop)prop=`<circle cx="76" cy="76" r="13" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="1.5"/><text x="76" y="81.5" font-size="15" text-anchor="middle">${x.prop}</text>`;
+  return `<svg class="avsvg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="50"/></clipPath><clipPath id="${id}b"><path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z"/></clipPath></defs><g clip-path="url(#${id})">
+<rect width="100" height="100" fill="${bg}"/>${scene}${veilB}${back}${staff}
+<path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z" fill="${cl}"/>${cloth2}${x.veil?"":`<path d="M41 72 L50 82 L59 72Z" fill="rgba(255,255,255,.35)"/>`}
 <rect x="42" y="60" width="16" height="15" rx="6" fill="${sk}"/><rect x="42" y="64" width="16" height="5" fill="rgba(0,0,0,.12)"/>
 <circle cx="27.5" cy="48" r="5.5" fill="${sk}"/><circle cx="72.5" cy="48" r="5.5" fill="${sk}"/>
 <ellipse cx="50" cy="46" rx="22.5" ry="25" fill="${sk}"/>${front}${beard}${brows}${eyes}
-<path d="M49 50 Q47 55 50 56" stroke="rgba(0,0,0,.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>${mouth}${gl}${hat}</g></svg>`;}
+<path d="M49 50 Q47 55 50 56" stroke="rgba(0,0,0,.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>${mouth}${gl}${hat}${veilF}${prop}</g></svg>`;}
+
+/* ---------- Personnages bibliques (avatars « bib:… » à gagner dans les cadeaux) ----------
+   c = peau.coiffure.couleurCheveux.barbe.yeux.bouche (indices AVB) ; x = attributs du personnage. */
+const BIB=[
+ ["noe","Noé","le bâtisseur","3.1.7.3.0.0",{cl:"#8a5a2b",bg:"#cfe8ff",scene:"rainbow",prop:"🔨"}],
+ ["abraham","Abraham","le père de la foi","3.1.7.3.1.0",{cl:"#6b4f9e",bg:"#1d2b5c",scene:"stars",turban:"#e9dcc0",staff:1,prop:"✨"}],
+ ["sara","Sara","la mère de la promesse","4.4.6.0.1.1",{veil:"#c9a46a",cl:"#a8714d",bg:"#ffe7c2",prop:"👶"}],
+ ["isaac","Isaac","le fils de la promesse","3.1.1.2.0.0",{cl:"#16a06b",bg:"#d8f3e6",prop:"🐏"}],
+ ["rebecca","Rébecca","la servante du puits","3.4.0.0.1.0",{veil:"#e0573f",cl:"#f5b94a",bg:"#fde0e0",prop:"🏺"}],
+ ["jacob","Jacob","le lutteur béni","3.1.1.2.0.2",{cl:"#7a4b23",bg:"#ece2ff",scene:"stars",prop:"🪜"}],
+ ["rachel","Rachel","la bergère","3.4.1.0.1.0",{veil:"#0ea5b7",cl:"#f4f4f4",bg:"#d8f3e6",prop:"🐑"}],
+ ["joseph","Joseph","le rêveur","3.1.0.0.1.1",{stripes:["#e0573f","#f5b94a","#16a06b","#1f4fd1","#7a49d6","#e85d9a","#0ea5b7"],bg:"#fff3b0",prop:"🌾"}],
+ ["moise","Moïse","le libérateur","3.1.7.3.0.2",{veil:"#8a5a2b",cl:"#c9a46a",bg:"#cfe8ff",scene:"sea",staff:1,prop:"📜"}],
+ ["aaron","Aaron","le souverain sacrificateur","3.1.6.3.0.0",{turban:"#f4f4f4",gem:"#f5c542",cl:"#1f4fd1",plate:1,bg:"#e6e9ef",prop:"🔥"}],
+ ["myriam","Myriam","la chantre de la délivrance","3.4.0.0.1.1",{veil:"#7a49d6",cl:"#f5b94a",bg:"#d6f4f7",scene:"sea",prop:"🪘"}],
+ ["josue","Josué","le vaillant conquérant","3.1.0.2.0.2",{helmet:1,cl:"#c8312b",bg:"#ffe7c2",prop:"🎺"}],
+ ["gedeon","Gédéon","le vaillant héros","3.1.1.2.0.0",{cl:"#5a7d2a",bg:"#1d2b5c",scene:"stars",prop:"🔥"}],
+ ["debora","Débora","la juge d'Israël","2.4.0.0.0.0",{veil:"#16a06b",cl:"#f4f4f4",bg:"#d8f3e6",prop:"🌴"}],
+ ["samson","Samson","l'homme fort","2.4.0.2.0.2",{cl:"#8a5a2b",bg:"#ffe7c2",prop:"🦁"}],
+ ["ruth","Ruth","la fidèle","3.4.1.0.1.0",{veil:"#f5b94a",cl:"#a8714d",bg:"#fff3b0",scene:"sun",prop:"🌾"}],
+ ["boaz","Boaz","le rédempteur généreux","3.1.6.2.1.0",{turban:"#e9dcc0",cl:"#14275e",bg:"#fff3b0",scene:"sun",prop:"🤝"}],
+ ["anne","Anne","la mère qui prie","3.4.0.0.0.2",{veil:"#e85d9a",cl:"#f4f4f4",bg:"#fde0e0",prop:"🙏"}],
+ ["samuel","Samuel","l'enfant qui écoute","4.1.0.0.3.3",{cl:"#f4f4f4",bg:"#1d2b5c",scene:"stars",prop:"🪔"}],
+ ["david","David","le roi puissant","3.7.1.2.1.1",{crown:true,cl:"#c8312b",bg:"#fde0e0",prop:"🪨"}],
+ ["salomon","Salomon","le roi sage","3.1.0.2.0.0",{crown:"#1f4fd1",cl:"#7a49d6",bg:"#fff3b0",prop:"📜"}],
+ ["elie","Élie","le prophète de feu","2.3.0.3.0.2",{veil:"#7a4b23",cl:"#8a5a2b",bg:"#fde0e0",shaggy:1,prop:"🔥"}],
+ ["elisee","Élisée","le prophète au double esprit","3.0.0.2.0.0",{cl:"#14275e",bg:"#e6e9ef",prop:"💧"}],
+ ["esther","Esther","la reine courageuse","3.4.0.0.1.0",{crown:"#e85d9a",cl:"#7a49d6",bg:"#ece2ff",prop:"✨"}],
+ ["nehemie","Néhémie","le bâtisseur de murailles","3.1.0.2.0.0",{turban:"#1f4fd1",cl:"#f4f4f4",bg:"#ffe7c2",prop:"🧱"}],
+ ["esdras","Esdras","le scribe de la Loi","3.1.7.3.0.2",{turban:"#f4f4f4",cl:"#14275e",bg:"#e6e9ef",prop:"📖"}],
+ ["job","Job","le patient","3.1.6.3.0.2",{cl:"#7a4b23",bg:"#e6e9ef",prop:"⛈️"}],
+ ["daniel","Daniel","le fidèle de Babylone","3.1.0.0.0.0",{turban:"#e0573f",gem:"#f5c542",cl:"#f5b94a",bg:"#ffe7c2",prop:"🦁"}],
+ ["jonas","Jonas","le prophète envoyé","3.1.1.2.3.3",{cl:"#0ea5b7",bg:"#cfe8ff",scene:"sea",prop:"🐋"}],
+ ["esaie","Ésaïe","« Me voici, envoie-moi »","3.1.1.3.0.0",{cl:"#14275e",bg:"#fff6c8",scene:"light",prop:"🪶"}],
+ ["jeremie","Jérémie","le prophète au cœur brisé","3.1.1.2.0.2",{cl:"#2a2f3a",bg:"#e6e9ef",prop:"🏺"}],
+ ["marie","Marie","la servante du Seigneur","3.4.0.0.1.0",{veil:"#3b6fd1",cl:"#f4f4f4",bg:"#fff6c8",scene:"light",prop:"⭐"}],
+ ["jeanbaptiste","Jean-Baptiste","la voix dans le désert","2.3.0.3.0.2",{cl:"#a0682f",shaggy:1,bg:"#f3dfa8",scene:"sun",prop:"💧"}],
+ ["pierre","Pierre","le pêcheur d'hommes","3.1.6.2.0.1",{cl:"#1f4fd1",bg:"#cfe8ff",scene:"sea",prop:"🐟"}],
+ ["jean","Jean","le disciple bien-aimé","3.4.1.0.1.0",{cl:"#e0573f",bg:"#fde0e0",prop:"❤️"}],
+ ["matthieu","Matthieu","le publicain appelé","3.1.0.5.0.0",{turban:"#f5b94a",cl:"#16a06b",bg:"#d8f3e6",prop:"💰"}],
+ ["mariemadeleine","Marie de Magdala","le témoin du matin de Pâques","3.4.0.0.1.1",{veil:"#e85d9a",cl:"#f4f4f4",bg:"#ffe7c2",scene:"sun",prop:"🌅"}],
+ ["marthe","Marthe","l'hôte dévouée","3.6.1.0.1.0",{veil:"#16a06b",cl:"#f5b94a",bg:"#d8f3e6",prop:"🍞"}],
+ ["zachee","Zachée","le petit homme transformé","3.1.0.5.1.1",{cl:"#7a49d6",bg:"#d8f3e6",prop:"🌳"}],
+ ["etienne","Étienne","le premier martyr","3.1.0.0.0.0",{cl:"#f4f4f4",bg:"#fff6c8",scene:"light",prop:"🕊️"}],
+ ["paul","Paul","l'apôtre des nations","3.8.0.2.0.2",{cl:"#14275e",bg:"#e6e9ef",prop:"✉️"}],
+ ["luc","Luc","le médecin bien-aimé","3.1.0.1.0.0",{cl:"#0ea5b7",bg:"#d6f4f7",prop:"🩺"}],
+ ["lydie","Lydie","la marchande de pourpre","3.4.0.0.1.0",{veil:"#7a49d6",cl:"#7a49d6",bg:"#ece2ff",prop:"🧵"}],
+ ["priscille","Priscille","l'enseignante","3.6.0.0.0.0",{veil:"#0ea5b7",cl:"#f5b94a",bg:"#d6f4f7",prop:"⛺"}],
+ ["timothee","Timothée","le jeune disciple","4.2.0.0.1.0",{cl:"#16a06b",bg:"#d8f3e6",prop:"📖"}],
+ ["corneille","Corneille","le centenier","3.1.0.1.0.2",{helmet:1,cl:"#c8312b",bg:"#e6e9ef",prop:"🛡️"}]];
+const BIBM=Object.fromEntries(BIB.map(b=>[b[0],b]));
+function bibSvg(id){const b=BIBM[id];if(!b)return "🙂";const [sk,hair,hairCol,beard,eyes,mouth]=b[3].split(".").map(Number);
+  return avSvg({skin:sk,hair,hairCol,beard,glasses:0,hat:0,cloth:0,bg:0,eyes,mouth},b[4]);}
+const isBib=v=>/^bib:[a-z]+$/.test(v||"")&&!!BIBM[String(v).slice(4)];
 
 /* ===================== RÉGLAGES DU JEU ===================== */
 // Valeurs par défaut : remplacées par les « Règles du jeu » réglées dans l'admin (voir applyRules dans ads.js).
@@ -4466,7 +4551,7 @@ const AV_PEOPLE=["👨","👩","🧑","👦","👧","👴","👵","🧔","👨�
 const AV_SYMBOLS=["🕊️","🦁","🐑","🐟","🌿","🔥","⭐","👑","🪔","📜","⛪","🌅","🌈","🍇","⚓","🛡️","💎","🌻","🦅","🐫"];
 const withTone=(b,t)=>{const c=Array.from(b);return c[0]+(t||"🏾")+c.slice(1).join("");};
 const avatar=()=>{const u=S.user;if(!u)return "🧑🏾";if(u.av)return AV_PEOPLE.includes(u.av)?withTone(u.av,u.tone):u.av;if(!u.gender)return "🧑🏾";return (u.gender==="f"?"👩":"👨")+(u.tone||"🏾");};
-const avImg=v=>/^(https:|data:image)/.test(v||"")?`<img src="${esc(v)}" alt="" class="avimg">`:avIsCfg(v)?avSvg(v):esc(v||"🙂");
+const avImg=v=>/^(https:|data:image)/.test(v||"")?`<img src="${esc(v)}" alt="" class="avimg">`:avIsCfg(v)?avSvg(v):isBib(v)?bibSvg(v.slice(4)):esc(v||"🙂");
 const avatarHTML=()=>avImg(S.user&&S.user.photo||avatar());
 
 /* Cœurs : +1 toutes les 25 minutes jusqu'à 5 */
@@ -4626,7 +4711,7 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
   const T={2:["Comment t'appeler ?","Ton avatar grimpera les niveaux avec toi."],3:["Qu'attends-tu de ce parcours ?","Plusieurs choix possibles"],4:["Où en es-tu avec la Bible ?","Pour adapter la difficulté"],5:["Quel Testament pour commencer ?","Tu pourras changer dans ton profil"],6:["Ton objectif quotidien","Combien de niveaux par jour ?"],7:["À quelle heure te le rappeler ?","Un rappel discret chaque jour"],8:["Allume ta lampe",""]};
   let body="",can=true;
   if(st===2){body=`<div class="avcard"><span class="avatarbig xl">${avatarHTML()}</span><div class="avcard-r"><b>Mon avatar</b><small>C'est lui que tes adversaires voient en ligne.</small>
-      <div class="avbtns"><button class="btn small" id="avStudio">🎨 Personnaliser</button><label class="btn small ghost">📷 Ma photo<input type="file" id="pPhoto" accept="image/*" hidden></label><button class="btn small ghost" id="avEmoji">😀 Emojis</button></div><small class="muted" id="pPhotoMsg"></small></div></div>
+      <div class="avbtns"><button class="btn small" id="avStudio">🎨 Personnaliser</button><label class="btn small ghost">📷 Ma photo<input type="file" id="pPhoto" accept="image/*" hidden></label><button class="btn small ghost" id="avEmoji">📖 Personnages</button></div><small class="muted" id="pPhotoMsg"></small></div></div>
     <div class="field"><label for="pName">Prénom</label><input id="pName" value="${esc(u.name||"")}" autocomplete="given-name"></div>
     <div class="eyebrow">Tu es</div><div class="gender"><button data-g="m" aria-pressed="${u.gender==="m"}"><span>👨${u.tone||"🏾"}</span>Un frère</button><button data-g="f" aria-pressed="${u.gender==="f"}"><span>👩${u.tone||"🏾"}</span>Une sœur</button></div>
     <div class="eyebrow">Ta tranche d'âge</div><div class="agegrid onbage">${AGE_RANGES.map(r=>`<button data-age="${r}" class="agebtn" aria-pressed="${u.age===r}">${ageLabel(r)}</button>`).join("")}</div>
@@ -4931,10 +5016,13 @@ const GIFTS={
   unl1h:{ic:"♾️",t:"1 h de vies illimitées",d:"Cadeau très rare ! Pendant une heure, tes vies ne baissent plus."}};
 /* Badges rares (affichés dans les défis en ligne) et éléments d'avatar réservés aux cadeaux */
 const RARE_BADGES=["👑 Couronne de vie","🔥 Flamme de Pentecôte","⚔️ Épée de l'Esprit","🦁 Lion de Juda","💎 Perle de grand prix","🌟 Étoile du matin","🕊️ Colombe de paix","🏰 Forteresse imprenable","🌿 Cep de la vigne","🪔 Lampe allumée"];
-const PREMIUM_EMOJI=["👑","🦁","💎","🦅","🔥","🛡️","🤴","👸"];
+/* Avatars : l'homme et la femme sont libres ; les personnages bibliques (BIB, avatar.js) se gagnent dans les cadeaux 3 étoiles. */
+const FREE_EMOJI=["","👨","👩"];
+const bibLocked=id=>!(S.unlocks||{})["b:"+id];
+const emoLocked=e=>isBib(e)?bibLocked(e.slice(4)):false;
+const bibName=id=>{const b=BIBM[id];return b?b[1]+", "+b[2]:"";};
 const PREMIUM_STUDIO=[["hat",5,"Couronne"],["hat",6,"Chapeau"],["glasses",3,"Lunettes de soleil"],["cloth",3,"Vêtement doré"],["cloth",9,"Vêtement blanc"],["bg",6,"Fond doré"],["bg",4,"Fond violet"]];
 const premKey=(k,i)=>"s:"+k+":"+i;
-const emoLocked=e=>PREMIUM_EMOJI.includes(e)&&!(S.unlocks||{})["e:"+e];
 const studioLocked=(k,i)=>PREMIUM_STUDIO.some(p=>p[0]===k&&p[1]===i)&&!(S.unlocks||{})[premKey(k,i)];
 const bookUnlockedByGift=b=>!!(S.keys||{})[b.id];
 const giftDayCount=()=>{const g=S.giftLog||{};return g.day===localDay()?g.n:0;};
@@ -4968,8 +5056,8 @@ function applyGift(k){regen();const G=Object.assign({k},GIFTS[k]||{ic:"🎁",t:"
       G.t=`${bk.name} débloqué !`;G.extra=`Le livre <b>${esc(bk.name)}</b> est ouvert : tu peux y jouer dès maintenant, sans attendre.`;return G;}k="help3";}
   if(k==="badge_rare"){S.rareBadges=S.rareBadges||[];const f=RARE_BADGES.filter(x=>!S.rareBadges.includes(x));if(f.length){const x=pick(f);S.rareBadges.push(x);S.rareBadge=x;
       G.t=`Badge rare : ${x.slice(x.indexOf(" ")+1)}`;G.ic=x.split(" ")[0];G.extra=`<span class="btag big">🏅 ${esc(x)}</span><br>Il s'affiche maintenant à côté de ton nom dans les défis en ligne.`;return G;}k="xp2";}
-  if(k==="avatar_item"){S.unlocks=S.unlocks||{};const f=[...PREMIUM_EMOJI.map(e=>["e:"+e,`l'avatar ${e}`,e]),...PREMIUM_STUDIO.map(p=>[premKey(p[0],p[1]),`« ${p[2]} » dans le studio d'avatar`,"🎨"])].filter(x=>!S.unlocks[x[0]]);
-    if(f.length){const x=pick(f);S.unlocks[x[0]]=Date.now();G.ic=x[2];G.extra=`Tu as débloqué ${esc(x[1])}. Va dans ton <b>Profil</b> pour l'utiliser.`;return G;}k="help1";}
+  if(k==="avatar_item"){S.unlocks=S.unlocks||{};const f=[...BIB.map(b=>["b:"+b[0],`<b>${esc(b[1])}</b>, ${esc(b[2])}`,`<span class="giftav">${bibSvg(b[0])}</span>`,"bib:"+b[0]]),...PREMIUM_STUDIO.map(p=>[premKey(p[0],p[1]),`« ${p[2]} » dans le studio d'avatar`,"🎨"])].filter(x=>!S.unlocks[x[0]]);
+    if(f.length){const x=pick(f);S.unlocks[x[0]]=Date.now();G.ic=x[2];if(x[3]){G.t="Nouveau personnage : "+BIBM[x[3].slice(4)][1];G.tryAv=x[3];G.extra=`Tu as débloqué ${x[1]}. Essaie-le tout de suite comme avatar de profil !`;}else{G.tryStudio=true;G.extra=`Tu as débloqué ${esc(x[1])}.`;}return G;}k="help1";}
   Object.assign(G,{k},GIFTS[k]);
   if(k==="xp50")S.xp=(S.xp||0)+50;
   if(k==="xp2")S.xp2=true;
@@ -4983,7 +5071,9 @@ function revealGift(G,left,then){sfx("win");setTimeout(()=>{confetti();vibrate([
   $("lbody").innerHTML=`<div class="center giftstage"><div class="gopen">${G.ic}</div><div class="eyebrow">Ton cadeau</div><h2 style="font-size:28px;margin:0">${esc(G.t)}</h2><p style="margin:0">${G.d}</p>
     ${G.extra?`<div class="giftextra">${G.extra}</div>`:""}
     <div class="giftmore">⭐⭐⭐ <b>Continue de faire des 3 étoiles</b> pour ouvrir d'autres cadeaux${typeof left==="number"&&left>0?` · encore ${left} aujourd'hui`:""} !</div></div>`;
-  $("lfoot").innerHTML=`<button class="btn" id="giftGo">Super, on continue ↑</button>`;$("giftGo").onclick=()=>{sfx("tap");then();};}
+  $("lfoot").innerHTML=`${G.tryAv||G.tryStudio?`<button class="btn ghost" id="giftTry">✨ Essayer</button>`:""}<button class="btn" id="giftGo">Super, on continue ↑</button>`;$("giftGo").onclick=()=>{sfx("tap");then();};
+  const gt=$("giftTry");if(gt)gt.onclick=()=>{if(G.tryStudio){openAvatarStudio();return;}sfx("good");S.user.av=G.tryAv;S.user.photo=null;save();if(typeof olSyncProfile==="function")olSyncProfile();
+    const o=document.querySelector(".gopen");if(o)o.innerHTML=`<span class="avatarbig xl">${avatarHTML()}</span>`;gt.textContent="✅ C'est ton avatar !";gt.disabled=true;};}
 
 function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r=completeLevel(b,L);
   const pct=Math.round(LS.firstTry/LS.total*100),k=b.id+"-"+L;S.best=S.best||{};const prev=S.best[k],isRecord=prev===undefined||pct>prev;if(isRecord)S.best[k]=pct;const best=S.best[k];const xp2=!!S.xp2;if(xp2){LS.xp*=2;S.xp2=false;}S.xp+=LS.xp;S.bestCombo=Math.max(S.bestCombo||0,LS.best);save();setHead();const ups=rankUpCheck();
@@ -5324,9 +5414,20 @@ function renderAvatarStudio(){const c=avsCfg;
   const sh=$("sheet");sh.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{if(studioLocked(b.dataset.k,+b.dataset.i)){sfx("bad");notify("🔒","Élément à débloquer","Fais 3 étoiles dans le parcours et ouvre les cadeaux pour le gagner.");return;}sfx("tap");const y=sh.scrollTop;const rows=[...sh.querySelectorAll(".avs-opts")].map(r=>r.scrollLeft);avsCfg[b.dataset.k]=+b.dataset.i;renderAvatarStudio();sh.scrollTop=y;sh.querySelectorAll(".avs-opts").forEach((r,i)=>r.scrollLeft=rows[i]||0);});
   $("avsRnd").onclick=()=>{sfx("tap");avsCfg=avRandom(S.user&&S.user.gender);Object.keys(avsCfg).forEach(k=>{if(studioLocked(k,avsCfg[k]))avsCfg[k]=0;});renderAvatarStudio();};
   $("avsOk").onclick=()=>{sfx("good");S.user.av=avCode(avsCfg);S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();else if(curScreen==="profile")renderProfile();if(typeof olSyncProfile==="function")olSyncProfile();};}
-function openEmojiSheet(){const u=S.user||{};
-  openSheet(`<h3 style="margin:0 0 10px">😀 Choisis un avatar</h3><div class="avgrid">${[["",""+(u.gender==="f"?"👩":"👨")+(u.tone||"🏾")],...AV_PEOPLE.map(b=>[b,withTone(b,u.tone)]),...AV_SYMBOLS.map(b=>[b,b])].map(([k,v])=>`<button data-av="${k}" class="${emoLocked(k)?"avlock":""}" aria-pressed="${!u.photo&&(u.av||"")===k}" aria-label="Avatar">${v}${emoLocked(k)?'<i class="lk">🔒</i>':""}</button>`).join("")}</div><p class="muted" style="font-size:13px;margin:10px 0 0">🔒 Les avatars dorés se débloquent en ouvrant les cadeaux 3 étoiles du parcours.</p>`);
-  $("sheet").querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{if(emoLocked(b.dataset.av)){sfx("bad");notify("🔒","Avatar à débloquer","Fais 3 étoiles dans le parcours et ouvre les cadeaux pour le gagner.");return;}sfx("tap");S.user.av=b.dataset.av||null;S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();if(typeof olSyncProfile==="function")olSyncProfile();});}
+function openEmojiSheet(){const u=S.user||{},t=u.tone||"🏾";const cur=(!u.photo&&u.av&&!avIsCfg(u.av))?u.av:"";let sel=cur;
+  const base=[["","Base",(u.gender==="f"?"👩":"👨")+t],["👨","Frère","👨"+t],["👩","Sœur","👩"+t]];
+  if(cur&&!isBib(cur)&&!FREE_EMOJI.includes(cur))base.push([cur,"Actuel",avImg(cur)]);
+  const list=[...base,...BIB.map(b=>["bib:"+b[0],b[1],bibSvg(b[0])])];
+  const got=BIB.filter(b=>!bibLocked(b[0])).length;
+  const prev=()=>{const k=sel,lk=emoLocked(k),b=isBib(k)?BIBM[k.slice(4)]:null,mine=!u.photo&&(u.av||"")===k;
+    return `<div class="emoprev${lk?" lk":""}"><span class="emobig">${b?bibSvg(b[0]):avImg(k||base[0][2])}</span><div><b>${b?esc(b[1]):k==="👩"?"Une sœur":k==="👨"?"Un frère":"Mon avatar"}</b><small>${b?esc(b[2]):"Avatar libre"}</small>
+      ${lk?`<small class="emolock">🔒 À gagner en ouvrant les cadeaux 3 étoiles du parcours</small>`:`<button class="btn small" id="emoOk" ${mine?"disabled":""}>${mine?"✅ Ton avatar actuel":"✨ Choisir comme avatar"}</button>`}</div></div>`;};
+  const draw=()=>{openSheet(`<h3 style="margin:0 0 4px">📖 Personnages bibliques</h3><p class="muted" style="font-size:13px;margin:0 0 10px">${got}/${BIB.length} débloqués · touche un personnage pour l'essayer</p>${prev()}
+    <div class="avgrid emogrid">${list.map(([k,n,v])=>`<button data-av="${esc(k)}" class="${emoLocked(k)?"avlock":""}" aria-pressed="${sel===k}" aria-label="${esc(n)}"><span class="emoface">${v}</span><small>${esc(n)}</small>${emoLocked(k)?'<i class="lk">🔒</i>':""}</button>`).join("")}</div>
+    <p class="muted" style="font-size:12.5px;margin:10px 0 0">🎁 Chaque cadeau 3 étoiles peut te faire gagner un nouveau personnage biblique.</p>`);
+    const sh=$("sheet");sh.querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{sfx(emoLocked(b.dataset.av)?"bad":"tap");sel=b.dataset.av;const y=sh.querySelector(".emogrid").scrollTop;draw();sh.querySelector(".emogrid").scrollTop=y;});
+    const ok=$("emoOk");if(ok)ok.onclick=()=>{sfx("good");S.user.av=sel||null;S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();else if(curScreen==="profile")renderProfile();if(typeof olSyncProfile==="function")olSyncProfile();};};
+  draw();}
 /* Rang et dernier badge, affichés aux adversaires */
 function myTitle(){const r=[0,rankInfo(S.xp).name];
   const last=Object.keys(S.badges||{}).sort((a,b)=>S.badges[b]-S.badges[a])[0];let badge="";

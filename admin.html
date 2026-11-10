@@ -66,7 +66,8 @@ h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.1;text-wrap:balance
 .guide .bubble{background:var(--white);border-radius:4px 18px 18px 18px;padding:12px 14px;box-shadow:0 3px 0 var(--line);min-width:0}
 .guide .bubble b{font-family:var(--f-display);font-size:19px;line-height:1.2;display:block}
 .guide .bubble small{color:var(--stone);font-size:12.5px}
-.obbody{flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;gap:12px;padding-block:18px}
+.obbody{flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:flex-start;gap:12px;padding-block:18px}
+.obbody>:first-child{margin-top:auto}.obbody>:last-child{margin-bottom:auto}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tile{background:var(--white);border-radius:18px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-weight:700;font-size:13.5px;color:var(--lapis-deep);box-shadow:0 0 0 2px transparent,0 4px 0 var(--line)}
 .tile span{font-size:32px}
@@ -899,6 +900,19 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .ranklist{display:grid;gap:8px}.rk{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:#f4f6fb}
 .rk b{display:block}.rk small{color:var(--muted)}.rk.got{background:#eaf7ef}.rk.cur{box-shadow:0 0 0 2px var(--good)}.rk-n{font-size:20px}
 .agegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.agebtn{padding:14px 10px;border-radius:14px;border:2px solid var(--line);background:#fff;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}.agebtn[aria-pressed="true"]{border-color:var(--lapis);background:#eef3fb;color:var(--lapis)}
+
+.emogrid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));max-height:min(340px,42vh)}
+.emogrid button{aspect-ratio:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px 6px}
+.emogrid button .emoface{font-size:28px;line-height:1;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;overflow:hidden}
+.emoface .avsvg,.emobig .avsvg,.giftav .avsvg{width:100%;height:100%;display:block}
+.giftav{display:block;width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px #f5c542}
+.emogrid button small{font-size:10px;font-weight:700;color:var(--stone);line-height:1.15;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.emoprev{display:flex;gap:14px;align-items:center;background:var(--lapis-soft);border-radius:18px;padding:12px 14px;margin-bottom:10px}
+.emoprev .emobig{font-size:52px;line-height:1;width:84px;height:84px;display:grid;place-items:center;background:#fff;border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px var(--lapis);flex-shrink:0}
+.emoprev.lk .emobig{box-shadow:0 0 0 3px #f5c542}
+.emoprev b{display:block;font-family:var(--f-display);font-size:18px}
+.emoprev small{display:block;color:var(--stone);font-size:13px;margin-bottom:6px}
+.emoprev .emolock{color:#9a6b00;font-weight:700;margin:0}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -1109,8 +1123,8 @@ const avIsCfg=v=>/^av1:[0-9.]+$/.test(v||"");
 function avRandom(gender){const r=n=>Math.floor(Math.random()*n),f=gender==="f";
   return {skin:r(5),hair:f?[3,4,5,6,7,9][r(6)]:[1,2,3,8,9,0][r(6)],hairCol:r(6),beard:f?0:[0,0,1,2,3,4,5][r(7)],glasses:r(3)?0:1+r(4),hat:r(4)?0:1+r(6),cloth:r(10),bg:r(8),eyes:r(3),mouth:r(3)};}
 let avUid=0;
-function avSvg(v){const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
-  const sk=AVB.skin[c.skin],hc=AVB.hairCol[c.hairCol],cl=AVB.cloth[c.cloth],bg=AVB.bg[c.bg],hatC=AVB.cloth[(c.cloth+4)%AVB.cloth.length];
+function avSvg(v,x){x=x||{};const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
+  const sk=AVB.skin[c.skin],hc=x.hc||AVB.hairCol[c.hairCol],cl=x.cl||AVB.cloth[c.cloth],bg=x.bg||AVB.bg[c.bg],hatC=AVB.cloth[(c.cloth+4)%AVB.cloth.length];
   const dark="rgba(0,0,0,.18)";let back="",front="",hat="",beard="",gl="",eyes="",mouth="";
   // cheveux derrière la tête
   if(c.hair===3)back=`<circle cx="50" cy="40" r="29" fill="${hc}"/>`;
@@ -1155,13 +1169,84 @@ function avSvg(v){const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
   const gs=c.glasses===3?`fill="#1d2433"`:`fill="rgba(255,255,255,.18)"`,gw=c.glasses===4?1.4:2.2;
   if(c.glasses===1)gl=`<g stroke="#1d2433" stroke-width="${gw}" ${gs}><circle cx="41" cy="46" r="7"/><circle cx="59" cy="46" r="7"/></g><path d="M48 46 H52 M34 45 L28 43 M66 45 L72 43" stroke="#1d2433" stroke-width="2"/>`;
   if(c.glasses===2||c.glasses===3||c.glasses===4)gl=`<g stroke="#1d2433" stroke-width="${gw}" ${gs}><rect x="33" y="40" width="15" height="11" rx="${c.glasses===3?4:2}"/><rect x="52" y="40" width="15" height="11" rx="${c.glasses===3?4:2}"/></g><path d="M48 45 H52 M33 44 L28 43 M67 44 L72 43" stroke="#1d2433" stroke-width="2"/>`;
-  return `<svg class="avsvg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#${id})">
-<rect width="100" height="100" fill="${bg}"/>${back}
-<path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z" fill="${cl}"/><path d="M41 72 L50 82 L59 72Z" fill="rgba(255,255,255,.35)"/>
+  // Personnages bibliques : décor, voile, turban, couronne, bâton, vêtement rayé ou en poil de chameau, attribut
+  let scene="",veilB="",veilF="",extra="",cloth2="",prop="",staff="";
+  if(x.scene==="rainbow")scene=["#e0573f","#f5b94a","#f5e04a","#16a06b","#1f4fd1","#7a49d6"].map((k,i)=>`<path d="M-6 70 A56 56 0 0 1 106 70" stroke="${k}" stroke-width="4" fill="none" transform="translate(0 ${i*4}) scale(1 ${1-i*.04})"/>`).join("");
+  if(x.scene==="stars")scene=[[14,16],[30,8],[82,14],[90,32],[10,36],[70,6],[22,28],[86,52],[8,56]].map(([a,b],i)=>`<circle cx="${a}" cy="${b}" r="${i%3?1.3:2}" fill="#fff6c8"/>`).join("");
+  if(x.scene==="sea")scene=`<path d="M0 66 Q12 58 24 66 T48 66 T72 66 T100 66 V100 H0Z" fill="#5fa8e8"/><path d="M0 76 Q12 68 24 76 T48 76 T72 76 T100 76 V100 H0Z" fill="#2f78c9"/>`;
+  if(x.scene==="sun")scene=`<circle cx="80" cy="18" r="12" fill="#ffd56b"/><path d="M0 80 Q30 66 60 78 T100 74 V100 H0Z" fill="#e8c27a"/>`;
+  if(x.scene==="light")scene=`<circle cx="50" cy="44" r="40" fill="#fff6c8" opacity=".7"/>`;
+  if(x.veil){veilB=`<path d="M22 62 C14 14 86 14 78 62 L90 104 H10 Z" fill="${x.veil}"/><path d="M22 62 C14 14 86 14 78 62" stroke="rgba(0,0,0,.12)" stroke-width="2" fill="none"/>`;
+    veilF=`<path d="M26 44 C22 12 78 12 74 44 C70 30 60 25 50 25 C40 25 30 30 26 44Z" fill="${x.veil}"/><path d="M28 36 C36 26 64 26 72 36" stroke="rgba(255,255,255,.35)" stroke-width="1.6" fill="none"/>`;}
+  if(x.turban)veilF+=`<path d="M25 38 C22 10 78 10 75 38 C66 30 34 30 25 38Z" fill="${x.turban}"/><path d="M28 30 C40 22 60 22 72 30 M27 24 C42 14 58 14 73 24" stroke="rgba(0,0,0,.16)" stroke-width="2" fill="none"/>${x.gem?`<circle cx="50" cy="27" r="3" fill="${x.gem}"/>`:""}`;
+  if(x.helmet)veilF+=`<path d="M25 40 C24 14 76 14 75 40 Z" fill="#b8bec9"/><path d="M25 40 H75" stroke="#7d8594" stroke-width="3"/><path d="M38 14 C40 2 60 2 62 14 C56 10 44 10 38 14Z" fill="#c8312b"/>`;
+  if(x.crown)veilF+=`<path d="M31 30 L33 12 L41 21 L50 7 L59 21 L67 12 L69 30 Z" fill="#f5c542" stroke="#c9961c" stroke-width="1.2"/><circle cx="50" cy="21" r="2.4" fill="${x.crown===true?"#e0573f":x.crown}"/><circle cx="38" cy="25" r="1.6" fill="#16a06b"/><circle cx="62" cy="25" r="1.6" fill="#1f4fd1"/>`;
+  if(x.stripes)cloth2=`<g clip-path="url(#${id}b)">${x.stripes.map((k,i)=>`<rect x="${4+i*13}" y="70" width="13" height="40" fill="${k}"/>`).join("")}</g>`;
+  if(x.shaggy)cloth2=`<path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z" fill="none" stroke="rgba(60,30,10,.45)" stroke-width="3" stroke-dasharray="2 3"/><g stroke="rgba(60,30,10,.35)" stroke-width="1.4">${[22,30,38,62,70,78].map(a=>`<path d="M${a} 84 l3 6 l3 -6"/>`).join("")}</g><path d="M14 92 H86" stroke="#6b4a2a" stroke-width="4"/>`;
+  if(x.plate)cloth2=`<rect x="40" y="80" width="20" height="18" rx="2" fill="#f5c542"/>${[0,1,2].flatMap(r=>[0,1,2].map(q=>`<rect x="${42+q*6}" y="${82+r*5.5}" width="4" height="4" fill="${["#e0573f","#16a06b","#1f4fd1"][(r+q)%3]}"/>`)).join("")}`;
+  if(x.staff)staff=`<path d="M15 100 L19 26 Q19 18 25 20" stroke="#7a4b23" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+  if(x.prop)prop=`<circle cx="76" cy="76" r="13" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="1.5"/><text x="76" y="81.5" font-size="15" text-anchor="middle">${x.prop}</text>`;
+  return `<svg class="avsvg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="50"/></clipPath><clipPath id="${id}b"><path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z"/></clipPath></defs><g clip-path="url(#${id})">
+<rect width="100" height="100" fill="${bg}"/>${scene}${veilB}${back}${staff}
+<path d="M12 104 C12 80 30 72 50 72 C70 72 88 80 88 104Z" fill="${cl}"/>${cloth2}${x.veil?"":`<path d="M41 72 L50 82 L59 72Z" fill="rgba(255,255,255,.35)"/>`}
 <rect x="42" y="60" width="16" height="15" rx="6" fill="${sk}"/><rect x="42" y="64" width="16" height="5" fill="rgba(0,0,0,.12)"/>
 <circle cx="27.5" cy="48" r="5.5" fill="${sk}"/><circle cx="72.5" cy="48" r="5.5" fill="${sk}"/>
 <ellipse cx="50" cy="46" rx="22.5" ry="25" fill="${sk}"/>${front}${beard}${brows}${eyes}
-<path d="M49 50 Q47 55 50 56" stroke="rgba(0,0,0,.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>${mouth}${gl}${hat}</g></svg>`;}
+<path d="M49 50 Q47 55 50 56" stroke="rgba(0,0,0,.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>${mouth}${gl}${hat}${veilF}${prop}</g></svg>`;}
+
+/* ---------- Personnages bibliques (avatars « bib:… » à gagner dans les cadeaux) ----------
+   c = peau.coiffure.couleurCheveux.barbe.yeux.bouche (indices AVB) ; x = attributs du personnage. */
+const BIB=[
+ ["noe","Noé","le bâtisseur","3.1.7.3.0.0",{cl:"#8a5a2b",bg:"#cfe8ff",scene:"rainbow",prop:"🔨"}],
+ ["abraham","Abraham","le père de la foi","3.1.7.3.1.0",{cl:"#6b4f9e",bg:"#1d2b5c",scene:"stars",turban:"#e9dcc0",staff:1,prop:"✨"}],
+ ["sara","Sara","la mère de la promesse","4.4.6.0.1.1",{veil:"#c9a46a",cl:"#a8714d",bg:"#ffe7c2",prop:"👶"}],
+ ["isaac","Isaac","le fils de la promesse","3.1.1.2.0.0",{cl:"#16a06b",bg:"#d8f3e6",prop:"🐏"}],
+ ["rebecca","Rébecca","la servante du puits","3.4.0.0.1.0",{veil:"#e0573f",cl:"#f5b94a",bg:"#fde0e0",prop:"🏺"}],
+ ["jacob","Jacob","le lutteur béni","3.1.1.2.0.2",{cl:"#7a4b23",bg:"#ece2ff",scene:"stars",prop:"🪜"}],
+ ["rachel","Rachel","la bergère","3.4.1.0.1.0",{veil:"#0ea5b7",cl:"#f4f4f4",bg:"#d8f3e6",prop:"🐑"}],
+ ["joseph","Joseph","le rêveur","3.1.0.0.1.1",{stripes:["#e0573f","#f5b94a","#16a06b","#1f4fd1","#7a49d6","#e85d9a","#0ea5b7"],bg:"#fff3b0",prop:"🌾"}],
+ ["moise","Moïse","le libérateur","3.1.7.3.0.2",{veil:"#8a5a2b",cl:"#c9a46a",bg:"#cfe8ff",scene:"sea",staff:1,prop:"📜"}],
+ ["aaron","Aaron","le souverain sacrificateur","3.1.6.3.0.0",{turban:"#f4f4f4",gem:"#f5c542",cl:"#1f4fd1",plate:1,bg:"#e6e9ef",prop:"🔥"}],
+ ["myriam","Myriam","la chantre de la délivrance","3.4.0.0.1.1",{veil:"#7a49d6",cl:"#f5b94a",bg:"#d6f4f7",scene:"sea",prop:"🪘"}],
+ ["josue","Josué","le vaillant conquérant","3.1.0.2.0.2",{helmet:1,cl:"#c8312b",bg:"#ffe7c2",prop:"🎺"}],
+ ["gedeon","Gédéon","le vaillant héros","3.1.1.2.0.0",{cl:"#5a7d2a",bg:"#1d2b5c",scene:"stars",prop:"🔥"}],
+ ["debora","Débora","la juge d'Israël","2.4.0.0.0.0",{veil:"#16a06b",cl:"#f4f4f4",bg:"#d8f3e6",prop:"🌴"}],
+ ["samson","Samson","l'homme fort","2.4.0.2.0.2",{cl:"#8a5a2b",bg:"#ffe7c2",prop:"🦁"}],
+ ["ruth","Ruth","la fidèle","3.4.1.0.1.0",{veil:"#f5b94a",cl:"#a8714d",bg:"#fff3b0",scene:"sun",prop:"🌾"}],
+ ["boaz","Boaz","le rédempteur généreux","3.1.6.2.1.0",{turban:"#e9dcc0",cl:"#14275e",bg:"#fff3b0",scene:"sun",prop:"🤝"}],
+ ["anne","Anne","la mère qui prie","3.4.0.0.0.2",{veil:"#e85d9a",cl:"#f4f4f4",bg:"#fde0e0",prop:"🙏"}],
+ ["samuel","Samuel","l'enfant qui écoute","4.1.0.0.3.3",{cl:"#f4f4f4",bg:"#1d2b5c",scene:"stars",prop:"🪔"}],
+ ["david","David","le roi puissant","3.7.1.2.1.1",{crown:true,cl:"#c8312b",bg:"#fde0e0",prop:"🪨"}],
+ ["salomon","Salomon","le roi sage","3.1.0.2.0.0",{crown:"#1f4fd1",cl:"#7a49d6",bg:"#fff3b0",prop:"📜"}],
+ ["elie","Élie","le prophète de feu","2.3.0.3.0.2",{veil:"#7a4b23",cl:"#8a5a2b",bg:"#fde0e0",shaggy:1,prop:"🔥"}],
+ ["elisee","Élisée","le prophète au double esprit","3.0.0.2.0.0",{cl:"#14275e",bg:"#e6e9ef",prop:"💧"}],
+ ["esther","Esther","la reine courageuse","3.4.0.0.1.0",{crown:"#e85d9a",cl:"#7a49d6",bg:"#ece2ff",prop:"✨"}],
+ ["nehemie","Néhémie","le bâtisseur de murailles","3.1.0.2.0.0",{turban:"#1f4fd1",cl:"#f4f4f4",bg:"#ffe7c2",prop:"🧱"}],
+ ["esdras","Esdras","le scribe de la Loi","3.1.7.3.0.2",{turban:"#f4f4f4",cl:"#14275e",bg:"#e6e9ef",prop:"📖"}],
+ ["job","Job","le patient","3.1.6.3.0.2",{cl:"#7a4b23",bg:"#e6e9ef",prop:"⛈️"}],
+ ["daniel","Daniel","le fidèle de Babylone","3.1.0.0.0.0",{turban:"#e0573f",gem:"#f5c542",cl:"#f5b94a",bg:"#ffe7c2",prop:"🦁"}],
+ ["jonas","Jonas","le prophète envoyé","3.1.1.2.3.3",{cl:"#0ea5b7",bg:"#cfe8ff",scene:"sea",prop:"🐋"}],
+ ["esaie","Ésaïe","« Me voici, envoie-moi »","3.1.1.3.0.0",{cl:"#14275e",bg:"#fff6c8",scene:"light",prop:"🪶"}],
+ ["jeremie","Jérémie","le prophète au cœur brisé","3.1.1.2.0.2",{cl:"#2a2f3a",bg:"#e6e9ef",prop:"🏺"}],
+ ["marie","Marie","la servante du Seigneur","3.4.0.0.1.0",{veil:"#3b6fd1",cl:"#f4f4f4",bg:"#fff6c8",scene:"light",prop:"⭐"}],
+ ["jeanbaptiste","Jean-Baptiste","la voix dans le désert","2.3.0.3.0.2",{cl:"#a0682f",shaggy:1,bg:"#f3dfa8",scene:"sun",prop:"💧"}],
+ ["pierre","Pierre","le pêcheur d'hommes","3.1.6.2.0.1",{cl:"#1f4fd1",bg:"#cfe8ff",scene:"sea",prop:"🐟"}],
+ ["jean","Jean","le disciple bien-aimé","3.4.1.0.1.0",{cl:"#e0573f",bg:"#fde0e0",prop:"❤️"}],
+ ["matthieu","Matthieu","le publicain appelé","3.1.0.5.0.0",{turban:"#f5b94a",cl:"#16a06b",bg:"#d8f3e6",prop:"💰"}],
+ ["mariemadeleine","Marie de Magdala","le témoin du matin de Pâques","3.4.0.0.1.1",{veil:"#e85d9a",cl:"#f4f4f4",bg:"#ffe7c2",scene:"sun",prop:"🌅"}],
+ ["marthe","Marthe","l'hôte dévouée","3.6.1.0.1.0",{veil:"#16a06b",cl:"#f5b94a",bg:"#d8f3e6",prop:"🍞"}],
+ ["zachee","Zachée","le petit homme transformé","3.1.0.5.1.1",{cl:"#7a49d6",bg:"#d8f3e6",prop:"🌳"}],
+ ["etienne","Étienne","le premier martyr","3.1.0.0.0.0",{cl:"#f4f4f4",bg:"#fff6c8",scene:"light",prop:"🕊️"}],
+ ["paul","Paul","l'apôtre des nations","3.8.0.2.0.2",{cl:"#14275e",bg:"#e6e9ef",prop:"✉️"}],
+ ["luc","Luc","le médecin bien-aimé","3.1.0.1.0.0",{cl:"#0ea5b7",bg:"#d6f4f7",prop:"🩺"}],
+ ["lydie","Lydie","la marchande de pourpre","3.4.0.0.1.0",{veil:"#7a49d6",cl:"#7a49d6",bg:"#ece2ff",prop:"🧵"}],
+ ["priscille","Priscille","l'enseignante","3.6.0.0.0.0",{veil:"#0ea5b7",cl:"#f5b94a",bg:"#d6f4f7",prop:"⛺"}],
+ ["timothee","Timothée","le jeune disciple","4.2.0.0.1.0",{cl:"#16a06b",bg:"#d8f3e6",prop:"📖"}],
+ ["corneille","Corneille","le centenier","3.1.0.1.0.2",{helmet:1,cl:"#c8312b",bg:"#e6e9ef",prop:"🛡️"}]];
+const BIBM=Object.fromEntries(BIB.map(b=>[b[0],b]));
+function bibSvg(id){const b=BIBM[id];if(!b)return "🙂";const [sk,hair,hairCol,beard,eyes,mouth]=b[3].split(".").map(Number);
+  return avSvg({skin:sk,hair,hairCol,beard,glasses:0,hat:0,cloth:0,bg:0,eyes,mouth},b[4]);}
+const isBib=v=>/^bib:[a-z]+$/.test(v||"")&&!!BIBM[String(v).slice(4)];
 /* Espace admin Parcours Biblique — réservé aux comptes marqués administrateur dans Supabase. */
 const CFG={url:"https://xyuqturdtqmclrjdnaen.supabase.co",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dXF0dXJkdHFtY2xyamRuYWVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NDI3OTUsImV4cCI6MjEwOTQxODc5NX0.RHa_6UtvTfeFBdQ7wcBDby35cgvBYabIDe5grAfmS0E"};
 const $=id=>document.getElementById(id);
@@ -1173,7 +1258,7 @@ const A={me:null,tab:(()=>{try{return localStorage.getItem("pb-admin-tab")||"hom
 const fmtD=d=>d?new Date(d).toLocaleString("fr-FR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"–";
 const DIFF={facile:"Facile",moyen:"Moyen",difficile:"Difficile"},KIND={qcm:"QCM",tf:"Vrai / faux",fill:"Verset à compléter"};
 function toast(t,bad){const e=$("toast");e.textContent=t;e.className="atoast"+(bad?" bad":"");e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,3500);}
-const adAv=v=>/^https:/.test(v||"")?`<img src="${esc(v)}" alt="">`:avIsCfg(v)?avSvg(v):esc(v||"🙂");
+const adAv=v=>/^https:/.test(v||"")?`<img src="${esc(v)}" alt="">`:avIsCfg(v)?avSvg(v):isBib(v)?bibSvg(v.slice(4)):esc(v||"🙂");
 function err(e){return (e&&(e.message||e.error_description))||String(e);}
 
 // Ne jamais attendre une requête Supabase dans ce rappel (blocage connu) : on relance boot() juste après.
