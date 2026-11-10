@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="de48a0ac89";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="045566c166";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -948,6 +948,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .rdex{background:#fff;border-radius:16px;padding:12px 14px;margin:0 0 14px;text-align:left;display:grid;gap:4px;font-size:14px;color:#3a4459;box-shadow:0 0 0 2px var(--line)}
 .rdex b{color:var(--lapis)}
 @keyframes fadein{from{opacity:0}}
+.rddate{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#9a6b00;margin:-2px 0 8px}
 
 </style>
 <div class="app" id="app">
@@ -5495,7 +5496,9 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdat
 
 /* ===================== ÉNIGME DU JOUR =====================
    Une seule devinette par jour (minuit à Kinshasa), affichée automatiquement à la première ouverture du jour.
-   Le serveur choisit une énigme jamais vue par ce joueur (daily_riddle) et vérifie la réponse (answer_riddle) :
+   Tous les joueurs reçoivent la même énigme à une date donnée (daily_riddle : celle programmée dans l'admin,
+   sinon une énigme pas encore utilisée ; quand toutes l'ont été, le cycle recommence).
+   Le serveur et vérifie la réponse (answer_riddle) :
    accents, majuscules et tirets ignorés, petites fautes acceptées, mais pas le nom d'un autre personnage.
    Les énigmes se gèrent dans l'admin (onglet « Énigmes du jour »). */
 let RD=null,RDnames=null,rdShown=false;
@@ -5511,7 +5514,7 @@ async function riddleMaybe(){const d=kinDay();
 function rdClose(){const o=$("riddle");if(o){o.classList.add("out");setTimeout(()=>o.remove(),250);}}
 function showRiddle(){rdClose();const o=document.createElement("div");o.id="riddle";o.className="rdveil";
   o.innerHTML=`<div class="rdcard" role="dialog" aria-modal="true" aria-labelledby="rdT"><button class="rdx" id="rdX">Plus tard</button>
-    <h2 id="rdT">Devinette du jour ! 🌅</h2>
+    <h2 id="rdT">Devinette du jour ! 🌅</h2>${RD.day?`<div class="rddate">${new Date(RD.day+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}</div>`:""}
     <p class="rdsub">Une seule question par jour. Trouve qui c'est et gagne <b>+10 XP</b>. Si tu te trompes… nouvelle chance demain !</p>
     <div class="rdimg">${RD.portrait?bibSvg(RD.portrait):"🎭"}</div>
     <p class="rdclue">« ${esc(RD.clue)} »<br><b>Qui suis-je ?</b></p>
@@ -5527,7 +5530,7 @@ function showRiddle(){rdClose();const o=document.createElement("div");o.id="ridd
     box.innerHTML=m.map(n=>`<button type="button" data-n="${esc(n)}">${esc(n)}</button>`).join("");
     box.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{sfx("tap");inp.value=b.dataset.n;box.innerHTML="";go.disabled=false;inp.focus();});};
   inp.oninput=sug;inp.onkeydown=e=>{if(e.key==="Enter"&&!go.disabled)go.click();};
-  $("rdX").onclick=()=>{sfx("tap");rdClose();};
+  $("rdX").onclick=()=>{sfx("tap");rdClose();olRpc("riddle_dismiss",{},8000).catch(()=>{});};
   go.onclick=async()=>{go.disabled=true;go.textContent="Vérification…";$("rdE").hidden=true;
     try{const r=await olRpc("answer_riddle",{p_id:RD.id,p_answer:inp.value.trim()},12000);rdResult(r,inp.value.trim());}
     catch(e){go.disabled=false;go.textContent="Valider la réponse (+10 XP) ⚡";$("rdE").textContent="Pas de connexion. Réessaie dans un instant.";$("rdE").hidden=false;}};}
