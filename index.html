@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="045566c166";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="f8ae81535c";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -949,6 +949,14 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .rdex b{color:var(--lapis)}
 @keyframes fadein{from{opacity:0}}
 .rddate{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#9a6b00;margin:-2px 0 8px}
+
+.prizeimg{position:relative;padding:0;border:0;background:none;flex-shrink:0;cursor:zoom-in;border-radius:16px}
+.prizeimg i{position:absolute;right:4px;bottom:4px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:12px;font-style:normal;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.lightbox{position:absolute;inset:0;z-index:80;background:rgba(8,12,28,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 16px 24px;gap:14px;animation:fadein .2s;cursor:zoom-out}
+.lightbox.out{opacity:0;transition:opacity .2s}
+.lightbox img{max-width:100%;max-height:calc(100% - 60px);object-fit:contain;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:popin .3s cubic-bezier(.2,1.4,.4,1)}
+.lightbox p{color:#fff;font-weight:800;font-size:17px;margin:0;text-align:center}
+.lightbox .lbx{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:18px}
 
 </style>
 <div class="app" id="app">
@@ -5681,7 +5689,7 @@ function olClaimSheet(){const w=OL.win;if(!w)return;const u=S.user||{},L=olCount
     catch(e){b.disabled=false;b.textContent="Envoyer";const m=String(e&&e.message||"");$("cErr").textContent=/pas_premier/.test(m)?"Seul le 1er du classement peut réclamer ce prix.":/fermee/.test(m)?"La remise du prix n'est pas encore ouverte.":/champs/.test(m)?"Remplis tous les champs.":olErr(e);}};}
 function olPrizeCard(){return olPrizeCard0()+'<p class="prize-legal">Gratuit, sans achat. Apple et Google ne sont ni organisateurs ni sponsors de ce concours. <a href="/reglement" target="_blank" rel="noopener">Règlement</a></p>';}
 function olPrizeCard0(){const p=OL.prize;const mois=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
-  return p?`<div class="prize">${p.image_url?`<img src="${esc(p.image_url)}" alt="">`:`<span class="pe">🏆</span>`}<div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>${esc(p.title)}</b>${p.description?`<p>${esc(p.description)}</p>`:""}</div></div>`
+  return p?`<div class="prize">${p.image_url?`<button class="prizeimg" data-zoom="${esc(p.image_url)}" data-cap="${esc(p.title)}" aria-label="Voir la photo du prix en grand"><img src="${esc(p.image_url)}" alt=""><i>🔍</i></button>`:`<span class="pe">🏆</span>`}<div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>${esc(p.title)}</b>${p.description?`<p>${esc(p.description)}</p>`:""}</div></div>`
     :`<div class="prize"><span class="pe">🏆</span><div><div class="eyebrow">Prix du meilleur disciple · ${esc(mois)}</div><b>Le prix du mois sera bientôt annoncé</b><p>Le premier du classement en fin de mois le remporte.</p></div></div>`;}
 function renderOnline(){const p=$("onlinePage");if(!p)return;
   if(!olInit()){p.innerHTML=`<h2>Défis en ligne</h2><div class="card"><b>Les défis en ligne se jouent sur le site du jeu.</b><p class="muted" style="margin:6px 0 12px;font-size:14px">Ouvre Parcours Biblique sur son site pour affronter d'autres disciples et entrer au classement du mois.</p><a class="btn" href="https://parcours-biblique.vercel.app/#defis" target="_blank" rel="noopener">Ouvrir parcours-biblique.vercel.app</a></div>`;return;}
@@ -5969,6 +5977,14 @@ bootAll();
 async function olUploadPhoto(blob){if(!OL.sb||!OL.session)return null;const uid=OL.session.user.id,path=`${uid}/photo-${Date.now()}.jpg`;
   const {error}=await OL.sb.storage.from("avatars").upload(path,blob,{contentType:"image/jpeg",upsert:false});if(error)throw error;
   return OL.sb.storage.from("avatars").getPublicUrl(path).data.publicUrl;}
+
+/* Photo en grand (prix du mois…) : touche la photo, touche à nouveau ou ✕ pour fermer */
+function openPhoto(src,cap){const o=document.createElement("div");o.className="lightbox";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");
+  o.innerHTML=`<button class="lbx" aria-label="Fermer">✕</button><img src="${esc(src)}" alt="${esc(cap||"")}">${cap?`<p>${esc(cap)}</p>`:""}`;
+  const close=()=>{o.classList.add("out");setTimeout(()=>o.remove(),200);document.removeEventListener("keydown",esc_);};
+  const esc_=e=>{if(e.key==="Escape")close();};document.addEventListener("keydown",esc_);
+  o.onclick=close;$("app").appendChild(o);sfx("tap");}
+document.addEventListener("click",e=>{const z=e.target.closest&&e.target.closest("[data-zoom]");if(z){e.preventDefault();openPhoto(z.dataset.zoom,z.dataset.cap);}});
 
 /* ===================== ANNONCES =====================
    Annonces publiées par l'équipe depuis l'admin (événements, partenaires…).
