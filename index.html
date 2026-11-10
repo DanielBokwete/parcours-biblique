@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="6943c80ee1";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="11798d59ef";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -238,6 +238,7 @@ input[type=range]{width:100%;accent-color:var(--lapis);height:28px}
 .segbar i.on{background:var(--lapis)}
 .chipstat{display:flex;align-items:center;gap:4px;font-weight:800;font-variant-numeric:tabular-nums;font-size:14px;padding:4px 8px;border-radius:10px}
 .chipstat.xp{background:#fff6dc;color:#9a6b00}
+.chipstat.xp small{font-size:11px;font-weight:900;letter-spacing:.04em}
 .chipstat.hp{background:var(--bad-bg);color:var(--bad)}
 .chipstat.hl{background:#eaf1ff;color:var(--lapis)}
 button.chipstat{font-family:inherit;cursor:pointer}
@@ -938,7 +939,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
       <div class="lhead">
         <button id="quit" aria-label="Quitter"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8a96ad" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
         <div class="prog"><i id="progBar" style="width:0%"></i></div>
-        <button class="chipstat xp" id="lXp" aria-label="Points et aides">⭐ 0</button>
+        <button class="chipstat xp" id="lXp" aria-label="XP gagnés">+0 <small>XP</small></button>
         <button class="chipstat hl" id="lHelps" aria-label="Aides : regarder une annonce pour en gagner">💡 5</button>
         <button class="chipstat hp" id="lHearts" aria-label="Vies : regarder une annonce pour en gagner">♥ 5</button>
         <button id="replay" aria-label="Relire à voix haute"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1f4fd1" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
@@ -4798,7 +4799,7 @@ async function startLevel(b,L,fromReview){if(lvStarting)return;regen();helpsRese
   show("lesson");renderStep();}
 function startTest(kind,qs,meta){const graded=qs.filter(q=>q.graded!==false).length;
   LS=Object.assign({mode:"test",kind,steps:qs.map(q=>({k:"q",q})),si:0,total:qs.length,graded,qdone:0,xp:0,combo:0,best:0,mistakes:0,firstTry:0,score:0},meta);show("lesson");renderStep();}
-function setHead(){$("progBar").style.width=Math.round(LS.qdone/LS.total*100)+"%";$("lXp").textContent="⭐ "+LS.xp;$("lHearts").hidden=LS.mode!=="level";$("lHearts").textContent="♥ "+(unlimited()?"∞":S.hearts);$("lHelps").hidden=LS.mode!=="level";$("lHelps").textContent="💡 "+S.helps;}
+function setHead(){$("progBar").style.width=Math.round(LS.qdone/LS.total*100)+"%";$("lXp").innerHTML="+"+LS.xp+" <small>XP</small>";$("lHearts").hidden=LS.mode!=="level";$("lHearts").textContent="♥ "+(unlimited()?"∞":S.hearts);$("lHelps").hidden=LS.mode!=="level";$("lHelps").textContent="💡 "+S.helps;}
 function renderStep(){stopTimer();setHead();const st=LS.steps[LS.si];$("timer").hidden=true;const body=$("lbody"),foot=$("lfoot");foot.className="lfoot pad";body.scrollTop=0;
   if(st.k==="card"){const c=st.c,num=(st.num0||0)+st.i+1;
     body.innerHTML=`<div class="eyebrow" style="color:var(--lapis)">${st.label} · ${esc(LS.ref)}</div><h2 class="qtitle" style="font-size:28px">${esc(LS.title)}</h2>
@@ -4995,7 +4996,7 @@ function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r
    <p>${perfect?"Tu as tout trouvé du premier coup.":"Toutes les réponses sont trouvées. On continue de monter !"}${lastOfBook&&next?`<br><b>${esc(next.name)}</b> est maintenant débloqué.`:""}</p>
    <div class="scorebox ${pctTone(pct)}"><div class="sc-ring" style="--p:${pct}"><b>${pct}%</b></div><div class="sc-txt">${prev===undefined?`<b>Ton score : ${pct} %</b><small>${pct<100?"Rejoue ce niveau plus tard pour viser 100 % !":"Parfait du premier coup !"}</small>`
       :isRecord&&pct>prev?`<b>🏆 Nouveau record !</b><small>Tu passes de ${prev} % à ${pct} %.</small>`:`<b>Ton record reste ${best} %</b><small>${pct<best?`Cette fois ${pct} %. Ton meilleur score est gardé.`:"Égalité avec ton record."}</small>`}</div></div>
-   ${rankUpHTML(ups)}${giftBlock(b,L,pct,firstTry)}<div class="reward"><div style="--c:#e3a008"><small>XP${xp2?" ×2":""}</small><b>⭐ +${LS.xp}</b></div><div style="--c:var(--good)"><small>Record</small><b>🎯 ${best}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
+   ${rankUpHTML(ups)}${giftBlock(b,L,pct,firstTry)}<div class="reward"><div style="--c:#e3a008"><small>XP${xp2?" ×2":""}</small><b>+${LS.xp} XP</b></div><div style="--c:var(--good)"><small>Record</small><b>🎯 ${best}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
   speak(`${perfect?"Sans faute !":"Bravo !"} Tu gagnes le badge ${badgeName(b,L)}.`);
   $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:10px"><button class="btn" id="back">Monter au niveau suivant ↑</button>${best<100?`<button class="btn ghost" id="again">🔁 Rejouer pour faire mieux</button>`:""}</div>`;
   const ag=$("again");if(ag)ag.onclick=()=>{sfx("tap");S.justDone={book:b.id,L};save();startLevel(b,L);};
@@ -5011,7 +5012,7 @@ function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("
   $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm adcta" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter ${RN()} amis · ${RH()} h illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
   $("toAd").onclick=()=>adReward("life",()=>{if(S.hearts>0)go("path");});$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
 {const lessonSheet=k=>{if(!LS||LS.mode!=="level"||typeof statSheet!=="function")return;statSheet(k,()=>{if(curScreen==="lesson"){setHead();if(LS&&!LS.answered&&LS.q)askFoot();}});};
- $("lHelps").onclick=()=>lessonSheet("help");$("lXp").onclick=()=>lessonSheet("help");$("lHearts").onclick=()=>lessonSheet("life");}
+ $("lHelps").onclick=()=>lessonSheet("help");$("lXp").onclick=()=>openRanks();$("lHearts").onclick=()=>lessonSheet("life");}
 $("quit").onclick=()=>{sfx("tap");if(LS&&LS.kind==="med"){S.med.state="due";save();go("medit");}else go(LS&&LS.mode==="test"?(LS.kind==="memo"?"bible":"medit"):"path");};
 $("replay").onclick=()=>{if(LS&&LS.say)speak(LS.say,true);};
 
@@ -5278,7 +5279,7 @@ function renderProfile(){regen();helpsReset();const n=totalDone();const ri=rankI
    <button class="card row rankcard" id="rankCard" style="box-shadow:0 0 0 2px var(--line)"><span class="ic" style="background:#e7eefc">🎖️</span><div style="flex:1;text-align:left"><small>${ri.next?`<b>${esc(ri.name)}</b> → ${esc(ri.next)} : encore <b>${ri.need} XP</b>${ri.reward?`<br>🎁 À la clé : ${esc(ri.reward)}`:""}`:"Titre le plus élevé atteint : <b>${esc(ri.name)}</b> !"}</small><span class="bar"><i style="width:${ri.pct}%"></i></span></div><span class="muted">›</span></button>
    <div><div class="eyebrow" style="margin-bottom:8px">Ma montée</div><div class="seg"><button aria-pressed="${S.testament==="AT"}" data-t="AT">📜 Ancien Testament</button><button aria-pressed="${S.testament==="NT"}" data-t="NT">✝️ Nouveau Testament</button></div></div>
    <div class="grid3"><div class="card"><b>🪔 ${S.streak}</b><small>Jours de lumière</small></div><div class="card"><b style="color:var(--bad)">♥ ${unlimited()?"∞":S.hearts}</b><small>${unlimited()?"Illimité "+fmt(unlimitedLeft()):S.hearts<MAX_HEARTS?"+1 dans "+fmt(nextHeartIn()):"Cœurs pleins"}</small></div><div class="card"><b>✅ ${n}</b><small>Niveaux réussis</small></div></div>
-   <div class="grid3"><div class="card"><b>⭐ ${S.xp}</b><small>XP</small></div><div class="card"><b>💡 ${S.helps}</b><small>Aides du jour</small></div><div class="card"><b>🕊️ ${S.med.history.length}</b><small>Méditations</small></div></div>
+   <div class="grid3"><div class="card"><b>${(S.xp||0).toLocaleString("fr-FR")}</b><small>XP</small></div><div class="card"><b>💡 ${S.helps}</b><small>Aides du jour</small></div><div class="card"><b>🕊️ ${S.med.history.length}</b><small>Méditations</small></div></div>
    <div class="card"><div class="eyebrow" style="margin-bottom:12px">Mes badges · ${S.testament==="AT"?"Ancien":"Nouveau"} Testament · ${earned.length}</div><div class="badges">
      ${[...earned.map(({b,L})=>`<div class="bdg"><span class="coin">${badgeIcon(b,L)}</span>${esc(badgeName(b,L))}</div>`),...upcoming.map(({b,L})=>`<div class="bdg off"><span class="coin">🔒</span>${esc(badgeName(b,L))}</div>`)].slice(0,badgesAll?999:9).join("")}</div>
      ${earned.length+upcoming.length>9?`<button class="btn ghost small" id="bdgMore" style="margin-top:14px">${badgesAll?"Voir moins":`Voir tous les badges (${earned.length})`}</button>`:""}</div>
