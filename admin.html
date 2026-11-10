@@ -862,6 +862,25 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 @media (prefers-reduced-motion:reduce){.btn.adcta{animation:none}}
 .adth{pointer-events:none;background:#000}
 .tag.ref{align-self:flex-start;justify-self:start;width:auto;font-size:12.5px;padding:4px 10px;background:#eef3fb;color:#1f4fd1;text-transform:none;letter-spacing:0;font-weight:800}
+
+/* Étoiles et cadeaux */
+.node .pct .nst{font-style:normal;letter-spacing:-1px;margin-right:4px;color:#ffd84d;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.node .pct .nst u{text-decoration:none;opacity:.35}
+.tag.defi{background:linear-gradient(135deg,#7b3fe4,#4a1fa8);color:#fff;text-transform:none;letter-spacing:0;font-size:12.5px;padding:4px 10px;align-self:flex-start;justify-self:start;width:auto}
+.giftbox{display:flex;align-items:center;gap:14px;width:100%;margin:12px 0 4px;padding:14px 16px;border-radius:20px;border:0;cursor:pointer;text-align:left;color:#fff;
+  background:linear-gradient(135deg,#7b3fe4,#1f4fd1);box-shadow:0 6px 0 #2a1a8a,0 10px 24px rgba(60,30,160,.35);animation:giftwob 2.2s ease-in-out infinite}
+.giftbox .gbx{font-size:44px;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,.3))}
+.giftbox b{display:block;font-size:18px;font-family:var(--f-display)}.giftbox small{display:block;opacity:.85;font-size:13px}
+.giftbox.opening{animation:giftshake .45s linear infinite}
+@keyframes giftwob{0%,82%,100%{transform:rotate(0)}86%{transform:rotate(-3deg)}90%{transform:rotate(3deg)}94%{transform:rotate(-2deg)}}
+@keyframes giftshake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-4deg)}75%{transform:translateX(4px) rotate(4deg)}}
+@media (prefers-reduced-motion:reduce){.giftbox,.giftbox.opening{animation:none}}
+.giftnext{margin:12px 0 4px;padding:10px 14px;border-radius:14px;background:#f1ecff;color:#4a1fa8;font-size:14px;text-align:center}
+.giftreveal{gap:10px;padding-block:6px}
+.gopen{font-size:84px;line-height:1;animation:popin .5s cubic-bezier(.2,1.6,.4,1) backwards;filter:drop-shadow(0 8px 14px rgba(60,30,160,.3))}
+.treasure{margin:4px 0;padding:14px 16px;border-radius:16px;background:#fff8e6;border:1px solid #f3dc9a;font-size:16px;line-height:1.5;font-style:italic;text-align:left}
+.treasure cite{display:block;margin-top:6px;font-style:normal;font-weight:800;font-size:13px;color:#8a5a00}
+.giftmore{padding:10px 12px;border-radius:14px;background:#eef3fb;font-size:14px;color:var(--ink)}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
