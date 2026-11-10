@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="adb4f2cb2b";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="bf902ad535";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -901,6 +901,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .rankup .ru-h{font-size:17px}.rankup .ru-r{margin:6px 0 4px;font-size:14.5px}.rankup small{color:#8a5a00}
 .ranklist{display:grid;gap:8px}.rk{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:#f4f6fb}
 .rk b{display:block}.rk small{color:var(--muted)}.rk.got{background:#eaf7ef}.rk.cur{box-shadow:0 0 0 2px var(--good)}.rk-n{font-size:20px}
+.agegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.agebtn{padding:14px 10px;border-radius:14px;border:2px solid var(--line);background:#fff;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}.agebtn[aria-pressed="true"]{border-color:var(--lapis);background:#eef3fb;color:var(--lapis)}
 
 </style>
 <div class="app" id="app">
@@ -4682,7 +4683,7 @@ function heartPill(){regen();helpsReset();const un=unlimited();
   return `<button class="sbtn hp" data-st="life" aria-label="Mes vies"><span class="v">♥ ${un?"∞":S.hearts}</span><small>${lifeSub}</small><i>+</i></button><button class="sbtn hl" data-st="help" aria-label="Mes aides"><span class="v">💡 ${S.helps}</span><small>aide${S.helps>1?"s":""}</small><i>+</i></button>`;}
 // Couleur du score : rouge en dessous de 50 %, orange de 50 à 99 %, vert à 100 % (pour donner envie de tout mettre au vert).
 const pctTone=p=>p>=100?"full":p>=50?"mid":"lo";
-function renderTop(){const b=curBook();const L=Math.min(doneOf(b)+1,b.levels);const u=unitOfLevel(b,L);
+function renderTop(){if(typeof ageAskMaybe==="function")setTimeout(ageAskMaybe,1500);const b=curBook();const L=Math.min(doneOf(b)+1,b.levels);const u=unitOfLevel(b,L);
   $("chipAv").textContent=b.ic;$("chipAv").style.background=S.testament==="AT"?"#f6e7c7":"#dbe9ff";
   $("chipUnit").textContent=`${b.name} · Étape ${u.i}`;$("chipName").textContent=u.name;$("pillHearts").innerHTML=heartPill();
   const rb=$("rankBar");if(rb){rb.innerHTML=rankBarHTML();rb.onclick=openRanks;}}
@@ -5279,13 +5280,13 @@ function renderProfile(){regen();helpsReset();const n=totalDone();const ri=rankI
    <div class="card"><div class="eyebrow" style="margin-bottom:12px">Mes badges · ${S.testament==="AT"?"Ancien":"Nouveau"} Testament · ${earned.length}</div><div class="badges">
      ${[...earned.map(({b,L})=>`<div class="bdg"><span class="coin">${badgeIcon(b,L)}</span>${esc(badgeName(b,L))}</div>`),...upcoming.map(({b,L})=>`<div class="bdg off"><span class="coin">🔒</span>${esc(badgeName(b,L))}</div>`)].slice(0,badgesAll?999:9).join("")}</div>
      ${earned.length+upcoming.length>9?`<button class="btn ghost small" id="bdgMore" style="margin-top:14px">${badgesAll?"Voir moins":`Voir tous les badges (${earned.length})`}</button>`:""}</div>
-   ${typeof adCityCard==="function"?adCityCard():""}${typeof olInviteCard==="function"?olInviteCard():""}
+   ${typeof adCityCard==="function"?adCityCard():""}${typeof ageCard==="function"?ageCard():""}${typeof olInviteCard==="function"?olInviteCard():""}
    <div class="card"><div class="eyebrow">Préférences</div>${settingsHTML()}<div class="switch"><div class="row"><span style="font-size:20px">⏰</span><div><b>Rappel quotidien</b><br><small>Chaque jour à ${esc(S.ob.remind)}</small></div></div></div></div>
    <div style="display:flex;flex-direction:column;align-items:center"><button class="textlink" id="logout">Se déconnecter</button><button class="textlink" id="reset">Réinitialiser ma progression</button>${typeof olCanAuth==="function"&&olCanAuth()&&OL.session?`<button class="textlink danger" id="delAcc">Supprimer mon compte</button>`:""}
      <div class="legal"><a href="/confidentialite" target="_blank" rel="noopener">Confidentialité</a> · <a href="/suppression-compte" target="_blank" rel="noopener">Suppression des données</a> · <a href="/reglement" target="_blank" rel="noopener">Règlement du prix</a></div></div>`;
   bindSettings($("profilePage"));
   document.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>{sfx("tap");S.testament=x.dataset.t;save();renderProfile();});
-  if(typeof bindCityCard==="function")bindCityCard();const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
+  if(typeof bindCityCard==="function")bindCityCard();if(typeof bindAgeCard==="function")bindAgeCard();const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
   {const rc=$("rankCard");if(rc)rc.onclick=openRanks;}$("editAv").onclick=()=>{OB.edit=true;OB.step=2;renderOnb();};
   if(typeof bindInstall==="function")bindInstall($("profilePage"));const da=$("delAcc");if(da)da.onclick=()=>{sfx("tap");olDeleteSheet();};
   $("logout").onclick=()=>{openSheet(`<h2 style="font-size:24px">Se déconnecter ?</h2><p style="line-height:1.5;color:#3a4766">Ta progression reste enregistrée sur ce compte. Tu la retrouveras en te reconnectant avec Google, sur ce téléphone ou un autre.</p><div style="display:grid;gap:12px"><button class="btn" id="yesOut">Me déconnecter</button><button class="btn ghost" onclick="closeSheet()">Annuler</button></div>`);
@@ -5837,7 +5838,23 @@ async function adLocate(force){const L=S.loc||{};if(!force&&L.src==="manual"&&L.
 // Après connexion : la ville choisie dans le profil (sur n'importe quel appareil) l'emporte.
 function adFromProfile(){if(!OL.me)return;
   if(OL.me.city){if(S.loc.src!=="manual"||S.loc.city!==OL.me.city){S.loc={city:OL.me.city,country:OL.me.country||"",src:"manual",at:Date.now()};save();}}
-  else if(S.loc.src==="manual"&&S.loc.city){olRpc("set_my_city",{p_city:S.loc.city,p_country:S.loc.country||""}).catch(()=>{});}}
+  else if(S.loc.src==="manual"&&S.loc.city){olRpc("set_my_city",{p_city:S.loc.city,p_country:S.loc.country||""}).catch(()=>{});}
+  if(S.user){if(OL.me.age_range&&!S.user.age){S.user.age=OL.me.age_range;save();}else if(S.user.age&&OL.me.age_range!==S.user.age)olRpc("set_my_age",{p_range:S.user.age}).catch(()=>{});}}
+/* ---------- Tranche d'âge (déclarée par le joueur, sert à afficher des annonces adaptées) ---------- */
+const AGE_RANGES=["13-17","18-24","25-34","35-44","45-54","55+"];
+const ageLabel=r=>r==="55+"?"55 ans et plus":r?r.replace("-"," à ")+" ans":"";
+function ageCard(){const a=S.user&&S.user.age;return `<div class="card row"><span class="ic" style="background:#fdeedd">🎂</span><div style="flex:1;min-width:0"><b>Ma tranche d'âge</b><br><small>${a?esc(ageLabel(a)):"Pas encore indiquée"}</small><br><small class="muted">Pour voir des annonces qui te concernent.</small></div><button class="chip" id="ageEdit">${a?"Modifier":"Indiquer"}</button></div>`;}
+function openAgeSheet(first){if(!S.user)return;sfx("tap");const cur=S.user.age||"";
+  openSheet(`<h2 style="font-size:23px;margin:0 0 6px">${first?"Une petite question 🙂":"Ma tranche d'âge"}</h2><p class="muted" style="margin:0 0 14px;line-height:1.45">Quelle est ta tranche d'âge ? Elle sert seulement à te montrer des annonces adaptées. Elle n'est jamais affichée aux autres joueurs.</p>
+    <div class="agegrid">${AGE_RANGES.map(r=>`<button class="agebtn" data-age="${r}" aria-pressed="${r===cur}">${ageLabel(r)}</button>`).join("")}</div>
+    ${first?`<button class="btn ghost" id="ageSkip" style="margin-top:12px">Plus tard</button>`:""}`);
+  document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>{S.user.age=b.dataset.age;S.ageAsked=Date.now();save();if(OL.session)olRpc("set_my_age",{p_range:S.user.age}).catch(()=>{});
+    closeSheet();notify("🎂","Merci !",ageLabel(S.user.age));if(curScreen==="profile")renderProfile();});
+  const sk=$("ageSkip");if(sk)sk.onclick=()=>{S.ageAsked=Date.now();save();closeSheet();};}
+function bindAgeCard(){const b=$("ageEdit");if(b)b.onclick=()=>openAgeSheet(false);}
+/* Demande unique, au calme sur la Montée, après quelques parties (redemandée au plus une fois par semaine si « Plus tard ») */
+function ageAskMaybe(){if(!S.user||S.user.age||!S.onboarded||curScreen!=="path"||document.getElementById("adFull"))return;
+  if(S.ageAsked&&Date.now()-S.ageAsked<7*864e5)return;if(totalDone()<2)return;if(!$("veil").hidden)return;openAgeSheet(true);}
 function adCityCard(){const L=S.loc||{};
   return `<div class="card row"><span class="ic" style="background:#e7eefc">📍</span><div style="flex:1;min-width:0"><b>Ma ville</b><br><small>${L.city?esc(adCityLabel())+(L.src==="manual"?"":" · détectée automatiquement"):"Pas encore détectée"}</small><br><small class="muted">Pour voir les événements près de chez toi.</small></div><button class="chip" id="cityEdit">Modifier</button></div>`;}
 function bindCityCard(){const b=$("cityEdit");if(!b)return;b.onclick=()=>{sfx("tap");const L=S.loc||{};
@@ -5856,7 +5873,7 @@ function adLog(ad,kind,mode){const sb=adSb();if(!sb||!ad)return Promise.resolve(
   return sb.rpc("ad_log",{p_ad:ad.id,p_kind:kind,p_mode:mode,p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||""}).then(()=>{},()=>{});}
 // Ouvre le lien dans un nouvel onglet / le navigateur, sans jamais quitter le jeu.
 function adOpen(ad,mode){if(!ad||!ad.link_url)return;adLog(ad,"click",mode);const a=document.createElement("a");a.href=ad.link_url;a.target="_blank";a.rel="noopener noreferrer";document.body.appendChild(a);a.click();a.remove();}
-async function adNext(mode){const sb=adSb();if(!sb)return null;try{const {data,error}=await sb.rpc("next_ad",{p_mode:mode,p_city:(S.loc&&S.loc.city)||"",p_viewer:adViewer()});if(error)return null;return data||null;}catch(e){return null;}}
+async function adNext(mode){const sb=adSb();if(!sb)return null;try{const {data,error}=await sb.rpc("next_ad",{p_mode:mode,p_city:(S.loc&&S.loc.city)||"",p_viewer:adViewer(),p_gender:(S.user&&S.user.gender)||null,p_age:(S.user&&S.user.age)||null});if(error)return null;return data||null;}catch(e){return null;}}
 
 /* ---------- Bandeau en haut de l'écran ---------- */
 function adTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S.activeSec++;if(S.activeSec%10===0)saveLocal();
