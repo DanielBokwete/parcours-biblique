@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="bf902ad535";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="42639e7068";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4628,8 +4628,9 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
       <div class="avbtns"><button class="btn small" id="avStudio">🎨 Personnaliser</button><label class="btn small ghost">📷 Ma photo<input type="file" id="pPhoto" accept="image/*" hidden></label><button class="btn small ghost" id="avEmoji">😀 Emojis</button></div><small class="muted" id="pPhotoMsg"></small></div></div>
     <div class="field"><label for="pName">Prénom</label><input id="pName" value="${esc(u.name||"")}" autocomplete="given-name"></div>
     <div class="eyebrow">Tu es</div><div class="gender"><button data-g="m" aria-pressed="${u.gender==="m"}"><span>👨${u.tone||"🏾"}</span>Un frère</button><button data-g="f" aria-pressed="${u.gender==="f"}"><span>👩${u.tone||"🏾"}</span>Une sœur</button></div>
+    <div class="eyebrow">Ta tranche d'âge</div><div class="agegrid onbage">${AGE_RANGES.map(r=>`<button data-age="${r}" class="agebtn" aria-pressed="${u.age===r}">${ageLabel(r)}</button>`).join("")}</div>
     <div class="eyebrow">Teint de ton avatar</div><div class="tones">${TONES.map(t=>`<button data-tone="${t}" aria-pressed="${(u.tone||"🏾")===t}" aria-label="Teint">${(u.gender==="f"?"👩":"👨")+t}</button>`).join("")}</div>
-`;can=!!(u.gender&&(u.name||"").trim());}
+`;can=!!(u.gender&&u.age&&(u.name||"").trim());}
   if(st===3){body=`<div class="tiles">${GOALS.map(([e,l],i)=>`<button class="tile" data-w="${i}" aria-pressed="${o.goals.includes(i)}"><span>${e}</span>${l}</button>`).join("")}</div>`;can=o.goals.length>0;}
   if(st===4){body=`<div class="list">${RELS.map(([e,t,s],i)=>`<button class="li" data-r="${i}" aria-pressed="${o.rel===i}"><span class="e">${e}</span><span><b>${t}</b><small>${s}</small></span><span class="chk">✓</span></button>`).join("")}</div>`;can=o.rel>=0;}
   if(st===5){body=`<div class="list">${[["AT","📜","Ancien Testament","39 livres, de la Genèse à Malachie"],["NT","✝️","Nouveau Testament","27 livres, de Matthieu à l'Apocalypse"]].map(([k,e,t,s])=>`<button class="li" data-t="${k}" aria-pressed="${S.testament===k}"><span class="e">${e}</span><span><b>${t}</b><small>${s}</small></span><span class="chk">✓</span></button>`).join("")}</div>`;can=!!S.testament;}
@@ -4645,6 +4646,7 @@ function renderOnb(){const el=$("onb"),st=OB.step,o=S.ob,u=S.user||{};show("onb"
   const nx=$("obNext");if(nx){if(OB.edit&&st===2)nx.textContent="Enregistrer";nx.onclick=()=>{sfx("tap");if(st===2){S.user.name=$("pName").value.trim();}if(OB.edit&&st===2){OB.edit=false;save();if(typeof olSyncProfile==="function")olSyncProfile();go("profile");return;}OB.step=st+1;save();renderOnb();};}
   const pn=$("pName");if(pn)pn.oninput=()=>{S.user.name=pn.value;$("obNext").disabled=!(S.user.gender&&pn.value.trim());};
   el.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{sfx("tap");S.user.gender=b.dataset.g;S.user.name=$("pName").value;renderOnb();});
+  el.querySelectorAll(".onbage [data-age]").forEach(b=>b.onclick=()=>{sfx("tap");S.user.age=b.dataset.age;S.ageAsked=Date.now();S.user.name=$("pName").value;renderOnb();});
   el.querySelectorAll("[data-tone]").forEach(b=>b.onclick=()=>{sfx("tap");S.user.tone=b.dataset.tone;S.user.name=$("pName").value;renderOnb();});
   const avs=$("avStudio");if(avs)avs.onclick=()=>{sfx("tap");S.user.name=$("pName").value;openAvatarStudio();};
   const ave=$("avEmoji");if(ave)ave.onclick=()=>{sfx("tap");S.user.name=$("pName").value;openEmojiSheet();};
@@ -5843,9 +5845,9 @@ function adFromProfile(){if(!OL.me)return;
 /* ---------- Tranche d'âge (déclarée par le joueur, sert à afficher des annonces adaptées) ---------- */
 const AGE_RANGES=["13-17","18-24","25-34","35-44","45-54","55+"];
 const ageLabel=r=>r==="55+"?"55 ans et plus":r?r.replace("-"," à ")+" ans":"";
-function ageCard(){const a=S.user&&S.user.age;return `<div class="card row"><span class="ic" style="background:#fdeedd">🎂</span><div style="flex:1;min-width:0"><b>Ma tranche d'âge</b><br><small>${a?esc(ageLabel(a)):"Pas encore indiquée"}</small><br><small class="muted">Pour voir des annonces qui te concernent.</small></div><button class="chip" id="ageEdit">${a?"Modifier":"Indiquer"}</button></div>`;}
+function ageCard(){const a=S.user&&S.user.age;return `<div class="card row"><span class="ic" style="background:#fdeedd">🎂</span><div style="flex:1;min-width:0"><b>Ma tranche d'âge</b><br><small>${a?esc(ageLabel(a)):"Pas encore indiquée"}</small><br><small class="muted">Pour un jeu adapté à ton âge.</small></div><button class="chip" id="ageEdit">${a?"Modifier":"Indiquer"}</button></div>`;}
 function openAgeSheet(first){if(!S.user)return;sfx("tap");const cur=S.user.age||"";
-  openSheet(`<h2 style="font-size:23px;margin:0 0 6px">${first?"Une petite question 🙂":"Ma tranche d'âge"}</h2><p class="muted" style="margin:0 0 14px;line-height:1.45">Quelle est ta tranche d'âge ? Elle sert seulement à te montrer des annonces adaptées. Elle n'est jamais affichée aux autres joueurs.</p>
+  openSheet(`<h2 style="font-size:23px;margin:0 0 6px">${first?"Une petite question 🙂":"Ma tranche d'âge"}</h2><p class="muted" style="margin:0 0 14px;line-height:1.45">Quelle est ta tranche d'âge ? Elle nous aide à adapter le jeu et ce que tu y découvres à ton âge. Elle n'est jamais affichée aux autres joueurs.</p>
     <div class="agegrid">${AGE_RANGES.map(r=>`<button class="agebtn" data-age="${r}" aria-pressed="${r===cur}">${ageLabel(r)}</button>`).join("")}</div>
     ${first?`<button class="btn ghost" id="ageSkip" style="margin-top:12px">Plus tard</button>`:""}`);
   document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>{S.user.age=b.dataset.age;S.ageAsked=Date.now();save();if(OL.session)olRpc("set_my_age",{p_range:S.user.age}).catch(()=>{});
@@ -5853,7 +5855,7 @@ function openAgeSheet(first){if(!S.user)return;sfx("tap");const cur=S.user.age||
   const sk=$("ageSkip");if(sk)sk.onclick=()=>{S.ageAsked=Date.now();save();closeSheet();};}
 function bindAgeCard(){const b=$("ageEdit");if(b)b.onclick=()=>openAgeSheet(false);}
 /* Demande unique, au calme sur la Montée, après quelques parties (redemandée au plus une fois par semaine si « Plus tard ») */
-function ageAskMaybe(){if(!S.user||S.user.age||!S.onboarded||curScreen!=="path"||document.getElementById("adFull"))return;
+function ageAskMaybe(){if(!S.user||S.user.age||!S.onboarded||S.ageAsked===-1||curScreen!=="path"||document.getElementById("adFull"))return;
   if(S.ageAsked&&Date.now()-S.ageAsked<7*864e5)return;if(totalDone()<2)return;if(!$("veil").hidden)return;openAgeSheet(true);}
 function adCityCard(){const L=S.loc||{};
   return `<div class="card row"><span class="ic" style="background:#e7eefc">📍</span><div style="flex:1;min-width:0"><b>Ma ville</b><br><small>${L.city?esc(adCityLabel())+(L.src==="manual"?"":" · détectée automatiquement"):"Pas encore détectée"}</small><br><small class="muted">Pour voir les événements près de chez toi.</small></div><button class="chip" id="cityEdit">Modifier</button></div>`;}
