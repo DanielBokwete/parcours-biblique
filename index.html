@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="c99e2a032a";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="c9dc1b878f";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -893,6 +893,15 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .avlock .lk{position:absolute;right:2px;bottom:2px;font-size:13px;font-style:normal;filter:none}
 .adf-pill.skip{cursor:pointer;background:rgba(255,255,255,.92);color:#14213d}.adf-pill.skip .adf-ring{display:none}
 
+/* Titres par XP */
+.rankbar{position:relative;z-index:3;display:flex;flex-direction:column;gap:5px;margin:-4px 16px 0;padding:8px 12px;border:0;border-radius:14px;background:rgba(255,255,255,.92);box-shadow:0 3px 10px rgba(20,39,94,.15);text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.rankbar .rb-t{font-size:13px}.rankbar .rb-bar{height:7px;border-radius:9px;background:#e3e9f5;overflow:hidden}.rankbar .rb-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#f2b51d,#e8611c)}
+.rankcard{width:100%;border:0;font:inherit;color:inherit;cursor:pointer}
+.rankup{margin:12px 0 4px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,#fff6dc,#ffe9c2);border:1px solid #f3d27a;text-align:center}
+.rankup .ru-h{font-size:17px}.rankup .ru-r{margin:6px 0 4px;font-size:14.5px}.rankup small{color:#8a5a00}
+.ranklist{display:grid;gap:8px}.rk{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:#f4f6fb}
+.rk b{display:block}.rk small{color:var(--muted)}.rk.got{background:#eaf7ef}.rk.cur{box-shadow:0 0 0 2px var(--good)}.rk-n{font-size:20px}
+
 </style>
 <div class="app" id="app">
 
@@ -909,6 +918,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
       </button>
       <div class="statbtns" id="pillHearts"></div>
     </div>
+    <button class="rankbar" id="rankBar" aria-label="Mon titre et ma progression"></button>
     <div class="scroll" id="scroll"><div class="track" id="track"></div></div>
   </section>
 
@@ -4626,7 +4636,8 @@ function heartPill(){regen();helpsReset();const un=unlimited();
 const pctTone=p=>p>=100?"full":p>=50?"mid":"lo";
 function renderTop(){const b=curBook();const L=Math.min(doneOf(b)+1,b.levels);const u=unitOfLevel(b,L);
   $("chipAv").textContent=b.ic;$("chipAv").style.background=S.testament==="AT"?"#f6e7c7":"#dbe9ff";
-  $("chipUnit").textContent=`${b.name} · Étape ${u.i}`;$("chipName").textContent=u.name;$("pillHearts").innerHTML=heartPill();}
+  $("chipUnit").textContent=`${b.name} · Étape ${u.i}`;$("chipName").textContent=u.name;$("pillHearts").innerHTML=heartPill();
+  const rb=$("rankBar");if(rb){rb.innerHTML=rankBarHTML();rb.onclick=openRanks;}}
 function nodeIcon(st){return st==="done"?'<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>'
   :st==="cur"?'<svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>'
   :'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';}
@@ -4855,8 +4866,8 @@ const GIFTS={
   unlock_book:{ic:"🔓",t:"Livre débloqué !",d:"Tu peux jouer un livre en avance, sans attendre de finir les précédents."},
   badge_rare:{ic:"🏅",t:"Badge rare",d:"Il s'affiche à côté de ton nom dans les défis en ligne. Tes adversaires le verront !"},
   avatar_item:{ic:"🎨",t:"Avatar exclusif débloqué",d:"Un élément réservé aux gagnants de cadeaux, à choisir dans ton profil."},
-  xp50:{ic:"🌟",t:"+50 XP",d:"Ton titre de disciple monte plus vite."},
-  xp2:{ic:"⚡",t:"XP doublés",d:"Ta prochaine partie du parcours rapporte deux fois plus d'XP."},
+  xp50:{ic:"🌟",t:"+50 XP",d:"Tu te rapproches de ton prochain titre de disciple et de sa récompense."},
+  xp2:{ic:"⚡",t:"XP doublés",d:"Ta prochaine partie du parcours rapporte deux fois plus d'XP : ton titre monte plus vite !"},
   help1:{ic:"💡",t:"+1 aide",d:"Une aide de plus à utiliser aujourd'hui."},
   help3:{ic:"💡",t:"+3 aides",d:"Trois aides de plus à utiliser aujourd'hui."},
   help5:{ic:"💡",t:"+5 aides",d:"Cinq aides de plus à utiliser aujourd'hui !"},
@@ -4897,7 +4908,7 @@ function giftScreen(b,L,then){const k=b.id+"-"+L;stopTimer();hush();$("progBar")
     if(!r.ok){save();$("giftTxt").textContent=r.reason==="limit"?`Tu as ouvert tes ${r.max} cadeaux du jour. Reviens demain !`:"Le cadeau de ce niveau a déjà été ouvert.";
       $("lfoot").innerHTML=`<button class="btn" id="giftGo">Continuer</button>`;$("giftGo").onclick=()=>{sfx("tap");then();};return;}
     const lg=S.giftLog&&S.giftLog.day===localDay()?S.giftLog:{day:localDay(),n:0};lg.n++;S.giftLog=lg;
-    const res=applyGift(r.gift);save();setHead();if(typeof olSyncTitle==="function")try{olSyncTitle();}catch(e){}
+    const res=applyGift(r.gift);const ups=rankUpCheck();if(ups)res.extra=(res.extra?res.extra+"<br>":"")+rankUpHTML(ups);save();setHead();if(typeof olSyncTitle==="function")try{olSyncTitle();}catch(e){}
     setTimeout(()=>revealGift(res,r.left,then),1100);};}
 /* Applique le cadeau. Si le cadeau tiré n'a plus d'objet (tout est déjà débloqué), il est remplacé par des aides. */
 function applyGift(k){regen();const G=Object.assign({k},GIFTS[k]||{ic:"🎁",t:"Surprise",d:""});
@@ -4923,7 +4934,7 @@ function revealGift(G,left,then){sfx("win");setTimeout(()=>{confetti();vibrate([
   $("lfoot").innerHTML=`<button class="btn" id="giftGo">Super, on continue ↑</button>`;$("giftGo").onclick=()=>{sfx("tap");then();};}
 
 function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r=completeLevel(b,L);
-  const pct=Math.round(LS.firstTry/LS.total*100),k=b.id+"-"+L;S.best=S.best||{};const prev=S.best[k],isRecord=prev===undefined||pct>prev;if(isRecord)S.best[k]=pct;const best=S.best[k];const xp2=!!S.xp2;if(xp2){LS.xp*=2;S.xp2=false;}S.xp+=LS.xp;S.bestCombo=Math.max(S.bestCombo||0,LS.best);save();setHead();
+  const pct=Math.round(LS.firstTry/LS.total*100),k=b.id+"-"+L;S.best=S.best||{};const prev=S.best[k],isRecord=prev===undefined||pct>prev;if(isRecord)S.best[k]=pct;const best=S.best[k];const xp2=!!S.xp2;if(xp2){LS.xp*=2;S.xp2=false;}S.xp+=LS.xp;S.bestCombo=Math.max(S.bestCombo||0,LS.best);save();setHead();const ups=rankUpCheck();
   S.stars=S.stars||{};const firstTry=prev===undefined;if(S.stars[k]===undefined)S.stars[k]=starsOf(firstTry?pct:prev);save();
   const lastOfBook=L===b.levels,next=BOOKS[b.t][b.idx+1],perfect=LS.mistakes===0,stars=S.stars[k];
   sfx("win");setTimeout(()=>{confetti();vibrate([40,40,40,40,120]);},150);if(r.newBadge)setTimeout(()=>sfx("badge"),800);
@@ -4933,7 +4944,7 @@ function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r
    <p>${perfect?"Tu as tout trouvé du premier coup.":"Toutes les réponses sont trouvées. On continue de monter !"}${lastOfBook&&next?`<br><b>${esc(next.name)}</b> est maintenant débloqué.`:""}</p>
    <div class="scorebox ${pctTone(pct)}"><div class="sc-ring" style="--p:${pct}"><b>${pct}%</b></div><div class="sc-txt">${prev===undefined?`<b>Ton score : ${pct} %</b><small>${pct<100?"Rejoue ce niveau plus tard pour viser 100 % !":"Parfait du premier coup !"}</small>`
       :isRecord&&pct>prev?`<b>🏆 Nouveau record !</b><small>Tu passes de ${prev} % à ${pct} %.</small>`:`<b>Ton record reste ${best} %</b><small>${pct<best?`Cette fois ${pct} %. Ton meilleur score est gardé.`:"Égalité avec ton record."}</small>`}</div></div>
-   ${giftBlock(b,L,pct,firstTry)}<div class="reward"><div style="--c:#e3a008"><small>XP${xp2?" ×2":""}</small><b>⭐ +${LS.xp}</b></div><div style="--c:var(--good)"><small>Record</small><b>🎯 ${best}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
+   ${rankUpHTML(ups)}${giftBlock(b,L,pct,firstTry)}<div class="reward"><div style="--c:#e3a008"><small>XP${xp2?" ×2":""}</small><b>⭐ +${LS.xp}</b></div><div style="--c:var(--good)"><small>Record</small><b>🎯 ${best}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
   speak(`${perfect?"Sans faute !":"Bravo !"} Tu gagnes le badge ${badgeName(b,L)}.`);
   $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:10px"><button class="btn" id="back">Monter au niveau suivant ↑</button>${best<100?`<button class="btn ghost" id="again">🔁 Rejouer pour faire mieux</button>`:""}</div>`;
   const ag=$("again");if(ag)ag.onclick=()=>{sfx("tap");S.justDone={book:b.id,L};save();startLevel(b,L);};
@@ -5176,18 +5187,38 @@ function renderPlan(p,tabs){const now=new Date(),Y=now.getFullYear(),plan=planFo
 
 /* ===================== PROFIL ===================== */
 let badgesAll=false;
-const RANKS=[[0,"Pèlerin"],[4,"Semeur"],[15,"Disciple"],[40,"Témoin"],[100,"Berger"],[250,"Ancien"]];
+const RANKS_OLD=[[0,"Pèlerin"],[4,"Semeur"],[15,"Disciple"],[40,"Témoin"],[100,"Berger"],[250,"Ancien"]];
 const totalDone=()=>Object.values(S.done).reduce((a,b)=>a+b,0);
 const SETTINGS=[["music","🎵","Musique de fond","Nappe calme pour la concentration"],["voice","🗣️","Voix off","Lecture des questions à voix haute"],["sfx","🔔","Effets sonores","Réponses, séries, victoire"],["vib","📳","Vibrations","Le téléphone vibre sur une erreur"]];
 function settingsHTML(){return SETTINGS.map(([k,e,t,d])=>`<div class="switch"><div class="row"><span style="font-size:20px">${e}</span><div><b>${t}</b><br><small>${d}</small></div></div><button class="toggle" role="switch" data-set="${k}" aria-checked="${S.set[k]}" aria-label="${t}"></button></div>`).join("");}
 function bindSettings(root){root.querySelectorAll("[data-set]").forEach(t=>t.onclick=()=>{const k=t.dataset.set;S.set[k]=!S.set[k];save();t.setAttribute("aria-checked",S.set[k]);
   if(k==="music")S.set.music?startMusic():stopMusic();if(k==="voice")S.set.voice?speak("La voix off est activée."):hush();if(k==="sfx"&&S.set.sfx)sfx("good");if(k==="vib")vibrate(120);});}
-function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0],nx=null;RANKS.forEach((x,i)=>{if(n>=x[0]){r=x;nx=RANKS[i+1]||null;}});const u=S.user||{};
+/* ===================== TITRES PAR XP ===================== */
+/* Les XP font monter le titre du joueur (affiché dans les défis en ligne). Chaque nouveau titre débloque une récompense. */
+const RANKS=[[0,"Pèlerin","",""],[300,"Semeur","help3","+3 aides"],[1000,"Disciple","avatar_item","un avatar exclusif"],[2500,"Témoin","badge_rare","un badge rare"],
+  [5000,"Serviteur","unl30m","30 min de vies illimitées"],[9000,"Berger","avatar_item+help5","un avatar exclusif et +5 aides"],[15000,"Ancien","badge_rare+unl1h","un badge rare et 1 h de vies illimitées"],[25000,"Apôtre","apotre","le badge « ✝️ Apôtre de la Parole »"]];
+function rankInfo(xp){xp=xp||0;let i=0;RANKS.forEach((r,j)=>{if(xp>=r[0])i=j;});const r=RANKS[i],nx=RANKS[i+1]||null;
+  return {i,name:r[1],next:nx?nx[1]:null,need:nx?nx[0]-xp:0,pct:nx?Math.round((xp-r[0])/(nx[0]-r[0])*100):100,reward:nx?nx[3]:""};}
+/* Vérifie si le joueur vient de passer un ou plusieurs titres, applique les récompenses et renvoie le texte à afficher. */
+function rankUpCheck(){const now=rankInfo(S.xp).i;if(S.rankIdx===undefined){S.rankIdx=now;save();return null;}if(now<=S.rankIdx)return null;
+  const out=[];for(let j=S.rankIdx+1;j<=now;j++){const r=RANKS[j];const got=[];
+    r[2].split("+").filter(Boolean).forEach(k=>{if(k==="apotre"){S.rareBadges=S.rareBadges||[];const x="✝️ Apôtre de la Parole";if(!S.rareBadges.includes(x))S.rareBadges.push(x);S.rareBadge=x;got.push(`<span class="btag big">🏅 ${x}</span>`);}
+      else{const G=applyGift(k);got.push(G.extra||`${G.ic} ${esc(G.t)}`);}});
+    out.push({name:r[1],got});}
+  S.rankIdx=now;save();if(typeof olSyncTitle==="function")try{olSyncTitle();}catch(e){}return out;}
+function rankUpHTML(ups){return ups?ups.map(u=>`<div class="rankup"><div class="ru-h">🎖️ Nouveau titre : <b>${esc(u.name)}</b> !</div><div class="ru-r">Récompense : ${u.got.join("<br>")}</div><small>Ton nouveau titre s'affiche dans les défis en ligne.</small></div>`).join(""):"";}
+function rankBarHTML(){const r=rankInfo(S.xp);return r.next?`<span class="rb-t">🎖️ <b>${esc(r.name)}</b> → ${esc(r.next)} · encore ${r.need} XP</span><span class="rb-bar"><i style="width:${r.pct}%"></i></span>`:`<span class="rb-t">🎖️ <b>${esc(r.name)}</b> · titre le plus élevé atteint !</span><span class="rb-bar"><i style="width:100%"></i></span>`;}
+function openRanks(){const ri=rankInfo(S.xp);sfx("tap");
+  openSheet(`<h3 style="margin:0 0 4px">🎖️ Les titres du disciple</h3><p class="muted" style="margin:0 0 12px">Gagne des XP en répondant juste dans le parcours : ton titre monte et chaque nouveau titre t'offre une récompense.</p>
+    <div class="ranklist">${RANKS.map((r,j)=>`<div class="rk ${j<=ri.i?"got":""} ${j===ri.i?"cur":""}"><span class="rk-n">${j<=ri.i?"✅":"🔒"}</span><div><b>${esc(r[1])}</b><small>${r[0]} XP${r[3]?" · 🎁 "+esc(r[3]):""}</small></div></div>`).join("")}</div>
+    <p class="muted" style="font-size:13px;margin:12px 0 0">Tu as <b>${S.xp||0} XP</b>. Astuce : les cadeaux « XP doublés » et « +50 XP » te font monter plus vite !</p>`);}
+
+function renderProfile(){regen();helpsReset();const n=totalDone();const ri=rankInfo(S.xp);const r=[0,ri.name];const u=S.user||{};
   const earned=Object.keys(S.badges).sort((a,b)=>S.badges[b]-S.badges[a]).map(id=>{const k=id.lastIndexOf("-"),b=ALLB.find(x=>x.id===id.slice(0,k)),L=+id.slice(k+1);return b&&b.t===S.testament?{b,L}:null;}).filter(Boolean);
   const b=curBook(),upcoming=[];for(let L=doneOf(b)+1;L<=b.levels&&upcoming.length<3;L++)upcoming.push({b,L});
   $("profilePage").innerHTML=`<h2>Profil</h2>${typeof installCard==="function"?installCard():""}
    <div class="card row"><span class="avatarbig">${avatarHTML()}</span><div><b style="font-size:18px">${esc(u.name||"")}</b><br><small>${esc(u.email||"")}${u.provider==="google"?" · Google":""}</small><br><small style="color:var(--lapis);font-weight:700">${u.gender==="f"?"Sœur":"Frère"} · ${esc(r[1])}</small></div><button class="chip" id="editAv">Modifier</button></div>
-   <div class="card row" style="box-shadow:0 0 0 2px var(--line)"><span class="ic" style="background:#e7eefc">🧭</span><div><small>${nx?`Encore ${plural(nx[0]-n,"niveau","niveaux")} pour devenir <b>${esc(nx[1])}</b>`:"Rang le plus élevé atteint"}</small><span class="bar"><i style="width:${nx?Math.round((n-r[0])/(nx[0]-r[0])*100):100}%"></i></span></div></div>
+   <button class="card row rankcard" id="rankCard" style="box-shadow:0 0 0 2px var(--line)"><span class="ic" style="background:#e7eefc">🎖️</span><div style="flex:1;text-align:left"><small>${ri.next?`<b>${esc(ri.name)}</b> → ${esc(ri.next)} : encore <b>${ri.need} XP</b>${ri.reward?`<br>🎁 À la clé : ${esc(ri.reward)}`:""}`:"Titre le plus élevé atteint : <b>Apôtre</b> !"}</small><span class="bar"><i style="width:${ri.pct}%"></i></span></div><span class="muted">›</span></button>
    <div><div class="eyebrow" style="margin-bottom:8px">Ma montée</div><div class="seg"><button aria-pressed="${S.testament==="AT"}" data-t="AT">📜 Ancien Testament</button><button aria-pressed="${S.testament==="NT"}" data-t="NT">✝️ Nouveau Testament</button></div></div>
    <div class="grid3"><div class="card"><b>🪔 ${S.streak}</b><small>Jours de lumière</small></div><div class="card"><b style="color:var(--bad)">♥ ${unlimited()?"∞":S.hearts}</b><small>${unlimited()?"Illimité "+fmt(unlimitedLeft()):S.hearts<MAX_HEARTS?"+1 dans "+fmt(nextHeartIn()):"Cœurs pleins"}</small></div><div class="card"><b>✅ ${n}</b><small>Niveaux réussis</small></div></div>
    <div class="grid3"><div class="card"><b>⭐ ${S.xp}</b><small>XP</small></div><div class="card"><b>💡 ${S.helps}</b><small>Aides du jour</small></div><div class="card"><b>🕊️ ${S.med.history.length}</b><small>Méditations</small></div></div>
@@ -5201,7 +5232,7 @@ function renderProfile(){regen();helpsReset();const n=totalDone();let r=RANKS[0]
   bindSettings($("profilePage"));
   document.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>{sfx("tap");S.testament=x.dataset.t;save();renderProfile();});
   if(typeof bindCityCard==="function")bindCityCard();const iv=$("olInv");if(iv)iv.onclick=()=>{sfx("tap");olShareInvite();};const bm=$("bdgMore");if(bm)bm.onclick=()=>{badgesAll=!badgesAll;const y=$("profilePage").scrollTop;renderProfile();$("profilePage").scrollTop=y;};
-  $("editAv").onclick=()=>{OB.edit=true;OB.step=2;renderOnb();};
+  {const rc=$("rankCard");if(rc)rc.onclick=openRanks;}$("editAv").onclick=()=>{OB.edit=true;OB.step=2;renderOnb();};
   if(typeof bindInstall==="function")bindInstall($("profilePage"));const da=$("delAcc");if(da)da.onclick=()=>{sfx("tap");olDeleteSheet();};
   $("logout").onclick=()=>{openSheet(`<h2 style="font-size:24px">Se déconnecter ?</h2><p style="line-height:1.5;color:#3a4766">Ta progression reste enregistrée sur ce compte. Tu la retrouveras en te reconnectant avec Google, sur ce téléphone ou un autre.</p><div style="display:grid;gap:12px"><button class="btn" id="yesOut">Me déconnecter</button><button class="btn ghost" onclick="closeSheet()">Annuler</button></div>`);
     $("yesOut").onclick=async()=>{closeSheet();if(typeof olLogout==="function")await olLogout();OB.step=0;renderOnb();};};
@@ -5239,7 +5270,7 @@ function openEmojiSheet(){const u=S.user||{};
   openSheet(`<h3 style="margin:0 0 10px">😀 Choisis un avatar</h3><div class="avgrid">${[["",""+(u.gender==="f"?"👩":"👨")+(u.tone||"🏾")],...AV_PEOPLE.map(b=>[b,withTone(b,u.tone)]),...AV_SYMBOLS.map(b=>[b,b])].map(([k,v])=>`<button data-av="${k}" class="${emoLocked(k)?"avlock":""}" aria-pressed="${!u.photo&&(u.av||"")===k}" aria-label="Avatar">${v}${emoLocked(k)?'<i class="lk">🔒</i>':""}</button>`).join("")}</div><p class="muted" style="font-size:13px;margin:10px 0 0">🔒 Les avatars dorés se débloquent en ouvrant les cadeaux 3 étoiles du parcours.</p>`);
   $("sheet").querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{if(emoLocked(b.dataset.av)){sfx("bad");notify("🔒","Avatar à débloquer","Fais 3 étoiles dans le parcours et ouvre les cadeaux pour le gagner.");return;}sfx("tap");S.user.av=b.dataset.av||null;S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();if(typeof olSyncProfile==="function")olSyncProfile();});}
 /* Rang et dernier badge, affichés aux adversaires */
-function myTitle(){const n=totalDone();let r=RANKS[0];RANKS.forEach(x=>{if(n>=x[0])r=x;});
+function myTitle(){const r=[0,rankInfo(S.xp).name];
   const last=Object.keys(S.badges||{}).sort((a,b)=>S.badges[b]-S.badges[a])[0];let badge="";
   if(last){const k=last.lastIndexOf("-"),bk=ALLB.find(x=>x.id===last.slice(0,k));if(bk)badge=badgeName(bk,+last.slice(k+1));}
   if(S.rareBadge)badge=S.rareBadge;

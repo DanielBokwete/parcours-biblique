@@ -888,6 +888,15 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .avlock{position:relative;opacity:.55;filter:grayscale(.5)}
 .avlock .lk{position:absolute;right:2px;bottom:2px;font-size:13px;font-style:normal;filter:none}
 .adf-pill.skip{cursor:pointer;background:rgba(255,255,255,.92);color:#14213d}.adf-pill.skip .adf-ring{display:none}
+
+/* Titres par XP */
+.rankbar{position:relative;z-index:3;display:flex;flex-direction:column;gap:5px;margin:-4px 16px 0;padding:8px 12px;border:0;border-radius:14px;background:rgba(255,255,255,.92);box-shadow:0 3px 10px rgba(20,39,94,.15);text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.rankbar .rb-t{font-size:13px}.rankbar .rb-bar{height:7px;border-radius:9px;background:#e3e9f5;overflow:hidden}.rankbar .rb-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#f2b51d,#e8611c)}
+.rankcard{width:100%;border:0;font:inherit;color:inherit;cursor:pointer}
+.rankup{margin:12px 0 4px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,#fff6dc,#ffe9c2);border:1px solid #f3d27a;text-align:center}
+.rankup .ru-h{font-size:17px}.rankup .ru-r{margin:6px 0 4px;font-size:14.5px}.rankup small{color:#8a5a00}
+.ranklist{display:grid;gap:8px}.rk{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:#f4f6fb}
+.rk b{display:block}.rk small{color:var(--muted)}.rk.got{background:#eaf7ef}.rk.cur{box-shadow:0 0 0 2px var(--good)}.rk-n{font-size:20px}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -1262,7 +1271,7 @@ async function tQuestions(){const f=A.q;let q=sb.from("questions").select("*",{c
     <input id="fs" placeholder="Rechercher…" value="${esc(f.s)}" style="flex:1;min-width:160px"><button class="btn small" id="fgo" style="width:auto">Filtrer</button><button class="btn small good" id="qnew" style="width:auto">＋ Nouvelle question</button></div>
   <p class="muted" style="margin:8px 0">${count||0} question(s) · page ${f.page+1}/${pages}</p>
   <table class="tbl"><tr><th>#</th><th>Question</th><th>Livre</th><th>Type</th><th>Niveau</th><th></th></tr>
-  ${data.map(x=>`<tr class="${x.active?"":"off"}"><td>${x.id}</td><td>${esc(x.kind==="fill"?x.sentence:x.prompt)}<br><small class="muted">✔ ${esc(ansText(x))}</small></td><td>${esc(x.book||"")} <small class="muted">${x.testament}</small></td><td>${KIND[x.kind]}</td><td><span class="pill2 d-${x.difficulty}">${DIFF[x.difficulty]}</span></td>
+  ${data.map((x,i)=>`<tr class="${x.active?"":"off"}"><td>${f.page*PAGE+i+1}</td><td>${esc(x.kind==="fill"?x.sentence:x.prompt)}<br><small class="muted">✔ ${esc(ansText(x))}</small></td><td>${esc(x.book||"")} <small class="muted">${x.testament}</small></td><td>${KIND[x.kind]}</td><td><span class="pill2 d-${x.difficulty}">${DIFF[x.difficulty]}</span></td>
   <td class="acts"><button class="textlink" data-qe="${x.id}">Modifier</button><button class="textlink" data-qa="${x.id}" data-v="${!x.active}">${x.active?"Désactiver":"Activer"}</button></td></tr>`).join("")||`<tr><td colspan="6" class="muted">Aucune question. Importe la banque depuis la vue d'ensemble ou ajoute-en une.</td></tr>`}</table>
   <div class="row"><button class="btn small ghost" id="pp" style="width:auto"${f.page?"":" disabled"}>← Précédent</button><button class="btn small ghost" id="pn" style="width:auto"${f.page+1<pages?"":" disabled"}>Suivant →</button></div></div>`;
   $("fgo").onclick=()=>{Object.assign(f,{t:$("ft").value,d:$("fd").value,k:$("fk").value,act:$("fa").value,s:$("fs").value.trim().replace(/[,()]/g," "),page:0});tQuestions();};
