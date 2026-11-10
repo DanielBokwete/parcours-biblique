@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="e3db1d15b0";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="988019170c";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -871,20 +871,26 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .node .pct .nst{font-style:normal;letter-spacing:-1px;margin-right:4px;color:#ffd84d;text-shadow:0 1px 0 rgba(0,0,0,.25)}
 .node .pct .nst u{text-decoration:none;opacity:.35}
 .tag.defi{background:linear-gradient(135deg,#7b3fe4,#4a1fa8);color:#fff;text-transform:none;letter-spacing:0;font-size:12.5px;padding:4px 10px;align-self:flex-start;justify-self:start;width:auto}
-.giftbox{display:flex;align-items:center;gap:14px;width:100%;margin:12px 0 4px;padding:14px 16px;border-radius:20px;border:0;cursor:pointer;text-align:left;color:#fff;
-  background:linear-gradient(135deg,#7b3fe4,#1f4fd1);box-shadow:0 6px 0 #2a1a8a,0 10px 24px rgba(60,30,160,.35);animation:giftwob 2.2s ease-in-out infinite}
-.giftbox .gbx{font-size:44px;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,.3))}
-.giftbox b{display:block;font-size:18px;font-family:var(--f-display)}.giftbox small{display:block;opacity:.85;font-size:13px}
-.giftbox.opening{animation:giftshake .45s linear infinite}
-@keyframes giftwob{0%,82%,100%{transform:rotate(0)}86%{transform:rotate(-3deg)}90%{transform:rotate(3deg)}94%{transform:rotate(-2deg)}}
-@keyframes giftshake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-4deg)}75%{transform:translateX(4px) rotate(4deg)}}
-@media (prefers-reduced-motion:reduce){.giftbox,.giftbox.opening{animation:none}}
 .giftnext{margin:12px 0 4px;padding:10px 14px;border-radius:14px;background:#f1ecff;color:#4a1fa8;font-size:14px;text-align:center}
 .giftreveal{gap:10px;padding-block:6px}
 .gopen{font-size:84px;line-height:1;animation:popin .5s cubic-bezier(.2,1.6,.4,1) backwards;filter:drop-shadow(0 8px 14px rgba(60,30,160,.3))}
 .treasure{margin:4px 0;padding:14px 16px;border-radius:16px;background:#fff8e6;border:1px solid #f3dc9a;font-size:16px;line-height:1.5;font-style:italic;text-align:left}
 .treasure cite{display:block;margin-top:6px;font-style:normal;font-weight:800;font-size:13px;color:#8a5a00}
 .giftmore{padding:10px 12px;border-radius:14px;background:#eef3fb;font-size:14px;color:var(--ink)}
+.giftnext.hot{background:linear-gradient(135deg,#7b3fe4,#1f4fd1);color:#fff}
+.giftstage{gap:12px;padding-top:10px}
+.bigbox{border:0;background:none;cursor:pointer;padding:10px;margin:18px 0 4px;animation:boxshake 2s ease-in-out infinite}
+.bigbox span{display:block;font-size:150px;line-height:1;filter:drop-shadow(0 16px 22px rgba(60,30,160,.35))}
+.bigbox.opening{animation:giftshake .35s linear infinite}
+@keyframes boxshake{0%,70%,100%{transform:rotate(0) scale(1)}75%{transform:rotate(-9deg) scale(1.06)}80%{transform:rotate(8deg) scale(1.06)}85%{transform:rotate(-6deg) scale(1.04)}90%{transform:rotate(4deg)}95%{transform:rotate(-2deg)}}
+@keyframes giftshake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-6px) rotate(-6deg)}75%{transform:translateX(6px) rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.bigbox,.bigbox.opening{animation:none}}
+.tapme{font-weight:800;font-size:17px;color:var(--lapis);animation:tapblink 2s ease-in-out infinite}
+@keyframes tapblink{50%{opacity:.55}}
+.giftextra{padding:12px 14px;border-radius:16px;background:#fff8e6;border:1px solid #f3dc9a;font-size:15px;line-height:1.5}
+.btag.big{display:inline-block;font-size:15px;padding:5px 12px;margin-bottom:6px}
+.avlock{position:relative;opacity:.55;filter:grayscale(.5)}
+.avlock .lk{position:absolute;right:2px;bottom:2px;font-size:13px;font-style:normal;filter:none}
 
 </style>
 <div class="app" id="app">
@@ -4419,7 +4425,7 @@ const books=()=>BOOKS[S.testament];
 const curBook=()=>books().find(b=>b.id===S.book[S.testament])||books()[0];
 const doneOf=b=>S.done[b.id]||0;
 const bookComplete=b=>doneOf(b)>=b.levels;
-const bookUnlocked=b=>b.idx===0||bookComplete(BOOKS[b.t][b.idx-1]);
+const bookUnlocked=b=>b.idx===0||bookComplete(BOOKS[b.t][b.idx-1])||!!(S.keys||{})[b.id];
 const levelTitle=(b,L)=>{const c=CONTENT[b.id];return (c&&c.titles&&c.titles[L-1])||("Niveau "+L);};
 const chapRange=(b,L)=>{const a=Math.floor((L-1)*b.ch/b.levels)+1,z=Math.max(a,Math.floor(L*b.ch/b.levels));return a===z?`${b.name} ${a}`:`${b.name} ${a}–${z}`;};
 const levelRef=(b,L)=>{const c=CONTENT[b.id];return (c&&c.levels[L]&&c.levels[L].ref)||chapRange(b,L);};
@@ -4839,9 +4845,11 @@ const starsOf=p=>p>=100?3:p>=60?2:1;
 function markDefi(qs){const sc=q=>q.graded===false?-1:q.type==="match"?4:q.type==="order"?4:q.type==="recite"?-1:q.type==="fill"?3:q.disp==="tf"?0:(q.a&&q.a.length>1?3:1);
   let bi=-1,bs=-1;qs.forEach((q,i)=>{const v=sc(q);if(v>=bs&&v>=0){bs=v;bi=i;}});if(bi>=0)qs[bi].defi=true;}
 const GIFTS={
+  unlock_book:{ic:"🔓",t:"Livre débloqué !",d:"Tu peux jouer un livre en avance, sans attendre de finir les précédents."},
+  badge_rare:{ic:"🏅",t:"Badge rare",d:"Il s'affiche à côté de ton nom dans les défis en ligne. Tes adversaires le verront !"},
+  avatar_item:{ic:"🎨",t:"Avatar exclusif débloqué",d:"Un élément réservé aux gagnants de cadeaux, à choisir dans ton profil."},
   xp50:{ic:"🌟",t:"+50 XP",d:"Ton titre de disciple monte plus vite."},
   xp2:{ic:"⚡",t:"XP doublés",d:"Ta prochaine partie du parcours rapporte deux fois plus d'XP."},
-  verse:{ic:"📜",t:"Verset trésor",d:"Un verset à garder dans ton cœur. Il rejoint tes versets trésors."},
   help1:{ic:"💡",t:"+1 aide",d:"Une aide de plus à utiliser aujourd'hui."},
   help3:{ic:"💡",t:"+3 aides",d:"Trois aides de plus à utiliser aujourd'hui."},
   help5:{ic:"💡",t:"+5 aides",d:"Cinq aides de plus à utiliser aujourd'hui !"},
@@ -4849,23 +4857,47 @@ const GIFTS={
   life1:{ic:"❤️",t:"+1 vie",d:"Une vie de plus pour continuer à monter."},
   lifefull:{ic:"💖",t:"Vies pleines",d:"Toutes tes vies sont rechargées !"},
   unl1h:{ic:"♾️",t:"1 h de vies illimitées",d:"Pendant une heure, tes vies ne baissent plus. Profites-en !"}};
-const TREASURE_REFS=["Jean 3:16","Psaumes 23:1","Philippiens 4:13","Romains 8:28","Proverbes 3:5","Josué 1:9","Ésaïe 41:10","Jérémie 29:11","Matthieu 11:28","Psaumes 119:105","Matthieu 6:33","Jean 14:6","Hébreux 11:1","Romains 12:2","Galates 5:22","Ésaïe 40:31","1 Corinthiens 13:4","Jacques 1:5","1 Jean 1:9","Psaumes 37:5","Matthieu 5:14","Jean 8:32","Éphésiens 2:8","Psaumes 121:2","Lamentations 3:22","Michée 6:8","Hébreux 13:5","Psaumes 27:1","Jean 15:5","Matthieu 28:20"];
+/* Badges rares (affichés dans les défis en ligne) et éléments d'avatar réservés aux cadeaux */
+const RARE_BADGES=["👑 Couronne de vie","🔥 Flamme de Pentecôte","⚔️ Épée de l'Esprit","🦁 Lion de Juda","💎 Perle de grand prix","🌟 Étoile du matin","🕊️ Colombe de paix","🏰 Forteresse imprenable","🌿 Cep de la vigne","🪔 Lampe allumée"];
+const PREMIUM_EMOJI=["👑","🦁","💎","🦅","🔥","🛡️","🤴","👸"];
+const PREMIUM_STUDIO=[["hat",5,"Couronne"],["hat",6,"Chapeau"],["glasses",3,"Lunettes de soleil"],["cloth",3,"Vêtement doré"],["cloth",9,"Vêtement blanc"],["bg",6,"Fond doré"],["bg",4,"Fond violet"]];
+const premKey=(k,i)=>"s:"+k+":"+i;
+const emoLocked=e=>PREMIUM_EMOJI.includes(e)&&!(S.unlocks||{})["e:"+e];
+const studioLocked=(k,i)=>PREMIUM_STUDIO.some(p=>p[0]===k&&p[1]===i)&&!(S.unlocks||{})[premKey(k,i)];
+const bookUnlockedByGift=b=>!!(S.keys||{})[b.id];
 const giftDayCount=()=>{const g=S.giftLog||{};return g.day===localDay()?g.n:0;};
+const giftMax=()=>+((typeof adCfg==="function"&&adCfg().gift_daily_max)||5);
+const giftEligible=(b,L,pct)=>pct>=100&&!(S.gifts||{})[b.id+"-"+L]&&giftDayCount()<giftMax();
 function giftBlock(b,L,pct){if(pct<100)return `<div class="giftnext">⭐⭐⭐ Fais 100 % pour débloquer un <b>cadeau surprise</b> !</div>`;
-  const k=b.id+"-"+L;S.gifts=S.gifts||{};if(S.gifts[k])return `<div class="giftnext">🎁 Cadeau de ce niveau déjà ouvert. Fais 3 étoiles sur un autre niveau pour en gagner un nouveau !</div>`;
-  const mx=+((typeof adCfg==="function"&&adCfg().gift_daily_max)||5);if(giftDayCount()>=mx)return `<div class="giftnext">🎁 Tu as ouvert tes ${mx} cadeaux du jour. Reviens demain pour en gagner d'autres !</div>`;
-  return `<button class="giftbox" id="giftBtn"><span class="gbx">🎁</span><span><b>Cadeau surprise !</b><small>3 étoiles : touche pour l'ouvrir</small></span></button>`;}
-function bindGift(b,L){const g=$("giftBtn");if(!g)return;g.onclick=async()=>{if(g.disabled)return;g.disabled=true;sfx("tap");const k=b.id+"-"+L;
-  const sb=typeof adSb==="function"?adSb():null;if(!sb){g.disabled=false;notify("📶","Connexion nécessaire","Connecte-toi à internet pour ouvrir ton cadeau.");return;}
-  g.classList.add("opening");regen();let r=null;
-  try{const {data,error}=await Promise.race([sb.rpc("open_gift",{p_viewer:adViewer(),p_level:k,p_missing_life:S.hearts<MAX_HEARTS&&!unlimited()}),new Promise((_,j)=>setTimeout(()=>j(new Error("t")),12000))]);if(error)throw error;r=data;}catch(e){}
-  if(!r){g.disabled=false;g.classList.remove("opening");notify("📶","Cadeau indisponible","Le cadeau n'a pas pu s'ouvrir. Réessaie dans un instant.");return;}
-  S.gifts=S.gifts||{};S.gifts[k]=Date.now();
-  if(!r.ok){save();g.outerHTML=`<div class="giftnext">${r.reason==="limit"?`🎁 Tu as ouvert tes ${r.max} cadeaux du jour. Reviens demain !`:"🎁 Cadeau de ce niveau déjà ouvert."}</div>`;return;}
-  const lg=S.giftLog&&S.giftLog.day===localDay()?S.giftLog:{day:localDay(),n:0};lg.n++;S.giftLog=lg;
-  const extra=await applyGift(r.gift);save();setHead();
-  setTimeout(()=>{g.outerHTML=`<div class="giftnext">🎁 Cadeau ouvert : <b>${GIFTS[r.gift]?GIFTS[r.gift].t:"surprise"}</b></div>`;revealGift(r.gift,extra,r.left);},900);};}
-async function applyGift(k){regen();
+  if((S.gifts||{})[b.id+"-"+L])return `<div class="giftnext">🎁 Cadeau de ce niveau déjà ouvert. Fais 3 étoiles sur un autre niveau pour en gagner un nouveau !</div>`;
+  if(giftDayCount()>=giftMax())return `<div class="giftnext">🎁 Tu as ouvert tes ${giftMax()} cadeaux du jour. Reviens demain pour en gagner d'autres !</div>`;
+  return `<div class="giftnext hot">🎁 <b>Un cadeau surprise t'attend !</b> Monte au niveau suivant pour l'ouvrir.</div>`;}
+/* Écran du cadeau : une grande boîte qui se secoue, à toucher pour l'ouvrir */
+function giftScreen(b,L,then){const k=b.id+"-"+L;stopTimer();hush();$("progBar").style.width="100%";
+  $("lbody").innerHTML=`<div class="center giftstage"><div class="eyebrow">⭐⭐⭐ Trois étoiles !</div><h2 style="font-size:28px;margin:0">Tu as gagné un cadeau</h2>
+    <button class="bigbox" id="bigBox" aria-label="Ouvrir le cadeau"><span>🎁</span></button><p class="tapme" id="giftTxt">👆 Touche le cadeau pour l'ouvrir</p></div>`;
+  $("lfoot").className="lfoot pad";$("lfoot").innerHTML="";sfx("badge");
+  const box=$("bigBox");let busy=false;
+  box.onclick=async()=>{if(busy)return;busy=true;sfx("tap");vibrate(40);box.classList.add("opening");$("giftTxt").textContent="Ouverture…";
+    const sb=typeof adSb==="function"?adSb():null;let r=null;regen();
+    if(sb){try{const {data,error}=await Promise.race([sb.rpc("open_gift",{p_viewer:adViewer(),p_level:k,p_missing_life:S.hearts<MAX_HEARTS&&!unlimited()}),new Promise((_,j)=>setTimeout(()=>j(new Error("t")),12000))]);if(error)throw error;r=data;}catch(e){}}
+    if(!r){busy=false;box.classList.remove("opening");$("giftTxt").innerHTML="📶 Le cadeau n'a pas pu s'ouvrir. Vérifie ta connexion et touche-le encore.";
+      $("lfoot").innerHTML=`<button class="btn ghost" id="giftLater">Plus tard</button>`;$("giftLater").onclick=()=>{sfx("tap");then();};return;}
+    S.gifts=S.gifts||{};S.gifts[k]=Date.now();
+    if(!r.ok){save();$("giftTxt").textContent=r.reason==="limit"?`Tu as ouvert tes ${r.max} cadeaux du jour. Reviens demain !`:"Le cadeau de ce niveau a déjà été ouvert.";
+      $("lfoot").innerHTML=`<button class="btn" id="giftGo">Continuer</button>`;$("giftGo").onclick=()=>{sfx("tap");then();};return;}
+    const lg=S.giftLog&&S.giftLog.day===localDay()?S.giftLog:{day:localDay(),n:0};lg.n++;S.giftLog=lg;
+    const res=applyGift(r.gift);save();setHead();if(typeof olSyncTitle==="function")try{olSyncTitle();}catch(e){}
+    setTimeout(()=>revealGift(res,r.left,then),1100);};}
+/* Applique le cadeau. Si le cadeau tiré n'a plus d'objet (tout est déjà débloqué), il est remplacé par des aides. */
+function applyGift(k){regen();const G=Object.assign({k},GIFTS[k]||{ic:"🎁",t:"Surprise",d:""});
+  if(k==="unlock_book"){const L=[...BOOKS.AT,...BOOKS.NT].filter(b=>!bookUnlocked(b)&&CONTENT[b.id]);if(L.length){const bk=pick(L.slice(0,12));S.keys=S.keys||{};S.keys[bk.id]=Date.now();
+      G.t=`${bk.name} débloqué !`;G.extra=`Le livre <b>${esc(bk.name)}</b> est ouvert : tu peux y jouer dès maintenant, sans attendre.`;return G;}k="help3";}
+  if(k==="badge_rare"){S.rareBadges=S.rareBadges||[];const f=RARE_BADGES.filter(x=>!S.rareBadges.includes(x));if(f.length){const x=pick(f);S.rareBadges.push(x);S.rareBadge=x;
+      G.t=`Badge rare : ${x.slice(x.indexOf(" ")+1)}`;G.ic=x.split(" ")[0];G.extra=`<span class="btag big">🏅 ${esc(x)}</span><br>Il s'affiche maintenant à côté de ton nom dans les défis en ligne.`;return G;}k="xp2";}
+  if(k==="avatar_item"){S.unlocks=S.unlocks||{};const f=[...PREMIUM_EMOJI.map(e=>["e:"+e,`l'avatar ${e}`,e]),...PREMIUM_STUDIO.map(p=>[premKey(p[0],p[1]),`« ${p[2]} » dans le studio d'avatar`,"🎨"])].filter(x=>!S.unlocks[x[0]]);
+    if(f.length){const x=pick(f);S.unlocks[x[0]]=Date.now();G.ic=x[2];G.extra=`Tu as débloqué ${esc(x[1])}. Va dans ton <b>Profil</b> pour l'utiliser.`;return G;}k="help1";}
+  Object.assign(G,{k},GIFTS[k]);
   if(k==="xp50")S.xp=(S.xp||0)+50;
   if(k==="xp2")S.xp2=true;
   if(k==="help1"||k==="help3"||k==="help5"){helpsReset();S.helps+=+k.slice(4);}
@@ -4873,16 +4905,12 @@ async function applyGift(k){regen();
   if(k==="life1")S.hearts=Math.min(MAX_HEARTS,S.hearts+1);
   if(k==="lifefull")S.hearts=MAX_HEARTS;
   if(k==="unl1h"){S.bonus=S.bonus||{};S.bonus.until=Math.max(Date.now(),S.bonus.until||0)+3600000;}
-  if(k==="verse"){try{await loadBible();const pool=TREASURE_REFS.map(r=>[r,refToKey(r)]).filter(x=>x[1]);S.treasures=S.treasures||[];
-      const fresh=pool.filter(x=>!S.treasures.includes(x[1]));const [ref,key]=pick(fresh.length?fresh:pool);const {g,c,v}=parseKey(key);
-      if(!S.treasures.includes(key))S.treasures.push(key);return {ref,text:vtext(g,c,v)};}catch(e){return null;}}
-  return null;}
-function revealGift(k,extra,left){const G=GIFTS[k]||{ic:"🎁",t:"Surprise",d:""};sfx("badge");setTimeout(()=>{confetti();vibrate([30,30,60]);},120);
-  openSheet(`<div class="center giftreveal"><div class="gopen">${G.ic}</div><div class="eyebrow">Ton cadeau</div><h2 style="font-size:26px;margin:0">${G.t}</h2><p style="margin:0">${G.d}</p>
-    ${k==="verse"&&extra?`<blockquote class="treasure">« ${esc(extra.text)} »<cite>📖 ${esc(extra.ref)}</cite></blockquote>`:""}
-    <div class="giftmore">⭐⭐⭐ <b>Continue de faire des 3 étoiles</b> pour ouvrir d'autres cadeaux${typeof left==="number"?` · encore ${left} aujourd'hui`:""} !</div>
-    <button class="btn" id="giftOk">Super, merci !</button></div>`);
-  $("giftOk").onclick=()=>{sfx("tap");closeSheet();};}
+  return G;}
+function revealGift(G,left,then){sfx("win");setTimeout(()=>{confetti();vibrate([30,30,60]);},120);
+  $("lbody").innerHTML=`<div class="center giftstage"><div class="gopen">${G.ic}</div><div class="eyebrow">Ton cadeau</div><h2 style="font-size:28px;margin:0">${esc(G.t)}</h2><p style="margin:0">${G.d}</p>
+    ${G.extra?`<div class="giftextra">${G.extra}</div>`:""}
+    <div class="giftmore">⭐⭐⭐ <b>Continue de faire des 3 étoiles</b> pour ouvrir d'autres cadeaux${typeof left==="number"&&left>0?` · encore ${left} aujourd'hui`:""} !</div></div>`;
+  $("lfoot").innerHTML=`<button class="btn" id="giftGo">Super, on continue ↑</button>`;$("giftGo").onclick=()=>{sfx("tap");then();};}
 
 function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r=completeLevel(b,L);
   const pct=Math.round(LS.firstTry/LS.total*100),k=b.id+"-"+L;S.best=S.best||{};const prev=S.best[k],isRecord=prev===undefined||pct>prev;if(isRecord)S.best[k]=pct;const best=S.best[k];const xp2=!!S.xp2;if(xp2){LS.xp*=2;S.xp2=false;}S.xp+=LS.xp;S.bestCombo=Math.max(S.bestCombo||0,LS.best);save();setHead();
@@ -4898,7 +4926,7 @@ function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r
   speak(`${perfect?"Sans faute !":"Bravo !"} Tu gagnes le badge ${badgeName(b,L)}.`);
   $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:10px"><button class="btn" id="back">Monter au niveau suivant ↑</button>${best<100?`<button class="btn ghost" id="again">🔁 Rejouer pour faire mieux</button>`:""}</div>`;
   const ag=$("again");if(ag)ag.onclick=()=>{sfx("tap");S.justDone={book:b.id,L};save();startLevel(b,L);};
-  bindGift(b,L);$("back").onclick=()=>{sfx("tap");if(lastOfBook&&next){S.book[b.t]=next.id;S.justDone=null;}else S.justDone={book:b.id,L};save();if(r.up)streakScreen();else go("path");};}
+  const gift=giftEligible(b,L,pct);$("back").onclick=()=>{sfx("tap");const go2=()=>{if(lastOfBook&&next){S.book[b.t]=next.id;S.justDone=null;}else S.justDone={book:b.id,L};save();if(r.up)streakScreen();else go("path");};if(gift)giftScreen(b,L,go2);else go2();};}
 function streakScreen(){const days=["L","M","M","J","V","S","D"],now=new Date(),dow=(now.getDay()+6)%7,mon=new Date(now);mon.setDate(now.getDate()-dow);
   $("progBar").style.width="100%";$("lbody").innerHTML=`<div class="center"><div class="lampwrap" style="width:100%;--f:1"><span class="glow" style="--g:7"></span><span class="lamp">🪔</span><span class="flame">🔥</span></div>
    <h2 style="font-size:26px">Ta lampe brille depuis ${plural(S.streak,"jour")}</h2>
@@ -5191,18 +5219,19 @@ let avsCfg=null;
 function openAvatarStudio(){const u=S.user||{};avsCfg=avIsCfg(u.av)?avParse(u.av):Object.assign(avRandom(u.gender),{beard:0,glasses:0,hat:0,skin:Math.max(0,TONES.indexOf(u.tone||"🏾"))+1});renderAvatarStudio();}
 function renderAvatarStudio(){const c=avsCfg;
   openSheet(`<div class="avs-top"><div class="avs-prev">${avSvg(c)}</div><div><h3>🎨 Ton avatar</h3><small>Touche une option : l'aperçu change tout de suite.</small></div></div>
-    <div class="avs-rows">${AVS_ROWS.map(([k,l,t])=>`<div class="avs-row"><div class="eyebrow">${l}</div><div class="avs-opts">${AVB[k].map((v,i)=>t==="color"?`<button class="avs-col" data-k="${k}" data-i="${i}" aria-pressed="${c[k]===i}" style="background:${v}" aria-label="${l} ${i+1}"></button>`:`<button class="avs-chip" data-k="${k}" data-i="${i}" aria-pressed="${c[k]===i}"><span class="avs-mini">${avSvg(Object.assign({},c,{[k]:i}))}</span>${esc(v)}</button>`).join("")}</div></div>`).join("")}</div>
+    <div class="avs-rows">${AVS_ROWS.map(([k,l,t])=>`<div class="avs-row"><div class="eyebrow">${l}</div><div class="avs-opts">${AVB[k].map((v,i)=>t==="color"?`<button class="avs-col${studioLocked(k,i)?" avlock":""}" data-k="${k}" data-i="${i}" aria-pressed="${c[k]===i}" style="background:${v}" aria-label="${l} ${i+1}">${studioLocked(k,i)?'<i class="lk">🔒</i>':""}</button>`:`<button class="avs-chip${studioLocked(k,i)?" avlock":""}" data-k="${k}" data-i="${i}" aria-pressed="${c[k]===i}"><span class="avs-mini">${avSvg(Object.assign({},c,{[k]:i}))}</span>${esc(v)}${studioLocked(k,i)?" 🔒":""}</button>`).join("")}</div></div>`).join("")}</div>
     <div class="avs-foot"><button class="btn ghost" id="avsRnd">🎲 Au hasard</button><button class="btn" id="avsOk">Choisir cet avatar</button></div>`);
-  const sh=$("sheet");sh.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{sfx("tap");const y=sh.scrollTop;const rows=[...sh.querySelectorAll(".avs-opts")].map(r=>r.scrollLeft);avsCfg[b.dataset.k]=+b.dataset.i;renderAvatarStudio();sh.scrollTop=y;sh.querySelectorAll(".avs-opts").forEach((r,i)=>r.scrollLeft=rows[i]||0);});
-  $("avsRnd").onclick=()=>{sfx("tap");avsCfg=avRandom(S.user&&S.user.gender);renderAvatarStudio();};
+  const sh=$("sheet");sh.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{if(studioLocked(b.dataset.k,+b.dataset.i)){sfx("bad");notify("🔒","Élément à débloquer","Fais 3 étoiles dans le parcours et ouvre les cadeaux pour le gagner.");return;}sfx("tap");const y=sh.scrollTop;const rows=[...sh.querySelectorAll(".avs-opts")].map(r=>r.scrollLeft);avsCfg[b.dataset.k]=+b.dataset.i;renderAvatarStudio();sh.scrollTop=y;sh.querySelectorAll(".avs-opts").forEach((r,i)=>r.scrollLeft=rows[i]||0);});
+  $("avsRnd").onclick=()=>{sfx("tap");avsCfg=avRandom(S.user&&S.user.gender);Object.keys(avsCfg).forEach(k=>{if(studioLocked(k,avsCfg[k]))avsCfg[k]=0;});renderAvatarStudio();};
   $("avsOk").onclick=()=>{sfx("good");S.user.av=avCode(avsCfg);S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();else if(curScreen==="profile")renderProfile();if(typeof olSyncProfile==="function")olSyncProfile();};}
 function openEmojiSheet(){const u=S.user||{};
-  openSheet(`<h3 style="margin:0 0 10px">😀 Choisis un avatar</h3><div class="avgrid">${[["",""+(u.gender==="f"?"👩":"👨")+(u.tone||"🏾")],...AV_PEOPLE.map(b=>[b,withTone(b,u.tone)]),...AV_SYMBOLS.map(b=>[b,b])].map(([k,v])=>`<button data-av="${k}" aria-pressed="${!u.photo&&(u.av||"")===k}" aria-label="Avatar">${v}</button>`).join("")}</div>`);
-  $("sheet").querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{sfx("tap");S.user.av=b.dataset.av||null;S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();if(typeof olSyncProfile==="function")olSyncProfile();});}
+  openSheet(`<h3 style="margin:0 0 10px">😀 Choisis un avatar</h3><div class="avgrid">${[["",""+(u.gender==="f"?"👩":"👨")+(u.tone||"🏾")],...AV_PEOPLE.map(b=>[b,withTone(b,u.tone)]),...AV_SYMBOLS.map(b=>[b,b])].map(([k,v])=>`<button data-av="${k}" class="${emoLocked(k)?"avlock":""}" aria-pressed="${!u.photo&&(u.av||"")===k}" aria-label="Avatar">${v}${emoLocked(k)?'<i class="lk">🔒</i>':""}</button>`).join("")}</div><p class="muted" style="font-size:13px;margin:10px 0 0">🔒 Les avatars dorés se débloquent en ouvrant les cadeaux 3 étoiles du parcours.</p>`);
+  $("sheet").querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{if(emoLocked(b.dataset.av)){sfx("bad");notify("🔒","Avatar à débloquer","Fais 3 étoiles dans le parcours et ouvre les cadeaux pour le gagner.");return;}sfx("tap");S.user.av=b.dataset.av||null;S.user.photo=null;save();closeSheet();if(curScreen==="onb")renderOnb();if(typeof olSyncProfile==="function")olSyncProfile();});}
 /* Rang et dernier badge, affichés aux adversaires */
 function myTitle(){const n=totalDone();let r=RANKS[0];RANKS.forEach(x=>{if(n>=x[0])r=x;});
   const last=Object.keys(S.badges||{}).sort((a,b)=>S.badges[b]-S.badges[a])[0];let badge="";
   if(last){const k=last.lastIndexOf("-"),bk=ALLB.find(x=>x.id===last.slice(0,k));if(bk)badge=badgeName(bk,+last.slice(k+1));}
+  if(S.rareBadge)badge=S.rareBadge;
   return {rank:r[1],badge};}
 
 /* ---------- Installer l'application (Android : installation directe ; iPhone : explication) ---------- */
