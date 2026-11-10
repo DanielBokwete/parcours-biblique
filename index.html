@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="c9dc1b878f";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="1363144672";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4386,7 +4386,8 @@ function avSvg(v){const c=typeof v==="string"?avParse(v):v,id="av"+(++avUid);
 <path d="M49 50 Q47 55 50 56" stroke="rgba(0,0,0,.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>${mouth}${gl}${hat}</g></svg>`;}
 
 /* ===================== RÉGLAGES DU JEU ===================== */
-const MAX_HEARTS=5, HEART_MS=25*60*1000, Q_SECONDS=20, DAILY_HELPS=5;
+// Valeurs par défaut : remplacées par les « Règles du jeu » réglées dans l'admin (voir applyRules dans ads.js).
+let MAX_HEARTS=5, HEART_MS=25*60*1000, Q_SECONDS=20, DAILY_HELPS=5;
 const MED_REMIND_MS=10*60*1000, MED_REMIND_COUNT=7;       // méditation : rappel toutes les 10 min pendant 1 h
 
 /* ===================== ÉTAT ===================== */
@@ -4957,7 +4958,7 @@ function streakScreen(){const days=["L","M","M","J","V","S","D"],now=new Date(),
   sfx("combo");$("lfoot").innerHTML=`<button class="btn" id="back">Continuer</button>`;$("back").onclick=()=>go("path");}
 function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("progBar").style.width="0%";$("lHearts").hidden=false;$("lHearts").textContent="♥ 0";
   $("lbody").innerHTML=`<div class="center"><div class="medal big">💔</div><h2 style="font-size:28px">Plus de cœurs pour le moment</h2><p>Un cœur revient toutes les 25 minutes. Le prochain dans :</p><div class="clock" id="cd">--:--</div><p style="font-size:13px" class="muted">En attendant, lis la Bible ou lance une méditation : ça ne coûte aucun cœur.</p></div>`;
-  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm adcta" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter 3 amis · 24 h illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
+  $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm adcta" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter ${RN()} amis · ${RH()} h illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
   $("toAd").onclick=()=>adReward("life",()=>{if(S.hearts>0)go("path");});$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
 {const lessonSheet=k=>{if(!LS||LS.mode!=="level"||typeof statSheet!=="function")return;statSheet(k,()=>{if(curScreen==="lesson"){setHead();if(LS&&!LS.answered&&LS.q)askFoot();}});};
  $("lHelps").onclick=()=>lessonSheet("help");$("lXp").onclick=()=>lessonSheet("help");$("lHearts").onclick=()=>lessonSheet("life");}
@@ -5195,7 +5196,7 @@ function bindSettings(root){root.querySelectorAll("[data-set]").forEach(t=>t.onc
   if(k==="music")S.set.music?startMusic():stopMusic();if(k==="voice")S.set.voice?speak("La voix off est activée."):hush();if(k==="sfx"&&S.set.sfx)sfx("good");if(k==="vib")vibrate(120);});}
 /* ===================== TITRES PAR XP ===================== */
 /* Les XP font monter le titre du joueur (affiché dans les défis en ligne). Chaque nouveau titre débloque une récompense. */
-const RANKS=[[0,"Pèlerin","",""],[300,"Semeur","help3","+3 aides"],[1000,"Disciple","avatar_item","un avatar exclusif"],[2500,"Témoin","badge_rare","un badge rare"],
+let RANKS=[[0,"Pèlerin","",""],[300,"Semeur","help3","+3 aides"],[1000,"Disciple","avatar_item","un avatar exclusif"],[2500,"Témoin","badge_rare","un badge rare"],
   [5000,"Serviteur","unl30m","30 min de vies illimitées"],[9000,"Berger","avatar_item+help5","un avatar exclusif et +5 aides"],[15000,"Ancien","badge_rare+unl1h","un badge rare et 1 h de vies illimitées"],[25000,"Apôtre","apotre","le badge « ✝️ Apôtre de la Parole »"]];
 function rankInfo(xp){xp=xp||0;let i=0;RANKS.forEach((r,j)=>{if(xp>=r[0])i=j;});const r=RANKS[i],nx=RANKS[i+1]||null;
   return {i,name:r[1],next:nx?nx[1]:null,need:nx?nx[0]-xp:0,pct:nx?Math.round((xp-r[0])/(nx[0]-r[0])*100):100,reward:nx?nx[3]:""};}
@@ -5346,17 +5347,17 @@ async function olShareInvite(){if(!OL.me){notify("🔐","Connecte-toi d'abord","
   try{if(navigator.share){await navigator.share({title:"Parcours Biblique",text:txt});return;}}catch(e){return;}
   try{await navigator.clipboard.writeText(txt);notify("📋","Lien copié","Colle-le dans WhatsApp, SMS ou Facebook.");}catch(e){notify("🔗","Ton lien",link);}}
 function olInviteCard(){const n=OL.me?OL.me.referrals||0:0;
-  return `<div class="card invitecard"><div class="eyebrow">Inviter des amis</div><b style="font-size:18px">🎁 3 amis invités = 24 h de vies illimitées</b>
-    <p class="muted" style="margin:6px 0 10px">Partage ton lien : dès que <b>3 personnes</b> installent le jeu avec et créent leur compte, tu gagnes <b>24 h de vies illimitées</b> dans le parcours. Ça se cumule : 6 amis = 48 h. Vous devenez aussi amis pour vous défier.</p>
-    ${OL.me?`<div class="linkbox">${esc(olInviteLink().replace("https://",""))}</div><div class="refprog"><div class="bar"><i style="width:${(n%3)/3*100}%"></i></div><small class="muted"><b>${n%3}/3</b> vers tes prochaines 24 h illimitées${n>=3?` · ${n} amis invités 🙌`:""}</small></div>`:""}
+  return `<div class="card invitecard"><div class="eyebrow">Inviter des amis</div><b style="font-size:18px">🎁 ${RN()} amis invités = ${RH()} h de vies illimitées</b>
+    <p class="muted" style="margin:6px 0 10px">Partage ton lien : dès que <b>${RN()} personnes</b> installent le jeu avec et créent leur compte, tu gagnes <b>${RH()} h de vies illimitées</b> dans le parcours. Ça se cumule : ${RN()*2} amis = 48 h. Vous devenez aussi amis pour vous défier.</p>
+    ${OL.me?`<div class="linkbox">${esc(olInviteLink().replace("https://",""))}</div><div class="refprog"><div class="bar"><i style="width:${(n%RN())/RN()*100}%"></i></div><small class="muted"><b>${n%RN()}/${RN()}</b> vers tes prochaines 24 h illimitées${n>=3?` · ${n} amis invités 🙌`:""}</small></div>`:""}
     <button class="btn" id="olInv" style="margin-top:10px">📤 Partager mon lien</button></div>`;}
 // Applique les vies illimitées gagnées par parrainage (stockées sur le serveur) à la partie locale.
 // Toutes les 3 personnes inscrites via le lien : +24 h de vies illimitées, cumulables (6 amis = 48 h).
 function olApplyBonus(){if(!OL.me)return;const n=OL.me.referrals||0,done=S.bonus.refApplied||0;if(n<=done)return;
-  const blocks=Math.floor(n/3)-Math.floor(done/3);S.bonus.refApplied=n;
-  if(blocks>0){S.bonus.until=Math.max(Date.now(),S.bonus.until||0)+blocks*24*3600000;save();
-    notify("🎁",`+${blocks*24} h de vies illimitées !`,`${n} amis ont rejoint le jeu grâce à toi. Merci !`);}
-  else{save();const r=3-n%3;notify("🤝",n-done>1?`${n-done} amis ont rejoint le jeu grâce à toi`:"Un ami a rejoint le jeu grâce à toi",`Encore ${r} ami${r>1?"s":""} et tu gagnes 24 h de vies illimitées.`);}
+  const blocks=Math.floor(n/RN())-Math.floor(done/RN());S.bonus.refApplied=n;
+  if(blocks>0){S.bonus.until=Math.max(Date.now(),S.bonus.until||0)+blocks*RH()*3600000;save();
+    notify("🎁",`+${blocks*RH()} h de vies illimitées !`,`${n} amis ont rejoint le jeu grâce à toi. Merci !`);}
+  else{save();const r=RN()-n%RN();notify("🤝",n-done>1?`${n-done} amis ont rejoint le jeu grâce à toi`:"Un ami a rejoint le jeu grâce à toi",`Encore ${r} ami${r>1?"s":""} et tu gagnes ${RH()} h de vies illimitées.`);}
   if(curScreen==="path"){const p=$("pillHearts");if(p)p.innerHTML=heartPill();}}
 async function olClaimRef(){let c=null;try{c=localStorage.getItem("pb-ref");}catch(e){}if(!c||!OL.me)return;
   try{localStorage.removeItem("pb-ref");}catch(e){}if(c===OL.me.referral_code)return;
@@ -5598,14 +5599,21 @@ async function olEnter(){if(olEntering)return;olEntering=true;
   catch(e){console.error(e);bootApp();}finally{olEntering=false;}}
 
 /* ---------- Recherche d'un adversaire ---------- */
-const OL_SEARCH_MAX=30;   // durée maximale de recherche d'un adversaire (secondes)
+let OL_SEARCH_MAX=30;   // durée maximale de recherche d'un adversaire (secondes)
 function olNoOpponent(){sfx("timeout");
   openSheet(`<div class="center" style="padding-block:10px;gap:10px"><div style="font-size:52px">😕</div><h2 style="font-size:24px;margin:0">Aucun adversaire trouvé</h2>
     <p class="muted" style="margin:0">Aucun autre disciple n'est en recherche en ce moment. Réessaie dans un instant, ou défie un ami pour jouer tout de suite.</p>
     <div style="display:grid;gap:10px;width:100%;margin-top:6px"><button class="btn" id="olRetry">🔄 Réessayer</button><button class="btn ghost" id="olFriendPlay">🤝 Jouer avec un ami</button></div></div>`);
   $("olRetry").onclick=()=>{sfx("tap");closeSheet();olSearch();};
   $("olFriendPlay").onclick=()=>{sfx("tap");closeSheet();OL.tab="friends";if(curScreen!=="online")go("online");else renderOnline();olLoadAll();};}
-function olSearch(){if(OL.searching)return;if(typeof adGate==="function"&&!adGate(olSearch))return;OL.searching=true;OL.searchStart=Date.now();
+function olXpGate(){const need=+(typeof adCfg==="function"?adCfg().online_min_xp:300)||0;const xp=S.xp||0;if(xp>=need)return true;sfx("bad");
+  const ri=typeof rankInfo==="function"?rankInfo(need):null;
+  openSheet(`<div class="center" style="padding-block:10px;gap:10px"><div style="font-size:52px">🎖️</div><h2 style="font-size:23px;margin:0">Encore ${need-xp} XP pour le tournoi</h2>
+    <p class="muted" style="margin:0">Le tournoi en ligne s'ouvre à <b>${need} XP</b>${ri?` (titre <b>${esc(ri.name)}</b>)`:""}. Tu as <b>${xp} XP</b> : continue le parcours pour y accéder. En attendant, tu peux déjà défier tes amis !</p>
+    <span class="bar" style="width:100%"><i style="width:${Math.min(100,Math.round(xp/need*100))}%"></i></span>
+    <div style="display:grid;gap:10px;width:100%;margin-top:6px"><button class="btn" id="xgPath">⛰️ Gagner des XP dans le parcours</button><button class="btn ghost" id="xgFriend">🤝 Défier un ami</button></div></div>`);
+  $("xgPath").onclick=()=>{sfx("tap");closeSheet();go("path");};$("xgFriend").onclick=()=>{sfx("tap");closeSheet();OL.tab="friends";renderOnline();olLoadAll();};return false;}
+function olSearch(){if(OL.searching)return;if(!olXpGate())return;if(typeof adGate==="function"&&!adGate(olSearch))return;OL.searching=true;OL.searchStart=Date.now();
   openSheet(`<div class="center" style="padding-block:10px"><div class="radar"><span>⚔️</span></div><h2 style="font-size:24px">Recherche d'un adversaire…</h2><p id="olSrchTxt">Dès qu'un autre disciple lance une recherche, la partie commence.</p><button class="btn ghost" id="olStop">Annuler</button></div>`);
   $("olStop").onclick=()=>{sfx("tap");olStopSearch();closeSheet();};
   const tick=async()=>{if(!OL.searching)return;
@@ -5752,12 +5760,20 @@ async function olUploadPhoto(blob){if(!OL.sb||!OL.session)return null;const uid=
    - chaque annonce peut viser une ou plusieurs villes ; le serveur fait tourner les annonces à parts égales.
    Tous les réglages (fréquence, durées, gains, plafond du jour, vies pour jouer en ligne) viennent de la base. */
 const AD={set:null,setAt:0,banT:null,busy:false,tick:null};
-const AD_DEF={banner_every_min:10,banner_seconds:8,reward_seconds:8,reward_lives:1,reward_helps:1,reward_daily_max:10,online_min_lives:3,online_cost_lives:1};
+const AD_DEF={banner_every_min:10,banner_seconds:8,reward_seconds:8,reward_lives:1,reward_helps:1,reward_daily_max:10,online_min_lives:3,online_cost_lives:1,
+  max_hearts:5,heart_minutes:25,daily_helps:5,question_seconds:20,online_min_xp:300,search_seconds:30,skip_seconds:5,win_points:10,draw_points:5,referral_needed:3,referral_hours:24,rank_thresholds:"300,1000,2500,5000,9000,15000,25000"};
+try{const r=JSON.parse(localStorage.getItem("pb-rules")||"null");if(r)AD.set=r;}catch(e){}
+/* Règles du jeu (réglées dans l'admin) appliquées au jeu */
+const RN=()=>Math.max(1,+adCfg().referral_needed||3),RH=()=>Math.max(1,+adCfg().referral_hours||24);
+function applyRules(){const c=adCfg(),n=(k,d)=>{const v=+c[k];return v>0?v:d;};
+  MAX_HEARTS=n("max_hearts",5);HEART_MS=n("heart_minutes",25)*60000;DAILY_HELPS=n("daily_helps",5);Q_SECONDS=n("question_seconds",20);
+  OL_SEARCH_MAX=n("search_seconds",30);AD_SKIP_SEC=n("skip_seconds",5);
+  const th=String(c.rank_thresholds||"").split(/[,; ]+/).map(Number).filter(x=>x>0);if(th.length===RANKS.length-1)th.forEach((x,i)=>{RANKS[i+1][0]=x;});}
 const adCfg=()=>Object.assign({},AD_DEF,AD.set||{});
 const adSb=()=>typeof olInit==="function"?olInit():null;
 function adViewer(){let v="";try{v=localStorage.getItem("pb-viewer")||"";if(!v){v=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);localStorage.setItem("pb-viewer",v);}}catch(e){v=v||"invite";}return v;}
 async function adLoadSettings(force){const sb=adSb();if(!sb)return adCfg();if(!force&&AD.set&&Date.now()-AD.setAt<10*60000)return adCfg();
-  try{const {data}=await sb.from("ad_settings").select("*").eq("id",1).maybeSingle();if(data){AD.set=data;AD.setAt=Date.now();}}catch(e){}return adCfg();}
+  try{const {data}=await sb.from("ad_settings").select("*").eq("id",1).maybeSingle();if(data){AD.set=data;AD.setAt=Date.now();try{localStorage.setItem("pb-rules",JSON.stringify(data));}catch(e){}applyRules();}}catch(e){}return adCfg();}
 
 /* ---------- Ville du joueur : estimée par la connexion, remplaçable dans le profil ---------- */
 function adCountryName(c){if(!c)return "";if(/^[A-Z]{2}$/.test(c)){try{return new Intl.DisplayNames(["fr"],{type:"region"}).of(c)||c;}catch(e){}}return c;}
@@ -5796,7 +5812,7 @@ function adTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S
   if(calm&&S.activeSec-(S.adAt||0)>=c.banner_every_min*60){S.adAt=S.activeSec;saveLocal();adInterstitial();}}
 /* Annonce automatique en plein écran (toutes les X minutes, jamais pendant une partie, ni dans Méditer ou la Bible).
    Pas de récompense ; le joueur peut la passer au bout de 5 secondes. */
-const AD_SKIP_SEC=5,AD_CALM_TABS=["path","online","profile"];
+let AD_SKIP_SEC=5;const AD_CALM_TABS=["path","online","profile"];
 async function adInterstitial(){if(AD.busy||document.getElementById("adFull"))return;AD.busy=true;
   try{await adLoadSettings();const ad=await adNext("banner");if(!ad||!AD_CALM_TABS.includes(curScreen))return;adPlayer(ad,{inter:true});}finally{AD.busy=false;}}
 async function adBanner(){if(AD.busy)return;AD.busy=true;
@@ -5826,7 +5842,7 @@ async function adReward(kind,after){sfx("tap");adAudioUnlock();const c=await adL
   if(life&&unlimited()){notify("♥","Vies illimitées","Tu as déjà des vies illimitées en ce moment.");return;}
   if(life){regen();if(S.hearts>=MAX_HEARTS){notify("♥","Tes vies sont au complet","Reviens quand il t'en manquera.");return;}}
   const prize=life?`+${gain} ♥`:`+${gain} 💡 aide${gain>1?"s":""}`;
-  const sorry=(t,p)=>{openSheet(`<div class="center" style="padding-top:4px"><div class="medal big">${life?"💔":"💡"}</div><h2 style="font-size:24px">${t}</h2><p style="line-height:1.5">${p}</p></div><div style="display:grid;gap:10px">${life?`<button class="btn" id="adInv">📤 Inviter 3 amis · 24 h illimitées</button>`:""}<button class="btn ghost" id="adBack">Fermer</button></div>`);
+  const sorry=(t,p)=>{openSheet(`<div class="center" style="padding-top:4px"><div class="medal big">${life?"💔":"💡"}</div><h2 style="font-size:24px">${t}</h2><p style="line-height:1.5">${p}</p></div><div style="display:grid;gap:10px">${life?`<button class="btn" id="adInv">📤 Inviter ${RN()} amis · ${RH()} h illimitées</button>`:""}<button class="btn ghost" id="adBack">Fermer</button></div>`);
     $("adBack").onclick=closeSheet;const iv=$("adInv");if(iv)iv.onclick=()=>{closeSheet();if(typeof olShareInvite==="function")olShareInvite();};};
   const later=life?`Un cœur revient toutes les 25 minutes.`:`Tes aides reviennent à minuit.`;
   if(!gain){sorry("Pas d'annonce pour le moment",later);return;}
@@ -5912,7 +5928,7 @@ function statSheet(kind,after){sfx("tap");regen();helpsReset();const c=adCfg();c
     const sub=life?(un?`Vies illimitées encore ${fmt(unlimitedLeft())}`:S.hearts<MAX_HEARTS?`+1 ♥ dans <b id="stCd">${fmt(nextHeartIn())}</b> · un cœur revient toutes les 25 minutes`:"Tes vies sont au complet"):`Tu reçois ${DAILY_HELPS} aides chaque jour, à minuit. Une aide retire une mauvaise réponse pendant un niveau.`;
     openSheet(`<div class="center" style="padding-top:2px"><div class="stbig ${life?"hp":"hl"}"><span>${life?"♥":"💡"}</span><b>${big}</b></div><h2 style="font-size:24px;margin:6px 0 4px">${life?"Mes vies":"Mes aides"}</h2><p style="line-height:1.5;margin:0 0 14px">${sub}</p></div>
       <div style="display:grid;gap:10px">${gain>0?`<button class="btn warm adcta" id="stAd"${full?" disabled":""}>▶️ Regarder une annonce · +${gain} ${life?"♥":`aide${gain>1?"s":""}`}</button><small class="adleft" id="stLeft">${adLeftTxt()}</small>`:""}
-      ${life?`<button class="btn ghost" id="stInv">📤 Inviter 3 amis · 24 h illimitées</button>`:""}<button class="textlink" id="stClose">Fermer</button></div>
+      ${life?`<button class="btn ghost" id="stInv">📤 Inviter ${RN()} amis · ${RH()} h illimitées</button>`:""}<button class="textlink" id="stClose">Fermer</button></div>
       ${life&&+c.online_min_lives>0?`<p class="muted" style="font-size:12.5px;text-align:center;margin:10px 0 0">Il faut au moins ${+c.online_min_lives} ♥ pour jouer en ligne ou entre amis.</p>`:""}`);
     adLeftFetch();
     const ad=$("stAd");if(ad)ad.onclick=()=>{closeSheet();adReward(kind,()=>{if(curScreen==="path")renderTop();if(after)after();});};
@@ -5936,6 +5952,8 @@ async function adPing(){const day=new Date().toLocaleDateString("sv");let last="
   try{const {error}=await sb.rpc("app_ping",{p_viewer:adViewer(),p_city:(S.loc&&S.loc.city)||"",p_country:(S.loc&&S.loc.country)||"",p_platform:adPlatform()});if(!error)localStorage.setItem("pb-ping",key);}catch(e){}}
 setTimeout(async()=>{adLoadSettings();await adLocate();if(!S.adAt)S.adAt=S.activeSec;adPing();},2500);
 setInterval(adPing,10*60000);
+
+try{applyRules();}catch(e){}
 
 </script>
 <script>if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script></body></html>
