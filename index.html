@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="988019170c";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="c99e2a032a";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -891,6 +891,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .btag.big{display:inline-block;font-size:15px;padding:5px 12px;margin-bottom:6px}
 .avlock{position:relative;opacity:.55;filter:grayscale(.5)}
 .avlock .lk{position:absolute;right:2px;bottom:2px;font-size:13px;font-style:normal;filter:none}
+.adf-pill.skip{cursor:pointer;background:rgba(255,255,255,.92);color:#14213d}.adf-pill.skip .adf-ring{display:none}
 
 </style>
 <div class="app" id="app">
@@ -4645,7 +4646,7 @@ function renderPath(){renderTop();const b=curBook();const T=S.testament.toLowerC
   const done=doneOf(b),open=bookUnlocked(b);const deco=T==="at"?["🌴","🌵","🐪","🌴","🐑","🏕️"]:["🌿","⛵","🐟","🌴","🏘️","🐑"];let h="";
   unitsOf(b).forEach(([name,a,z],ui)=>{h+=`<div class="unit"><div class="k">Étape ${ui+1} · ${chapSpan(b,a,z)}</div><div class="h">${esc(name)}</div></div>`;
     for(let L=a;L<=z;L++){const st=L<=done?"done":(L===done+1&&open?"cur":"lock");const x=xOf(L);
-      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}${st==="done"&&bestOf(b,L)!==undefined?" s-"+pctTone(bestOf(b,L)):""}" data-level="${L}" aria-label="Niveau ${L} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${pctTone(bestOf(b,L))}"><i class="nst">${"★".repeat(starsOf(bestOf(b,L)))}<u>${"★".repeat(3-starsOf(bestOf(b,L)))}</u></i>${bestOf(b,L)}%</span>`:""}</button>${L%3===2&&scn&&props.length?`<img class="prop3d" src="/props/${props[Math.floor(L/3)%props.length]}.webp" alt="" loading="lazy" style="left:${propLeft(x)}px">`:""}${L%3===2&&!scn?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
+      h+=`<div class="node-wrap" id="nw${L}" style="transform:translateX(${x}px)"><button class="node ${st}${st==="done"&&bestOf(b,L)!==undefined?" s-"+pctTone(bestOf(b,L)):""}" data-level="${L}" aria-label="Niveau ${L} : ${esc(levelTitle(b,L))}">${nodeIcon(st)}<span class="num">${L}</span>${st==="done"&&bestOf(b,L)!==undefined?`<span class="pct ${pctTone(bestOf(b,L))}"><i class="nst">${"★".repeat(starsAt(b,L))}<u>${"★".repeat(3-starsAt(b,L))}</u></i>${bestOf(b,L)}%</span>`:""}</button>${L%3===2&&scn&&props.length?`<img class="prop3d" src="/props/${props[Math.floor(L/3)%props.length]}.webp" alt="" loading="lazy" style="left:${propLeft(x)}px">`:""}${L%3===2&&!scn?`<span class="deco" style="left:${x>0?-96:150}px;top:14px">${deco[L%deco.length]}</span>`:""}</div>`;}});
   const next=books()[b.idx+1];
   h+=`<div class="endbook"><span class="ic">⛰️</span><div><b>Sommet de ${esc(b.name)}</b><br><small class="muted">${next?`Termine les ${b.levels} niveaux pour débloquer ${esc(next.name)}.`:"Dernier livre du "+(S.testament==="AT"?"Ancien":"Nouveau")+" Testament."}</small></div></div>`;
   tr.innerHTML=h+`<svg class="trail" id="trail"></svg><div class="pawn" id="pawn"><div class="bob"><div class="head">${avatarHTML()}</div><div class="pin"></div></div></div>`;
@@ -4731,7 +4732,7 @@ async function startLevel(b,L,fromReview){if(lvStarting)return;regen();helpsRese
   lvStarting=true;let qs;const lv=CONTENT[b.id].levels[L];try{qs=await levelQuestions(b,L,lv);}catch(e){qs=lv.qs.map(normQ);}finally{lvStarting=false;}const steps=[];const pk=b.id+"-"+L;S.lvPlays=S.lvPlays||{};S.lvPlays[pk]=(S.lvPlays[pk]||0)+1;save();
   lv.cards.forEach((c,i)=>steps.push({k:"card",c,i,n:lv.cards.length,label:"L'essentiel",last:i===lv.cards.length-1,go:"Aux questions !"}));
   qs.forEach((q,i)=>{steps.push({k:"q",q});if(i===1&&lv.mid)lv.mid.forEach((c,j)=>steps.push({k:"card",c,i:j,n:lv.mid.length,label:"Pour aller plus loin",last:j===lv.mid.length-1,go:"Reprendre les questions",num0:lv.cards.length}));});
-  markDefi(qs);LS={mode:"level",fromReview:!!fromReview,b,L,lv,title:levelTitle(b,L),ref:lv.ref,steps,si:0,total:qs.length,qdone:0,xp:0,combo:0,best:0,mistakes:0,firstTry:0};
+  qs.forEach(q=>{if(q.q)q.q=bookify(q.q,b.name);});markDefi(qs);LS={mode:"level",fromReview:!!fromReview,b,L,lv,title:levelTitle(b,L),ref:lv.ref,steps,si:0,total:qs.length,qdone:0,xp:0,combo:0,best:0,mistakes:0,firstTry:0};
   show("lesson");renderStep();}
 function startTest(kind,qs,meta){const graded=qs.filter(q=>q.graded!==false).length;
   LS=Object.assign({mode:"test",kind,steps:qs.map(q=>({k:"q",q})),si:0,total:qs.length,graded,qdone:0,xp:0,combo:0,best:0,mistakes:0,firstTry:0,score:0},meta);show("lesson");renderStep();}
@@ -4840,7 +4841,13 @@ function bumpStreak(){const d=localDay();if(!S.playDays.includes(d)){S.playDays.
 const bestOf=(b,L)=>(S.best||{})[b.id+"-"+L];
 /* ===================== ÉTOILES ET CADEAUX ===================== */
 /* Étoiles d'une partie : 0–40 % = 1 étoile, 60–80 % = 2 étoiles, 100 % = 3 étoiles. */
+/* Une question ne cite jamais « 13:31 » seul : le nom du livre est ajouté (« en 13:31 » devient « dans Matthieu 13:31 »). */
+function bookify(t,bn){if(!t||!/\d+:\d+/.test(t))return t;
+  return t.replace(/(\b(?:en|selon|dans|d['’]après|à|au)\s+)?(\d+:\d+(?:\s?[-–]\s?\d+)?)/gi,(m,pre,ref,off,str)=>{const before=(str.slice(0,off)+(pre||"")).replace(/\s*\b(?:en|selon|dans|d['’]après|à|au)\s*$/i,"").replace(/[\s(]+$/,"").toLowerCase();
+    if(ALLB.some(x=>before.endsWith(x.name.toLowerCase())))return m;const p=(pre||"").trim().toLowerCase();
+    return p==="selon"||p==="dans"||/^d['’]après$/.test(p)?`${pre}${bn} ${ref}`:p?`dans ${bn} ${ref}`:`${bn} ${ref}`;});}
 const starsOf=p=>p>=100?3:p>=60?2:1;
+const starsAt=(b,L)=>{const v=(S.stars||{})[b.id+"-"+L];return v!==undefined?v:starsOf(bestOf(b,L)||0);};
 /* Question défi : dans chaque partie, la question la plus exigeante (la dernière à égalité) se joue sans aide. */
 function markDefi(qs){const sc=q=>q.graded===false?-1:q.type==="match"?4:q.type==="order"?4:q.type==="recite"?-1:q.type==="fill"?3:q.disp==="tf"?0:(q.a&&q.a.length>1?3:1);
   let bi=-1,bs=-1;qs.forEach((q,i)=>{const v=sc(q);if(v>=bs&&v>=0){bs=v;bi=i;}});if(bi>=0)qs[bi].defi=true;}
@@ -4856,7 +4863,9 @@ const GIFTS={
   shield:{ic:"🛡️",t:"Bouclier de foi",d:"Ta prochaine erreur dans le parcours ne te coûtera pas de vie."},
   life1:{ic:"❤️",t:"+1 vie",d:"Une vie de plus pour continuer à monter."},
   lifefull:{ic:"💖",t:"Vies pleines",d:"Toutes tes vies sont rechargées !"},
-  unl1h:{ic:"♾️",t:"1 h de vies illimitées",d:"Pendant une heure, tes vies ne baissent plus. Profites-en !"}};
+  unl10m:{ic:"♾️",t:"10 min de vies illimitées",d:"Pendant 10 minutes, tes vies ne baissent plus. Fonce !"},
+  unl30m:{ic:"♾️",t:"30 min de vies illimitées",d:"Pendant 30 minutes, tes vies ne baissent plus. Profites-en !"},
+  unl1h:{ic:"♾️",t:"1 h de vies illimitées",d:"Cadeau très rare ! Pendant une heure, tes vies ne baissent plus."}};
 /* Badges rares (affichés dans les défis en ligne) et éléments d'avatar réservés aux cadeaux */
 const RARE_BADGES=["👑 Couronne de vie","🔥 Flamme de Pentecôte","⚔️ Épée de l'Esprit","🦁 Lion de Juda","💎 Perle de grand prix","🌟 Étoile du matin","🕊️ Colombe de paix","🏰 Forteresse imprenable","🌿 Cep de la vigne","🪔 Lampe allumée"];
 const PREMIUM_EMOJI=["👑","🦁","💎","🦅","🔥","🛡️","🤴","👸"];
@@ -4866,9 +4875,10 @@ const emoLocked=e=>PREMIUM_EMOJI.includes(e)&&!(S.unlocks||{})["e:"+e];
 const studioLocked=(k,i)=>PREMIUM_STUDIO.some(p=>p[0]===k&&p[1]===i)&&!(S.unlocks||{})[premKey(k,i)];
 const bookUnlockedByGift=b=>!!(S.keys||{})[b.id];
 const giftDayCount=()=>{const g=S.giftLog||{};return g.day===localDay()?g.n:0;};
-const giftMax=()=>+((typeof adCfg==="function"&&adCfg().gift_daily_max)||5);
+const giftMax=()=>{const m=typeof adCfg==="function"?+adCfg().gift_daily_max:0;return m>0?m:Infinity;};
 const giftEligible=(b,L,pct)=>pct>=100&&!(S.gifts||{})[b.id+"-"+L]&&giftDayCount()<giftMax();
-function giftBlock(b,L,pct){if(pct<100)return `<div class="giftnext">⭐⭐⭐ Fais 100 % pour débloquer un <b>cadeau surprise</b> !</div>`;
+function giftBlock(b,L,pct,first){if(!first)return `<div class="giftnext">⭐⭐⭐ Les cadeaux se gagnent avec 3 étoiles <b>dès le premier essai</b>. Vise 100 % sur le prochain niveau !</div>`;
+  if(pct<100)return `<div class="giftnext">⭐⭐⭐ Fais 100 % du premier coup sur un niveau pour gagner un <b>cadeau surprise</b> !</div>`;
   if((S.gifts||{})[b.id+"-"+L])return `<div class="giftnext">🎁 Cadeau de ce niveau déjà ouvert. Fais 3 étoiles sur un autre niveau pour en gagner un nouveau !</div>`;
   if(giftDayCount()>=giftMax())return `<div class="giftnext">🎁 Tu as ouvert tes ${giftMax()} cadeaux du jour. Reviens demain pour en gagner d'autres !</div>`;
   return `<div class="giftnext hot">🎁 <b>Un cadeau surprise t'attend !</b> Monte au niveau suivant pour l'ouvrir.</div>`;}
@@ -4904,7 +4914,7 @@ function applyGift(k){regen();const G=Object.assign({k},GIFTS[k]||{ic:"🎁",t:"
   if(k==="shield")S.shield=(S.shield||0)+1;
   if(k==="life1")S.hearts=Math.min(MAX_HEARTS,S.hearts+1);
   if(k==="lifefull")S.hearts=MAX_HEARTS;
-  if(k==="unl1h"){S.bonus=S.bonus||{};S.bonus.until=Math.max(Date.now(),S.bonus.until||0)+3600000;}
+  const unl={unl10m:10,unl30m:30,unl1h:60}[k];if(unl){S.bonus=S.bonus||{};S.bonus.until=Math.max(Date.now(),S.bonus.until||0)+unl*60000;}
   return G;}
 function revealGift(G,left,then){sfx("win");setTimeout(()=>{confetti();vibrate([30,30,60]);},120);
   $("lbody").innerHTML=`<div class="center giftstage"><div class="gopen">${G.ic}</div><div class="eyebrow">Ton cadeau</div><h2 style="font-size:28px;margin:0">${esc(G.t)}</h2><p style="margin:0">${G.d}</p>
@@ -4914,19 +4924,20 @@ function revealGift(G,left,then){sfx("win");setTimeout(()=>{confetti();vibrate([
 
 function finishLevel(){stopTimer();$("timer").hidden=true;const {b,L}=LS;const r=completeLevel(b,L);
   const pct=Math.round(LS.firstTry/LS.total*100),k=b.id+"-"+L;S.best=S.best||{};const prev=S.best[k],isRecord=prev===undefined||pct>prev;if(isRecord)S.best[k]=pct;const best=S.best[k];const xp2=!!S.xp2;if(xp2){LS.xp*=2;S.xp2=false;}S.xp+=LS.xp;S.bestCombo=Math.max(S.bestCombo||0,LS.best);save();setHead();
-  const lastOfBook=L===b.levels,next=BOOKS[b.t][b.idx+1],perfect=LS.mistakes===0,stars=starsOf(pct);
+  S.stars=S.stars||{};const firstTry=prev===undefined;if(S.stars[k]===undefined)S.stars[k]=starsOf(firstTry?pct:prev);save();
+  const lastOfBook=L===b.levels,next=BOOKS[b.t][b.idx+1],perfect=LS.mistakes===0,stars=S.stars[k];
   sfx("win");setTimeout(()=>{confetti();vibrate([40,40,40,40,120]);},150);if(r.newBadge)setTimeout(()=>sfx("badge"),800);
   $("lbody").innerHTML=`<div class="center"><div class="medal badge">${badgeIcon(b,L)}</div><div class="eyebrow">${r.newBadge?"Nouveau badge":"Badge déjà obtenu"}</div><div class="badgename">${esc(badgeName(b,L))}</div>
-   <div class="stars">${[0,1,2].map(i=>`<span class="${i<stars?"":"off"}">⭐</span>`).join("")}</div>
+   <div class="stars">${[0,1,2].map(i=>`<span class="${i<stars?"":"off"}">⭐</span>`).join("")}</div>${firstTry?"":`<small class="muted" style="display:block;margin-top:-6px">Étoiles gagnées à ta première partie · elles ne changent plus en rejouant</small>`}
    <h2 style="font-size:28px">${perfect?"Sans faute, "+esc(S.user?S.user.name:"")+" !":lastOfBook?esc(b.name)+" gravi !":"Niveau "+L+" réussi"}</h2>
    <p>${perfect?"Tu as tout trouvé du premier coup.":"Toutes les réponses sont trouvées. On continue de monter !"}${lastOfBook&&next?`<br><b>${esc(next.name)}</b> est maintenant débloqué.`:""}</p>
    <div class="scorebox ${pctTone(pct)}"><div class="sc-ring" style="--p:${pct}"><b>${pct}%</b></div><div class="sc-txt">${prev===undefined?`<b>Ton score : ${pct} %</b><small>${pct<100?"Rejoue ce niveau plus tard pour viser 100 % !":"Parfait du premier coup !"}</small>`
       :isRecord&&pct>prev?`<b>🏆 Nouveau record !</b><small>Tu passes de ${prev} % à ${pct} %.</small>`:`<b>Ton record reste ${best} %</b><small>${pct<best?`Cette fois ${pct} %. Ton meilleur score est gardé.`:"Égalité avec ton record."}</small>`}</div></div>
-   ${giftBlock(b,L,pct)}<div class="reward"><div style="--c:#e3a008"><small>XP${xp2?" ×2":""}</small><b>⭐ +${LS.xp}</b></div><div style="--c:var(--good)"><small>Record</small><b>🎯 ${best}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
+   ${giftBlock(b,L,pct,firstTry)}<div class="reward"><div style="--c:#e3a008"><small>XP${xp2?" ×2":""}</small><b>⭐ +${LS.xp}</b></div><div style="--c:var(--good)"><small>Record</small><b>🎯 ${best}%</b></div><div style="--c:var(--lapis)"><small>Plus longue série</small><b>✨ ${LS.best}</b></div></div></div>`;
   speak(`${perfect?"Sans faute !":"Bravo !"} Tu gagnes le badge ${badgeName(b,L)}.`);
   $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:10px"><button class="btn" id="back">Monter au niveau suivant ↑</button>${best<100?`<button class="btn ghost" id="again">🔁 Rejouer pour faire mieux</button>`:""}</div>`;
   const ag=$("again");if(ag)ag.onclick=()=>{sfx("tap");S.justDone={book:b.id,L};save();startLevel(b,L);};
-  const gift=giftEligible(b,L,pct);$("back").onclick=()=>{sfx("tap");const go2=()=>{if(lastOfBook&&next){S.book[b.t]=next.id;S.justDone=null;}else S.justDone={book:b.id,L};save();if(r.up)streakScreen();else go("path");};if(gift)giftScreen(b,L,go2);else go2();};}
+  const gift=firstTry&&giftEligible(b,L,pct);$("back").onclick=()=>{sfx("tap");const go2=()=>{if(lastOfBook&&next){S.book[b.t]=next.id;S.justDone=null;}else S.justDone={book:b.id,L};save();if(r.up)streakScreen();else go("path");};if(gift)giftScreen(b,L,go2);else go2();};}
 function streakScreen(){const days=["L","M","M","J","V","S","D"],now=new Date(),dow=(now.getDay()+6)%7,mon=new Date(now);mon.setDate(now.getDate()-dow);
   $("progBar").style.width="100%";$("lbody").innerHTML=`<div class="center"><div class="lampwrap" style="width:100%;--f:1"><span class="glow" style="--g:7"></span><span class="lamp">🪔</span><span class="flame">🔥</span></div>
    <h2 style="font-size:26px">Ta lampe brille depuis ${plural(S.streak,"jour")}</h2>
@@ -5750,8 +5761,13 @@ async function adNext(mode){const sb=adSb();if(!sb)return null;try{const {data,e
 /* ---------- Bandeau en haut de l'écran ---------- */
 function adTick(){if(!S.onboarded||document.visibilityState!=="visible")return;S.activeSec++;if(S.activeSec%10===0)saveLocal();
   const c=adCfg();if(!(c.banner_every_min>0))return;
-  const calm=TABS.includes(curScreen)&&$("veil").hidden&&$("reminder").hidden&&$("adBan").hidden&&$("toast").hidden;
-  if(calm&&S.activeSec-(S.adAt||0)>=c.banner_every_min*60){S.adAt=S.activeSec;saveLocal();adBanner();}}
+  const calm=["path","online","profile"].includes(curScreen)&&!document.getElementById("adFull")&&$("veil").hidden&&$("reminder").hidden&&$("adBan").hidden&&$("toast").hidden;
+  if(calm&&S.activeSec-(S.adAt||0)>=c.banner_every_min*60){S.adAt=S.activeSec;saveLocal();adInterstitial();}}
+/* Annonce automatique en plein écran (toutes les X minutes, jamais pendant une partie, ni dans Méditer ou la Bible).
+   Pas de récompense ; le joueur peut la passer au bout de 5 secondes. */
+const AD_SKIP_SEC=5,AD_CALM_TABS=["path","online","profile"];
+async function adInterstitial(){if(AD.busy||document.getElementById("adFull"))return;AD.busy=true;
+  try{await adLoadSettings();const ad=await adNext("banner");if(!ad||!AD_CALM_TABS.includes(curScreen))return;adPlayer(ad,{inter:true});}finally{AD.busy=false;}}
 async function adBanner(){if(AD.busy)return;AD.busy=true;
   try{const c=await adLoadSettings();const ad=await adNext("banner");if(!ad)return;
     const b=$("adBan");
@@ -5798,7 +5814,7 @@ function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||docu
   const bg=ad.image_url?`<div class="adf-bg" style="background-image:url('${esc(ad.image_url)}')"></div>`:"";
   el.innerHTML=`${bg}<div class="adf-media">${vid?`<video id="adfV" src="${esc(ad.video_url)}" ${ad.image_url?`poster="${esc(ad.image_url)}"`:""} playsinline webkit-playsinline preload="auto"></video>`:ad.image_url?`<img src="${esc(ad.image_url)}" alt="">`:`<div class="adf-txt">${esc(ad.title)}</div>`}</div>
     <div class="adf-top"><div class="adf-l"><span class="adf-tag">Annonce</span>${vid||ad.audio_url?`<button class="adf-ic" id="adfSnd" aria-label="Son">🔇</button>`:""}</div>
-      <div class="adf-r"><span class="adf-pill" id="adfPill"><svg viewBox="0 0 36 36" class="adf-ring"><circle cx="18" cy="18" r="15.5" class="t"/><circle cx="18" cy="18" r="15.5" class="p" id="adfRing"/></svg><b id="adfSec">${base}</b><span id="adfLbl">Récompense dans ${base} s</span></span><button class="adf-x" id="adfX" aria-label="Fermer l'annonce">✕</button></div></div>
+      <div class="adf-r"><span class="adf-pill" id="adfPill"><svg viewBox="0 0 36 36" class="adf-ring"><circle cx="18" cy="18" r="15.5" class="t"/><circle cx="18" cy="18" r="15.5" class="p" id="adfRing"/></svg><b id="adfSec">${o.inter?AD_SKIP_SEC:base}</b><span id="adfLbl">${o.inter?`Passer dans ${AD_SKIP_SEC} s`:`Récompense dans ${base} s`}</span></span><button class="adf-x" id="adfX" aria-label="Fermer l'annonce"${o.inter?' hidden':''}>✕</button></div></div>
     <div class="adf-done" id="adfDone" hidden></div>
     <div class="adf-bot"><div class="adf-card" id="adfCard">${adThumb(ad,"adf-ico")}<div class="adf-ct"><b>${esc(ad.title)}</b>${ad.body?`<span>${esc(ad.body)}</span>`:""}</div>${ad.link_url?`<span class="adf-go">${esc(ad.cta||"Voir")}</span>`:""}</div>
       <div class="adf-bar"><i id="adfBar"></i></div></div>`;
@@ -5814,7 +5830,7 @@ function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||docu
     if(snd)snd.onclick=e=>{e.stopPropagation();v.muted=!v.muted;if(!v.muted)v.play().catch(()=>{});};}
   else if(ad.audio_url){const ok=adAudioPlay(ad.audio_url);setSnd(ok&&adSoundOn());
     if(snd)snd.onclick=e=>{e.stopPropagation();const a=AD.au;if(!a)return;if(!a.paused&&a.getAttribute("src")===ad.audio_url){a.pause();setSnd(false);}else{if(a.getAttribute("src")!==ad.audio_url){a.src=ad.audio_url;a.loop=true;a.volume=.85;}if(typeof stopMusic==="function")stopMusic();AD.musicWas=AD.musicWas||!!S.set.music;a.play().then(()=>setSnd(true),()=>{});}};}
-  adLog(ad,"view","reward");
+  adLog(ad,"view",o.inter?"banner":"reward");
   setTimeout(()=>{const cd=$("adfCard");if(cd)cd.classList.add("on");},1200);
   const ring=$("adfRing"),C=2*Math.PI*15.5;if(ring){ring.style.strokeDasharray=C;ring.style.strokeDashoffset=0;}
   const finish=async(viaClick)=>{if(done)return;done=true;cancelAnimationFrame(raf);
@@ -5831,15 +5847,19 @@ function adPlayer(ad,o){const sb=adSb();const c=adCfg();const app=$("app")||docu
   const step=t=>{if(closed||done)return;const dt=Math.min(250,t-last);last=t;
     const running=document.visibilityState==="visible"&&(!v||(!v.paused&&v.readyState>=3));if(running)el0+=dt;
     const rem=Math.max(0,need-el0/1000),k=Math.min(1,el0/1000/need);$("adfBar").style.width=(k*100)+"%";if(ring)ring.style.strokeDashoffset=C*k;
+    if(o.inter){const sk=Math.max(0,AD_SKIP_SEC-el0/1000);if(ring)ring.style.strokeDashoffset=C*Math.min(1,el0/1000/AD_SKIP_SEC);
+      if(sk>0){$("adfSec").textContent=Math.ceil(sk);$("adfLbl").textContent=`Passer dans ${Math.ceil(sk)} s`;}
+      else if(!el.dataset.skip){el.dataset.skip=1;const p=$("adfPill");p.classList.add("skip");$("adfSec").textContent="";$("adfLbl").textContent="Passer l'annonce ›";p.onclick=e=>{e.stopPropagation();close();};$("adfX").hidden=false;$("adfX").classList.add("ready");}
+      if(rem<=0){close();return;}raf=requestAnimationFrame(step);return;}
     const s=Math.ceil(rem);$("adfSec").textContent=s;$("adfLbl").textContent=`Récompense dans ${s} s`;
     if(rem<=0){finish(false);return;}raf=requestAnimationFrame(step);};raf=requestAnimationFrame(step);
   const close=()=>{closed=true;cancelAnimationFrame(raf);if(v){try{v.pause();v.removeAttribute("src");v.load();}catch(e){}}adAudioStop();if(v&&AD.musicWas&&S.set.music&&typeof startMusic==="function")startMusic();AD.musicWas=false;
     el.classList.add("out");setTimeout(()=>el.remove(),250);if(curScreen==="path")renderTop();if(curScreen==="profile")renderProfile();if(granted&&o.after)o.after();};
-  $("adfX").onclick=e=>{e.stopPropagation();if(done){close();return;}
+  $("adfX").onclick=e=>{e.stopPropagation();if(done||o.inter){close();return;}
     if(v)v.pause();const cf=document.createElement("div");cf.className="adf-confirm";
     cf.innerHTML=`<div><b>Quitter l'annonce ?</b><p>Tu ne recevras pas ta récompense (${o.prize}).</p><button class="btn" id="adfKeep">Continuer l'annonce</button><button class="textlink" id="adfQuit" style="color:#fff">Quitter</button></div>`;el.appendChild(cf);
     $("adfKeep").onclick=()=>{cf.remove();last=performance.now();if(v)v.play().catch(()=>{});};$("adfQuit").onclick=()=>{cf.remove();close();};};
-  const open=e=>{if(e)e.stopPropagation();if(!ad.link_url)return;adOpen(ad,"reward");};
+  const open=e=>{if(e)e.stopPropagation();if(!ad.link_url)return;adOpen(ad,o.inter?"banner":"reward");};
   $("adfCard").onclick=open;const m=el.querySelector(".adf-media");if(m&&ad.link_url)m.onclick=open;}
 
 /* ---------- Annonces récompensées restantes aujourd'hui (remise à zéro à minuit, heure de Kinshasa) ---------- */
