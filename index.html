@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="2ce0b75f77";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="d322c43214";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5579,7 +5579,7 @@ const SC={
  agar:{c:"L'eau de l'outre est épuisée",sky:"desert",h:["bib:agar","bib:ismael"],k:"dry",r:"Genèse 21:15",
    art:{dir:"agar",mode:"heat",bg:"bg",bgFocus:.5,feet:.93,sk:"dry",voice:{p:1,fs:1},hero:{calm:"agar-calme",fear:"agar-peur",joy:"agar-joie",h:.62},reward:"puits",rh:.5,snd:{}}},
  sodom:{c:"Le soufre et le feu tombent sur Sodome",sky:"fire",h:["👨‍👩‍👧"],k:"fall",e:"🔥",r:"Genèse 19:24",
-   art:{dir:"sodom",mode:"firerain",bg:"bg",bgFocus:.5,feet:.93,sk:"fire",voice:{p:.9,fs:1},hero:{calm:"famille-fuit",fear:"famille-peur",joy:"famille-joie",h:.6,sweat:"🔥"},threat:{walk:"feu"},snd:{}}},
+   art:{dir:"sodom",wip:1,mode:"firerain",bg:"bg",bgFocus:.5,feet:.93,sk:"fire",voice:{p:.9,fs:1},hero:{calm:"famille-fuit",fear:"famille-peur",joy:"famille-joie",h:.6,sweat:"🔥"},threat:{walk:"feu"},snd:{}}},
  promise:{c:"Rien n'est impossible à l'Éternel",sky:"night",h:["bib:sara"],p:"⭐",k:"time",r:"Genèse 18:14"},
  moriah:{c:"Sur le mont Morija, Dieu pourvoira",sky:"dusk",h:["bib:isaac"],p:"🪵",k:"time",r:"Genèse 22:8"},
  well:{c:"Le soir tombe près du puits",sky:"dusk",h:["bib:eliezer"],p:"🐫",k:"dark",r:"Genèse 24:11"},
@@ -5778,10 +5778,11 @@ function seSpr(dir,n){const k=dir+"/"+n;if(!SE.img[k]){const im=new Image();im.d
 const seOk=im=>im&&im.complete&&im.naturalWidth>0;
 function sePart(o){SE.parts.push(Object.assign({x:0,y:0,vx:0,vy:0,g:0,life:1,age:0,size:6,kind:"dot",col:"#fff",rot:0,vr:0},o));}
 
-/* Pas encore activé pour les joueurs : visible seulement en prévisualisation (?scenes=1 dans l'adresse, mémorisé sur l'appareil ; ?scenes=0 pour l'enlever). */
+/* En ligne pour tous les joueurs : uniquement les scènes illustrées terminées (art sans « wip »).
+   Aperçu complet (y compris les anciennes scènes dessinées et celles en cours) : ?scenes=1 dans l'adresse, mémorisé sur l'appareil ; ?scenes=0 pour l'enlever. */
 const SCENES_LIVE=(()=>{try{const q=location.search;if(/[?&]scenes=1/.test(q))localStorage.setItem("pb-scenes","1");if(/[?&]scenes=0/.test(q))localStorage.removeItem("pb-scenes");return localStorage.getItem("pb-scenes")==="1";}catch(e){return false;}})();
-function sceneShow(){const el=$("scene");if(!el)return;if(!SCENES_LIVE||!LS||LS.mode!=="level"){sceneHide();return;}
-  const s=sceneFor(LS.b.id,LS.L);
+function sceneShow(){const el=$("scene");if(!el)return;if(!LS||LS.mode!=="level"){sceneHide();return;}
+  const s=sceneFor(LS.b.id,LS.L);if(!SCENES_LIVE&&!(s.art&&!s.art.wip)){sceneHide();return;}
   if(SE.s!==s||!el.querySelector("canvas")){SE.s=s;el.innerHTML=`<canvas></canvas><div class="sccap">${esc(s.c)}</div><div class="scsec" id="scSec"></div><div class="scfail" id="scFail" hidden><span>FAIL</span></div>`;
     SE.cv=el.querySelector("canvas");SE.ctx=SE.cv.getContext("2d");SE.wave=null;SE.swarm=null;SE.clouds=null;(s.h||[]).concat([s.e,s.p,s.pk]).forEach(v=>{if(/^bib:/.test(v||""))seImg(v.slice(4));});
     if(s.art){const a=s.art;[a.bg,a.light,a.dark,a.reward,...(a.pre||[]),...Object.values(a.hero||{}),...Object.values(a.threat||{})].forEach(n=>{if(typeof n==="string"&&n)seSpr(a.dir,n);});}}
