@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="dcda36eff9";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="ee59647ae5";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4871,7 +4871,7 @@ if(IN_STORE_APP)document.documentElement.classList.add("store-app");
 $("pillHearts").onclick=e=>{const b=e.target.closest("[data-st]");if(!b)return;if(typeof statSheet==="function")statSheet(b.dataset.st);};
 
 /* ===================== MOTEUR DE QUESTIONS =====================
-   mode "level" : cœurs, chrono 20 s, aides ; on réessaie jusqu'à trouver (la bonne réponse n'est jamais montrée).
+   mode "level" : cœurs, chrono selon la difficulté (20/15/10 s), aides ; on réessaie jusqu'à trouver (la bonne réponse n'est jamais montrée).
    mode "test"  : méditation et mémorisation ; une seule tentative, sans cœur ni chrono, correction affichée. */
 let LS=null,TM=null;
 function normQ(q){if(q.t==="tf")return {type:"choice",disp:"tf",q:q.q,o:["Vrai","Faux"],a:[q.a?0:1],ref:q.ref,ex:q.ex};
@@ -4890,15 +4890,19 @@ function levelChapters(b,lv){const s=String(lv.ref||"").slice(b.name.length).tri
   return out;}
 function shuffleOpts(q){if(q.type!=="choice"||q.disp!=="qcm"||!Array.isArray(q.o))return q;const idx=shuffle(q.o.map((_,i)=>i));
   return Object.assign({},q,{o:idx.map(i=>q.o[i]),a:(q.a||[]).map(x=>idx.indexOf(x))});}
-function bankToQ(r){if(r.kind==="tf")return {type:"choice",disp:"tf",q:r.prompt,o:["Vrai","Faux"],a:[r.answer?0:1],ref:r.ref,ex:r.explanation||""};
-  if(r.kind==="fill")return {type:"fill",q:r.prompt||"Complète le verset",s:r.sentence,o:r.options,a:[r.answer],ref:r.ref,ex:r.explanation||""};
-  return {type:"choice",disp:"qcm",q:r.prompt,o:r.options,a:Array.isArray(r.answer)?r.answer:[r.answer],ref:r.ref,ex:r.explanation||""};}
+function bankToQ(r){if(r.kind==="tf")return {type:"choice",disp:"tf",q:r.prompt,o:["Vrai","Faux"],a:[r.answer?0:1],ref:r.ref,ex:r.explanation||"",diff:r.difficulty};
+  if(r.kind==="fill")return {type:"fill",q:r.prompt||"Complète le verset",s:r.sentence,o:r.options,a:[r.answer],ref:r.ref,ex:r.explanation||"",diff:r.difficulty};
+  return {type:"choice",disp:"qcm",q:r.prompt,o:r.options,a:Array.isArray(r.answer)?r.answer:[r.answer],ref:r.ref,ex:r.explanation||"",diff:r.difficulty};}
 function passageQs(b,chs){if(!BIBLE||!chs.length)return [];const out=[];let guard=0;
   while(out.length<3&&guard++<12){const seg=pick(chs),ch=BIBLE[b.g]&&BIBLE[b.g][seg.c-1];if(!ch)continue;
     const v1=seg.v1||1,v2=Math.min(seg.v2||ch.length,ch.length),v=v1+Math.floor(Math.random()*(v2-v1+1)),t=ch[v-1]||"";if(t.length<40||t.length>240)continue;
     const r=genVerseQuestions({g:b.g,c:seg.c,v},false).qs.filter(q=>q.type==="fill"||q.tag==="Contexte");if(r.length)out.push(pick(r));}
   return out;}
-async function levelQuestions(b,L,lv){const base=lv.qs.map(normQ),key=b.id+"-"+L;S.lvPlays=S.lvPlays||{};const plays=S.lvPlays[key]||0;
+/* Difficulté : dans chaque niveau, questions 1-2 faciles, 3-4 moyennes, 5 difficile (comme la banque en ligne). */
+const Q_DIFF=i=>i<2?"facile":i<4?"moyen":"difficile";
+/* Chrono selon la difficulté : facile = temps normal (20 s), moyenne = ×1,33 plus rapide (15 s), difficile = ×2 plus rapide (10 s). */
+const qSec=q=>{const d=q&&q.diff;return d==="difficile"?Math.round(Q_SECONDS/2):d==="moyen"?Math.round(Q_SECONDS*.75):Q_SECONDS;};
+async function levelQuestions(b,L,lv){const base=lv.qs.map((q,i)=>Object.assign(normQ(q),{diff:Q_DIFF(i)})),key=b.id+"-"+L;S.lvPlays=S.lvPlays||{};const plays=S.lvPlays[key]||0;
   if(plays===0&&L>doneOf(b))return base.map(shuffleOpts);
   const chs=levelChapters(b,lv),n=base.length,keepN=Math.min(3,n),start=(plays*2)%n;
   const keep=Array.from({length:keepN},(_,i)=>base[(start+i)%n]);
@@ -4906,11 +4910,11 @@ async function levelQuestions(b,L,lv){const base=lv.qs.map(normQ),key=b.id+"-"+L
   try{if(typeof olLevelPool==="function"){const rows=await Promise.race([olLevelPool(b.name,chs.map(x=>x.c)),new Promise(r=>setTimeout(()=>r([]),1500))]);
     const mine=new Set(lv.qs.map(q=>q.q));extra=shuffle((rows||[]).filter(r=>!String(r.source||"").startsWith(key+"-")&&!mine.has(r.prompt))).map(bankToQ);}}catch(e){}
   if(extra.length<n-keepN){try{await Promise.race([loadBible(),new Promise((_,j)=>setTimeout(j,1500))]);}catch(e){}extra=extra.concat(passageQs(b,chs));}
-  const qs=keep.concat(extra.slice(0,n-keepN));while(qs.length<n)qs.push(base[(start+qs.length)%n]);
+  const qs=keep.concat(extra.slice(0,n-keepN).map(q=>q.diff?q:Object.assign(q,{diff:"moyen"})));while(qs.length<n)qs.push(base[(start+qs.length)%n]);
   return shuffle(qs).map(shuffleOpts);}
 let lvStarting=false;
 async function startLevel(b,L,fromReview){if(lvStarting)return;regen();helpsReset();if(!S.testament)S.testament=b.t;if(S.hearts<=0&&!unlimited()){noHearts();return;}
-  lvStarting=true;let qs;const lv=CONTENT[b.id].levels[L];try{qs=await levelQuestions(b,L,lv);}catch(e){qs=lv.qs.map(normQ);}finally{lvStarting=false;}const steps=[];const pk=b.id+"-"+L;S.lvPlays=S.lvPlays||{};S.lvPlays[pk]=(S.lvPlays[pk]||0)+1;save();
+  lvStarting=true;let qs;const lv=CONTENT[b.id].levels[L];try{qs=await levelQuestions(b,L,lv);}catch(e){qs=lv.qs.map((q,i)=>Object.assign(normQ(q),{diff:Q_DIFF(i)}));}finally{lvStarting=false;}const steps=[];const pk=b.id+"-"+L;S.lvPlays=S.lvPlays||{};S.lvPlays[pk]=(S.lvPlays[pk]||0)+1;save();
   lv.cards.forEach((c,i)=>steps.push({k:"card",c,i,n:lv.cards.length,label:"L'essentiel",last:i===lv.cards.length-1,go:"Aux questions !"}));
   qs.forEach((q,i)=>{steps.push({k:"q",q});if(i===1&&lv.mid)lv.mid.forEach((c,j)=>steps.push({k:"card",c,i:j,n:lv.mid.length,label:"Pour aller plus loin",last:j===lv.mid.length-1,go:"Reprendre les questions",num0:lv.cards.length}));});
   qs.forEach(q=>{if(q.q)q.q=bookify(q.q,b.name);});markDefi(qs);LS={mode:"level",fromReview:!!fromReview,b,L,lv,title:levelTitle(b,L),ref:lv.ref,steps,si:0,total:qs.length,qdone:0,xp:0,combo:0,best:0,mistakes:0,firstTry:0};
@@ -4958,8 +4962,8 @@ function askFoot(msg){helpsReset();if($("lHelps"))$("lHelps").textContent="💡 
   const needCheck=q.type!=="match";const dis=q.type==="order"?LS.ord.length!==q.frags.length:q.type==="recite"?true:LS.sel.size===0;
   f.innerHTML=`${msg?`<div class="fb"><b>${msg[0]}</b><p>${msg[1]}</p></div>`:""}<div class="actions">${lvl?(q.defi?`<button class="btn ghost helpbtn" disabled title="Pas d'aide sur la question défi">⚡ Sans aide</button>`:`<button class="btn ghost helpbtn" id="help">💡 Aide · ${S.helps}</button>`):""}${needCheck?`<button class="btn" id="check" ${dis?"disabled":""}>${q.graded===false?"Valider":"Vérifier"}</button>`:""}</div>`;
   const c=$("check");if(c)c.onclick=check;const h=$("help");if(h)h.onclick=useHelp;}
-function startTimer(){stopTimer();$("timer").hidden=false;$("timer").classList.remove("urgent");let t0=Date.now(),tl=t0;let lastSec=Q_SECONDS;$("tbar").style.transform="scaleX(1)";$("tnum").textContent=Q_SECONDS+"s";
-  TM=setInterval(()=>{const nw=Date.now();if(!$("veil").hidden||document.getElementById("adFull")){t0+=nw-tl;tl=nw;return;}tl=nw;const left=Math.max(0,Q_SECONDS-(Date.now()-t0)/1000);$("tbar").style.transform=`scaleX(${left/Q_SECONDS})`;const s=Math.ceil(left);$("tnum").textContent=s+"s";sceneTick(1-left/Q_SECONDS,s);
+function startTimer(){stopTimer();$("timer").hidden=false;$("timer").classList.remove("urgent");const QS=qSec(LS&&LS.q);let t0=Date.now(),tl=t0;let lastSec=QS;$("tbar").style.transform="scaleX(1)";$("tnum").textContent=QS+"s";
+  TM=setInterval(()=>{const nw=Date.now();if(!$("veil").hidden||document.getElementById("adFull")){t0+=nw-tl;tl=nw;return;}tl=nw;const left=Math.max(0,QS-(Date.now()-t0)/1000);$("tbar").style.transform=`scaleX(${left/QS})`;const s=Math.ceil(left);$("tnum").textContent=s+"s";sceneTick(1-left/QS,s);
     if(left<=5)$("timer").classList.add("urgent");if(s<lastSec&&s<=5&&s>0)sfx("tick");lastSec=s;if(left<=0){stopTimer();penalize(true);}},80);}
 function stopTimer(){if(TM){clearInterval(TM);TM=null;}}
 function floatXp(n){if(!n)return;const e=document.createElement("span");e.className="xpfloat";e.textContent="+"+n;const r=$("lXp").getBoundingClientRect(),a=$("app").getBoundingClientRect();e.style.left=(r.left-a.left+8)+"px";e.style.top=(r.top-a.top+18)+"px";$("app").appendChild(e);setTimeout(()=>e.remove(),1000);}
@@ -5749,14 +5753,14 @@ function sePart(o){SE.parts.push(Object.assign({x:0,y:0,vx:0,vy:0,g:0,life:1,age
 const SCENES_LIVE=(()=>{try{const q=location.search;if(/[?&]scenes=1/.test(q))localStorage.setItem("pb-scenes","1");if(/[?&]scenes=0/.test(q))localStorage.removeItem("pb-scenes");return localStorage.getItem("pb-scenes")==="1";}catch(e){return false;}})();
 function sceneShow(){const el=$("scene");if(!el)return;if(!SCENES_LIVE||!LS||LS.mode!=="level"){sceneHide();return;}
   const s=sceneFor(LS.b.id,LS.L);
-  if(SE.s!==s||!el.querySelector("canvas")){SE.s=s;el.innerHTML=`<canvas></canvas><div class="sccap">${esc(s.c)}</div><div class="scsec" id="scSec">${Q_SECONDS}s</div><div class="scfail" id="scFail" hidden><span>FAIL</span></div>`;
+  if(SE.s!==s||!el.querySelector("canvas")){SE.s=s;el.innerHTML=`<canvas></canvas><div class="sccap">${esc(s.c)}</div><div class="scsec" id="scSec"></div><div class="scfail" id="scFail" hidden><span>FAIL</span></div>`;
     SE.cv=el.querySelector("canvas");SE.ctx=SE.cv.getContext("2d");SE.wave=null;SE.swarm=null;SE.clouds=null;(s.h||[]).concat([s.e,s.p,s.pk]).forEach(v=>{if(/^bib:/.test(v||""))seImg(v.slice(4));});
     if(s.art){const a=s.art;[a.bg,a.light,a.dark,...(a.pre||[]),...Object.values(a.hero||{}),...Object.values(a.threat||{})].forEach(n=>{if(typeof n==="string"&&n)seSpr(a.dir,n);});}}
   el.hidden=false;el.className="scene";document.body.classList.add("hasScene");if(!SE.on||SA.s!==s)saStart(s);SE.on=true;seResize();sceneReset();
   cancelAnimationFrame(SE.raf);SE.last=performance.now();SE.raf=requestAnimationFrame(seLoop);}
 function seResize(){const cv=SE.cv;if(!cv)return;const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);SE.W=Math.max(200,r.width||360);SE.H=r.height||170;cv.width=SE.W*d;cv.height=SE.H*d;SE.ctx.setTransform(d,0,0,d,0,0);}
 function sceneHide(){saStop();SE.on=false;cancelAnimationFrame(SE.raf);const el=$("scene");if(el)el.hidden=true;document.body.classList.remove("hasScene");}
-function sceneReset(){SE.state="";SE.st=0;SE.tp=0;SE.p=0;SE.parts=[];SE.shake=0;SE.flash=0;SE.tx=0;SE.lv=0;saReset();const f=$("scFail");if(f)f.hidden=true;const el=$("scene");if(el)el.classList.remove("lose");}
+function sceneReset(){const ss=$("scSec");if(ss&&typeof qSec==="function"){ss.textContent=qSec(LS&&LS.q)+"s";ss.classList.remove("urg");}SE.state="";SE.st=0;SE.tp=0;SE.p=0;SE.parts=[];SE.shake=0;SE.flash=0;SE.tx=0;SE.lv=0;saReset();const f=$("scFail");if(f)f.hidden=true;const el=$("scene");if(el)el.classList.remove("lose");}
 function sceneTick(p,sec){if(!SE.on)return;const t=$("scSec");if(t){t.textContent=sec+"s";t.classList.toggle("urg",sec<=5);}if(!SE.state)SE.tp=p;}
 function sceneHit(){if(!SE.on)return;saHit();SE.state="hit";SE.st=0;SE.shake=1;SE.flash=1;const g=seGround();if(SE.s&&SE.s.art&&SE.s.art.mode==="reveal")return;
   for(let i=0;i<14;i++)sePart({x:seHeroX()+10,y:g-24,vx:(Math.random()-.3)*160,vy:-Math.random()*160,g:380,life:.8,size:3+Math.random()*3,col:i%2?"#ffd166":"#fff",kind:"dot"});
@@ -5954,7 +5958,7 @@ function seDrawReveal(c,s,dt){const a=s.art,W=SE.W,H=SE.H,st=SE.state,t=SE.t;let
 function seDrawFlood(c,s,dt){const a=s.art,W=SE.W,H=SE.H,st=SE.state,t=SE.t;let p=Math.max(0,SE.p);const P=st==="win"?p*Math.max(.15,1-SE.st*.9):p;
   c.save();seCam(c,W,H,Math.min(1,p),st,W*.4,H*.75);seBg(c,a,a.bg,W,H);
   if(st!=="win"||SE.st<.4){c.fillStyle=`rgba(20,30,50,${.1+Math.min(1,p)*.25})`;c.fillRect(0,0,W,H);}
-  const gnd=H*.9,happy=st==="win"||(!st&&p<.4);
+  const gnd=H*.9,happy=st==="win";
   /* arche */
   const ax=W*.66,aw=seFig(c,a,"arche",ax,gnd-H*.06+Math.sin(t*1.4)*(P>.5?2:0),H*.62);
   /* animaux, deux par deux */
@@ -6131,6 +6135,8 @@ function rdResult(r,given){S.riddleDay=kinDay();const ok=!!r.correct;
    le navigateur ne reçoit jamais les bonnes réponses avant d'avoir répondu. */
 const OL_CFG={url:"https://xyuqturdtqmclrjdnaen.supabase.co",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5dXF0dXJkdHFtY2xyamRuYWVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NDI3OTUsImV4cCI6MjEwOTQxODc5NX0.RHa_6UtvTfeFBdQ7wcBDby35cgvBYabIDe5grAfmS0E"};
 const OL_Q_SECONDS=20, OL_POINTS={win:10,draw:5};
+/* Même règle que le solo : facile 20 s, moyenne 15 s, difficile 10 s (le serveur applique la même durée). */
+const olSecs=q=>({moyen:15,difficile:10})[q&&q.difficulty]||OL_Q_SECONDS;
 const OL={sb:null,session:null,me:null,tab:"play",authMode:"signup",msg:"",searching:false,searchT:null,searchStart:0,waitInvite:null,waitT:null,
   chan:null,m:null,lb:null,friends:null,hist:null,prize:null,invites:[],seenInv:{},dT:null,clockT:null,pollT:null};
 
@@ -6275,7 +6281,7 @@ function renderOnline(){const p=$("onlinePage");if(!p)return;
     const gc=typeof adCfg==="function"?adCfg():{online_min_lives:0},need=+gc.online_min_lives||0,cost=+gc.online_cost_lives||0;
   if(t==="play"){
     h+=olPrizeCard()+`<button class="btn big" id="olFind">⚔️ Trouver un adversaire</button>
-      <div class="card rules"><b>Comment ça marche</b><ul><li>10 questions tirées au hasard, Ancien et Nouveau Testament mélangés, du facile au difficile.</li><li>⚡ Course de vitesse : le premier qui trouve la bonne réponse remporte la question, et on passe à la suivante pour les deux.</li><li>Une mauvaise réponse te bloque sur cette question : ton adversaire peut encore la trouver. 20 secondes maximum par question.</li><li>Victoire : <b>+${OL_POINTS.win} points</b> · égalité : <b>+${OL_POINTS.draw} points</b> chacun.</li><li>Seuls les points des parties en ligne comptent pour le classement du mois.</li>${need>0?`<li>♥ Il faut au moins <b>${need} vies</b> pour lancer ou accepter une partie (en ligne ou entre amis)${cost>0?`, et chaque partie en utilise ${cost}`:""}. Il en manque ? Regarde une annonce : +${+gc.reward_lives||1} ♥ par annonce.</li>`:""}</ul></div>`;
+      <div class="card rules"><b>Comment ça marche</b><ul><li>10 questions tirées au hasard, Ancien et Nouveau Testament mélangés, du facile au difficile.</li><li>⚡ Course de vitesse : le premier qui trouve la bonne réponse remporte la question, et on passe à la suivante pour les deux.</li><li>Une mauvaise réponse te bloque sur cette question : ton adversaire peut encore la trouver. 20 secondes pour une question facile, 15 pour une moyenne, 10 pour une difficile.</li><li>Victoire : <b>+${OL_POINTS.win} points</b> · égalité : <b>+${OL_POINTS.draw} points</b> chacun.</li><li>Seuls les points des parties en ligne comptent pour le classement du mois.</li>${need>0?`<li>♥ Il faut au moins <b>${need} vies</b> pour lancer ou accepter une partie (en ligne ou entre amis)${cost>0?`, et chaque partie en utilise ${cost}`:""}. Il en manque ? Regarde une annonce : +${+gc.reward_lives||1} ♥ par annonce.</li>`:""}</ul></div>`;
     const hOn=(OL.hist||[]).filter(x=>x.mode==="online");
     h+=`<h3 class="olh3">Mes dernières parties en ligne</h3>`+(hOn.length?`<div class="hist2">${hOn.map(x=>`<div class="hrow"><span>${x.won?"🏆":x.is_draw?"🤝":"💪"}</span><span class="nm">${x.mode==="friend"?"Ami · ":""}${olName(x.opp_name)}<small>${new Date(x.finished_at).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</small></span><b>${x.my_score} – ${x.opp_score}</b>${x.mode==="online"?`<span class="pts">+${x.points}</span>`:`<span class="pts muted">amical</span>`}</div>`).join("")}</div>`:`<div class="card muted" style="font-size:14px">Aucune partie en ligne pour l'instant. Lance ton premier défi !</div>`);}
   if(t==="rank"){const lb=OL.lb;const mois=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
@@ -6491,9 +6497,9 @@ function olAsk(idx){if(!OL.m||OL.m.shown)return;const d=OL.m.data,n=d.questions.
   $("dbody").querySelectorAll("[data-c]").forEach(b=>{if(OL.m.locked)b.disabled=true;b.onclick=()=>{const v=b.dataset.c;olAnswer(v==="true"?true:v==="false"?false:+v,b);};});
   if(OL.m.locked)olMsg("ko","Tu t'es trompé sur cette question. À ton adversaire de jouer…");
   speak(q.kind==="fill"?q.sentence.replace("___","…"):q.prompt);
-  const t0=olAt(OL.m.st.cur_started);$("dtimer").hidden=false;$("dtimer").classList.remove("urgent");let last=-1,ticked=false;
-  clearInterval(OL.dT);OL.dT=setInterval(()=>{if(!OL.m||OL.m.idx!==idx){clearInterval(OL.dT);return;}const left=Math.max(0,OL_Q_SECONDS*1000-(Date.now()-t0));const s=Math.ceil(left/1000);
-    $("dtbar").style.transform=`scaleX(${left/(OL_Q_SECONDS*1000)})`;if(s!==last){last=s;$("dtnum").textContent=s+"s";if(s<=5&&s>0){sfx("tick");$("dtimer").classList.add("urgent");}}
+  const QS=olSecs(q),t0=olAt(OL.m.st.cur_started);$("dtimer").hidden=false;$("dtimer").classList.remove("urgent");let last=-1,ticked=false;
+  clearInterval(OL.dT);OL.dT=setInterval(()=>{if(!OL.m||OL.m.idx!==idx){clearInterval(OL.dT);return;}const left=Math.max(0,QS*1000-(Date.now()-t0));const s=Math.ceil(left/1000);
+    $("dtbar").style.transform=`scaleX(${left/(QS*1000)})`;if(s!==last){last=s;$("dtnum").textContent=s+"s";if(s<=5&&s>0){sfx("tick");$("dtimer").classList.add("urgent");}}
     if(left<=0&&!ticked){ticked=true;olRpc("tick_match",{m:OL.m.id}).catch(()=>{}).then(olPoll);}},100);}
 function olMsg(kind,txt){const m=$("dMsg");if(m)m.innerHTML=`<div class="fbk ${kind}"><b>${txt}</b></div>`;}
 async function olAnswer(choice,btn){if(!OL.m||OL.m.locked)return;const idx=OL.m.idx;OL.m.locked=true;hush();
