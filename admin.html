@@ -954,40 +954,19 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .lightbox p{color:#fff;font-weight:800;font-size:17px;margin:0;text-align:center}
 .lightbox .lbx{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:18px}
 
-/* Scènes de danger (pendant les questions) */
-.scene{position:relative;height:112px;margin:2px 0 4px;border-radius:18px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 6px 16px rgba(20,33,61,.12);background:#cfe8ff}
-.scene svg{display:block;width:100%;height:100%}
+/* Scènes de danger (pendant les questions) — moteur canvas */
+.scene{position:relative;height:172px;margin:2px 0 4px;border-radius:20px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 8px 20px rgba(20,33,61,.16);background:#cfe8ff}
+.scene canvas{display:block;width:100%;height:100%}
 body.hasScene .timer{display:none!important}
-.sccap{position:absolute;left:8px;top:7px;max-width:calc(100% - 70px);background:rgba(255,255,255,.88);color:var(--ink);font:700 11.5px/1.25 var(--f-body,inherit);padding:4px 9px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.sccap{position:absolute;left:8px;top:7px;max-width:calc(100% - 70px);background:rgba(255,255,255,.9);color:var(--ink);font:700 11.5px/1.25 var(--f-body,inherit);padding:4px 9px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.12)}
 .scsec{position:absolute;right:8px;top:6px;background:var(--bad);color:#fff;font:800 14px var(--f-display);padding:2px 9px;border-radius:999px;min-width:38px;text-align:center;font-variant-numeric:tabular-nums}
 .scsec.urg{animation:scpulse .5s infinite}
 @keyframes scpulse{50%{transform:scale(1.15)}}
-#scThreat{transition:transform .12s linear}
-.scene .tw0{animation:scbob .7s ease-in-out infinite}.scene .tw1{animation:scbob .7s ease-in-out -.23s infinite}.scene .tw2{animation:scbob .7s ease-in-out -.46s infinite}
-@keyframes scbob{50%{transform:translateY(-3px)}}
-.scene .tok{transform-box:fill-box}
-.scene #scHero{transform-box:fill-box;transform-origin:center bottom;transition:filter .3s}
-.scene.win #scHero{animation:scjump .5s ease 2}
-@keyframes scjump{40%{transform:translateY(-10px)}}
-.scene.hit{animation:scshake .45s}
-.scene.hit::after{content:"";position:absolute;inset:0;background:rgba(214,50,63,.35);animation:scflash .9s forwards;pointer-events:none}
-@keyframes scflash{to{opacity:0}}
-@keyframes scshake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
-.scene.lose svg{filter:grayscale(.85) brightness(.8)}
-#scRise{transition:transform .8s ease}
-.scene .wave{animation:scwave 2.2s linear infinite}.scene .wave.w2{animation-duration:3.1s;animation-direction:reverse}
-@keyframes scwave{to{transform:translateX(-30px)}}
-.scene .drop{animation:scdrop 1.6s linear infinite}
-@keyframes scdrop{from{transform:translateY(-14px)}to{transform:translateY(118px)}}
-.scene .flick{animation:scflick .35s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center bottom}
-@keyframes scflick{to{transform:scale(1.08,.94)}}
-.scene .popup{animation:scpop 1.1s ease-out forwards}.scene .sunup{animation:scpop 1.1s ease-out forwards}
-@keyframes scpop{from{transform:translateY(10px);opacity:0}25%{opacity:1}to{transform:translateY(-26px);opacity:0}}
-.scene .tw{animation:sctw 2s ease-in-out infinite}
-@keyframes sctw{50%{opacity:.3}}
-@media(max-height:700px){.scene{height:92px}}
-@media(prefers-reduced-motion:reduce){.scene *{animation:none!important}}
-.scene .glow{animation:scglow 1s ease-in-out infinite alternate}@keyframes scglow{to{opacity:.4}}
+.scfail{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.scfail span{display:grid;place-items:center;width:118px;height:118px;border-radius:50%;background:#fff;border:9px solid #e5293e;color:#e5293e;font:900 34px/1 var(--f-display);letter-spacing:.02em;box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 0 0 4px #fff,inset 0 0 0 7px #e5293e;transform:rotate(-12deg)}
+.scfail.go span{animation:scstamp .55s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes scstamp{from{transform:scale(3) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(-12deg);opacity:1}}
+@media(max-height:700px){.scene{height:140px}}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
