@@ -967,6 +967,18 @@ body.hasScene .timer{display:none!important}
 .scfail.go span{animation:scstamp .55s cubic-bezier(.2,1.6,.4,1) both}
 @keyframes scstamp{from{transform:scale(3) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(-12deg);opacity:1}}
 @media(max-height:700px){.scene{height:140px}}
+
+/* Annonce de changement de vitesse (questions moyennes / difficiles) */
+.spdnote{position:absolute;left:50%;top:86px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border-radius:999px;
+  background:#fff;box-shadow:0 10px 28px rgba(20,30,60,.22);font-size:14px;line-height:1.15;white-space:nowrap;animation:spdin .45s cubic-bezier(.2,1.4,.4,1)}
+.spdnote b{display:block;font-weight:800}.spdnote small{display:block;color:#5b6475;font-weight:600;font-size:12.5px}
+.spdnote .spdi{font-size:24px}
+.spdnote.moyen{border:2px solid #f2a516}.spdnote.moyen b{color:#b26a00}
+.spdnote.difficile{border:2px solid #e5484d}.spdnote.difficile b{color:#c4252b}
+.spdnote.facile{border:2px solid #2fae66}.spdnote.facile b{color:#1d7d47}
+.spdnote.out{opacity:0;transform:translate(-50%,-12px);transition:.35s}
+@keyframes spdin{0%{opacity:0;transform:translate(-50%,-18px) scale(.8)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
+@media (prefers-reduced-motion:reduce){.spdnote{animation:none}}
 body.admin{overflow:auto;background:#eef3fb;height:auto;min-height:100%}
 .ahead{background:linear-gradient(160deg,#1c2f6b,#2e5ff0);color:#fff;padding:14px 20px;font-family:var(--f-display);font-size:20px}
 .anav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
@@ -1605,7 +1617,7 @@ function adForm(a){const cities=A.adCities||[],lab=A.adLab||(k=>cap(k));const dr
 /* ---- Réglages (annonces, vies, parties en ligne) ---- */
 /* ---------- Règles du jeu : toutes les valeurs modifiables, appliquées à tous les joueurs sans mise à jour ---------- */
 const RULES=[
- ["❤️ Vies et aides",[["max_hearts","Vies maximum","vies","Nombre de vies quand le compteur est plein.",1,20],["heart_minutes","Recharge d'une vie","minutes","Temps pour regagner une vie perdue.",1,600],["daily_helps","Aides par jour","aides","Aides offertes chaque jour (remises à zéro à minuit).",0,50],["question_seconds","Temps par question facile (parcours)","secondes","Chrono d'une question facile. Les moyennes ont 3/4 de ce temps (15 s pour 20 s) et les difficiles la moitié (10 s).",5,120]]],
+ ["❤️ Vies et aides",[["max_hearts","Vies maximum","vies","Nombre de vies quand le compteur est plein.",1,20],["heart_minutes","Recharge d'une vie","minutes","Temps pour regagner une vie perdue.",1,600],["daily_helps","Aides par jour","aides","Aides offertes chaque jour (remises à zéro à minuit).",0,50],["question_seconds","Temps par question facile (parcours)","secondes","Chrono d'une question facile. Les questions moyennes et difficiles ont 3/4 de ce temps (15 s pour 20 s).",5,120]]],
  ["⚔️ Défis en ligne",[["online_min_xp","XP minimum pour le tournoi","XP","En dessous, le joueur ne peut pas chercher d'adversaire au hasard ; les parties entre amis restent ouvertes.",0,100000],["online_min_lives","Vies minimum pour jouer en ligne ou entre amis","vies","0 = aucune condition.",0,20],["online_cost_lives","Vies consommées par partie","vies","0 = gratuit.",0,20],["search_seconds","Durée de recherche d'un adversaire","secondes","Après ce délai : « Aucun adversaire trouvé ».",10,300],["win_points","Points pour une victoire","points","Comptent pour le classement du mois.",0,1000],["draw_points","Points pour un match nul","points","",0,1000]]],
  ["📣 Annonces",[["banner_every_min","Annonce automatique plein écran : toutes les …","minutes","Hors partie, hors Méditer et Bible. 0 = jamais.",0,600],["skip_seconds","Annonce automatique : bouton « Passer » après","secondes","",0,60],["reward_seconds","Annonce récompensée : durée minimale","secondes","Si la créa n'a pas sa propre durée.",3,120],["reward_lives","Vies gagnées par annonce","vies","",0,20],["reward_helps","Aides gagnées par annonce","aides","",0,20],["reward_daily_max","Annonces récompensées par jour et par joueur","annonces","Remise à zéro à minuit.",0,200]]],
  ["🎁 Cadeaux et parrainage",[["gift_daily_max","Cadeaux 3 étoiles par jour","cadeaux","0 = sans limite (1 cadeau par niveau réussi à 100 % du premier coup).",0,1000],["referral_needed","Amis à inviter pour le bonus","amis","",1,50],["referral_hours","Durée du bonus de parrainage","heures","Vies illimitées offertes au parrain.",1,720]]]];
