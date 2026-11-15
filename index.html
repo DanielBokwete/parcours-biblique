@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="dbecdce01a";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="6989a19707";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -959,7 +959,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .lightbox .lbx{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:18px}
 
 /* Scènes de danger (pendant les questions) — moteur canvas */
-.scene{position:relative;height:172px;margin:2px 0 4px;border-radius:20px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 8px 20px rgba(20,33,61,.16);background:#cfe8ff}
+.scene{position:relative;height:184px;margin:2px 0 4px;border-radius:20px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 8px 20px rgba(20,33,61,.16);background:#cfe8ff}
 .scene canvas{display:block;width:100%;height:100%}
 body.hasScene .timer{display:none!important}
 .sccap{position:absolute;left:8px;top:7px;max-width:calc(100% - 70px);background:rgba(255,255,255,.9);color:var(--ink);font:700 11.5px/1.25 var(--f-body,inherit);padding:4px 9px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.12)}
@@ -5534,7 +5534,8 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdat
 const SC={
  /* Genèse */
  creation:{c:"Les ténèbres couvrent l'abîme",sky:"night",h:["🌍"],k:"dark",r:"Genèse 1:2"},
- eden:{c:"Le serpent s'approche d'Ève",sky:"garden",h:["bib:eve"],p:"🌳",k:"walk",e:"🐍",r:"Genèse 3:1"},
+ eden:{c:"Le serpent s'approche d'Ève",sky:"garden",h:["bib:eve"],p:"🌳",k:"walk",e:"🐍",r:"Genèse 3:1",
+   art:{dir:"eden",bg:"bg",bgFocus:.62,feet:.86,hero:{calm:"eve-calme",fear:"eve-peur",joy:"eve-joie",h:.66},threat:{walk:"serpent-rampe",attack:"serpent-dresse",h:.34,ha:.62,slither:1}}},
  cain:{c:"Caïn s'approche d'Abel dans les champs",sky:"field",h:["bib:abel"],p:"🐑",k:"walk",e:"bib:cain",r:"Genèse 4:8"},
  flood:{c:"Les eaux montent : fais entrer les animaux",sky:"storm",h:["🐘","🦒"],p:"ark",pk:"bib:noe",k:"rise",e:"water",board:1,r:"Genèse 7:7-17"},
  babel:{c:"Les langues sont confondues sur le chantier",sky:"day",h:["🧱"],p:"tower",k:"swarm",e:"💬",n:6,r:"Genèse 11:7"},
@@ -5737,6 +5738,8 @@ function seEmoji(c,t,x,y,size,flip,rot){c.save();c.translate(x,y);if(rot)c.rotat
 function seTok(c,v,x,y,r,ring,flip){if(!/^bib:/.test(v)){seEmoji(c,v,x,y,r*1.9,flip);return;}
   const im=seImg(v.slice(4));c.save();c.shadowColor="rgba(0,0,0,.28)";c.shadowBlur=6;c.shadowOffsetY=3;c.beginPath();c.arc(x,y,r+3,0,7);c.fillStyle=ring;c.fill();c.restore();
   c.save();c.beginPath();c.arc(x,y,r,0,7);c.clip();c.fillStyle="#f3eee6";c.fillRect(x-r,y-r,r*2,r*2);if(im.complete&&im.naturalWidth){if(flip){c.translate(x,0);c.scale(-1,1);c.translate(-x,0);}c.drawImage(im,x-r,y-r,r*2,r*2);}c.restore();}
+function seSpr(dir,n){const k=dir+"/"+n;if(!SE.img[k]){const im=new Image();im.decoding="async";im.src="/sc/"+k+".webp";SE.img[k]=im;}return SE.img[k];}
+const seOk=im=>im&&im.complete&&im.naturalWidth>0;
 function sePart(o){SE.parts.push(Object.assign({x:0,y:0,vx:0,vy:0,g:0,life:1,age:0,size:6,kind:"dot",col:"#fff",rot:0,vr:0},o));}
 
 /* Pas encore activé pour les joueurs : visible seulement en prévisualisation (?scenes=1 dans l'adresse, mémorisé sur l'appareil ; ?scenes=0 pour l'enlever). */
@@ -5744,7 +5747,8 @@ const SCENES_LIVE=(()=>{try{const q=location.search;if(/[?&]scenes=1/.test(q))lo
 function sceneShow(){const el=$("scene");if(!el)return;if(!SCENES_LIVE||!LS||LS.mode!=="level"){sceneHide();return;}
   const s=sceneFor(LS.b.id,LS.L);
   if(SE.s!==s||!el.querySelector("canvas")){SE.s=s;el.innerHTML=`<canvas></canvas><div class="sccap">${esc(s.c)}</div><div class="scsec" id="scSec">${Q_SECONDS}s</div><div class="scfail" id="scFail" hidden><span>FAIL</span></div>`;
-    SE.cv=el.querySelector("canvas");SE.ctx=SE.cv.getContext("2d");SE.wave=null;SE.swarm=null;SE.clouds=null;(s.h||[]).concat([s.e,s.p,s.pk]).forEach(v=>{if(/^bib:/.test(v||""))seImg(v.slice(4));});}
+    SE.cv=el.querySelector("canvas");SE.ctx=SE.cv.getContext("2d");SE.wave=null;SE.swarm=null;SE.clouds=null;(s.h||[]).concat([s.e,s.p,s.pk]).forEach(v=>{if(/^bib:/.test(v||""))seImg(v.slice(4));});
+    if(s.art){const a=s.art;[a.bg,...Object.values(a.hero||{}),...Object.values(a.threat||{})].forEach(n=>{if(typeof n==="string")seSpr(a.dir,n);});}}
   el.hidden=false;el.className="scene";document.body.classList.add("hasScene");SE.on=true;seResize();sceneReset();
   cancelAnimationFrame(SE.raf);SE.last=performance.now();SE.raf=requestAnimationFrame(seLoop);}
 function seResize(){const cv=SE.cv;if(!cv)return;const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);SE.W=Math.max(200,r.width||360);SE.H=r.height||170;cv.width=SE.W*d;cv.height=SE.H*d;SE.ctx.setTransform(d,0,0,d,0,0);}
@@ -5769,6 +5773,7 @@ function seLoop(now){if(!SE.on)return;const dt=Math.min(.05,(now-SE.last)/1000);
   seDraw(dt);SE.raf=requestAnimationFrame(seLoop);}
 
 function seDraw(dt){const c=SE.ctx,s=SE.s,W=SE.W,H=SE.H,g=seGround(),hx=seHeroX(),p=Math.max(0,SE.p),t=SE.t;if(!c||!s)return;
+  if(s.art&&seOk(seSpr(s.art.dir,s.art.bg))){seDrawArt(c,s,dt);return;}
   const [a,b,g1,g2]=SKY[s.sky]||SKY.day;c.save();
   if(SE.shake>0)c.translate((Math.random()-.5)*10*SE.shake,(Math.random()-.5)*6*SE.shake);
   /* ciel */ let gr=c.createLinearGradient(0,0,0,H);gr.addColorStop(0,a);gr.addColorStop(1,b);c.fillStyle=gr;c.fillRect(-10,-10,W+20,H+20);
@@ -5883,6 +5888,36 @@ function sePartsDraw(c,dt){const P=SE.parts;for(let i=P.length-1;i>=0;i--){const
   c.restore();}
   if(P.length>260)P.splice(0,P.length-260);}
 addEventListener("resize",()=>{if(SE.on)seResize();});
+
+/* ---------- Scènes illustrées : décor peint, héros et danger en vraies poses ---------- */
+function seDrawArt(c,s,dt){const a=s.art,W=SE.W,H=SE.H,p=Math.max(0,SE.p),st=SE.state,t=SE.t;
+  c.save();if(SE.shake>0)c.translate((Math.random()-.5)*12*SE.shake,(Math.random()-.5)*7*SE.shake);
+  /* caméra : léger zoom vers l'action quand le danger approche */
+  const zoom=1+(st==="win"?0:Math.min(1,p))*.07,fx=W*.32,fy=H*.7;c.translate(fx,fy);c.scale(zoom,zoom);c.translate(-fx,-fy);
+  const bg=seSpr(a.dir,a.bg),bw=bg.naturalWidth*H/bg.naturalHeight,bx=-(bw-W)*(a.bgFocus??1);
+  c.drawImage(bg,bx,0,bw,H);
+  const feet=H*(a.feet||.85),hx=W*.17;
+  /* héros */
+  const he=a.hero,pose=st==="win"?he.joy:(st==="hit"||st==="lose"||p>.45)?he.fear:he.calm,im=seSpr(a.dir,pose);
+  if(seOk(im)){const hh=H*(he.h||.62)*(pose===he.joy?1.08:1),hw=im.naturalWidth*hh/im.naturalHeight;
+    const jump=st==="win"?Math.abs(Math.sin(SE.st*8))*16*Math.max(0,1-SE.st/1.3):0,trem=(p>.7&&!st)||st==="hit"?(Math.random()-.5)*(st==="hit"?6:3):0,breath=Math.sin(t*3)*.012;
+    c.fillStyle="rgba(0,0,0,.22)";c.beginPath();c.ellipse(hx,feet-2,hw*.42,5,0,0,7);c.fill();
+    c.save();c.translate(hx+trem,feet-jump);c.scale(1-breath*.5,1+breath);if(st==="lose")c.filter="grayscale(.7)";c.drawImage(im,-hw/2,-hh,hw,hh);c.restore();
+    if(p>.55&&!st&&Math.random()<.05)sePart({x:hx+hw*.3,y:feet-hh*.85,vx:22,vy:-24,g:220,life:.7,kind:"emo",t:"💦",size:11});}
+  /* danger */
+  const th=a.threat,near=p>.84||st==="hit"||st==="lose",tn=near&&th.attack?th.attack:th.walk,ti=seSpr(a.dir,tn);
+  if(seOk(ti)){const thh=H*(near&&th.attack?th.ha||.6:th.h||.4),tw=ti.naturalWidth*thh/ti.naturalHeight;
+    const reach=hx+W*(near?.16:.1)+tw*.5,start=W+tw*.6;let X=reach+(start-reach)*(1-Math.min(1.04,p)),flip=false;
+    if(st==="win"){X=reach+(start-reach)*(1-Math.min(1,p))+Math.pow(SE.st,2)*W*1.6;flip=true;}
+    const wob=th.slither?Math.sin(t*7)*.05:0,bob=th.slither?Math.sin(t*14)*1.5:Math.abs(Math.sin(t*10))*4;
+    c.fillStyle="rgba(0,0,0,.2)";c.beginPath();c.ellipse(X,feet-2,tw*.4,4,0,0,7);c.fill();
+    c.save();c.translate(X,feet-bob);if(flip)c.scale(-1,1);c.rotate(wob);if(th.slither&&!near)c.scale(1+Math.sin(t*7)*.04,1-Math.sin(t*7)*.04);
+    c.drawImage(ti,-tw/2,-thh,tw,thh);c.restore();
+    if(!st&&Math.random()<dt*6)sePart({x:X+tw*.4,y:feet-3,vx:25+Math.random()*25,vy:-12,g:50,life:.5,kind:"dust",size:3+Math.random()*3});
+    if(st==="hit"&&SE.st<.25)sePart({x:hx+W*.08,y:feet-H*.35,life:.35,kind:"emo",t:"💥",size:34});}
+  sePartsDraw(c,dt);c.restore();
+  if(SE.flash>0){c.fillStyle=`rgba(214,50,63,${SE.flash*.45})`;c.fillRect(0,0,W,H);}
+  if(st==="lose"){c.fillStyle="rgba(20,20,30,.28)";c.fillRect(0,0,W,H);}}
 
 /* ===================== ÉNIGME DU JOUR =====================
    Une seule devinette par jour (minuit à Kinshasa), affichée automatiquement à la première ouverture du jour.
