@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="fe2d31a2fa";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="69bb4253c9";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -958,6 +958,41 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
 .lightbox p{color:#fff;font-weight:800;font-size:17px;margin:0;text-align:center}
 .lightbox .lbx{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:18px}
 
+/* Scènes de danger (pendant les questions) */
+.scene{position:relative;height:112px;margin:2px 0 4px;border-radius:18px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 6px 16px rgba(20,33,61,.12);background:#cfe8ff}
+.scene svg{display:block;width:100%;height:100%}
+body.hasScene .timer{display:none!important}
+.sccap{position:absolute;left:8px;top:7px;max-width:calc(100% - 70px);background:rgba(255,255,255,.88);color:var(--ink);font:700 11.5px/1.25 var(--f-body,inherit);padding:4px 9px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.scsec{position:absolute;right:8px;top:6px;background:var(--bad);color:#fff;font:800 14px var(--f-display);padding:2px 9px;border-radius:999px;min-width:38px;text-align:center;font-variant-numeric:tabular-nums}
+.scsec.urg{animation:scpulse .5s infinite}
+@keyframes scpulse{50%{transform:scale(1.15)}}
+#scThreat{transition:transform .12s linear}
+.scene .tw0{animation:scbob .7s ease-in-out infinite}.scene .tw1{animation:scbob .7s ease-in-out -.23s infinite}.scene .tw2{animation:scbob .7s ease-in-out -.46s infinite}
+@keyframes scbob{50%{transform:translateY(-3px)}}
+.scene .tok{transform-box:fill-box}
+.scene #scHero{transform-box:fill-box;transform-origin:center bottom;transition:filter .3s}
+.scene.win #scHero{animation:scjump .5s ease 2}
+@keyframes scjump{40%{transform:translateY(-10px)}}
+.scene.hit{animation:scshake .45s}
+.scene.hit::after{content:"";position:absolute;inset:0;background:rgba(214,50,63,.35);animation:scflash .9s forwards;pointer-events:none}
+@keyframes scflash{to{opacity:0}}
+@keyframes scshake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.scene.lose svg{filter:grayscale(.85) brightness(.8)}
+#scRise{transition:transform .8s ease}
+.scene .wave{animation:scwave 2.2s linear infinite}.scene .wave.w2{animation-duration:3.1s;animation-direction:reverse}
+@keyframes scwave{to{transform:translateX(-30px)}}
+.scene .drop{animation:scdrop 1.6s linear infinite}
+@keyframes scdrop{from{transform:translateY(-14px)}to{transform:translateY(118px)}}
+.scene .flick{animation:scflick .35s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center bottom}
+@keyframes scflick{to{transform:scale(1.08,.94)}}
+.scene .popup{animation:scpop 1.1s ease-out forwards}.scene .sunup{animation:scpop 1.1s ease-out forwards}
+@keyframes scpop{from{transform:translateY(10px);opacity:0}25%{opacity:1}to{transform:translateY(-26px);opacity:0}}
+.scene .tw{animation:sctw 2s ease-in-out infinite}
+@keyframes sctw{50%{opacity:.3}}
+@media(max-height:700px){.scene{height:92px}}
+@media(prefers-reduced-motion:reduce){.scene *{animation:none!important}}
+.scene .glow{animation:scglow 1s ease-in-out infinite alternate}@keyframes scglow{to{opacity:.4}}
+
 </style>
 <div class="app" id="app">
 
@@ -999,6 +1034,7 @@ a.btn{text-decoration:none;display:flex;align-items:center;justify-content:cente
         <button id="replay" aria-label="Relire à voix haute"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1f4fd1" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
       </div>
       <div class="timer" id="timer" hidden><div class="tline"><i id="tbar"></i></div><span class="tnum" id="tnum">20s</span></div>
+      <div class="scene" id="scene" hidden></div>
     </div>
     <div class="lbody pad" id="lbody"></div>
     <div class="lfoot pad" id="lfoot"></div>
@@ -4546,7 +4582,7 @@ const MED_REMIND_MS=10*60*1000, MED_REMIND_COUNT=7;       // méditation : rappe
 const KEY="parcours-biblique-v4";
 const fresh=()=>({user:null,onboarded:false,ob:{goals:[],rel:-1,daily:2,remind:"07:00"},testament:null,book:{AT:"gen",NT:"mat"},done:{},xp:0,
   hearts:MAX_HEARTS,heartAt:0,helps:DAILY_HELPS,helpsDay:"",streak:0,lastDay:"",playDays:[],bestCombo:0,badges:{},justDone:null,
-  set:{music:true,voice:true,sfx:true,vib:true},activeSec:0,adAt:0,bonus:{until:0,refApplied:0},loc:{city:"",country:"",src:"",at:0},olPaid:{},
+  set:{music:true,voice:true,sfx:true,vib:true,scenes:true},activeSec:0,adAt:0,bonus:{until:0,refApplied:0},loc:{city:"",country:"",src:"",at:0},olPaid:{},
   med:{sel:[],delay:60,state:"idle",start:0,due:0,notified:0,notes:{},history:[]},plan:{done:{},notes:{}},read:{}});
 let S=fresh();
 function loadState(o){const f=fresh(),s=Object.assign(f,o||{});if(o&&o.don&&!o.bonus)o.bonus={until:o.don.until||0,refApplied:o.don.refApplied||0};if(s.don)delete s.don;["set","bonus","loc","olPaid","med","ob","plan"].forEach(k=>s[k]=Object.assign(f[k],(o||{})[k]||{}));return s;}
@@ -4903,7 +4939,7 @@ async function startLevel(b,L,fromReview){if(lvStarting)return;regen();helpsRese
 function startTest(kind,qs,meta){const graded=qs.filter(q=>q.graded!==false).length;
   LS=Object.assign({mode:"test",kind,steps:qs.map(q=>({k:"q",q})),si:0,total:qs.length,graded,qdone:0,xp:0,combo:0,best:0,mistakes:0,firstTry:0,score:0},meta);show("lesson");renderStep();}
 function setHead(){$("progBar").style.width=Math.round(LS.qdone/LS.total*100)+"%";$("lXp").innerHTML="+"+LS.xp+" <small>XP</small>";$("lHearts").hidden=LS.mode!=="level";$("lHearts").textContent="♥ "+(unlimited()?"∞":S.hearts);$("lHelps").hidden=LS.mode!=="level";$("lHelps").textContent="💡 "+S.helps;}
-function renderStep(){stopTimer();setHead();const st=LS.steps[LS.si];$("timer").hidden=true;const body=$("lbody"),foot=$("lfoot");foot.className="lfoot pad";body.scrollTop=0;
+function renderStep(){stopTimer();setHead();const st=LS.steps[LS.si];$("timer").hidden=true;if(st.k==="card")sceneHide();const body=$("lbody"),foot=$("lfoot");foot.className="lfoot pad";body.scrollTop=0;
   if(st.k==="card"){const c=st.c,num=(st.num0||0)+st.i+1;
     body.innerHTML=`<div class="eyebrow" style="color:var(--lapis)">${st.label} · ${esc(LS.ref)}</div><h2 class="qtitle" style="font-size:28px">${esc(LS.title)}</h2>
      <div class="fiche"><div class="medal">${c.ill}</div><div class="pk">${num} / ${LS.lv.cards.length+(LS.lv.mid?LS.lv.mid.length:0)}</div><h3 style="font-size:22px">${esc(c.key)}</h3><p>${esc(c.txt)}</p>${c.verse?`<p class="verse">${esc(c.verse)}</p>`:""}</div>`;
@@ -4926,7 +4962,7 @@ function renderStep(){stopTimer();setHead();const st=LS.steps[LS.si];$("timer").
   if(q.type==="order"){body.innerHTML=`${combo}${tag}<div class="qtitle">${esc(q.q)}</div><div class="orderline" id="oline"></div><div class="wordbank" id="obank"></div><div class="hint">Touche les morceaux dans le bon ordre. Touche un morceau placé pour le retirer.</div>`;drawOrder();LS.say=q.q;}
   if(q.type==="recite"){body.innerHTML=`${combo}${tag}<div class="qtitle">${esc(q.q)}</div><div class="eyebrow">${esc(q.ref)}</div><textarea class="recite" id="rec" placeholder="Écris le verset de mémoire…" aria-label="Le verset de mémoire"></textarea><div class="hint">Pas besoin d'être parfait : on compare les mots et leur ordre.</div>`;
     $("rec").oninput=()=>{const c=$("check");if(c)c.disabled=$("rec").value.trim().length<4;};LS.say=q.q;}
-  askFoot();speak(LS.say);if(LS.mode==="level")startTimer();}
+  askFoot();speak(LS.say);if(LS.mode==="level"){sceneShow();sceneReset();startTimer();}}
 function drawSentence(){const q=LS.q,i=[...LS.sel][0],ok=LS.answered&&i!==undefined&&q.a.includes(i);
   const parts=q.s.split("___");$("sent").innerHTML=`${esc(parts[0])}<button class="slot ${i!==undefined?"filled":""} ${ok?"ok":""}" id="slot">${i!==undefined?esc(q.o[i]):"&nbsp;"}</button>${esc(parts[1]||"")}`;
   $("slot").onclick=()=>{if(LS.answered||i===undefined)return;sfx("tap");LS.sel.clear();syncPick();};
@@ -4944,7 +4980,7 @@ function askFoot(msg){helpsReset();if($("lHelps"))$("lHelps").textContent="💡 
   f.innerHTML=`${msg?`<div class="fb"><b>${msg[0]}</b><p>${msg[1]}</p></div>`:""}<div class="actions">${lvl?(q.defi?`<button class="btn ghost helpbtn" disabled title="Pas d'aide sur la question défi">⚡ Sans aide</button>`:`<button class="btn ghost helpbtn" id="help">💡 Aide · ${S.helps}</button>`):""}${needCheck?`<button class="btn" id="check" ${dis?"disabled":""}>${q.graded===false?"Valider":"Vérifier"}</button>`:""}</div>`;
   const c=$("check");if(c)c.onclick=check;const h=$("help");if(h)h.onclick=useHelp;}
 function startTimer(){stopTimer();$("timer").hidden=false;$("timer").classList.remove("urgent");let t0=Date.now(),tl=t0;let lastSec=Q_SECONDS;$("tbar").style.transform="scaleX(1)";$("tnum").textContent=Q_SECONDS+"s";
-  TM=setInterval(()=>{const nw=Date.now();if(!$("veil").hidden||document.getElementById("adFull")){t0+=nw-tl;tl=nw;return;}tl=nw;const left=Math.max(0,Q_SECONDS-(Date.now()-t0)/1000);$("tbar").style.transform=`scaleX(${left/Q_SECONDS})`;const s=Math.ceil(left);$("tnum").textContent=s+"s";
+  TM=setInterval(()=>{const nw=Date.now();if(!$("veil").hidden||document.getElementById("adFull")){t0+=nw-tl;tl=nw;return;}tl=nw;const left=Math.max(0,Q_SECONDS-(Date.now()-t0)/1000);$("tbar").style.transform=`scaleX(${left/Q_SECONDS})`;const s=Math.ceil(left);$("tnum").textContent=s+"s";sceneTick(1-left/Q_SECONDS,s);
     if(left<=5)$("timer").classList.add("urgent");if(s<lastSec&&s<=5&&s>0)sfx("tick");lastSec=s;if(left<=0){stopTimer();penalize(true);}},80);}
 function stopTimer(){if(TM){clearInterval(TM);TM=null;}}
 function floatXp(n){if(!n)return;const e=document.createElement("span");e.className="xpfloat";e.textContent="+"+n;const r=$("lXp").getBoundingClientRect(),a=$("app").getBoundingClientRect();e.style.left=(r.left-a.left+8)+"px";e.style.top=(r.top-a.top+18)+"px";$("app").appendChild(e);setTimeout(()=>e.remove(),1000);}
@@ -4963,9 +4999,9 @@ function strike(i,anim){LS.out.add(i);LS.sel.delete(i);const q=LS.q;
   if(q.type==="choice"&&q.disp!=="tf")el.querySelector(".box").textContent="✕";syncPick();}
 function penalize(timeout,msg){LS.tries++;LS.mistakes++;LS.combo=0;if((S.shield||0)>0&&!unlimited()){S.shield--;save();notify("🛡️","Bouclier de foi","Ton bouclier t'a protégé : aucune vie perdue.");}else loseHeart();sfx(timeout?"timeout":"bad");sfx("heart");vibrate([90,50,90]);shake();
   const h=$("lHearts");h.classList.remove("hit");void h.offsetWidth;h.classList.add("hit");setHead();
-  if(S.hearts<=0){stopTimer();LS.answered=true;const f=$("lfoot");f.className="lfoot pad ko";f.innerHTML=`<div class="fb"><b>Plus de cœurs !</b><p>Un nouveau cœur revient dans 25 minutes.</p></div><button class="btn bad" id="next">Continuer</button>`;$("next").onclick=noHearts;return;}
-  askFoot(timeout?["Temps écoulé !","Tu perds un cœur. Le chrono repart, essaie encore."]:msg);startTimer();}
-function right(){stopTimer();hush();LS.answered=true;const q=LS.q,first=LS.tries===0,reflect=q.graded===false;let gain=first?10:5,bonus=0;
+  if(S.hearts<=0){stopTimer();sceneLose();LS.answered=true;const f=$("lfoot");f.className="lfoot pad ko";f.innerHTML=`<div class="fb"><b>Plus de cœurs !</b><p>Un nouveau cœur revient dans 25 minutes.</p></div><button class="btn bad" id="next">Continuer</button>`;$("next").onclick=noHearts;return;}
+  sceneHit(timeout);askFoot(timeout?["Temps écoulé !","Tu perds un cœur. Le chrono repart, essaie encore."]:msg);startTimer();}
+function right(){stopTimer();hush();LS.answered=true;sceneWin();const q=LS.q,first=LS.tries===0,reflect=q.graded===false;let gain=first?10:5,bonus=0;
   if(LS.mode==="test"){gain=reflect?1:3;if(!reflect){LS.score++;LS.combo++;LS.best=Math.max(LS.best,LS.combo);}}
   else if(first){LS.firstTry++;LS.combo++;LS.best=Math.max(LS.best,LS.combo);if(LS.combo===3||LS.combo===5){bonus=15;sfx("combo");}}else LS.combo=0;
   LS.xp+=gain+bonus;LS.qdone++;sfx("good");vibrate(30);floatXp(gain+bonus);setHead();
@@ -5000,7 +5036,7 @@ function useHelp(){helpsReset();const q=LS.q;
     S.helps--;save();sfx("help");LS.mL=L;LS.mR=null;matchTap("r",R);askFoot();return;}
   const cand=q.o.map((_,i)=>i).filter(i=>!q.a.includes(i)&&!LS.out.has(i));if(!cand.length){askFoot(["Plus rien à retirer","Toutes les mauvaises options sont déjà barrées."]);return;}
   S.helps--;save();sfx("help");strike(pick(cand),false);askFoot();}
-function nextStep(){LS.si++;if(LS.si<LS.steps.length)renderStep();else LS.mode==="level"?finishLevel():finishTest();}
+function nextStep(){LS.si++;if(LS.si>=LS.steps.length)sceneHide();if(LS.si<LS.steps.length)renderStep();else LS.mode==="level"?finishLevel():finishTest();}
 function completeLevel(b,L){const first=L>doneOf(b);if(first)S.done[b.id]=L;const id=b.id+"-"+L,newBadge=!S.badges[id];if(newBadge)S.badges[id]=Date.now();const up=bumpStreak();save();return {first,newBadge,up};}
 function bumpStreak(){const d=localDay();if(!S.playDays.includes(d)){S.playDays.push(d);S.playDays=S.playDays.slice(-21);}if(S.lastDay===d)return false;
   const y=localDay(new Date(Date.now()-864e5));S.streak=S.lastDay===y?S.streak+1:1;S.lastDay=d;return true;}
@@ -5115,7 +5151,7 @@ function streakScreen(){const days=["L","M","M","J","V","S","D"],now=new Date(),
    <div class="weekrow">${days.map((d,i)=>{const dt=new Date(mon);dt.setDate(mon.getDate()+i);return `<div><span class="${S.playDays.includes(localDay(dt))?"on":""}">🪔</span>${d}</div>`}).join("")}</div>
    <p>Garde-la allumée : un niveau ou une méditation par jour suffit. Rappel prévu à ${esc(S.ob.remind)}.</p></div>`;
   sfx("combo");$("lfoot").innerHTML=`<button class="btn" id="back">Continuer</button>`;$("back").onclick=()=>go("path");}
-function noHearts(){stopTimer();hush();show("lesson");$("timer").hidden=true;$("progBar").style.width="0%";$("lHearts").hidden=false;$("lHearts").textContent="♥ 0";
+function noHearts(){stopTimer();hush();sceneHide();show("lesson");$("timer").hidden=true;$("progBar").style.width="0%";$("lHearts").hidden=false;$("lHearts").textContent="♥ 0";
   $("lbody").innerHTML=`<div class="center"><div class="medal big">💔</div><h2 style="font-size:28px">Plus de cœurs pour le moment</h2><p>Un cœur revient toutes les 25 minutes. Le prochain dans :</p><div class="clock" id="cd">--:--</div><p style="font-size:13px" class="muted">En attendant, lis la Bible ou lance une méditation : ça ne coûte aucun cœur.</p></div>`;
   $("lfoot").className="lfoot pad";$("lfoot").innerHTML=`<div style="display:grid;gap:12px"><button class="btn warm adcta" id="toAd">▶️ Regarder une annonce · +1 ♥</button><button class="btn" id="toI">📤 Inviter ${RN()} amis · ${RH()} h illimitées</button><button class="btn ghost" id="toV">Ouvrir la Bible</button><button class="btn ghost" id="toP">Retour à la montée</button></div>`;
   $("toAd").onclick=()=>adReward("life",()=>{if(S.hearts>0)go("path");});$("toI").onclick=()=>{if(typeof olShareInvite==="function")olShareInvite();};$("toV").onclick=()=>go("bible");$("toP").onclick=()=>go("path");}
@@ -5349,7 +5385,7 @@ function renderPlan(p,tabs){const now=new Date(),Y=now.getFullYear(),plan=planFo
 let badgesAll=false;
 const RANKS_OLD=[[0,"Pèlerin"],[4,"Semeur"],[15,"Disciple"],[40,"Témoin"],[100,"Berger"],[250,"Ancien"]];
 const totalDone=()=>Object.values(S.done).reduce((a,b)=>a+b,0);
-const SETTINGS=[["music","🎵","Musique de fond","Nappe calme pour la concentration"],["voice","🗣️","Voix off","Lecture des questions à voix haute"],["sfx","🔔","Effets sonores","Réponses, séries, victoire"],["vib","📳","Vibrations","Le téléphone vibre sur une erreur"]];
+const SETTINGS=[["music","🎵","Musique de fond","Nappe calme pour la concentration"],["voice","🗣️","Voix off","Lecture des questions à voix haute"],["sfx","🔔","Effets sonores","Réponses, séries, victoire"],["vib","📳","Vibrations","Le téléphone vibre sur une erreur"],["scenes","🎬","Scènes de danger","Le danger de l'histoire avance pendant les questions"]];
 function settingsHTML(){return SETTINGS.map(([k,e,t,d])=>`<div class="switch"><div class="row"><span style="font-size:20px">${e}</span><div><b>${t}</b><br><small>${d}</small></div></div><button class="toggle" role="switch" data-set="${k}" aria-checked="${S.set[k]}" aria-label="${t}"></button></div>`).join("");}
 function bindSettings(root){root.querySelectorAll("[data-set]").forEach(t=>t.onclick=()=>{const k=t.dataset.set;S.set[k]=!S.set[k];save();t.setAttribute("aria-checked",S.set[k]);
   if(k==="music")S.set.music?startMusic():stopMusic();if(k==="voice")S.set.voice?speak("La voix off est activée."):hush();if(k==="sfx"&&S.set.sfx)sfx("good");if(k==="vib")vibrate(120);});}
@@ -5504,6 +5540,291 @@ function showApkUpdate(a){const force=APK_INFO.v<(a.minVersion||0);
   $("apkGo").onclick=()=>{sfx("tap");setTimeout(()=>notify("⬇️","Téléchargement lancé","Ouvre le fichier dans tes notifications pour installer."),400);};}
 setTimeout(checkUpdates,4000);setInterval(checkUpdates,30*60*1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdates();});
+
+/* ===================== SCÈNES DE DANGER =====================
+   Pendant chaque question d'un niveau, une petite scène remplace la barre du chrono :
+   le danger de l'histoire (fidèle au texte biblique) avance pendant les 20 secondes.
+   Bonne réponse : le danger recule et le personnage est sauvé.
+   Mauvaise réponse ou temps écoulé : le danger atteint le personnage (un cœur perdu), puis repart.
+   Plus de cœurs : le danger reste sur le personnage.
+
+   Une scène : {c: légende, sky: ambiance, h: héros, p: ce qu'on protège, k: type de danger, e: le danger, n: nombre, r: référence}
+   Héros et dangers : "bib:id" = portrait biblique, sinon un emoji.
+   Types : walk (s'approche), swarm (nuée), rise (eau, feu ou boue qui monte), fall (pluie de…),
+           dark (la nuit ou les ténèbres tombent), dry (sécheresse, soif), fade (le feu de l'autel faiblit), time (le temps presse). */
+const SC={
+ /* Genèse */
+ creation:{c:"Les ténèbres couvrent l'abîme",sky:"night",h:["🌍"],k:"dark",r:"Genèse 1:2"},
+ eden:{c:"Le serpent s'approche d'Ève",sky:"garden",h:["bib:eve"],p:"🌳",k:"walk",e:"🐍",r:"Genèse 3:1"},
+ cain:{c:"Caïn s'approche d'Abel dans les champs",sky:"field",h:["bib:abel"],p:"🐑",k:"walk",e:"bib:cain",r:"Genèse 4:8"},
+ flood:{c:"Les eaux montent : fais entrer les animaux",sky:"storm",h:["🐘","🦒"],p:"ark",pk:"bib:noe",k:"rise",e:"water",board:1,r:"Genèse 7:7-17"},
+ babel:{c:"Les langues sont confondues sur le chantier",sky:"day",h:["🧱"],p:"tower",k:"swarm",e:"💬",n:6,r:"Genèse 11:7"},
+ famine:{c:"La famine frappe le pays",sky:"desert",h:["bib:abraham"],p:"🐑",k:"dry",r:"Genèse 12:10"},
+ lot:{c:"Les rois emmènent Lot prisonnier",sky:"desert",h:["🧔🏽"],p:"⛺",k:"walk",e:"🐎",n:3,r:"Genèse 14:12"},
+ prey:{c:"Les oiseaux de proie s'abattent sur l'offrande",sky:"dusk",h:["bib:abraham"],p:"🔥",k:"fall",e:"🦅",r:"Genèse 15:11"},
+ agar:{c:"L'eau de l'outre est épuisée",sky:"desert",h:["bib:agar","bib:ismael"],k:"dry",r:"Genèse 21:15"},
+ sodom:{c:"Le soufre et le feu tombent sur Sodome",sky:"fire",h:["👨‍👩‍👧"],k:"fall",e:"🔥",r:"Genèse 19:24"},
+ promise:{c:"Rien n'est impossible à l'Éternel",sky:"night",h:["bib:sara"],p:"⭐",k:"time",r:"Genèse 18:14"},
+ moriah:{c:"Sur le mont Morija, Dieu pourvoira",sky:"dusk",h:["bib:isaac"],p:"🪵",k:"time",r:"Genèse 22:8"},
+ well:{c:"Le soir tombe près du puits",sky:"dusk",h:["bib:eliezer"],p:"🐫",k:"dark",r:"Genèse 24:11"},
+ esau:{c:"Ésaü veut se venger de Jacob",sky:"field",h:["bib:jacob"],k:"walk",e:"bib:esau",r:"Genèse 27:41"},
+ esau400:{c:"Ésaü arrive avec quatre cents hommes",sky:"dusk",h:["bib:jacob"],p:"🐑",k:"walk",e:"🐎",n:4,r:"Genèse 32:6"},
+ laban:{c:"Le jour la chaleur, la nuit le froid",sky:"desert",h:["bib:jacob"],p:"🐑",k:"dry",r:"Genèse 31:40"},
+ joseph:{c:"Ses frères complotent contre Joseph",sky:"desert",h:["bib:joseph"],p:"pit",k:"walk",e:"🧔🏽",n:3,r:"Genèse 37:18"},
+ famine7:{c:"Sept années de famine approchent",sky:"desert",h:["bib:joseph"],p:"🌾",k:"dry",r:"Genèse 41:30"},
+ /* Exode */
+ nile:{c:"Pharaon fait chercher les petits garçons",sky:"river",h:["bib:myriam"],p:"🧺",k:"walk",e:"⚔️",n:2,r:"Exode 1:22 ; 2:4"},
+ bush:{c:"Le buisson brûle sans se consumer",sky:"desert",h:["bib:moise"],p:"bush",k:"time",r:"Exode 3:2"},
+ bricks:{c:"Les inspecteurs exigent les briques",sky:"desert",h:["🧱"],k:"walk",e:"⚔️",n:2,r:"Exode 5:13"},
+ plagues:{c:"Les sauterelles s'abattent sur l'Égypte",sky:"day",h:["bib:moise"],p:"🏠",k:"swarm",e:"🦗",n:8,r:"Exode 10:14"},
+ passover:{c:"À minuit, le destructeur passe",sky:"night",h:["🏠"],p:"🐑",k:"dark",r:"Exode 12:23"},
+ redsea:{c:"Les chars de Pharaon poursuivent Israël",sky:"desert",h:["bib:moise"],k:"walk",e:"🐎",n:4,r:"Exode 14:9"},
+ thirst:{c:"Le peuple a soif dans le désert",sky:"desert",h:["bib:moise"],p:"🪨",k:"dry",r:"Exode 17:1-3"},
+ sinai:{c:"Tonnerre et éclairs sur le Sinaï",sky:"storm",h:["bib:moise"],p:"⛰️",k:"fall",e:"⚡",r:"Exode 19:16"},
+ calf:{c:"Le veau d'or détourne le peuple",sky:"desert",h:["bib:moise"],p:"📜",k:"walk",e:"🐂",r:"Exode 32:19"},
+ tabernacle:{c:"Bâtir la demeure de Dieu",sky:"desert",h:["bib:moise"],p:"⛺",k:"time",r:"Exode 40:33"},
+ altar:{c:"Le feu brûlera toujours sur l'autel",sky:"desert",h:["bib:aaron"],k:"fade",r:"Lévitique 6:13"},
+ /* Nombres à Josué */
+ quail:{c:"Le peuple murmure au désert",sky:"desert",h:["bib:moise"],k:"dry",r:"Nombres 11:1"},
+ giants:{c:"Les fils d'Anak, des géants",sky:"field",h:["bib:caleb"],p:"🍇",k:"walk",e:"bib:goliath",r:"Nombres 13:33"},
+ korah:{c:"La terre s'ouvre sous les rebelles",sky:"desert",h:["bib:moise"],k:"rise",e:"mud",r:"Nombres 16:32"},
+ snakes:{c:"Des serpents brûlants envahissent le camp",sky:"desert",h:["bib:moise"],p:"🐍",k:"swarm",e:"🐍",n:4,r:"Nombres 21:6"},
+ balaam:{c:"L'ange se tient sur le chemin",sky:"field",h:["🫏"],k:"walk",e:"⚔️",r:"Nombres 22:23"},
+ og:{c:"Og, roi de Basan, marche contre Israël",sky:"field",h:["bib:moise"],k:"walk",e:"👑",n:1,big:1,r:"Deutéronome 3:1"},
+ desert40:{c:"Quarante ans dans le désert",sky:"desert",h:["bib:moise"],k:"dry",r:"Deutéronome 8:2"},
+ jordan:{c:"Le Jourdain déborde : avancez !",sky:"river",h:["bib:josue"],p:"📦",k:"rise",e:"water",r:"Josué 3:15"},
+ jericho:{c:"Sept tours autour de Jéricho",sky:"day",h:["bib:josue"],p:"🎺",k:"time",r:"Josué 6:15"},
+ sunstop:{c:"Le soleil va se coucher avant la victoire",sky:"dusk",h:["bib:josue"],k:"dark",r:"Josué 10:12-13"},
+ canaan:{c:"Les rois de Canaan attaquent",sky:"field",h:["bib:josue"],k:"walk",e:"🐎",n:3,r:"Josué 10:5"},
+ /* Juges, Ruth, Samuel */
+ sisera:{c:"Les neuf cents chars de fer de Sisera",sky:"field",h:["bib:debora"],p:"🌴",k:"walk",e:"🐎",n:4,r:"Juges 4:3"},
+ midian:{c:"Madian, nombreux comme des sauterelles",sky:"dusk",h:["bib:gedeon"],p:"🏺",k:"swarm",e:"🐫",n:6,r:"Juges 7:12"},
+ lion:{c:"Un jeune lion rugit contre Samson",sky:"field",h:["bib:samson"],p:"🍇",k:"walk",e:"🦁",r:"Juges 14:5"},
+ delilah:{c:"Les Philistins guettent Samson",sky:"night",h:["bib:samson"],k:"walk",e:"bib:dalila",r:"Juges 16:9"},
+ oppress:{c:"Les ennemis envahissent le pays",sky:"field",h:["🏠"],p:"🌾",k:"walk",e:"⚔️",n:3,r:"Juges 2:14"},
+ glean:{c:"Glaner avant la fin du jour",sky:"dusk",h:["bib:ruth"],p:"🌾",k:"dark",r:"Ruth 2:17"},
+ ruthfam:{c:"La famine chasse la famille de Bethléhem",sky:"desert",h:["bib:naomi","bib:ruth"],k:"dry",r:"Ruth 1:1"},
+ hannah:{c:"Anne prie au temple de Silo",sky:"dusk",h:["bib:anne"],p:"🕯️",k:"time",r:"1 Samuel 1:10"},
+ philistines:{c:"Les Philistins s'avancent contre Israël",sky:"field",h:["bib:samuel"],k:"walk",e:"⚔️",n:3,r:"1 Samuel 7:7"},
+ goliath:{c:"Goliath s'avance vers David",sky:"field",h:["bib:david"],p:"🪨",k:"walk",e:"bib:goliath",big:1,r:"1 Samuel 17:48"},
+ saul:{c:"Saül poursuit David",sky:"desert",h:["bib:david"],p:"cave",k:"walk",e:"bib:saul",r:"1 Samuel 23:25"},
+ absalom:{c:"Absalom se révolte contre David",sky:"field",h:["bib:david"],k:"walk",e:"🐎",n:3,r:"2 Samuel 15:14"},
+ nathan:{c:"La brebis du pauvre",sky:"field",h:["🐑"],k:"walk",e:"🤴🏽",r:"2 Samuel 12:4"},
+ /* Rois, Chroniques */
+ temple:{c:"Bâtir le temple de l'Éternel",sky:"day",h:["bib:salomon"],p:"🏛️",k:"time",r:"1 Rois 6:38"},
+ drought:{c:"Ni rosée ni pluie pendant ces années",sky:"desert",h:["bib:elie"],p:"🐦‍⬛",k:"dry",r:"1 Rois 17:1"},
+ jezebel:{c:"Jézabel menace la vie d'Élie",sky:"dusk",h:["bib:elie"],k:"walk",e:"bib:jezabel",r:"1 Rois 19:2"},
+ naboth:{c:"Achab convoite la vigne de Naboth",sky:"field",h:["🍇"],k:"walk",e:"bib:achab",r:"1 Rois 21:2"},
+ soldiers:{c:"Des soldats viennent chercher Élie",sky:"desert",h:["bib:elie"],k:"walk",e:"⚔️",n:3,r:"2 Rois 1:9"},
+ creditor:{c:"Le créancier vient prendre ses fils",sky:"day",h:["👩🏽‍👦🏽"],p:"🫗",k:"walk",e:"🧔🏽",r:"2 Rois 4:1"},
+ dothan:{c:"L'armée syrienne entoure Dothan",sky:"dusk",h:["bib:elisee"],k:"walk",e:"🐎",n:4,r:"2 Rois 6:14"},
+ athaliah:{c:"Athalie veut détruire la race royale",sky:"night",h:["👶🏽"],p:"🛏️",k:"walk",e:"👑",r:"2 Rois 11:1-2"},
+ assyria:{c:"L'armée d'Assyrie marche contre Jérusalem",sky:"dusk",h:["🏰"],k:"walk",e:"🐎",n:4,r:"2 Rois 18:17"},
+ babylon:{c:"L'armée de Babylone assiège Jérusalem",sky:"fire",h:["🏰"],k:"walk",e:"⚔️",n:4,r:"2 Rois 25:1"},
+ genealogy:{c:"D'Adam à David",sky:"day",h:["📜"],k:"time",r:"1 Chroniques 1:1"},
+ battle:{c:"Une grande multitude s'avance contre Juda",sky:"desert",h:["bib:josaphat"],p:"🎶",k:"walk",e:"⚔️",n:4,r:"2 Chroniques 20:2"},
+ /* Retour d'exil, Esther, Job */
+ rebuild:{c:"Les adversaires découragent les bâtisseurs",sky:"day",h:["bib:esdras"],p:"🧱",k:"walk",e:"🧔🏽",n:2,r:"Esdras 4:4"},
+ walls:{c:"Sanballat et Tobija s'opposent aux murailles",sky:"day",h:["bib:nehemie"],p:"🧱",k:"walk",e:"⚔️",n:2,r:"Néhémie 4:8"},
+ haman:{c:"Aman complote contre Mardochée",sky:"night",h:["bib:mardochee","bib:esther"],k:"walk",e:"bib:aman",r:"Esther 3:6"},
+ jobstorm:{c:"Un grand vent frappe la maison",sky:"storm",h:["bib:job"],p:"🏠",k:"fall",e:"🌪️",r:"Job 1:19"},
+ leviathan:{c:"Le crocodile, que nul n'ose réveiller",sky:"river",h:["bib:job"],k:"walk",e:"🐊",r:"Job 41:1"},
+ /* Poésie */
+ shadow:{c:"La vallée de l'ombre de la mort",sky:"dusk",h:["🐑"],p:"bib:david",k:"dark",r:"Psaume 23:4"},
+ waters:{c:"Les flots grondent et écument",sky:"sea",h:["🏰"],k:"rise",e:"water",r:"Psaume 46:3"},
+ lionasp:{c:"Le lion et l'aspic sous tes pieds",sky:"night",h:["bib:david"],k:"walk",e:"🦁",r:"Psaume 91:13"},
+ enemies:{c:"Les méchants s'avancent contre moi",sky:"dusk",h:["bib:david"],k:"walk",e:"⚔️",n:3,r:"Psaume 27:2"},
+ babylonriv:{c:"Au bord des fleuves de Babylone",sky:"river",h:["🎻"],k:"dark",r:"Psaume 137:1"},
+ thorns:{c:"Les ronces envahissent le champ du paresseux",sky:"field",h:["👨🏽‍🌾"],p:"🌾",k:"swarm",e:"🌵",n:6,r:"Proverbes 24:30-31"},
+ ant:{c:"La fourmi amasse en été",sky:"field",h:["🐜"],p:"🌾",k:"dark",r:"Proverbes 6:6-8"},
+ seasons:{c:"Il y a un temps pour tout",sky:"dusk",h:["⏳"],k:"time",r:"Ecclésiaste 3:1"},
+ foxes:{c:"Les petits renards ravagent les vignes",sky:"garden",h:["🍇"],k:"walk",e:"🦊",n:3,r:"Cantique 2:15"},
+ /* Prophètes */
+ vision:{c:"Une pierre ardente sur les lèvres",sky:"day",h:["bib:esaie"],p:"🔥",k:"time",r:"Ésaïe 6:6-7"},
+ sennach:{c:"Sanchérib menace Jérusalem",sky:"dusk",h:["bib:esaie"],p:"🏰",k:"walk",e:"🐎",n:4,r:"Ésaïe 36:1"},
+ throughwater:{c:"Si tu traverses les eaux, je serai avec toi",sky:"river",h:["🧍🏽"],k:"rise",e:"water",r:"Ésaïe 43:2"},
+ cistern:{c:"Jérémie s'enfonce dans la boue de la citerne",sky:"day",h:["bib:jeremie"],k:"rise",e:"mud",r:"Jérémie 38:6"},
+ northfoe:{c:"L'ennemi vient du nord",sky:"dusk",h:["bib:jeremie"],p:"🏰",k:"walk",e:"🐎",n:3,r:"Jérémie 4:6"},
+ lament:{c:"La ville est assiégée",sky:"fire",h:["🏰"],k:"dark",r:"Lamentations 1:1"},
+ watchman:{c:"La sentinelle voit venir l'épée",sky:"dusk",h:["bib:ezechiel"],p:"🏰",k:"walk",e:"⚔️",n:3,r:"Ézéchiel 33:6"},
+ bones:{c:"La vallée des ossements desséchés",sky:"desert",h:["bib:ezechiel"],p:"💀",k:"time",r:"Ézéchiel 37:4"},
+ gog:{c:"Gog monte contre Israël",sky:"storm",h:["🏰"],k:"walk",e:"🐎",n:4,r:"Ézéchiel 38:16"},
+ furnace:{c:"La fournaise est sept fois plus chauffée",sky:"fire",h:["bib:schadrac","bib:meschac","bib:abednego"],k:"rise",e:"fire",over:1,fourth:1,r:"Daniel 3:19-25"},
+ lions:{c:"Daniel dans la fosse aux lions",sky:"night",h:["bib:daniel"],k:"walk",e:"🦁",n:2,r:"Daniel 6:16"},
+ beasts:{c:"Quatre grandes bêtes sortent de la mer",sky:"sea",h:["bib:daniel"],k:"walk",e:"🐻",r:"Daniel 7:3"},
+ statue:{c:"Le songe de la grande statue",sky:"night",h:["bib:daniel"],k:"time",r:"Daniel 2:31"},
+ whirlwind:{c:"Ils sèment le vent, ils moissonneront la tempête",sky:"storm",h:["bib:osee"],p:"🌾",k:"fall",e:"🌪️",r:"Osée 8:7"},
+ locusts:{c:"Les sauterelles dévorent le pays",sky:"day",h:["bib:joel"],p:"🌾",k:"swarm",e:"🦗",n:9,r:"Joël 1:4"},
+ roar:{c:"Le lion rugit : qui ne craindrait ?",sky:"field",h:["bib:amos"],p:"🐑",k:"walk",e:"🦁",r:"Amos 3:8"},
+ edom:{c:"Édom se dresse contre son frère Jacob",sky:"desert",h:["bib:jacob"],k:"walk",e:"bib:esau",r:"Abdias 1:10"},
+ tempest:{c:"Une grande tempête sur la mer",sky:"storm",h:["bib:jonas"],p:"⛵",k:"rise",e:"wave",r:"Jonas 1:4"},
+ fish:{c:"Trois jours dans le ventre du poisson",sky:"deep",h:["bib:jonas"],k:"dark",r:"Jonas 1:17"},
+ worm:{c:"Un ver pique le ricin de Jonas",sky:"desert",h:["bib:jonas"],p:"🌿",k:"walk",e:"🐛",r:"Jonas 4:7"},
+ chaldeans:{c:"Les Chaldéens, plus agiles que les léopards",sky:"desert",h:["bib:michee"],p:"🏰",k:"walk",e:"🐆",n:2,r:"Habacuc 1:8"},
+ nineveh:{c:"Le destructeur marche contre Ninive",sky:"fire",h:["🏯"],k:"walk",e:"🐎",n:3,r:"Nahum 2:1"},
+ nofruit:{c:"Même si le figuier ne fleurit pas",sky:"desert",h:["🌳"],k:"dry",r:"Habacuc 3:17"},
+ darkday:{c:"Jour de ténèbres et d'obscurité",sky:"dusk",h:["🏰"],k:"dark",r:"Sophonie 1:15"},
+ haggai:{c:"La sécheresse sur la terre",sky:"desert",h:["🌾"],k:"dry",r:"Aggée 1:11"},
+ horns:{c:"Les cornes qui ont dispersé Juda",sky:"dusk",h:["🏰"],k:"walk",e:"🐂",n:2,r:"Zacharie 1:19"},
+ sunrise:{c:"Le soleil de la justice se lèvera",sky:"night",h:["🌾"],k:"dark",r:"Malachie 4:2"},
+ /* Évangiles */
+ herod:{c:"Hérode fait chercher le petit enfant",sky:"night",h:["bib:marie","bib:josephnt"],p:"👶🏽",k:"walk",e:"⚔️",n:2,r:"Matthieu 2:13"},
+ fast:{c:"Quarante jours de jeûne au désert",sky:"desert",h:["🧍🏽"],k:"dry",r:"Matthieu 4:2"},
+ rock:{c:"La pluie tombe, les torrents viennent",sky:"storm",h:["🏠"],p:"🪨",k:"rise",e:"water",r:"Matthieu 7:25"},
+ lakestorm:{c:"Une grande tempête s'élève sur le lac",sky:"storm",h:["bib:jean"],p:"⛵",k:"rise",e:"wave",r:"Matthieu 8:24"},
+ wolves:{c:"Des brebis au milieu des loups",sky:"field",h:["🐑"],k:"walk",e:"🐺",n:2,r:"Matthieu 10:16"},
+ sower:{c:"Les oiseaux mangent la semence",sky:"field",h:["👨🏽‍🌾"],p:"🌱",k:"fall",e:"🐦",r:"Matthieu 13:4"},
+ peterwater:{c:"Pierre commence à enfoncer",sky:"storm",h:["bib:pierre"],k:"rise",e:"wave",r:"Matthieu 14:30"},
+ cross:{c:"Les ténèbres couvrent toute la terre",sky:"dusk",h:["✝️"],k:"dark",r:"Matthieu 27:45"},
+ dawn:{c:"Le premier jour, à l'aube",sky:"night",h:["bib:mariemadeleine"],p:"🪨",k:"dark",r:"Matthieu 28:1"},
+ shepherds:{c:"Les bergers veillent la nuit sur leurs troupeaux",sky:"night",h:["🐑"],p:"🔥",k:"dark",r:"Luc 2:8"},
+ robbers:{c:"Les brigands sur la route de Jéricho",sky:"desert",h:["🧍🏽"],k:"walk",e:"🗡️",n:2,r:"Luc 10:30"},
+ lostsheep:{c:"La brebis perdue loin du troupeau",sky:"dusk",h:["🐑"],k:"dark",r:"Luc 15:4"},
+ crowd:{c:"Le soir vient et la foule a faim",sky:"dusk",h:["👦🏽"],p:"🧺",k:"dark",r:"Jean 6:9"},
+ nets:{c:"Toute la nuit sans rien prendre",sky:"night",h:["bib:pierre"],p:"⛵",k:"time",r:"Luc 5:5"},
+ gethsemane:{c:"La nuit à Gethsémané",sky:"night",h:["🌿"],k:"dark",r:"Luc 22:39"},
+ light:{c:"La lumière luit dans les ténèbres",sky:"night",h:["🕯️"],k:"dark",r:"Jean 1:5"},
+ lazarus:{c:"Lazare est malade",sky:"dusk",h:["bib:marthe"],p:"🏠",k:"time",r:"Jean 11:3"},
+ /* Actes et épîtres */
+ pentecost:{c:"Comme un vent impétueux",sky:"day",h:["🔥"],k:"time",r:"Actes 2:2"},
+ arrest:{c:"Les gardes viennent arrêter les apôtres",sky:"day",h:["bib:pierre"],k:"walk",e:"⚔️",n:2,r:"Actes 5:18"},
+ stephen:{c:"La foule s'irrite contre Étienne",sky:"desert",h:["bib:etienne"],k:"walk",e:"🧔🏽",n:3,r:"Actes 7:54"},
+ saulthreat:{c:"Saul respire la menace contre les disciples",sky:"desert",h:["⛪"],k:"walk",e:"bib:paul",r:"Actes 9:1"},
+ prison:{c:"À minuit, en prison, Paul et Silas chantent",sky:"night",h:["bib:paul"],p:"⛓️",k:"dark",r:"Actes 16:25"},
+ riot:{c:"Une émeute éclate contre Paul",sky:"day",h:["bib:paul"],k:"walk",e:"🧔🏽",n:3,r:"Actes 19:29"},
+ shipwreck:{c:"La tempête brise le navire",sky:"storm",h:["bib:paul"],p:"⛵",k:"rise",e:"wave",r:"Actes 27:41"},
+ viper:{c:"Une vipère sort du feu",sky:"dusk",h:["bib:paul"],p:"🔥",k:"walk",e:"🐍",r:"Actes 28:3"},
+ darts:{c:"Les traits enflammés du malin",sky:"night",h:["🛡️"],k:"fall",e:"🔥",r:"Éphésiens 6:16"},
+ roaring:{c:"Le diable rôde comme un lion rugissant",sky:"night",h:["🐑"],k:"walk",e:"🦁",r:"1 Pierre 5:8"},
+ thief:{c:"Comme un voleur dans la nuit",sky:"night",h:["🏠"],k:"walk",e:"🥷🏽",r:"1 Thessaloniciens 5:2"},
+ tongue:{c:"Un petit feu embrase une grande forêt",sky:"field",h:["🌲"],k:"rise",e:"fire",r:"Jacques 3:5"},
+ noahspared:{c:"Noé épargné du déluge",sky:"storm",h:["🐑","🐫"],p:"ark",pk:"bib:noe",k:"rise",e:"water",board:1,r:"2 Pierre 2:5"},
+ race:{c:"Courons avec persévérance",sky:"day",h:["🏃🏽"],k:"time",r:"Hébreux 12:1"},
+ chains:{c:"Paul écrit depuis sa prison",sky:"dusk",h:["bib:paul"],p:"📜",k:"time",r:"Philippiens 1:13"},
+ persevere:{c:"Tiens ferme jusqu'au bout",sky:"day",h:["bib:timothee"],p:"📜",k:"time",r:"2 Timothée 4:7"},
+ dragon:{c:"Le dragon se tient devant la femme",sky:"night",h:["bib:marie"],p:"👶🏽",k:"walk",e:"🐉",big:1,r:"Apocalypse 12:4"},
+ horsemen:{c:"Les cavaliers s'élancent",sky:"fire",h:["🌍"],k:"walk",e:"🐎",n:4,r:"Apocalypse 6:2"},
+ trumpets:{c:"Des sauterelles montent du puits de l'abîme",sky:"fire",h:["🌳"],k:"swarm",e:"🦗",n:8,r:"Apocalypse 9:3"},
+ newjeru:{c:"Il n'y aura plus de nuit",sky:"night",h:["🏰"],k:"dark",r:"Apocalypse 22:5"},
+ patmos:{c:"Exilé dans l'île de Patmos",sky:"sea",h:["bib:jeanpatmos"],k:"time",r:"Apocalypse 1:9"}
+};
+/* Histoire par histoire : "livre:niveau" → scène. Les niveaux sans entrée prennent la scène du livre. */
+const SC_LVL={
+ "gen:1":"creation","gen:2":"eden","gen:3":"cain","gen:4":"flood","gen:5":"babel","gen:6":"famine","gen:7":"lot","gen:8":"prey","gen:9":"agar","gen:10":"sodom","gen:11":"promise","gen:12":"moriah","gen:13":"well","gen:14":"esau","gen:15":"esau","gen:16":"laban","gen:17":"esau400","gen:18":"joseph","gen:19":"famine7","gen:20":"famine7",
+ "exo:1":"nile","exo:2":"bush","exo:3":"bricks","exo:4":"plagues","exo:5":"passover","exo:6":"redsea","exo:7":"thirst","exo:8":"sinai","exo:13":"calf",
+ "nom:5":"quail","nom:6":"giants","nom:7":"korah","nom:8":"thirst","nom:9":"snakes","nom:10":"balaam","nom:15":"giants","deu:2":"og","deu:4":"desert40","deu:15":"desert40",
+ "jos:2":"jordan","jos:3":"jericho","jos:4":"canaan","jos:5":"sunstop","jos:6":"giants",
+ "jug:2":"sisera","jug:3":"midian","jug:4":"midian","jug:6":"lion","jug:7":"delilah",
+ "rut:1":"ruthfam","rut:2":"glean","rut:3":"glean",
+ "1sa:1":"hannah","1sa:2":"philistines","1sa:3":"philistines","1sa:6":"philistines","1sa:7":"goliath","1sa:8":"saul","1sa:9":"saul","1sa:10":"saul","1sa:11":"saul","1sa:12":"philistines",
+ "2sa:5":"nathan","2sa:7":"absalom","2sa:8":"absalom","2sa:9":"absalom",
+ "1ro:1":"temple","1ro:2":"temple","1ro:3":"temple","1ro:4":"temple","1ro:5":"temple","1ro:7":"drought","1ro:8":"jezebel","1ro:9":"naboth",
+ "2ro:1":"soldiers","2ro:2":"creditor","2ro:3":"dothan","2ro:5":"athaliah","2ro:7":"assyria","2ro:8":"assyria","2ro:10":"babylon",
+ "2ch:2":"temple","2ch:3":"temple","2ch:8":"battle","2ch:9":"athaliah","2ch:13":"assyria","2ch:14":"babylon",
+ "neh:1":"walls","neh:2":"walls","neh:3":"walls",
+ "job:1":"jobstorm","job:2":"jobstorm","job:14":"leviathan","job:16":"leviathan",
+ "psa:5":"shadow","psa:6":"enemies","psa:10":"waters","psa:12":"saul","psa:19":"lionasp","psa:28":"babylonriv",
+ "pro:4":"ant","ecc:1":"seasons",
+ "esa:4":"vision","esa:13":"sennach","esa:17":"throughwater",
+ "jer:18":"cistern","jer:19":"babylon",
+ "eze:15":"bones","eze:16":"gog",
+ "dan:1":"statue","dan:2":"furnace","dan:3":"lions","dan:4":"beasts",
+ "amo:4":"locusts","jon:1":"tempest","jon:2":"fish","jon:3":"worm","hab:3":"nofruit",
+ "mat:1":"herod","mat:2":"fast","mat:3":"rock","mat:4":"lakestorm","mat:5":"wolves","mat:6":"sower","mat:7":"peterwater","mat:10":"cross","mat:11":"dawn",
+ "mar:2":"lakestorm","mar:6":"dawn",
+ "luc:2":"shepherds","luc:3":"nets","luc:4":"rock","luc:5":"robbers","luc:7":"lostsheep","luc:9":"gethsemane","luc:10":"cross",
+ "jea:1":"light","jea:3":"crowd","jea:4":"light","jea:5":"lazarus","jea:8":"dawn",
+ "act:1":"pentecost","act:2":"arrest","act:3":"stephen","act:4":"saulthreat","act:5":"arrest","act:6":"stephen","act:7":"prison","act:8":"riot","act:9":"riot","act:10":"riot","act:11":"shipwreck",
+ "2co:4":"shipwreck","1th:3":"thief","2pi:2":"noahspared","heb:4":"noahspared","heb:5":"race","1co:3":"race","2ti:3":"persevere",
+ "apo:1":"patmos","apo:4":"horsemen","apo:5":"trumpets","apo:6":"dragon","apo:7":"horsemen","apo:9":"newjeru"
+};
+const SC_BOOK={gen:"famine",exo:"tabernacle",lev:"altar",nom:"desert40",deu:"desert40",jos:"canaan",jug:"oppress",rut:"glean","1sa":"philistines","2sa":"absalom","1ro":"temple","2ro":"assyria","1ch":"genealogy","2ch":"battle",
+ esd:"rebuild",neh:"walls",est:"haman",job:"jobstorm",psa:"enemies",pro:"thorns",ecc:"seasons",can:"foxes",esa:"sennach",jer:"northfoe",lam:"lament",eze:"watchman",dan:"lions",ose:"whirlwind",joe:"locusts",amo:"roar",abd:"edom",
+ jon:"tempest",mic:"chaldeans",nah:"nineveh",hab:"chaldeans",sop:"darkday",agg:"haggai",zac:"horns",mal:"sunrise",mat:"lakestorm",mar:"lakestorm",luc:"lostsheep",jea:"light",act:"riot",rom:"chains","1co":"race","2co":"shipwreck",gal:"race",eph:"darts",phi:"chains",col:"chains","1th":"thief","2th":"persevere","1ti":"persevere","2ti":"persevere",tit:"persevere",phm:"chains",heb:"race",jac:"tongue","1pi":"roaring","2pi":"noahspared",
+ "1je":"light","2je":"light","3je":"light",jud:"darts",apo:"dragon"};
+function sceneFor(bookId,L){return SC[SC_LVL[bookId+":"+L]]||SC[SC_BOOK[bookId]]||SC.race;}
+
+/* ---------- Dessin ---------- */
+const SCN={on:false,s:null,p:0,hold:0,state:"",drops:[],raf:0};
+const SKY={day:["#8fd3ff","#dff3ff","#7cc36a"],garden:["#a7e3ff","#e8fbff","#5fb24f"],field:["#9bd5ff","#eaf7ff","#9ccf5b"],desert:["#ffd79a","#fff1d6","#e7bf7a"],dusk:["#ff9f6b","#ffd9a8","#9c7a4a"],
+ night:["#0f1d4a","#2c3f86","#2b4a3a"],storm:["#4a5872","#8a97ad","#4f6b5a"],fire:["#7a1d12","#e8642c","#5a3b2a"],sea:["#7cc8ff","#d8f1ff","#2f78c9"],river:["#9fd8ff","#e6f6ff","#7cbf63"],deep:["#06223f","#0d3d6b","#06223f"]};
+const scEmoji=(t,x,y,s,cls)=>`<text x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central"${cls?` class="${cls}"`:""}>${t}</text>`;
+function scToken(v,x,y,r,ring,id){if(/^bib:/.test(v)){const b=v.slice(4);return `<g class="tok"><clipPath id="${id}"><circle cx="${x}" cy="${y}" r="${r}"/></clipPath><circle cx="${x}" cy="${y}" r="${r+2.5}" fill="${ring}"/><image href="/bib/${b}.webp" x="${x-r}" y="${y-r}" width="${r*2}" height="${r*2}" clip-path="url(#${id})" preserveAspectRatio="xMidYMid slice"/></g>`;}
+  return scEmoji(v,x,y,r*1.9);}
+function scProt(p,x,y){if(!p)return "";
+  if(p==="ark")return `<g class="ark" transform="translate(${x},${y})"><path d="M-30 4 H30 L22 18 H-22 Z" fill="#8a5a2b" stroke="#5c3a1a" stroke-width="1.5"/><rect x="-16" y="-10" width="32" height="14" fill="#a87442" stroke="#5c3a1a" stroke-width="1.2"/><path d="M-19 -10 L0 -20 L19 -10 Z" fill="#7a4b23"/><rect x="-4" y="-6" width="8" height="10" fill="#3d2410"/></g>`+(SCN.s&&SCN.s.pk?scToken(SCN.s.pk,x+2,y-27,10,"#fff","scpk"):"");
+  if(p==="tower")return `<g transform="translate(${x},${y})"><path d="M-20 18 H20 L15 4 H-15 Z M-15 4 H15 L11 -8 H-11 Z M-11 -8 H11 L7 -20 H-7 Z" fill="#c9905a" stroke="#8a5a2b" stroke-width="1.2"/></g>`;
+  if(p==="pit")return `<ellipse cx="${x}" cy="${y+14}" rx="20" ry="6" fill="#3d2410"/>`;
+  if(p==="cave")return `<path d="M${x-26} ${y+18} Q${x} ${y-30} ${x+26} ${y+18} Z" fill="#6b5a48"/><path d="M${x-12} ${y+18} Q${x} ${y-6} ${x+12} ${y+18} Z" fill="#2a2018"/>`;
+  if(p==="bush")return `${scEmoji("🌿",x,y+6,30)}${scEmoji("🔥",x,y-8,22,"flick")}`;
+  return /^bib:/.test(p)?scToken(p,x,y,15,"#fff","scp"):scEmoji(p,x,y+4,30);}
+function sceneSVG(s){const [a,b,g]=SKY[s.sky]||SKY.day,u="s"+Date.now()%1e6;SCN.u=u;
+  const stars=/night|deep/.test(s.sky)?[[30,14],[90,26],[150,10],[210,22],[260,12],[300,30],[340,16],[120,40]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.4" fill="#fff" opacity=".8" class="tw"/>`).join(""):"";
+  const sun=/day|garden|field|desert|river/.test(s.sky)?`<circle cx="262" cy="24" r="12" fill="#ffd56b" opacity=".95"/>`:s.sky==="dusk"?`<circle cx="290" cy="56" r="16" fill="#ffb24a" opacity=".9"/>`:s.sky==="night"?`<circle cx="320" cy="20" r="9" fill="#f4f1d0"/>`:"";
+  const clouds=s.sky==="storm"?`<g fill="#5e6b84" opacity=".9"><ellipse cx="80" cy="16" rx="50" ry="14"/><ellipse cx="200" cy="12" rx="60" ry="15"/><ellipse cx="320" cy="18" rx="50" ry="13"/></g>`:"";
+  const ground=s.sky==="sea"||s.sky==="deep"?`<rect y="92" width="360" height="28" fill="${g}"/>`:`<path d="M0 88 Q60 78 120 86 T240 84 T360 86 V120 H0 Z" fill="${g}"/><path d="M0 98 Q90 92 180 98 T360 96 V120 H0 Z" fill="#000" opacity=".08"/>`;
+  const H=s.h||["🧍🏽"],hx=56,hy=70;
+  const heroes=H.map((v,i)=>scToken(v,hx+i*(H.length>2?18:26)-(H.length-1)*(H.length>2?9:13),hy-(i%2)*4,H.length>2?14:17,"#fff",u+"h"+i)).join("");
+  const n=s.n||1,big=s.big?1.35:1;
+  const threat=(s.k==="walk"||s.k==="swarm")?Array.from({length:s.k==="swarm"?(s.n||7):n},(_,i)=>{const dx=s.k==="swarm"?(i%4)*20+((i*7)%9):i*24,dy=s.k==="swarm"?((i*13)%5)*9-18:(i%2)*6;
+     return `<g transform="translate(${dx},${dy})"><g class="tw${i%3}">${/^bib:/.test(s.e)?scToken(s.e,0,0,17*big,"#d6323f",u+"t"+i):scEmoji(s.e,0,0,(s.k==="swarm"?20:28)*big)}</g></g>`;}).join(""):"";
+  return `<svg viewBox="0 0 360 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+   <defs><linearGradient id="${u}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>
+   <linearGradient id="${u}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd166"/><stop offset=".45" stop-color="#f3722c"/><stop offset="1" stop-color="#9d0208"/></linearGradient></defs>
+   <rect width="360" height="120" fill="url(#${u}g)"/>${stars}${sun}${clouds}${ground}
+   <g id="scProt">${scProt(s.p,hx+(H.length>1?62:50),hy+2)}</g>
+   ${s.over?"":`<g id="scHero" class="hero">${heroes}</g>`}
+   <g id="scThreat">${threat}</g>
+   <g id="scRise"></g>
+   ${s.over?`<g id="scHero" class="hero">${heroes}</g>`:""}
+   <g id="scFx"></g>
+   <rect id="scShade" width="360" height="120" fill="${s.sky==="desert"||s.k==="dry"?"#ff7a00":"#050a24"}" opacity="0"/>
+   <g id="scSand"></g>
+  </svg>`;}
+
+/* ---------- Vie de la scène ---------- */
+try{if(S.set&&S.set.scenes===undefined)S.set.scenes=true;}catch(e){}
+function sceneShow(){const el=$("scene");if(!el)return;if(!LS||LS.mode!=="level"||S.set&&S.set.scenes===false){sceneHide();return;}
+  const s=sceneFor(LS.b.id,LS.L);if(SCN.s!==s||!SCN.on){SCN.s=s;el.innerHTML=`${sceneSVG(s)}<div class="sccap">${esc(s.c)}</div><div class="scsec" id="scSec">${Q_SECONDS}s</div>`;}
+  SCN.on=true;SCN.p=0;SCN.hold=0;SCN.state="";el.hidden=false;el.className="scene";document.body.classList.add("hasScene");sceneDraw(0);}
+function sceneHide(){SCN.on=false;cancelAnimationFrame(SCN.raf);const el=$("scene");if(el){el.hidden=true;}document.body.classList.remove("hasScene");}
+function sceneTick(p,sec){if(!SCN.on)return;const t=$("scSec");if(t){t.textContent=sec+"s";t.classList.toggle("urg",sec<=5);}
+  if(Date.now()<SCN.hold||SCN.state)return;SCN.p=p;sceneDraw(p);}
+function sceneDraw(p){const s=SCN.s;if(!s)return;const th=document.getElementById("scThreat"),rs=document.getElementById("scRise"),sh=document.getElementById("scShade"),sd=document.getElementById("scSand");
+  if(!th)return;const H=s.h||[1],reach=56+(H.length>1?40:26);
+  if(s.k==="walk"||s.k==="swarm"){const span=(s.k==="swarm"?60:Math.max(0,(s.n||1)-1)*24);const x=340-span-(340-span-reach-8)*p;th.style.transform=`translate(${x}px,${s.k==="swarm"?58:74}px)`;}
+  else th.style.transform="translate(-999px,0)";
+  if(s.k==="rise"){const y=120-p*(s.e==="mud"?62:74),col=s.e==="fire"?`url(#${SCN.u}f)`:s.e==="mud"?"#6b4a2a":"#2f7fd8";
+    rs.innerHTML=`<path class="wave" d="M-20 ${y} q15 -7 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V130 H-20 Z" fill="${col}" opacity="${s.e==="fire"?.92:.82}"/>${s.e==="wave"||s.e==="water"?`<path class="wave w2" d="M-20 ${y+8} q15 -6 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V130 H-20 Z" fill="#1d5fb0" opacity=".7"/>`:""}`;
+    if(s.p==="ark"){const pr=document.getElementById("scProt");if(pr){pr.style.transition="transform .12s linear";pr.style.transform=`translate(0,${-Math.max(0,p*74-34)}px)`;}}}
+  if(s.k==="dark")sh.setAttribute("opacity",(p*.82).toFixed(3));
+  else if(s.k==="dry"){sh.setAttribute("opacity",(p*.38).toFixed(3));document.getElementById("scHero").style.filter=`saturate(${1-p*.7})`;}
+  else sh.setAttribute("opacity","0");
+  if(s.k==="fade"){const k=Math.max(.15,1-p*.9);sd.innerHTML=`<rect x="160" y="70" width="40" height="22" rx="3" fill="#8a7a66"/>${scEmoji("🔥",180,58-8*k,36*k,"flick")}`;}
+  if(s.k==="time"){sd.innerHTML=`<g transform="translate(300,60)">${scEmoji("⏳",0,0,30)}<rect x="-22" y="22" width="44" height="6" rx="3" fill="rgba(0,0,0,.25)"/><rect x="-22" y="22" width="${44*(1-p)}" height="6" rx="3" fill="#ffd166"/></g>`;}
+  if(s.k==="fall")sceneRain(p);}
+function sceneRain(p){const fx=document.getElementById("scSand");if(!fx)return;const s=SCN.s,n=Math.round(1+p*7);
+  if(!SCN.drops.length||SCN.drops.length!==n){SCN.drops=Array.from({length:n},(_,i)=>({x:110+((i*61)%230),d:(i*0.37)%1}));}
+  fx.innerHTML=SCN.drops.map((d,i)=>`<g class="drop" style="animation-delay:-${(d.d*1.6).toFixed(2)}s;animation-duration:${(1.8-p*.8).toFixed(2)}s">${scEmoji(s.e,d.x,0,s.e==="⚡"?24:18)}</g>`).join("");}
+function scenePop(t,cls){const fx=document.getElementById("scFx");if(!fx)return;const g=document.createElementNS("http://www.w3.org/2000/svg","g");g.innerHTML=scEmoji(t,64,52,24,cls||"popup");fx.appendChild(g);setTimeout(()=>g.remove(),1100);}
+function sceneHit(timeout){if(!SCN.on)return;const el=$("scene");SCN.state="hit";sceneDraw(1);el.classList.remove("hit");void el.offsetWidth;el.classList.add("hit");scenePop("💔");
+  SCN.hold=Date.now()+1100;setTimeout(()=>{if(SCN.state==="hit"){SCN.state="";el.classList.remove("hit");sceneDraw(0);}},1050);}
+function sceneWin(){if(!SCN.on)return;const s=SCN.s,el=$("scene");SCN.state="win";el.classList.add("win");
+  const th=document.getElementById("scThreat");if(th&&(s.k==="walk"||s.k==="swarm")){th.style.transition="transform .9s cubic-bezier(.5,0,.8,.4)";th.style.transform=`translate(460px,${s.k==="swarm"?40:74}px) scale(-1,1)`;}
+  const rs=document.getElementById("scRise");if(rs)rs.style.transform="translateY(90px)";const sh=document.getElementById("scShade");if(sh)sh.setAttribute("opacity","0");
+  const hero=document.getElementById("scHero");if(hero)hero.style.filter="";
+  if(s.k==="dark")scenePop("☀️","sunup");if(s.k==="dry")SCN.drops=[],document.getElementById("scSand").innerHTML=[130,180,230,280].map((x,i)=>`<g class="drop" style="animation-delay:-${i*.3}s">${scEmoji("💧",x,0,16)}</g>`).join("");
+  if(s.k==="fall")document.getElementById("scSand").innerHTML="";if(s.k==="fade")document.getElementById("scSand").innerHTML=`<rect x="160" y="70" width="40" height="22" rx="3" fill="#8a7a66"/>${scEmoji("🔥",180,46,44,"flick")}`;
+  if(s.k==="time")document.getElementById("scSand").innerHTML=`<g transform="translate(300,60)">${scEmoji("✅",0,0,30)}</g>`;
+  if(s.board&&hero){hero.style.transition="transform .8s ease, opacity .8s";hero.style.transform="translate(50px,-12px) scale(.3)";hero.style.opacity="0";}
+  if(s.fourth){const fx=document.getElementById("scFx");if(fx){const g=document.createElementNS("http://www.w3.org/2000/svg","g");g.innerHTML=`<circle cx="118" cy="66" r="16" fill="#fff6c8" opacity=".9" class="glow"/>${scEmoji("✨",118,66,22)}`;fx.appendChild(g);}}
+  scenePop("✨");setTimeout(()=>scenePop("🙌"),250);}
+function sceneLose(){if(!SCN.on)return;SCN.state="lose";sceneDraw(1);const el=$("scene");el.classList.add("lose");scenePop("💔");}
+/* Avant chaque nouvelle question : on remet la scène à zéro (le danger repart de loin). */
+function sceneReset(){if(!SCN.on)return;const el=$("scene");el.classList.remove("win","hit","lose");SCN.state="";SCN.hold=0;
+  const he=document.getElementById("scHero");if(he){he.style.transition="";he.style.transform="";he.style.opacity="";}const fx=document.getElementById("scFx");if(fx)fx.innerHTML="";
+  const th=document.getElementById("scThreat");if(th)th.style.transition="";const rs=document.getElementById("scRise");if(rs)rs.style.transform="";
+  const sd=document.getElementById("scSand");if(sd)sd.innerHTML="";SCN.drops=[];sceneDraw(0);}
 
 /* ===================== ÉNIGME DU JOUR =====================
    Une seule devinette par jour (minuit à Kinshasa), affichée automatiquement à la première ouverture du jour.
