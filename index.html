@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="6989a19707";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f4fd1"><meta name="description" content="Parcours Biblique : le jeu gratuit pour parcourir toute la Bible, niveau par niveau, et défier d'autres disciples en ligne."><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Parcours Biblique"><script>window.PB_BUILD="9a82888a8f";</script><style>html,body{margin:0;height:100%}</style></head><body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <title>Parcours Biblique</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4700,7 +4700,7 @@ const TABS=["path","online","medit","bible","profile"];
 let curScreen="";
 function show(id){curScreen=id;["onb","path","online","duel","medit","bible","profile","lesson"].forEach(s=>{const e=$(s);if(e)e.hidden=s!==id;});$("nav").hidden=!TABS.includes(id);
   document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.tab===id?"page":"false"));}
-function go(t){stopTimer();hush();closeSheet();if(t==="path")renderPath();if(t==="medit")renderMedit();if(t==="bible")renderBible();if(t==="profile")renderProfile();if(t==="online"){renderOnline();if(typeof olLoadAll==="function")olLoadAll();}show(t);}
+function go(t){stopTimer();hush();closeSheet();if(t!=="lesson"&&typeof sceneHide==="function")sceneHide();if(t==="path")renderPath();if(t==="medit")renderMedit();if(t==="bible")renderBible();if(t==="profile")renderProfile();if(t==="online"){renderOnline();if(typeof olLoadAll==="function")olLoadAll();}show(t);}
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{sfx("tap");if(b.dataset.tab==="bible"&&curScreen!=="bible"){BR.mode="browse";}go(b.dataset.tab);});
 function openSheet(html){$("sheet").innerHTML='<div class="grab"></div>'+html;$("veil").hidden=false;$("sheet").scrollTop=0;}
 function closeSheet(){$("veil").hidden=true;}
@@ -5535,7 +5535,7 @@ const SC={
  /* Genèse */
  creation:{c:"Les ténèbres couvrent l'abîme",sky:"night",h:["🌍"],k:"dark",r:"Genèse 1:2"},
  eden:{c:"Le serpent s'approche d'Ève",sky:"garden",h:["bib:eve"],p:"🌳",k:"walk",e:"🐍",r:"Genèse 3:1",
-   art:{dir:"eden",bg:"bg",bgFocus:.62,feet:.86,hero:{calm:"eve-calme",fear:"eve-peur",joy:"eve-joie",h:.66},threat:{walk:"serpent-rampe",attack:"serpent-dresse",h:.34,ha:.62,slither:1}}},
+   art:{dir:"eden",bg:"bg",bgFocus:.62,feet:.86,hero:{calm:"eve-calme",fear:"eve-peur",joy:"eve-joie",h:.66},threat:{walk:"serpent-rampe",attack:"serpent-dresse",h:.34,ha:.62,slither:1},snd:{}}},
  cain:{c:"Caïn s'approche d'Abel dans les champs",sky:"field",h:["bib:abel"],p:"🐑",k:"walk",e:"bib:cain",r:"Genèse 4:8"},
  flood:{c:"Les eaux montent : fais entrer les animaux",sky:"storm",h:["🐘","🦒"],p:"ark",pk:"bib:noe",k:"rise",e:"water",board:1,r:"Genèse 7:7-17"},
  babel:{c:"Les langues sont confondues sur le chantier",sky:"day",h:["🧱"],p:"tower",k:"swarm",e:"💬",n:6,r:"Genèse 11:7"},
@@ -5749,24 +5749,24 @@ function sceneShow(){const el=$("scene");if(!el)return;if(!SCENES_LIVE||!LS||LS.
   if(SE.s!==s||!el.querySelector("canvas")){SE.s=s;el.innerHTML=`<canvas></canvas><div class="sccap">${esc(s.c)}</div><div class="scsec" id="scSec">${Q_SECONDS}s</div><div class="scfail" id="scFail" hidden><span>FAIL</span></div>`;
     SE.cv=el.querySelector("canvas");SE.ctx=SE.cv.getContext("2d");SE.wave=null;SE.swarm=null;SE.clouds=null;(s.h||[]).concat([s.e,s.p,s.pk]).forEach(v=>{if(/^bib:/.test(v||""))seImg(v.slice(4));});
     if(s.art){const a=s.art;[a.bg,...Object.values(a.hero||{}),...Object.values(a.threat||{})].forEach(n=>{if(typeof n==="string")seSpr(a.dir,n);});}}
-  el.hidden=false;el.className="scene";document.body.classList.add("hasScene");SE.on=true;seResize();sceneReset();
+  el.hidden=false;el.className="scene";document.body.classList.add("hasScene");if(!SE.on||SA.s!==s)saStart(s);SE.on=true;seResize();sceneReset();
   cancelAnimationFrame(SE.raf);SE.last=performance.now();SE.raf=requestAnimationFrame(seLoop);}
 function seResize(){const cv=SE.cv;if(!cv)return;const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);SE.W=Math.max(200,r.width||360);SE.H=r.height||170;cv.width=SE.W*d;cv.height=SE.H*d;SE.ctx.setTransform(d,0,0,d,0,0);}
-function sceneHide(){SE.on=false;cancelAnimationFrame(SE.raf);const el=$("scene");if(el)el.hidden=true;document.body.classList.remove("hasScene");}
-function sceneReset(){SE.state="";SE.st=0;SE.tp=0;SE.p=0;SE.parts=[];SE.shake=0;SE.flash=0;SE.tx=0;SE.lv=0;const f=$("scFail");if(f)f.hidden=true;const el=$("scene");if(el)el.classList.remove("lose");}
+function sceneHide(){saStop();SE.on=false;cancelAnimationFrame(SE.raf);const el=$("scene");if(el)el.hidden=true;document.body.classList.remove("hasScene");}
+function sceneReset(){SE.state="";SE.st=0;SE.tp=0;SE.p=0;SE.parts=[];SE.shake=0;SE.flash=0;SE.tx=0;SE.lv=0;saReset();const f=$("scFail");if(f)f.hidden=true;const el=$("scene");if(el)el.classList.remove("lose");}
 function sceneTick(p,sec){if(!SE.on)return;const t=$("scSec");if(t){t.textContent=sec+"s";t.classList.toggle("urg",sec<=5);}if(!SE.state)SE.tp=p;}
-function sceneHit(){if(!SE.on)return;SE.state="hit";SE.st=0;SE.shake=1;SE.flash=1;const g=seGround();
+function sceneHit(){if(!SE.on)return;saHit();SE.state="hit";SE.st=0;SE.shake=1;SE.flash=1;const g=seGround();
   for(let i=0;i<14;i++)sePart({x:seHeroX()+10,y:g-24,vx:(Math.random()-.3)*160,vy:-Math.random()*160,g:380,life:.8,size:3+Math.random()*3,col:i%2?"#ffd166":"#fff",kind:"dot"});
   sePart({x:seHeroX(),y:g-56,vy:-30,life:1.1,kind:"emo",t:"💔",size:26});}
-function sceneWin(){if(!SE.on)return;SE.state="win";SE.st=0;const g=seGround(),hx=seHeroX();
+function sceneWin(){if(!SE.on)return;saWin();SE.state="win";SE.st=0;const g=seGround(),hx=seHeroX();
   for(let i=0;i<26;i++)sePart({x:hx,y:g-40,vx:(Math.random()-.5)*260,vy:-80-Math.random()*200,g:420,life:1.4,size:4+Math.random()*4,col:["#ffd166","#06d6a0","#118ab2","#ef476f","#fff"][i%5],kind:"conf",vr:(Math.random()-.5)*12});
   sePart({x:hx+4,y:g-62,vy:-28,life:1.2,kind:"emo",t:"✨",size:24});}
-function sceneLose(){if(!SE.on)return;SE.state="lose";SE.st=0;SE.shake=1.4;SE.flash=1;const f=$("scFail");if(f){f.hidden=false;f.classList.remove("go");void f.offsetWidth;f.classList.add("go");}const el=$("scene");if(el)el.classList.add("lose");}
+function sceneLose(){if(!SE.on)return;saLose();SE.state="lose";SE.st=0;SE.shake=1.4;SE.flash=1;const f=$("scFail");if(f){f.hidden=false;f.classList.remove("go");void f.offsetWidth;f.classList.add("go");}const el=$("scene");if(el)el.classList.add("lose");}
 
 const seGround=()=>SE.H*.74;
 const seHeroX=()=>Math.max(54,SE.W*.17);
-function seLoop(now){if(!SE.on)return;const dt=Math.min(.05,(now-SE.last)/1000);SE.last=now;SE.t+=dt;SE.st+=dt;
-  if(SE.state==="hit"&&SE.st>1.05){SE.state="";SE.tp=0;}
+function seLoop(now){if(!SE.on)return;const dt=Math.min(.05,(now-SE.last)/1000);SE.last=now;SE.t+=dt;SE.st+=dt;saUpdate(dt);
+  if(SE.state==="hit"&&SE.st>1.05){SE.state="";SE.tp=0;SA.feared=false;}
   const target=SE.state==="hit"?1.04:SE.state==="lose"?1.02:SE.state==="win"?SE.p:SE.tp;SE.p+=(target-SE.p)*Math.min(1,dt*(SE.state==="hit"?14:5));
   SE.shake=Math.max(0,SE.shake-dt*2.4);SE.flash=Math.max(0,SE.flash-dt*1.8);
   if(SE.cv&&(SE.cv.width<10||Math.abs(SE.cv.getBoundingClientRect().width-SE.W)>2))seResize();
@@ -5918,6 +5918,67 @@ function seDrawArt(c,s,dt){const a=s.art,W=SE.W,H=SE.H,p=Math.max(0,SE.p),st=SE.
   sePartsDraw(c,dt);c.restore();
   if(SE.flash>0){c.fillStyle=`rgba(214,50,63,${SE.flash*.45})`;c.fillRect(0,0,W,H);}
   if(st==="lose"){c.fillStyle="rgba(20,20,30,.28)";c.fillRect(0,0,W,H);}}
+
+/* ===================== SONS DES SCÈNES =====================
+   Tout est synthétisé en direct (Web Audio) : ambiance (vent, oiseaux), bruit du danger (frottement + sifflement
+   du serpent qui s'intensifie), battements de cœur quand le danger est tout près, voix du héros (souffle de peur,
+   cri, cri de joie). Si un vrai fichier son existe (art.snd : nom -> /sc/<dir>/<fichier>.mp3), il remplace la
+   version synthétisée. Respecte le réglage « Effets sonores ». */
+const SA={on:false,bus:null,amb:null,rus:null,nb:null,nextHiss:0,nextBird:0,nextBeat:0,feared:false,buf:{},s:null};
+function saNoise(a){if(!SA.nb){const n=a.sampleRate*2,b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;SA.nb=b;}return SA.nb;}
+function saLoop(a,type,f,q,vol){const s=a.createBufferSource(),fl=a.createBiquadFilter(),g=a.createGain();s.buffer=saNoise(a);s.loop=true;fl.type=type;fl.frequency.value=f;fl.Q.value=q;g.gain.value=vol;s.connect(fl);fl.connect(g);g.connect(SA.bus);s.start();return {s,f:fl,g};}
+function saBurst(type,f,q,dur,vol,o={}){const a=AC;if(!a||!SA.bus)return;const t=a.currentTime+(o.when||0),s=a.createBufferSource(),fl=a.createBiquadFilter(),g=a.createGain();
+  s.buffer=saNoise(a);fl.type=type;fl.frequency.setValueAtTime(f,t);if(o.to)fl.frequency.exponentialRampToValueAtTime(o.to,t+dur);fl.Q.value=q;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+(o.att||.04));g.gain.setValueAtTime(vol,t+dur*.55);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  s.connect(fl);fl.connect(g);g.connect(o.bus||SA.bus);s.start(t,Math.random()*1.5);s.stop(t+dur+.05);}
+function saThump(vol,when=0){const a=AC;if(!a||!SA.bus)return;const t=a.currentTime+when,o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.setValueAtTime(75,t);o.frequency.exponentialRampToValueAtTime(38,t+.16);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+.22);o.connect(g);g.connect(SA.bus);o.start(t);o.stop(t+.3);}
+function saBird(){const a=AC;if(!a)return;const n=2+Math.floor(Math.random()*3),b=2600+Math.random()*1600;
+  for(let i=0;i<n;i++)tone(b*(1+Math.random()*.15),.07+Math.random()*.05,{type:"sine",vol:.025,when:i*.11,slide:1.25+Math.random()*.3,bus:SA.bus});}
+/* voix synthétisée : source glottique (dent de scie + souffle) passée dans des formants de voyelle */
+const SA_V={a:[[850,1,6],[1220,.55,8],[2810,.25,10]],i:[[300,1,6],[2300,.5,10],[3000,.3,12]],u:[[320,1,6],[870,.35,8],[2240,.12,10]],h:[[700,1,2],[1500,.7,3],[2600,.5,4]]};
+function saVoice(segs,vol=.18){const a=AC;if(!a||!SA.bus)return;const t0=a.currentTime;
+  segs.forEach(sg=>{const t=t0+(sg.at||0),d=sg.d,out=a.createGain();out.gain.setValueAtTime(.0001,t);out.gain.exponentialRampToValueAtTime(vol*(sg.v||1),t+(sg.att||.03));out.gain.setValueAtTime(vol*(sg.v||1),t+d*.6);out.gain.exponentialRampToValueAtTime(.0001,t+d);out.connect(SA.bus);
+    const src=a.createGain();src.gain.value=1;
+    if(!sg.breath){const o=a.createOscillator(),vib=a.createOscillator(),vg=a.createGain();o.type="sawtooth";o.frequency.setValueAtTime(sg.f[0],t);
+      for(let k=1;k<sg.f.length;k++)o.frequency.linearRampToValueAtTime(sg.f[k],t+d*k/(sg.f.length-1));
+      vib.frequency.value=sg.vib||6.5;vg.gain.value=sg.f[0]*.035;vib.connect(vg);vg.connect(o.frequency);o.connect(src);o.start(t);o.stop(t+d+.05);vib.start(t);vib.stop(t+d+.05);}
+    const ns=a.createBufferSource(),ng=a.createGain();ns.buffer=saNoise(a);ng.gain.value=sg.breath?1.4:.18;ns.connect(ng);ng.connect(src);ns.start(t,Math.random());ns.stop(t+d+.05);
+    SA_V[sg.vw||"a"].forEach(([f,gn,q])=>{const bp=a.createBiquadFilter(),g=a.createGain();bp.type="bandpass";bp.frequency.value=f*(sg.fs||1);bp.Q.value=q;g.gain.value=gn*(sg.breath?1:2.2);src.connect(bp);bp.connect(g);g.connect(out);});});}
+const SA_VOX={
+ gasp:()=>saVoice([{breath:1,vw:"h",d:.32,att:.08,v:.9,fs:1.1}],.22),
+ scream:()=>saVoice([{f:[560,820,900,760],d:.75,vw:"a",att:.02,vib:7,fs:1.15},{breath:1,vw:"h",d:.4,v:.25}],.2),
+ longscream:()=>saVoice([{f:[600,880,860,520],d:1.25,vw:"a",att:.02,vib:6,fs:1.15}],.2),
+ joy:()=>saVoice([{f:[380,430],d:.17,vw:"u",fs:1.1},{at:.2,f:[520,760,700],d:.36,vw:"i",fs:1.1}],.17)};
+function saPlay(key,fallback){const a=AC,b=SA.buf[key];if(b&&b!=="x"&&a){const s=a.createBufferSource(),g=a.createGain();g.gain.value=.9;s.buffer=b;s.connect(g);g.connect(SA.bus);s.start();return;}fallback&&fallback();}
+function saStart(s){saStop();if(!S.set.sfx||!s||!s.art)return;const a=ac();if(!a)return;SA.s=s;SA.on=true;
+  SA.bus=a.createGain();SA.bus.gain.setValueAtTime(0,a.currentTime);SA.bus.gain.linearRampToValueAtTime(1,a.currentTime+.6);SA.bus.connect(master);
+  if(musicBus){try{musicBus.gain.cancelScheduledValues(a.currentTime);musicBus.gain.setTargetAtTime(.35,a.currentTime,.3);}catch(e){}}
+  SA.amb=saLoop(a,"lowpass",420,.6,.035);           /* vent doux */
+  SA.rus=saLoop(a,"bandpass",2600,.8,0);              /* frottement du danger dans l'herbe */
+  const snd=s.art.snd||{};Object.entries(snd).forEach(([k,f])=>{if(SA.buf[k])return;SA.buf[k]="x";
+    fetch(`/sc/${s.art.dir}/${f}.mp3`).then(r=>r.ok?r.arrayBuffer():null).then(d=>d&&a.decodeAudioData(d)).then(b=>{if(b)SA.buf[k]=b;}).catch(()=>{});});
+  SA.nextHiss=SA.nextBird=SA.nextBeat=0;SA.feared=false;}
+function saStop(){if(!SA.on)return;SA.on=false;const a=AC,bus=SA.bus,parts=[SA.amb,SA.rus];SA.bus=null;
+  try{bus.gain.cancelScheduledValues(a.currentTime);bus.gain.setTargetAtTime(0,a.currentTime,.12);setTimeout(()=>{parts.forEach(p=>{try{p.s.stop()}catch(e){}});try{bus.disconnect()}catch(e){}},700);}catch(e){}
+  if(musicBus){try{musicBus.gain.setTargetAtTime(1,a.currentTime,.4);}catch(e){}}}
+function saReset(){SA.feared=false;SA.nextHiss=0;}
+function saUpdate(dt){if(!SA.on||!AC)return;const a=AC,now=a.currentTime,p=Math.max(0,Math.min(1,SE.p)),st=SE.state,th=SA.s.art.threat||{};
+  /* le danger se rapproche : frottement plus fort, vent couvert */
+  const rv=st==="win"?Math.max(0,.06*(1-SE.st)):st==="lose"?0:(.012+p*.07)*(th.slither?(.75+.25*Math.sin(SE.t*7)):1);
+  SA.rus.g.gain.setTargetAtTime(rv,now,.08);SA.rus.f.frequency.setTargetAtTime(1800+p*1600,now,.2);
+  /* oiseaux : ils chantent tant que le danger est loin, se taisent à son approche, reviennent après la victoire */
+  if(now>SA.nextBird){SA.nextBird=now+1.2+Math.random()*2.2;if((st==="win"&&SE.st>.6)||(!st&&p<.5&&Math.random()>p*1.6))saBird();}
+  /* sifflements du serpent, de plus en plus rapprochés et forts */
+  if(!st&&p>.12&&now>SA.nextHiss){SA.nextHiss=now+Math.max(.55,2.2-p*1.9)+Math.random()*.4;
+    saPlay("hiss",()=>saBurst("highpass",4200,.7,.45+p*.5,.03+p*.14,{att:.09,to:5200}));}
+  /* battements de cœur quand c'est tout près */
+  if(!st&&p>.62&&now>SA.nextBeat){const iv=Math.max(.42,.95-(p-.62)*1.3);SA.nextBeat=now+iv;saThump(.22+p*.2);saThump(.14+p*.12,.13);}
+  /* Ève prend peur */
+  if(!st&&p>.45&&!SA.feared){SA.feared=true;saPlay("gasp",SA_VOX.gasp);}}
+function saHit(){if(!SA.on)return;saPlay("attack",()=>saBurst("highpass",3600,.6,.7,.3,{att:.02,to:6000}));saThump(.55);saPlay("scream",SA_VOX.scream);}
+function saWin(){if(!SA.on)return;saPlay("joy",SA_VOX.joy);saBurst("bandpass",2400,.7,.9,.08,{att:.02,to:900,when:.1});}
+function saLose(){if(!SA.on)return;saBurst("highpass",3600,.6,1,.3,{att:.02,to:6000});saThump(.7);saThump(.5,.5);saPlay("longscream",SA_VOX.longscream);}
 
 /* ===================== ÉNIGME DU JOUR =====================
    Une seule devinette par jour (minuit à Kinshasa), affichée automatiquement à la première ouverture du jour.
